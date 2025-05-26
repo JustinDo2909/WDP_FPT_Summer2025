@@ -14,6 +14,17 @@ const eslintConfig = [
   {
     rules: {
       "no-console": ["error", { allow: ["warn", "error"] }],
+      "react/forbid-elements": [
+        "error",
+        {
+          forbid: [
+            {
+              element: "div",
+              message: "Please use  custom layouts level in lib/by/Div",
+            },
+          ],
+        },
+      ],
     },
   },
 ];
