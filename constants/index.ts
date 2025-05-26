@@ -85,3 +85,78 @@ export const countUpItems = [
     text: "RECO hợp tác với hơn 10 thương hiệu thân thiện với môi trường để tạo ra một tương lai xanh hơn.",
   },
 ];
+
+export const product = {
+  product: {
+    product_id: 1,
+    title: "Body Brilliant Exfoliating Serum",
+    description: "Exfoliating Body Serum with 15% Glycolic Acid. This powerful yet gentle formula helps remove dead skin cells, revealing smoother, brighter skin. Perfect for all skin types.",
+    price: 2800000,
+    sale_price: 2300000,
+    image_url: [
+      "https://picsum.photos/1000",
+      "https://picsum.photos/700",
+      "https://picsum.photos/800",
+      "https://picsum.photos/900"
+    ],
+    product_category_id: 1,
+    product_brand_id: 1,
+    total_stock: 50,
+    created_at: "2025-01-15T10:00:00Z",
+    updated_at: "2025-05-20T14:30:00Z",
+    ingredients: "Glycolic Acid 15%, Hyaluronic Acid, Niacinamide, Vitamin E, Aloe Vera Extract",
+    how_to_use: "Apply 2-3 drops to clean, dry skin. Use 2-3 times per week in the evening. Always follow with sunscreen during the day.",
+    rating: 4.8,
+    reviews_count: 2
+  },
+  category: {
+    product_category_id: 1,
+    title: "Body Care",
+    description: "Products for body care and skincare"
+  },
+  brand: {
+    product_brand_id: 1,
+    title: "T-Care",
+    description: "Premium skincare brand"
+  },
+  reviews: [
+    {
+      review_id: 1,
+      product_id: 1,
+      r_id: "user123",
+      r_name: "Alice Smith",
+      r_value: 5,
+      r_message: "This serum is amazing! My skin feels so smooth and bright after just a few uses.",
+      created_at: "2025-02-10T09:00:00Z"
+    },
+    {
+      review_id: 2,
+      product_id: 1,
+      r_id: "user456",
+      r_name: "Bob Johnson",
+      r_value: 4,
+      r_message: "Really good product, but I wish it came in a bigger bottle.",
+      created_at: "2025-03-05T12:00:00Z"
+    }
+  ],
+  thumbnails: [
+    { color: "#fce7f3", label: "Light Pink" },
+    { color: "#f3e8ff", label: "Light Purple" },
+    { color: "#fdf2f8", label: "Pale Pink" },
+    { color: "#ffffff", label: "White", border: true }
+  ],
+  navLinks: [
+    { href: "#", label: "About Us" },
+    { href: "#", label: "Shop" },
+    { href: "#", label: "Blog" },
+    { href: "#", label: "News" },
+    { href: "#", label: "FAQs" }
+  ],
+  breadcrumbItems: ["Home", "Shop"],
+  tabs: [
+    { id: "description", label: "Description" },
+    { id: "ingredients", label: "Ingredients" },
+    { id: "usage", label: "How to Use" },
+    { id: "reviews", label: "Reviews (2)" }
+  ]
+};
