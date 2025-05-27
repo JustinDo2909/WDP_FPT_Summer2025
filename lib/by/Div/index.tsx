@@ -20,7 +20,7 @@ export function Core({
 }
 //#endregion
 
-//#region  Contain (cap 2)
+//#region  Container (cap 2)
 
 export function Container({
   className,

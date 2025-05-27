@@ -43,6 +43,7 @@
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.4.1",
     "react-redux": "^9.2.0",
+    "recharts": "^2.15.3",
     "sanity": "^3.67.1",
     "socket.io-client": "^4.8.1",
     "sonner": "^2.0.1",
@@ -59,6 +60,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/js-cookie": "^3.0.6",
+    "@types/lodash": "^4.17.17",
     "@types/node": "^20",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
