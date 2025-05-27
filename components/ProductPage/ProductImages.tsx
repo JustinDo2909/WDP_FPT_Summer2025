@@ -1,6 +1,7 @@
 // ProductImages.tsx
 import React from "react";
 import { Carousel } from "../ImageCarousel";
+import { Card } from "@/lib/by/Div";
 
 type ProductImagesProps = {
   images: string[];
@@ -10,5 +11,5 @@ type ProductImagesProps = {
 };
 
 export function ProductImages({images, discount, productName}:ProductImagesProps) {
-  return <Carousel images={images} discount={discount} productName={productName}  />;
+  return <Card><Carousel images={images} discount={discount} productName={productName}  /></Card>;
 }
