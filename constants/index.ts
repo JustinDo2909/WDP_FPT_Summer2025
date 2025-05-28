@@ -39,82 +39,84 @@ export const footerData = [
   },
 ];
 
-export const productType = [
-  { title: "Tshirt", value: "tshirt" },
-  { title: "Jacket", value: "jacket" },
-  { title: "Pants", value: "pants" },
-  { title: "Hoodie", value: "hoodie" },
-  { title: "Short", value: "tshirt" },
-];
-
-export const quickLinksData = [
-  { title: "About us", href: "/about" },
-  { title: "Contact us", href: "/contact" },
-  { title: "Terms & Conditions", href: "/terms" },
-  { title: "Privacy Policy", href: "/privacy" },
-  { title: "FAQs", href: "/faqs" },
-];
-
-export const categoriesData = [
-  { title: "Men's Fashion", href: "/men" },
-  { title: "Women's Fashion", href: "/women" },
-  { title: "Kids corner", href: "/kids" },
-  { title: "Tshirt", href: "/t-shirt" },
-  { title: "Accessories", href: "/accessories" },
-  { title: "Household", href: "/household" },
-  { title: "Others", href: "/others" },
-];
-export const faqsData = [
+export const listProductData = [
   {
-    question: "What services does Reco offer?",
-    answer:
-      "Reco offers a wide range of technology solutions including custom software development, cloud services, and digital transformation consulting.",
+    product_id: 1,
+    title: "La Roche-Posay Anthelios SPF50+",
+    description:
+      "High protection sunscreen for sensitive skin, non-greasy and water-resistant.",
+    price: 450000,
+    sale_price: 389000,
+    image_url: "/images/images.png",
+    product_category_id: 1, // e.g., Skincare
+    product_brand_id: 1, // e.g., La Roche-Posay
+    total_stock: 100,
   },
   {
-    question: "How can I get support for Reco products?",
-    answer:
-      "You can reach our support team through our contact page or by emailing support@Reco.com.",
+    product_id: 2,
+    title: "CeraVe Hydrating Facial Cleanser",
+    description:
+      "Gentle cleanser with ceramides and hyaluronic acid for normal to dry skin.",
+    price: 350000,
+    sale_price: 315000,
+    image_url: "/images/images.png",
+    product_category_id: 1,
+    product_brand_id: 2,
+    total_stock: 75,
   },
   {
-    question: "Does Reco offer training for its products?",
-    answer:
-      "Yes, we offer comprehensive training programs for all our products and services. Please contact our sales team for more information.",
+    product_id: 3,
+    title: "Vichy Mineral 89 Booster",
+    description: "Daily booster to strengthen skin barrier and deeply hydrate.",
+    price: 600000,
+    sale_price: 529000,
+    image_url: "/images/images.png",
+    product_category_id: 1,
+    product_brand_id: 3,
+    total_stock: 85,
   },
   {
-    question: "What industries does Reco serve?",
-    answer:
-      "Reco serves a wide range of industries including finance, healthcare, retail, and manufacturing.",
+    product_id: 4,
+    title: "Bioderma Sensibio H2O Micellar Water",
+    description: "Cleansing and makeup removing water for sensitive skin.",
+    price: 420000,
+    sale_price: 375000,
+    image_url: "/images/images.png",
+    product_category_id: 1,
+    product_brand_id: 4,
+    total_stock: 120,
   },
   {
-    question: "How does Reco ensure data security?",
-    answer:
-      "We employ industry-standard security measures and comply with all relevant data protection regulations to ensure the security of our clients' data.",
-  },
-];
-
-export const countUpItems = [
-  {
-    id: 1,
-    number: 200,
-    title: "kg",
-    text: "Mỗi năm, RECO tái tạo hơn 200 kg quần áo thành các sản phẩm thời trang bền vững như túi xách.",
+    product_id: 5,
+    title: "Eucerin Advanced Repair Cream",
+    description: "Fragrance-free moisturizing cream for very dry skin.",
+    price: 490000,
+    sale_price: 449000,
+    image_url: "/images/images.png",
+    product_category_id: 2, // e.g., Body Care
+    product_brand_id: 5,
+    total_stock: 60,
   },
   {
-    id: 2,
-    number: 2000,
-    title: "Sản Phẩm",
-    text: "RECO giúp 2,000 sản phẩm quần áo cũ tìm được mục đích mới mỗi năm.",
+    product_id: 6,
+    title: "Paula’s Choice BHA Liquid Exfoliant",
+    description: "2% salicylic acid solution for blackheads and pore care.",
+    price: 700000,
+    sale_price: 639000,
+    image_url: "/images/images.png",
+    product_category_id: 1,
+    product_brand_id: 6,
+    total_stock: 90,
   },
   {
-    id: 3,
-    number: 50,
-    title: "Tình Nguyện Viên",
-    text: "Hơn 50 tình nguyện viên từ khắp Việt Nam tham gia cùng RECO trong hành trình thời trang bền vững.",
-  },
-  {
-    id: 4,
-    number: 10,
-    title: "Đối Tác",
-    text: "RECO hợp tác với hơn 10 thương hiệu thân thiện với môi trường để tạo ra một tương lai xanh hơn.",
+    product_id: 7,
+    title: "Avene Thermal Spring Water Spray",
+    description: "Soothing spray for sensitive or irritated skin.",
+    price: 300000,
+    sale_price: 275000,
+    image_url: "/images/images.png",
+    product_category_id: 1,
+    product_brand_id: 7,
+    total_stock: 110,
   },
 ];

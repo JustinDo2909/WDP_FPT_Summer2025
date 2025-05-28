@@ -1,9 +1,8 @@
 "use client";
 
-import { Area, Container, Group, Row, Wrap } from "@/lib/by/Div";
 import Link from "next/link";
 import { map } from "lodash";
-import { ShoppingBag, ShoppingCart, User } from "lucide-react";
+import { ShoppingBag, User } from "lucide-react";
 import React from "react";
 
 interface Header {
@@ -17,7 +16,7 @@ interface HeaderMenuProps {
 
 const HeaderMenu = ({ headers }: HeaderMenuProps) => {
   return (
-    <div className="self-stretch px-12 bg-transparent backdrop-blur-[2px] border-b shadow-md inline-flex justify-between items-center">
+    <div className="self-stretch px-12 bg-white border-b shadow-md inline-flex justify-between items-center">
       <Link
         href="/"
         className="w-64 inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
