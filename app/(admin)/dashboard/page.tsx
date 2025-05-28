@@ -5,11 +5,13 @@ import { Sidebar } from "@/components/admin/Dashboard/Sidebar";
 import { OverviewCards } from "@/components/admin/Dashboard/OverviewCards";
 import { RevenueChart } from "@/components/admin/Dashboard/RevenueChart";
 import { getCurrentDate } from "@/app/(admin)/dashboard/seg/utils";
+import { StatisticsSection } from "@/components/admin/Dashboard/StatisticSection";
 import { Menu } from "lucide-react";
 import { Area, Yard, Section, Anchor, Block } from "../../../lib/by/Div/index";
 
 export default function Dashboard() {
   const [timeFilter, setTimeFilter] = useState("last_7_days");
+  const [activeTab, setActiveTab] = useState("products");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -33,11 +35,12 @@ export default function Dashboard() {
         </header>
 
         <div className="flex-1 space-y-6 p-6 overflow-auto">
-          {/* Hàng 1: Overview Cards */}
           <OverviewCards />
-
-          {/* Hàng 2: Revenue Chart */}
           <RevenueChart timeFilter={timeFilter} setTimeFilter={setTimeFilter} />
+          <StatisticsSection
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
         </div>
       </div>
     </div>

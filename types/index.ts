@@ -9,3 +9,8 @@ export interface TooltipProps {
   }[];
   label?: string;
 }
+
+export interface StatisticsSectionProps {
+  activeTab: string;
+  setActiveTab: (value: string) => void;
+}
