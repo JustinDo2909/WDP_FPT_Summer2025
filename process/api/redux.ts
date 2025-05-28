@@ -4,6 +4,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { api } from "./api";
 import { ghnApi } from "./apiGHN";
 import { chatbotApi } from "./apiChatBot";
+import { apiAuth } from "./apiAuth";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     [api.reducerPath]: api.reducer,
     [ghnApi.reducerPath]: ghnApi.reducer,
     [chatbotApi.reducerPath]: chatbotApi.reducer,
+    [apiAuth.reducerPath]: apiAuth.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
@@ -18,7 +20,8 @@ export const store = configureStore({
     getDefaultMiddleware().concat(
       api.middleware,
       ghnApi.middleware,
-      chatbotApi.middleware
+      chatbotApi.middleware,
+      apiAuth.middleware
     ),
 });
 
