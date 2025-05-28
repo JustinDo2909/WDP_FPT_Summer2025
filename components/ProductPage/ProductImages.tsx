@@ -11,5 +11,5 @@ type ProductImagesProps = {
 };
 
 export function ProductImages({images, discount, productName}:ProductImagesProps) {
-  return <Card><Carousel images={images} discount={discount} productName={productName}  /></Card>;
+  return <Card className="space-y-3 sm:space-y-4  p-8 pb-4"><Carousel images={images} discount={discount} productName={productName}  /></Card>;
 }

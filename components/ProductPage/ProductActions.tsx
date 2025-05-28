@@ -16,7 +16,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
 
   const { quantity, increment, decrement } = useProductActions(1, 1, totalStock || 99);
   return (
-    <Box className="flex items-center gap-4">
+    <Box className="flex gap-4">
       <Row className='items-center'>
         <QuantityButton quantity={quantity} increment={increment} decrement={decrement}/> 
         <RText className='text-gray-500'>{totalStock} left in stock</RText>

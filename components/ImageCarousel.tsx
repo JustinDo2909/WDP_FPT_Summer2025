@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Card, Row, Begin } from '@/lib/by/Div'; 
+import React, { useState } from "react";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Row, Begin } from "@/lib/by/Div";
+import { times } from "lodash";
 
 type CarouselProps = {
   images: string[];
@@ -23,9 +24,9 @@ export function Carousel({ images, productName, discount }: CarouselProps) {
   const onThumbnailClick = (index: number) => setSelectedImage(index);
 
   return (
-    <Card className="space-y-3 sm:space-y-4">
+    <>
       <Begin className="relative group">
-        <Begin className="aspect-square bg-gradient-to-br from-pink-100 to-rose-100 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg relative">
+        <Begin className="block w-full aspect-square bg-gradient-to-br from-pink-100 to-rose-100 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg relative">
           <Image
             src={images[selectedImage]}
             alt={productName}
@@ -40,6 +41,7 @@ export function Carousel({ images, productName, discount }: CarouselProps) {
             </span>
           </Begin>
         </Begin>
+
 
         {/* prev Button */}
         <button
@@ -63,20 +65,20 @@ export function Carousel({ images, productName, discount }: CarouselProps) {
       </Begin>
 
       <Row className="flex space-x-2 sm:space-x-3 justify-center overflow-x-auto py-2">
-        {images.map((image, index) => (
+        {times(images.length, (index: number) => (
           <button
             key={index}
             onClick={() => onThumbnailClick(index)}
             className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg sm:rounded-xl overflow-hidden transition-all ${
               selectedImage === index
-                ? 'ring-2 ring-pink-400 ring-offset-2'
-                : 'hover:ring-2 hover:ring-pink-200 hover:ring-offset-2'
+          ? "ring-2 ring-pink-400 ring-offset-2"
+          : "hover:ring-2 hover:ring-pink-200 hover:ring-offset-2"
             }`}
             type="button"
             aria-label={`View image ${index + 1}`}
           >
             <Image
-              src={image}
+              src={images[index]}
               alt={`Thumbnail ${index + 1}`}
               width={80}
               height={80}
@@ -86,6 +88,6 @@ export function Carousel({ images, productName, discount }: CarouselProps) {
           </button>
         ))}
       </Row>
-    </Card>
+    </>
   );
 }

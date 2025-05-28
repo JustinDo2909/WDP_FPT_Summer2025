@@ -1,15 +1,13 @@
 import { Star } from "lucide-react";
-import { Area, Row, RText, Wrap } from "@/lib/by/Div";
-import { ProductPageData } from "@/types";
+import { Row, RText, Wrap } from "@/lib/by/Div";
 import { formatPrice } from '../../utils/formatPrice';
 
-export function ProductInfo({ productData }: { productData: ProductPageData }) {
-  const { product, category } = productData;
+export function ProductInfo({ productData }: { productData: IProductPageData }) {
+  const { product, category, brand } = productData;
   return (
     <>
-      <Area>
-        <h1 className="text-3xl font-bold text-gray-900">{product.title}</h1>
-      </Area>
+      <RText className="text-pink-500 font-bold">{brand.title}</RText>
+        <h1 className="text-3xl font-bold text-gray-900 leading-none">{product.title}</h1>
 
       <Row className="items-center justify-start gap-0">
         <Wrap className="flex-start">
@@ -37,7 +35,7 @@ export function ProductInfo({ productData }: { productData: ProductPageData }) {
 
       <RText>{product.description}</RText>
 
-      <Row className="justify-between"><RText>Danh mục</RText><RText className="text-right">{category.title}</RText></Row>
+      <Row className=""><RText className="text-right bg-pink-100 rounded-full px-2">{category.title}</RText></Row>
 
       
     </>

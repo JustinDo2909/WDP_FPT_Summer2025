@@ -1,34 +1,45 @@
-import { Core, Container, Area, Begin } from "@/lib/by/Div";
-import { ProductPageData } from "@/types";
+import { Card, Area, Begin } from "@/lib/by/Div";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/lib/pattern/share/Tabs";
+import { times } from "lodash";
 
-const tabs = [
-  { label: "Description", key: "description" },
-  { label: "Ingredients", key: "ingredients" },
-  { label: "How to Use", key: "how-to-use" },
-  { label: "Reviews", key: "reviews" },
-];
-
-export function ProductDetailsTabs({productData}: { productData: ProductPageData }) {
+export function ProductDetailsTabs({
+  productData,
+}: {
+  productData: IProductPageData;
+}) {
   return (
-    <Core>
-      <Container>
+    <Card className="p-4 min-h-[400px] flex-1">
+      <Tabs defaultValue="description">
         <Area>
           <Begin>
-            {tabs.map((tab) => (
-              
-                <button
-                  key={tab.key}
-                  className={`pb-2 border-b-2 transition-all duration-200
-            //   activeTab === tab.key
-            //     ? "border-pink-500 text-pink-600 font-semibold"
-            //     : "border-transparent text-gray-500 hover:text-gray-700"}`}
-                >
+            <TabsList>
+                {times(productData.tabs.length, (i) => {
+                const tab = productData.tabs[i];
+                return (
+                  <TabsTrigger key={tab.id} value={tab.id}>
                   {tab.label}
-                </button>
-            ))}
+                  </TabsTrigger>
+                );
+                })}
+            </TabsList>
           </Begin>
         </Area>
-      </Container>
-    </Core>
+
+        <Area className="pt-2 text-sm text-gray-700">
+          <TabsContent value="description">
+            <p>{productData.product.description}</p>
+          </TabsContent>
+          <TabsContent value="ingredients">
+            <p>{productData.product.ingredients}</p>
+          </TabsContent>
+          <TabsContent value="how-to-use">
+            <p>{productData.product.how_to_use}</p>
+          </TabsContent>
+          <TabsContent value="reviews">
+            <p>No reviews yet.</p>
+          </TabsContent>
+        </Area>
+      </Tabs>
+    </Card>
   );
 }
