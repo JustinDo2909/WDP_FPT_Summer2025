@@ -1,3 +1,5 @@
+"use client";
+
 import "../globals.css";
 import Header from "@/lib/pattern/core/Header";
 import Footer from "@/lib/pattern/core/Footer";

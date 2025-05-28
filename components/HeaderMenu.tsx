@@ -3,7 +3,8 @@
 import { Area, Container, Group, Row, Wrap } from "@/lib/by/Div";
 import Link from "next/link";
 import { map } from "lodash";
-import { ShoppingCart, User } from "lucide-react";
+import { ShoppingBag, ShoppingCart, User } from "lucide-react";
+import React from "react";
 
 interface Header {
   title: string;
@@ -16,60 +17,60 @@ interface HeaderMenuProps {
 
 const HeaderMenu = ({ headers }: HeaderMenuProps) => {
   return (
-    <Container className="flex flex-row justify-between items-center py-2 border-b bg-white">
-      <Row>
-        <Area className="flex-row">
-          <Link
-            href="/"
-            className="bg-pink-200 px-4 py-2 rounded-lg font-bold text-lg text-gray-800"
-          >
-            LOGO!
-          </Link>
-        </Area>
-
-        <Area className="flex-row">
-          <Group className="gap-8">
-            {map(headers, (header, index) => (
-              <Link
-                key={index}
-                href={header.href}
-                className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-50"
-              >
-                {header.title}
-              </Link>
-            ))}
-          </Group>
-        </Area>
-
-        <Area className="flex-row">
-          <Group className="gap-4">
+    <div className="self-stretch px-12 bg-transparent backdrop-blur-[2px] border-b shadow-md inline-flex justify-between items-center">
+      <Link
+        href="/"
+        className="w-64 inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
+      >
+        LOGO!
+      </Link>
+      <div className="py-2.5 flex justify-start items-center gap-3">
+        {map(headers, (header: Header, index: number) => (
+          <div key={index} className="flex items-center">
             <Link
-              href="/chatbot"
-              className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-full transition-colors"
+              href={header.href}
+              className="px-7 py-2 relative flex justify-center items-center gap-2.5 overflow-hidden rounded-sm
+               after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 
+               after:h-[2px] after:w-0 after:bg-[#ffc6c6] after:transition-all after:duration-300    
+               hover:after:w-full"
             >
-              AI Chatbot
+              {header.title}
             </Link>
+            {index < headers.length - 1 && (
+              <div className="w-px h-6 bg-gray-300 mx-3" />
+            )}
+          </div>
+        ))}
 
-            <Link
-              href="/cart"
-              className="p-2 hover:bg-gray-50 rounded-md transition-colors"
-            >
-              <ShoppingCart size={24} className="text-gray-700" />
-            </Link>
+        <button className="p-2.5 bg-zinc-800 rounded-[50px] flex justify-center items-center gap-2.5 overflow-hidden">
+          <span className="justify-start text-white text-sm font-bold font-['Inter']">
+            AI Chatbot
+          </span>
+        </button>
+      </div>
 
-            <Link
-              href="/login"
-              className="hover:bg-gray-50 rounded-md transition-colors"
-            >
-              <Wrap className="px-3 py-2">
-                <User size={20} className="text-gray-700" />
-                <span className="text-gray-700">Sign in</span>
-              </Wrap>
-            </Link>
-          </Group>
-        </Area>
-      </Row>
-    </Container>
+      <div className="flex justify-start items-center gap-7 overflow-hidden">
+        <Link
+          href="/cart"
+          className="flex p-2 justify-center items-center gap-2.5 overflow-hidden rounded-full
+        hover:bg-[#ffc6c6] transition-all hover:cursor-pointer"
+        >
+          <ShoppingBag size={20} />
+        </Link>
+        <div className="devider w-px h-6 bg-gray-300" />
+        <Link
+          href="/login"
+          className="flex justify-center items-center gap-2.5 overflow-hidden hover:cursor-pointer"
+        >
+          <span className="px-2 py-1.5 rounded-[10px] flex justify-center items-center gap-2.5 overflow-hidden">
+            <User size={20} />
+          </span>
+          <div className="justify-start text-black text-sm font-normal font-['Inter']">
+            Sign in
+          </div>
+        </Link>
+      </div>
+    </div>
   );
 };
 

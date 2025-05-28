@@ -9,14 +9,14 @@ export default function Page() {
   };
 
   return (
-    <Begin className="flex flex-col ">
+    <Begin className="flex flex-col h-screen">
       <Group>
         <RText>fff</RText>
 
         <button onClick={openModal}>Mở Modal</button>
       </Group>
 
-      <RModal
+      {/* <RModal
         name="Test"
         isBottomSheet={true}
         _set={{
@@ -38,7 +38,7 @@ export default function Page() {
             <button onClick={() => onClose()}>Đóng</button>
           </div>
         )}
-      </RModal>
+      </RModal> */}
     </Begin>
   );
 }
