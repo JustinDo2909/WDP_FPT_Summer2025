@@ -1,9 +1,42 @@
 export const headerData = [
-  { title: "Trang Chủ", href: "/" },
-  { title: "Sản Phẩm", href: "/product" },
-  { title: "Dịch Vụ Custom", href: "/custom" },
-  { title: "Cộng Đồng", href: "/community" },
-  { title: "Về Chúng Tôi", href: "/about" },
+  { title: "Home", href: "/" },
+  { title: "Category", href: "/category" },
+  { title: "Shop", href: "/shop" },
+  { title: "Event", href: "/event" },
+  { title: "About", href: "/about" },
+];
+
+export const footerData = [
+  {
+    title: "Category",
+    links: [
+      { title: "Face Care", href: "/category/face-care" },
+      { title: "Body Care", href: "/category/body-care" },
+      { title: "Hand Care", href: "/category/hand-care" },
+      { title: "Special Collections", href: "/category/special-collections" },
+      { title: "Sale", href: "/category/sale" },
+    ],
+  },
+  {
+    title: "About",
+    links: [
+      { title: "About Us", href: "/about" },
+      { title: "Shop", href: "/shop" },
+      { title: "event", href: "/event" },
+      { title: "Contacts", href: "/contacts" },
+      { title: "Showrooms", href: "/showrooms" },
+    ],
+  },
+  {
+    title: "Terms & Policy",
+    links: [
+      { title: "Term of Service", href: "/terms" },
+      { title: "Return & Refund", href: "/return-refund" },
+      { title: "Cookie Policy", href: "/cookie-policy" },
+      { title: "Payment Terms", href: "/payment-terms" },
+      { title: "Disclaimer", href: "/disclaimer" },
+    ],
+  },
 ];
 
 export const productType = [
