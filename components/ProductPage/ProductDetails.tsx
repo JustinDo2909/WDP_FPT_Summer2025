@@ -1,6 +1,6 @@
 import { Card, Area, Begin } from "@/lib/by/Div";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/lib/pattern/share/Tabs";
-import { times } from "lodash";
+import { map } from "lodash";
 
 export function ProductDetailsTabs({
   productData,
@@ -13,14 +13,12 @@ export function ProductDetailsTabs({
         <Area>
           <Begin>
             <TabsList>
-                {times(productData.tabs.length, (i) => {
-                const tab = productData.tabs[i];
-                return (
+                {map(productData.tabs, (tab) => (
+               
                   <TabsTrigger key={tab.id} value={tab.id}>
                   {tab.label}
                   </TabsTrigger>
-                );
-                })}
+                ))}
             </TabsList>
           </Begin>
         </Area>

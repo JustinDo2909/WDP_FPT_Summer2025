@@ -12,7 +12,7 @@ const mockProduct = product.product;
 const ProductPage = () => {
   return (
     <Core className="min-h-screen bg-gray-100">
-      <Container className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <Container className="flex flex-col flex-1 py-4 px-6 gap-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <Area className="grid lg:grid-cols-2 gap-2 lg:gap-4">
           <Column>
             <ProductImages

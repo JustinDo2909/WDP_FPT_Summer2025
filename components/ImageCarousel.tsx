@@ -26,13 +26,13 @@ export function Carousel({ images, productName, discount }: CarouselProps) {
   return (
     <>
       <Begin className="relative group">
-        <Begin className="block w-full aspect-square bg-gradient-to-br from-pink-100 to-rose-100 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg relative">
+        <Begin className="block w-full h-full aspect-square  bg-gradient-to-br from-pink-100 to-rose-100 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg relative">
           <Image
             src={images[selectedImage]}
             alt={productName}
             fill
-            sizes="(max-width: 768px) 100vw, 400px"
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            sizes="(max-width: 768px) 100vw"
+            className="object-cover group-hover:scale-105 aspect-square  transition-transform duration-500"
             priority
           />
           <Begin className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 w-auto">

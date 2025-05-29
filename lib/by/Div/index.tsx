@@ -30,7 +30,7 @@ export function Container({
   return (
     <div
       id="Contain"
-      className={`flex flex-col flex-1 py-4 px-6 gap-4 relative ${className || ""}`}
+      className={` ${className || ""}`}
       {...args}
     >
       {children}
