@@ -12,9 +12,9 @@ const Loading = () => {
           className="flex items-center space-x-2 text-green-800"
         >
           <Loader2 className=" animate-spin" />
-          <span className="font-semibold tracking-wide">
+          {/* <span className="font-semibold tracking-wide">
             Reco is loading...
-          </span>
+          </span> */}
         </motion.div>
       </div>
     </div>
