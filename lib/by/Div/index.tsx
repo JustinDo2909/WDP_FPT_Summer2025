@@ -9,18 +9,14 @@ export function Core({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Core"
-      className={`flex flex-col flex-1 gap-2 ${className || ""}`}
-      {...args}
-    >
+    <div id="Core" className={`${className || ""}`} {...args}>
       {children}
     </div>
   );
 }
 //#endregion
 
-//#region  Contain (cap 2)
+//#region  Container (cap 2)
 
 export function Container({
   className,
@@ -28,7 +24,7 @@ export function Container({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div id="Contain" className={`${className || ""}`} {...args}>
+    <div id="Contain" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -42,7 +38,7 @@ export function Area({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div id="Area" className={`${className || ""}`} {...args}>
+    <div id="Area" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -84,7 +80,7 @@ export function Anchor({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div id="Anchor" className={`${className || ""}`} {...args}>
+    <div id="Anchor" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -129,7 +125,7 @@ export function Box({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div id="Box" className={`${className || ""}`} {...args}>
+    <div id="Box" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -208,7 +204,7 @@ export function Cover({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div id="Cover" className={`${className || ""}`} {...args}>
+    <div id="Cover" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -222,7 +218,7 @@ export function Scroll({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className="flex-1 relative">
+    <div className="">
       <div id="Scroll" className={` ${className || ""}`} {...args}>
         {children}
       </div>
@@ -236,7 +232,7 @@ export function Mass({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div id="Mass" className={`${className || ""}`} {...args}>
+    <div id="Mass" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -250,11 +246,7 @@ export function RText({
   ...args
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p
-      id="RText"
-      className={`text-sm flex items-center text-gray-800 ${className || ""}`}
-      {...args}
-    >
+    <p id="RText" className={` ${className || ""}`} {...args}>
       {children}
     </p>
   );
