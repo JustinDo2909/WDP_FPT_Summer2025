@@ -7,14 +7,15 @@ import {
   recentOrders,
 } from "@/constants/dashboard/index";
 
-// Utility functions
+//#region fomatCurrency
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
   }).format(Math.abs(amount));
 };
-
+//#endregion
+//#region fomatCurrencyShort
 export const formatCurrencyShort = (amount: number): string => {
   if (amount >= 1000000000) {
     return `${(amount / 1000000000).toFixed(1)}B`;
@@ -25,11 +26,13 @@ export const formatCurrencyShort = (amount: number): string => {
   }
   return amount.toString();
 };
-
+//#endregion
+//#region getCurrentMonth
 export const getCurrentMonth = (): number => {
   return new Date().getMonth(); // 0-11, May = 4
 };
-
+//#endregion
+//#region calculateMonthlyGrowth
 export const calculateMonthlyGrowth = (): string => {
   const currentMonth = getCurrentMonth();
   if (currentMonth === 0) return "0";
@@ -45,12 +48,14 @@ export const calculateMonthlyGrowth = (): string => {
   ).toFixed(1);
   return growth;
 };
-
+//#endregion
+//#region getTotalYearRevenue
 export const getTotalYearRevenue = (): number => {
   const currentMonth = getCurrentMonth();
   return _.sumBy(_.take(monthlyRevenueData, currentMonth + 1), "revenue");
 };
-
+//#endregion
+//#region getStatusBadgeConfig
 export const getStatusBadgeConfig = (status: string) => {
   const statusConfig = {
     completed: {
@@ -73,7 +78,8 @@ export const getStatusBadgeConfig = (status: string) => {
 
   return statusConfig[status as keyof typeof statusConfig];
 };
-
+//#endregion
+//#region getPaymentMethodIcon
 export const getPaymentMethodIcon = (method: string) => {
   if (method === "mastercard") {
     return {
@@ -88,7 +94,8 @@ export const getPaymentMethodIcon = (method: string) => {
     text: "VISA",
   };
 };
-
+//#endregion
+//#region getCurrentDate
 export const getCurrentDate = (): string => {
   return new Date().toLocaleDateString("vi-VN", {
     weekday: "long",
@@ -97,7 +104,8 @@ export const getCurrentDate = (): string => {
     day: "numeric",
   });
 };
-
+//#endregion
+//#region getMonthlyRevenueData
 // Data processing functions
 export const getMonthlyRevenueData = () => {
   const currentMonth = getCurrentMonth();
@@ -107,26 +115,31 @@ export const getMonthlyRevenueData = () => {
     hasData: index <= currentMonth,
   }));
 };
-
+//#endregion
+//#region getTopProductsData
 export const getTopProductsData = () => {
   return _.take(_.orderBy(topProducts, ["revenue"], ["desc"]), 5);
 };
-
+//#endregion
+//#region getTopCustomersData
 export const getTopCustomersData = () => {
   return _.take(_.orderBy(topCustomers, ["spent"], ["desc"]), 5);
 };
-
+//#endregion
+//#region getCategoryDistribution
 export const getCategoryDistribution = () => {
   return _.map(categoryData, (category) => ({
     ...category,
     percentage: `${category.value}%`,
   }));
 };
-
+//#endregion
+//#region getRecentTransactions
 export const getRecentTransactions = () => {
   return _.take(_.orderBy(recentOrders, ["date"], ["desc"]), 5);
 };
-
+//#endregion
+//#region getOverviewMetrics
 export const getOverviewMetrics = () => {
   const totalRevenue = getTotalYearRevenue();
   const totalOrders = 1234;
@@ -140,3 +153,4 @@ export const getOverviewMetrics = () => {
     rating: averageRating,
   };
 };
+//#endregion

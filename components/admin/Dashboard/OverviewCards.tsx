@@ -12,7 +12,7 @@ import {
   getTotalYearRevenue,
   calculateMonthlyGrowth,
 } from "@/app/(admin)/dashboard/seg/utils";
-import _ from "lodash";
+import map from "lodash/map";
 import { Area, Block, Section, Anchor } from "@/lib/by/Div/index";
 
 export function OverviewCards() {
@@ -51,25 +51,25 @@ export function OverviewCards() {
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-4">
-      {_.map(cards, (card, index) => (
-        <div
+    <Area className="grid gap-4 md:grid-cols-4">
+      {map(cards, (card, index) => (
+        <Section
           key={index}
           className={`bg-gradient-to-br ${card.gradient} text-white border-0 rounded-lg shadow-sm`}
         >
-          <div className="flex flex-row items-center justify-between space-y-0 pb-2 p-6">
+          <Anchor className="flex flex-row items-center justify-between space-y-0 pb-2 p-6">
             <h3 className="text-sm font-medium opacity-90">{card.title}</h3>
             <card.icon className="h-4 w-4 opacity-90" />
-          </div>
-          <div className="px-6 pb-6">
-            <div className="text-2xl font-bold">{card.value}</div>
+          </Anchor>
+          <Anchor className="px-6 pb-6">
+            <Block className="text-2xl font-bold">{card.value}</Block>
             <p className="text-xs opacity-90">
               <TrendingUp className="inline h-3 w-3 mr-1" />
               {card.change}
             </p>
-          </div>
-        </div>
+          </Anchor>
+        </Section>
       ))}
-    </div>
+    </Area>
   );
 }

@@ -13,11 +13,13 @@ import {
 import {
   formatCurrency,
   formatCurrencyShort,
-  getTotalYearRevenue,
-  calculateMonthlyGrowth,
+  // getTotalYearRevenue,
+  // calculateMonthlyGrowth,
   getMonthlyRevenueData,
 } from "@/app/(admin)/dashboard/seg/utils";
 import { MoreHorizontal } from "lucide-react";
+import { TooltipProps } from "@/types/dashboard/index";
+import { Area, Section, Anchor, RText, Yard } from "@/lib/by/Div/index";
 
 interface RevenueChartProps {
   timeFilter: string;
@@ -26,17 +28,17 @@ interface RevenueChartProps {
 
 export function RevenueChart({ timeFilter, setTimeFilter }: RevenueChartProps) {
   const data = getMonthlyRevenueData();
-  const totalRevenue = getTotalYearRevenue();
-  const revenueGrowth = calculateMonthlyGrowth();
+  // const totalRevenue = getTotalYearRevenue();
+  // const revenueGrowth = calculateMonthlyGrowth();
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       if (data.hasData && data.revenue > 0) {
         return (
-          <div className="bg-white p-3 border rounded-lg shadow-lg">
+          <Anchor className="bg-white p-3 border rounded-lg shadow-lg">
             <p className="font-medium">{`${label}: ${formatCurrency(data.revenue)}`}</p>
-          </div>
+          </Anchor>
         );
       }
     }
@@ -44,20 +46,20 @@ export function RevenueChart({ timeFilter, setTimeFilter }: RevenueChartProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border">
-      <div className="p-6 border-b">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold mb-1">Monthly Sales</h3>
-          </div>
-          <div className="flex items-center space-x-2">
+    <Area className="bg-white rounded-lg shadow-sm border">
+      <Yard className="p-6 border-b">
+        <Section className="flex items-center justify-between">
+          <Anchor>
+            <RText className="text-lg font-semibold mb-1">Monthly Sales</RText>
+          </Anchor>
+          <Anchor className="flex items-center space-x-2">
             <button className="p-2 hover:bg-gray-100 rounded">
               <MoreHorizontal className="h-4 w-4 text-gray-500" />
             </button>
-          </div>
-        </div>
-      </div>
-      <div className="p-6">
+          </Anchor>
+        </Section>
+      </Yard>
+      <Yard className="p-6">
         <ResponsiveContainer width="100%" height={300}>
           <BarChart
             data={data}
@@ -95,7 +97,7 @@ export function RevenueChart({ timeFilter, setTimeFilter }: RevenueChartProps) {
             />
           </BarChart>
         </ResponsiveContainer>
-      </div>
-    </div>
+      </Yard>
+    </Area>
   );
 }

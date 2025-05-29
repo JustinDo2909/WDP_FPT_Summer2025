@@ -9,11 +9,7 @@ export function Core({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Core"
-      className={`flex flex-col flex-1 gap-2 ${className || ""}`}
-      {...args}
-    >
+    <div id="Core" className={`${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -28,11 +24,7 @@ export function Container({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Contain"
-      className={`flex flex-col flex-1 py-4 px-6 gap-4 relative ${className || ""}`}
-      {...args}
-    >
+    <div id="Contain" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -46,11 +38,7 @@ export function Area({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Area"
-      className={`flex flex-col gap-2 ${className || ""}`}
-      {...args}
-    >
+    <div id="Area" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -64,11 +52,7 @@ export function Yard({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Yard"
-      className={`flex flex-col gap-2 ${className || ""}`}
-      {...args}
-    >
+    <div id="Yard" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -82,11 +66,7 @@ export function Section({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Section"
-      className={`flex flex-col gap-2 ${className || ""}`}
-      {...args}
-    >
+    <div id="Section" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -100,11 +80,7 @@ export function Anchor({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Anchor"
-      className={`flex flex-col gap-2 ${className || ""}`}
-      {...args}
-    >
+    <div id="Anchor" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -118,11 +94,7 @@ export function Block({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Block"
-      className={`flex flex-col gap-2 ${className || ""}`}
-      {...args}
-    >
+    <div id="Block" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -137,11 +109,7 @@ export function Card({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Card"
-      className={`flex flex-col gap-2 p-2 shadow-md bg-white rounded-lg ${className || ""}`}
-      {...args}
-    >
+    <div id="Card" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -157,11 +125,7 @@ export function Box({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Box"
-      className={`flex flex-col gap-2 ${className || ""}`}
-      {...args}
-    >
+    <div id="Box" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -193,11 +157,7 @@ export function Row({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Row"
-      className={`flex flex-row gap-2 ${className || ""}`}
-      {...args}
-    >
+    <div id="Row" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -213,11 +173,7 @@ export function Group({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Group"
-      className={`w-auto flex items-center gap-2 ${className || ""}`}
-      {...args}
-    >
+    <div id="Group" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -232,11 +188,7 @@ export function Wrap({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Wrap"
-      className={`flex flex-row items-center gap-1 ${className || ""}`}
-      {...args}
-    >
+    <div id="Wrap" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -252,11 +204,7 @@ export function Cover({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Cover"
-      className={`flex items-center gap-2 ${className || ""}`}
-      {...args}
-    >
+    <div id="Cover" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -270,12 +218,8 @@ export function Scroll({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className="flex-1 relative">
-      <div
-        id="Scroll"
-        className={`overflow-hidden absolute m-auto flex-1 inset-0 ${className || ""}`}
-        {...args}
-      >
+    <div className="">
+      <div id="Scroll" className={` ${className || ""}`} {...args}>
         {children}
       </div>
     </div>
@@ -288,11 +232,7 @@ export function Mass({
   ...args
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      id="Mass"
-      className={`flex flex-col gap-2 ${className || ""}`}
-      {...args}
-    >
+    <div id="Mass" className={` ${className || ""}`} {...args}>
       {children}
     </div>
   );
@@ -304,11 +244,7 @@ export function RText({
   ...args
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p
-      id="RText"
-      className={`text-sm flex items-center text-gray-800 ${className || ""}`}
-      {...args}
-    >
+    <p id="RText" className={` ${className || ""}`} {...args}>
       {children}
     </p>
   );
