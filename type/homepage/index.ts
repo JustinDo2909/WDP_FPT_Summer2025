@@ -9,3 +9,17 @@ export type IProduct = {
 export type Products = {
   products: IProduct[];
 };
+
+export type ILink = {
+  title: string;
+  href: string;
+};
+
+export type Footer = {
+  title: string;
+  links: ILink[];
+};
+
+export type FooterProps = {
+  footers: Footer[];
+};

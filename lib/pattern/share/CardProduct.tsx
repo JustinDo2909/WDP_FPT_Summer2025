@@ -1,7 +1,8 @@
 "use client";
 
-import { Card } from "@/lib/by/Div";
+import { Block, Card, Group, Row, Section } from "@/lib/by/Div";
 import { IProduct } from "@/type/homepage";
+import { max } from "lodash";
 import Image from "next/image";
 
 const CardProduct = ({ product }: { product: IProduct }) => {
@@ -11,44 +12,47 @@ const CardProduct = ({ product }: { product: IProduct }) => {
       : 0;
 
   return (
-    <Card className="w-72 h-fit p-2.5 bg-white rounded-md inline-flex flex-col justify-start items-end gap-2.5 overflow-hidden">
+    <Card className="w-fit h-full p-2.5 bg-white rounded-md shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col justify-start items-end gap-1 overflow-hidden">
       <Image
-        className="self-stretch h-72 relative rounded-md object-cover"
-        src={product.image_url}
-        width={300}
-        height={300}
+        className="self-stretch w-full relative rounded-md object-"
+        src={product.image_url || "/placeholder.svg"}
+        width={200}
+        height={200}
         alt="product"
       />
-      <div className="self-stretch flex-1 py-1.5 flex flex-col justify-start items-start gap-2.5 overflow-hidden">
-        <div className="self-stretch px-2.5 inline-flex justify-between items-start overflow-hidden">
-          <div className="inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden">
-            <div className="justify-start">
-              <span className="text-pink-400 text-2xl font-bold font-['Roboto']">
-                {product.sale_price} VND
-                <br />
-              </span>
-              <span className="text-neutral-500 text-base font-normal font-['Roboto'] line-through">
-                {product.price} VND
-              </span>
-            </div>
-          </div>
-          <div className="px-2 py-1 bg-purple-500 rounded-md flex rounded-md justify-center items-center gap-2.5 overflow-hidden">
-            <span className="justify-start text-white text-base font-semibold">
+
+      <Section className="self-stretch flex-1 py-1.5 flex flex-col justify-start items-start gap-1 px-2 overflow-hidden">
+        <Row className="self-stretch inline-flex justify-between items-start overflow-hidden">
+          <Group className="inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden">
+            <Block className="justify-start">
+              <Block className="text-pink-400 text-lg font-bold font-['Roboto']">
+                {product.sale_price.toLocaleString()} VND
+              </Block>
+              <Block className="text-neutral-500 text-sm font-normal font-['Roboto'] line-through">
+                {product.price.toLocaleString()} VND
+              </Block>
+            </Block>
+          </Group>
+
+          <Block className="px-2 py-1 bg-purple-500 rounded-md flex justify-center items-center gap-2.5 overflow-hidden">
+            <Block className="justify-start text-white text-sm font-semibold">
               -{discount}%
-            </span>
-          </div>
-        </div>
-        <div className="self-stretch p-2.5 flex flex-col justify-start items-start gap-[5px] overflow-hidden">
-          <div className="self-stretch justify-start text-zinc-800 text-2xl font-bold font-['Roboto']">
+            </Block>
+          </Block>
+        </Row>
+
+        <Section className="self-stretch flex-1 flex flex-col justify-start items-start gap-[5px] overflow-hidden">
+          <Block className="self-stretch justify-start text-zinc-800 text-lg font-bold font-['Roboto'] line-clamp-2">
             {product.title}
-          </div>
-        </div>
-        <div className="self-stretch px-2.5 inline-flex justify-start items-start gap-2.5 overflow-hidden">
-          <div className=" justify-start text-black text-base font-normal font-['Roboto']">
+          </Block>
+        </Section>
+
+        <Section className="self-stretch  inline-flex justify-start items-start gap-2.5 overflow-hidden">
+          <Block className="justify-start text-black text-sm font-normal font-['Roboto'] line-clamp-3">
             {product.description}
-          </div>
-        </div>
-      </div>
+          </Block>
+        </Section>
+      </Section>
     </Card>
   );
 };
