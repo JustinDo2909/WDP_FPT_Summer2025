@@ -8,7 +8,7 @@ const customBaseQuery = async (
   extraOptions: any
 ) => {
   const baseQuery = fetchBaseQuery({
-    baseUrl: "http://localhost:8080/api",
+    baseUrl: "https://cosme-play-be.vercel.app/api",
     prepareHeaders: async (headers) => {},
     credentials: "include",
   });

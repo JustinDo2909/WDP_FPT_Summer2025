@@ -1,7 +1,7 @@
 "use client";
 
 import FooterMenu from "@/components/FooterMenu";
-import { footerData } from "@/constants";
+import { footerData } from "@/constants/homepage";
 import { Core } from "@/lib/by/Div";
 
 const Footer = () => {

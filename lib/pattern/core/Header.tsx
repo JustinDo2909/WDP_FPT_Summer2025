@@ -1,7 +1,7 @@
 "use client";
 
 import HeaderMenu from "@/components/HeaderMenu";
-import { headerData } from "@/constants";
+import { headerData } from "@/constants/homepage";
 import { Core } from "@/lib/by/Div";
 
 const Header = () => {

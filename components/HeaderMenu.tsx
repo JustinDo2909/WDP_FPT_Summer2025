@@ -4,7 +4,8 @@ import Link from "next/link";
 import { map } from "lodash";
 import { ShoppingBag, User } from "lucide-react";
 import React from "react";
-import { Block, Container, Group, Row, Section } from "@/lib/by/Div";
+import { Block, Container, Group, Row, RText, Section } from "@/lib/by/Div";
+import { useUser } from "@/hooks/useUser";
 
 interface Header {
   title: string;
@@ -16,6 +17,8 @@ interface HeaderMenuProps {
 }
 
 const HeaderMenu = ({ headers }: HeaderMenuProps) => {
+  const { user } = useUser();
+
   return (
     <Container className="w-full px-36 bg-white border-b shadow-md inline-flex justify-between items-center">
       <Section className="w-fit inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden">
@@ -68,8 +71,9 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
             <Block className="px-2 py-1.5 rounded-[10px] flex justify-center items-center gap-2.5 overflow-hidden">
               <User size={20} />
             </Block>
+
             <Block className="justify-start text-black text-sm font-normal font-['Inter']">
-              Sign in
+              {user ? <RText>Logout</RText> : <RText>Login</RText>}
             </Block>
           </Link>
         </Row>

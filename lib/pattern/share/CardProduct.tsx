@@ -2,7 +2,6 @@
 
 import { Block, Card, Group, Row, Section } from "@/lib/by/Div";
 import { IProduct } from "@/type/homepage";
-import { max } from "lodash";
 import Image from "next/image";
 
 const CardProduct = ({ product }: { product: IProduct }) => {
