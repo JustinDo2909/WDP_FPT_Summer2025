@@ -13,7 +13,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
-    <Link href={`${product.product.product_id}`} className="flex-1 flex">
+    <Link href={`products/${product.product.product_id}`} className="flex-1 flex">
     <Card className="max-w-sm group p-2 cursor-pointer bg-white dark:bg-zinc-900 rounded-xl shadow flex flex-col gap-3">
       {/* Product Image */}
       <Cover className="relative aspect-square w-full overflow-hidden rounded-lg bg-pink-100">
