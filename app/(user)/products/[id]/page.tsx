@@ -12,16 +12,16 @@ const mockProduct = product.product;
 const ProductPage = () => {
   return (
     <Core className="min-h-screen bg-gray-100">
-      <Container className="flex flex-col flex-1 py-4 px-6 gap-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <Container className="flex flex-col flex-1 py-4 px-6 gap-4 max-w-7xl mx-auto sm:px-6 lg:px-8 sm:py-8">
         <Area className="grid lg:grid-cols-2 gap-2 lg:gap-4">
-          <Column>
+          <Column className="flex flex-col">
             <ProductImages
               images={mockProduct.image_url}
               discount={10}
               productName={mockProduct.title}
             />
           </Column>
-          <Card className="p-4 space-y-2">
+          <Card className="flex flex-col gap-2 shadow-md bg-white rounded-lg p-4 space-y-2">
             <ProductInfo productData={product} />
             <ProductActions totalStock={product.product.total_stock} />
             <ShopGuarantees />
@@ -29,7 +29,7 @@ const ProductPage = () => {
         </Area>
         <Area className="flex !flex-row gap-2 lg:gap-4">
           <ProductDetailsTabs productData={product} />
-          <Card className="w-[25%] p-4">
+          <Card className="flex flex-col gap-2 shadow-md bg-white rounded-lg w-[25%] p-4">
             <RText className="font-bold text-xl text-pink-500 ">You might also like: </RText>
             <ProductCard product={product}/>
           </Card>

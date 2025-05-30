@@ -8,7 +8,7 @@ export function ProductDetailsTabs({
   productData: IProductPageData;
 }) {
   return (
-    <Card className="p-4 min-h-[400px] flex-1">
+    <Card className="flex flex-col gap-2 shadow-md bg-white rounded-lg p-4 min-h-[400px] flex-1">
       <Tabs defaultValue="description">
         <Area>
           <Begin>
