@@ -16,7 +16,7 @@ const QuantityButton: React.FC<QuantityButtonProps> = ({
 }) => {
 
   return (
-    <Wrap className="w-auto py-2 items-center gap-2 border border-gray-300 rounded-xl">
+    <Wrap className="flex w-auto py-2 items-center gap-2 border border-gray-300 rounded-xl">
       <Button
         label={<Minus/>}
         onClick={decrement}

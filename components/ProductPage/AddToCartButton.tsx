@@ -5,7 +5,7 @@ import { ShoppingCart } from "lucide-react";
 
 const AddToCartButton: React.FC<AddToCartButtonProps> = () => {
   return (
-    <Button label={<Row>
+    <Button label={<Row className="flex items-center gap-2">
      <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
       <span>Add to Cart</span>
     </Row>}
