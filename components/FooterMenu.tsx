@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { InstagramIcon, FacebookIcon, YoutubeIcon } from "lucide-react";
 import { map } from "lodash";
-import { Block, Container, Group, Row, Section } from "@/lib/by/Div";
+import { Block, Container, Group, Row, RText, Section } from "@/lib/by/Div";
 import { Footer, FooterProps, ILink } from "@/type/homepage";
 
 const FooterMenu = ({ footers }: FooterProps) => {
@@ -11,20 +11,20 @@ const FooterMenu = ({ footers }: FooterProps) => {
     <Container className="w-full px-36 py-10 bg-[#ffc6c6] inline-flex flex-col justify-center items-center gap-10 overflow-hidden">
       <Section className="self-stretch py-5 inline-flex justify-between items-center">
         <Section className="p-2.5 inline-flex flex-col justify-center items-start gap-y-6 overflow-hidden">
-          <Block className="justify-start text-pink-400 text-5xl font-bold">
+          <RText className="justify-start text-pink-400 text-5xl font-bold">
             LOGO!
-          </Block>
+          </RText>
 
           <Group className="flex flex-col justify-start items-start gap-2">
-            <Block className="justify-start text-black text-xl font-bold font-['Roboto_Flex']">
+            <RText className="justify-start text-black text-xl font-bold font-['Roboto_Flex']">
               Contact Us
-            </Block>
-            <Block className="justify-start text-zinc-800 text-xl font-normal font-['Roboto_Flex']">
+            </RText>
+            <RText className="justify-start text-zinc-800 text-xl font-normal font-['Roboto_Flex']">
               Phone: 077 961 456
-            </Block>
-            <Block className="justify-start text-zinc-800 text-xl font-normal font-['Roboto_Flex']">
+            </RText>
+            <RText className="justify-start text-zinc-800 text-xl font-normal font-['Roboto_Flex']">
               Email: takeskincare@gmail.com
-            </Block>
+            </RText>
           </Group>
 
           <Row className="w-auto py-1.5 inline-flex justify-start items-center gap-x-14 overflow-hidden">
