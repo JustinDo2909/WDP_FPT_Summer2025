@@ -6,7 +6,7 @@ import {
   getStatusBadgeConfig,
   getPaymentMethodIcon,
   getRecentTransactions,
-} from "@/app/(admin)/dashboard/seg/utils";
+} from "@/components/admin/Dashboard/seg/utils";
 import map from "lodash/map";
 import {
   Area,
@@ -14,23 +14,23 @@ import {
   Section,
   Anchor,
   RText,
-  Group,
-  Wrap,
+  Core,
+  Container,
 } from "@/lib/by/Div/index";
 
 export function TransactionsTable() {
   const transactions = getRecentTransactions();
 
   return (
-    <Area className="bg-white rounded-lg shadow-sm border">
-      <Yard className="p-6 border-b">
-        <Section className="flex items-center justify-between">
-          <Anchor>
+    <Core className="bg-white rounded-lg shadow-sm border">
+      <Container className="p-6 border-b">
+        <Area className="flex items-center justify-between">
+          <Yard>
             <RText className="text-lg font-semibold">Transactions</RText>
             <RText className="text-sm text-gray-600">
               This is a list of latest transactions
             </RText>
-          </Anchor>
+          </Yard>
           <Anchor className="flex items-center space-x-2">
             <button className="flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50">
               <Filter className="h-4 w-4 mr-2" />
@@ -46,10 +46,10 @@ export function TransactionsTable() {
               className="w-32 px-3 py-2 border border-gray-300 rounded-md text-sm"
             />
           </Anchor>
-        </Section>
-      </Yard>
-      <Yard className="p-6">
-        <Section className="overflow-x-auto">
+        </Area>
+      </Container>
+      <Container className="p-6">
+        <Area className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b">
@@ -81,11 +81,11 @@ export function TransactionsTable() {
                 return (
                   <tr key={order.id} className="border-b hover:bg-gray-50">
                     <td className="py-4 px-4">
-                      <Group className="font-medium">
+                      <Yard className="font-medium">
                         {order.isRefund
                           ? `Payment refund to ${order.id}`
                           : `Payment from ${order.customer}`}
-                      </Group>
+                      </Yard>
                     </td>
                     <td className="py-4 px-4 text-gray-500">{order.date}</td>
                     <td
@@ -98,15 +98,15 @@ export function TransactionsTable() {
                       {order.reference}
                     </td>
                     <td className="py-4 px-4">
-                      <Group className="flex items-center space-x-2">
-                        <Wrap className={paymentIcon.className}>
+                      <Yard className="flex items-center space-x-2">
+                        <Section className={paymentIcon.className}>
                           {paymentIcon.text}
-                        </Wrap>
+                        </Section>
                         <span className="text-gray-500">
                           •••{" "}
                           {order.paymentMethod === "mastercard" ? "475" : "924"}
                         </span>
-                      </Group>
+                      </Yard>
                     </td>
                     <td className="py-4 px-4">
                       <span
@@ -120,8 +120,8 @@ export function TransactionsTable() {
               })}
             </tbody>
           </table>
-        </Section>
-      </Yard>
-    </Area>
+        </Area>
+      </Container>
+    </Core>
   );
 }

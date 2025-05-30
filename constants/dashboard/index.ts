@@ -13,14 +13,6 @@ export const monthlyRevenueData = [
   { name: "Dec", revenue: 0, target: 100000000 },
 ];
 
-export const categoryData = [
-  { name: "Skincare", value: 35, color: "#8884d8" },
-  { name: "Makeup", value: 28, color: "#82ca9d" },
-  { name: "Haircare", value: 18, color: "#ffc658" },
-  { name: "Fragrance", value: 12, color: "#ff7300" },
-  { name: "Supplements", value: 7, color: "#00ff88" },
-];
-
 export const topProducts = [
   {
     id: 1,
@@ -159,17 +151,6 @@ export const recentOrders = [
     paymentMethod: "mastercard",
     status: "completed",
   },
-];
-
-export const menuItems = [
-  { title: "Dashboard", icon: "LayoutDashboard", url: "#", active: true },
-  { title: "Products", icon: "Package", url: "#" },
-  { title: "Categories", icon: "Grid3X3", url: "#" },
-  { title: "Orders", icon: "ShoppingCart", url: "#" },
-  { title: "Customers", icon: "Users", url: "#" },
-  { title: "Voucher", icon: "Ticket", url: "#" },
-  { title: "Review", icon: "MessageSquare", url: "#" },
-  { title: "Inventory", icon: "Warehouse", url: "#" },
 ];
 
 export const overviewStats = [

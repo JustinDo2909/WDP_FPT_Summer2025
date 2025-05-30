@@ -3,9 +3,9 @@ import {
   monthlyRevenueData,
   topProducts,
   topCustomers,
-  categoryData,
   recentOrders,
 } from "@/constants/dashboard/index";
+import { categoryData } from "@/constants/share/index";
 
 //#region fomatCurrency
 export const formatCurrency = (amount: number): string => {
