@@ -5,6 +5,7 @@ import { map } from "lodash";
 import { listProductData } from "@/constants/homepage";
 import CardProduct from "@/lib/pattern/share/CardProduct";
 import Image from "next/image";
+import FloatingGameButton from "@/components/floating_game_button";
 
 export default function Page() {
   return (
@@ -101,6 +102,8 @@ export default function Page() {
           ))}
         </Group>
       </Section>
+
+      <FloatingGameButton />
     </Area>
   );
 }

@@ -3,6 +3,7 @@
 import BannerAbout from "@/components/aboutPage/bannerAbout";
 import ContactUs from "@/components/aboutPage/contactUs";
 import ContentAbout from "@/components/aboutPage/contentAbout";
+import FloatingGameButton from "@/components/floating_game_button";
 import { Container, Core } from "@/lib/by/Div";
 
 export default function About() {
@@ -21,6 +22,7 @@ export default function About() {
       </Container>
 
       <Container className="h-24 bg-transparent"></Container>
+      <FloatingGameButton />
     </Core>
   );
 }
