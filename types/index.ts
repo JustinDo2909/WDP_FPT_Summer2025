@@ -1,11 +1,15 @@
 declare global {
   type IProduct = {
-    product_id: number;
+    id: string;
+    createdAt: string; // or Date
+    updatedAt: string; // or Date
+    productCategory: IProductCategory;
+    productBrand: IProductBrand;
     title: string;
     description: string;
     price: number;
     sale_price: number;
-    image_url: string[];
+    image_url: string;
     product_category_id: number;
     product_brand_id: number;
     total_stock: number;
@@ -67,6 +71,16 @@ declare global {
   };
 }
 
+type IProductCategory = {
+  title: string;
+  description: string;
+};
+
+type IProductBrand = {
+  title: string;
+  description: string;
+};
+
 export type {
   IProduct,
   ICategory,
@@ -76,4 +90,6 @@ export type {
   INavLink,
   ITab,
   IProductPageData,
+  IProductCategory,
+  IProductBrand
 };

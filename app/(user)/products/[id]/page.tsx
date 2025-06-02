@@ -7,7 +7,7 @@ import ProductActions from "@/components/ProductPage/ProductActions";
 import { ShopGuarantees } from "@/components/ShopGuarantees";
 import ProductCard from "@/lib/pattern/share/ProductCard";
 
-const mockProduct = product.product;
+const mockProduct = product;
 
 const ProductPage = () => {
   return (
@@ -23,7 +23,7 @@ const ProductPage = () => {
           </Column>
           <Card className="flex flex-col gap-2 shadow-md bg-white rounded-lg p-4 space-y-2">
             <ProductInfo productData={product} />
-            <ProductActions totalStock={product.product.total_stock} />
+            <ProductActions totalStock={product.total_stock} />
             <ShopGuarantees />
           </Card>
         </Area>

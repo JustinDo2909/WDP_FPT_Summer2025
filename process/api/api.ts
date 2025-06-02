@@ -9,7 +9,7 @@ const customBaseQuery = async (
   extraOptions: any
 ) => {
   const baseQuery = fetchBaseQuery({
-    baseUrl: "http://localhost:9999",
+    baseUrl: "https://cosme-play-be.vercel.app/api/",
     credentials: "include",
     prepareHeaders: async (headers) => {
       const token = Cookies.get("authToken");
@@ -40,16 +40,28 @@ const customBaseQuery = async (
   }
 };
 
+
+//#region getProducts
 export const api = createApi({
   baseQuery: customBaseQuery,
   reducerPath: "api",
   tagTypes: ["Products"],
   endpoints: (build) => ({
-    getProduct: build.query<any, any>({
-      query: () => `/product`,
+    getProducts: build.query<any, ProductQueryParams>({
+      query: ({ category, brand, page = 1, limit = 20, sort}) => {
+        const params = new URLSearchParams();
+
+        if (category) params.append("category", category);
+        if (brand) params.append("brand", brand);
+        params.append("page", page.toString());
+        params.append("limit", limit.toString());
+        if (sort) params.append("sort", sort);
+        return `/products?${params.toString()}`;
+      },
       providesTags: ["Products"],
     }),
   }),
 });
+//#endregion 
 
-export const { useGetProductQuery } = api;
+export const { useGetProductsQuery } = api;
