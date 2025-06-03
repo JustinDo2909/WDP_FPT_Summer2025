@@ -7,7 +7,7 @@ declare global {
         page?: number;
         limit?: number;
         sort?: string;
-        query?: string;
+        title?: string;
     };
 
     type PaginatedResponse<T, N extends string> = Record<N, T[]> & {

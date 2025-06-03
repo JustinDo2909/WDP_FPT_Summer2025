@@ -40,7 +40,7 @@ export const useAutoRefetch = (
   searchParams: ProductQueryParams,
   refetch: () => void,
   shouldFetch: boolean,
-  excludeKeys: string[] = ['query']
+  excludeKeys: string[] = ['title']
 ) => {
   const prevParamsRef = useRef(searchParams);
 

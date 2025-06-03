@@ -1,4 +1,4 @@
-export const product = {
+export const mproduct = {
   
     id: 1,
     title: "Body Brilliant Exfoliating Serum",

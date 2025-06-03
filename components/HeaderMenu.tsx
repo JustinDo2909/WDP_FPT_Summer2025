@@ -54,7 +54,7 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
 
       <Section className="flex justify-start items-center gap-7 overflow-hidden">
         <Link
-          href="/cart"
+          href="/checkout/cart"
           className="flex p-2 justify-center items-center gap-2.5 overflow-hidden rounded-full
         hover:bg-[#ffc6c6] transition-all hover:cursor-pointer"
         >

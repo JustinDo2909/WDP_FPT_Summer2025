@@ -7,7 +7,7 @@ export default async function SearchPage({ searchParams }: {searchParams: Produc
   const stringParams = {
     ...params,
     page: params.page !== undefined ? String(params.page) : "1",
-    limit: params.limit !== undefined ? String(params.limit) : "20",
+    limit: params.limit !== undefined ? String(params.limit) : "5",
   };
 
   const productsData:PaginatedResponse<IProduct, 'products'> = await fetchProducts(stringParams);

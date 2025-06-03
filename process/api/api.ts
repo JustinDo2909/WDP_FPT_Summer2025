@@ -41,18 +41,19 @@ const customBaseQuery = async (
 };
 
 
-//#region getProducts
 export const api = createApi({
   baseQuery: customBaseQuery,
   reducerPath: "api",
   tagTypes: ["Products"],
   endpoints: (build) => ({
+    //#region getProducts
     getProducts: build.query<any, ProductQueryParams>({
-      query: ({ category, brand, page = 1, limit = 20, sort}) => {
+      query: ({ category, brand, page = 1, limit = 20, sort, title}) => {
         const params = new URLSearchParams();
 
         if (category) params.append("category", category);
         if (brand) params.append("brand", brand);
+        if (title) params.append("title", title);
         params.append("page", page.toString());
         params.append("limit", limit.toString());
         if (sort) params.append("sort", sort);
@@ -60,8 +61,8 @@ export const api = createApi({
       },
       providesTags: ["Products"],
     }),
+   //#endregion 
   }),
 });
-//#endregion 
 
 export const { useGetProductsQuery } = api;

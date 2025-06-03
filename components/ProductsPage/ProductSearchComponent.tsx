@@ -19,16 +19,17 @@ interface ProductsSearchComponentProps {
 import { useSearchParams } from 'next/navigation';
 import { map } from 'lodash';
 import { BRANDS, CATEGORIES } from "./seg/utils";
+import { useState } from "react";
 
 
 export const ProductsSearchComponent = ({
   searchParams,
   onChangeParams,
-  onSearch,
   isLoading
 }: ProductsSearchComponentProps) => {
   const params = useSearchParams();
-  const query = params.get('query') ?? '';
+  const query = params.get('title') ?? '';
+  const [querry, setQuerry] = useState(query)
 
   return (
     <Section className="flex flex-col gap-6 px-4 sm:px-6">
@@ -49,9 +50,9 @@ export const ProductsSearchComponent = ({
                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
                        placeholder-pink-500 dark:placeholder-pink-400 pr-14
                        transition-shadow duration-200 hover:shadow-lg"
-            value={searchParams.query}
-            onChange={(e) => onChangeParams({ query: e.target.value })}
-            onKeyPress={(e) => e.key === "Enter" && onSearch()}
+            value={querry}
+            onChange={(e) => setQuerry(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && onChangeParams({ title: querry })}
           />
           <button
             aria-label="Search"
@@ -60,7 +61,7 @@ export const ProductsSearchComponent = ({
                        border-2 border-pink-500 hover:border-pink-600 rounded-full
                        transition-transform duration-200 hover:scale-105 focus:ring-2 focus:ring-pink-300
                        disabled:opacity-50 shadow-md"
-            onClick={onSearch}
+            onClick={() => onChangeParams({ title: querry })}
           >
             {isLoading ? (
               <svg

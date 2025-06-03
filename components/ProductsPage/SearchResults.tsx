@@ -7,6 +7,7 @@ import { ProductGrid } from "@/lib/pattern/share/ProductGrid";
 import { useGetProductsQuery } from "@/process/api/api";
 import { useState } from "react";
 import { useAutoRefetch } from "./seg/utils";
+import CirclePagination from "@/lib/pattern/share/CirclePagination";
 
 interface SearchResultsProps {
   initialData?: PaginatedResponse<IProduct, 'products'>;
@@ -18,8 +19,8 @@ export const SearchResults = ({ initialData }: SearchResultsProps) => {
     brand: "",
     sort: "",
     page: 1,
-    limit: 10,
-    query: ""
+    limit: 5,
+    title: ""
   });
 
   const shouldFetch = true;
@@ -27,7 +28,7 @@ export const SearchResults = ({ initialData }: SearchResultsProps) => {
     searchParams
   );
 
-  useAutoRefetch(searchParams, refetch, shouldFetch, ['query']);
+  useAutoRefetch(searchParams, refetch, shouldFetch, ['title']);
 
 
   return (
@@ -46,10 +47,56 @@ export const SearchResults = ({ initialData }: SearchResultsProps) => {
 
       <Area className="bg-muted rounded-xl shadow-sm">
         <Content className="mt-4">
+          {!isLoading && !fetchedData.pagination.total ? (
+            <EmptySearchResults />
+          ) : (
+            <>
           <ProductGrid products={fetchedData?.products ?? initialData?.products} />
+                <CirclePagination 
+                  onPageChange={(value) => setSearchParams(prev => ({ ...prev, page: value }))} 
+                  pagination={fetchedData?.pagination ?? initialData?.pagination}
+                />
+            </>
+          )}
+          {/* <CirclePagination onPageChange={(value) => setSearchParams(prev => ({ ...prev, page: value }))} pagination={fetchedData?.pagination ?? initialData?.pagination}/> */}
         </Content>
       </Area>
     </>
   );
 };
 
+
+
+
+
+
+const EmptySearchResults = () => {
+  return (
+    <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+      <div className="w-24 h-24 mb-6 rounded-full bg-muted flex items-center justify-center">
+        <svg 
+          className="w-12 h-12 text-muted-foreground" 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth={1.5} 
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+          />
+        </svg>
+      </div>
+      
+      <h3 className="text-xl font-semibold text-foreground mb-2">
+        No products found
+      </h3>
+      
+      <p className="text-muted-foreground max-w-md mb-6">
+        We couldn't find any products matching your search criteria. Try adjusting your filters or search terms.
+        
+      </p>
+    </div>
+  );
+};
