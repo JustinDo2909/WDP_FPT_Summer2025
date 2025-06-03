@@ -4,7 +4,7 @@ import { X, Upload, Trash2 } from "lucide-react";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 import { brandData, categoryData } from "@/constants/share/index";
 import { AddProductModalProps } from "@/types/productManagement/index";
-import { useProductForm } from "@/components/admin/ProductManagement/seg/utils";
+import { useProductForm } from "@/components/admin/Product/seg/utils";
 
 export function AddProductModal({
   isOpen,

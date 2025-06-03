@@ -97,13 +97,14 @@ export const getPaymentMethodIcon = (method: string) => {
 //#endregion
 //#region getCurrentDate
 export const getCurrentDate = (): string => {
-  return new Date().toLocaleDateString("vi-VN", {
+  return new Date().toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   });
 };
+
 //#endregion
 //#region getMonthlyRevenueData
 // Data processing functions
