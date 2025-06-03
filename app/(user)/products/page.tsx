@@ -1,6 +1,7 @@
 import { SearchResults } from "@/components/ProductsPage/SearchResults";
 import { Core, Container } from "@/lib/by/Div";
 import { fetchProducts } from "./seg";
+import FloatingGameButton from "@/components/floating_game_button";
 
 export default async function SearchPage({ searchParams }: {searchParams: ProductQueryParams}) {
   const params = await searchParams;
@@ -17,6 +18,7 @@ export default async function SearchPage({ searchParams }: {searchParams: Produc
       <Container className="max-w-7xl mx-auto px-4">
         <SearchResults initialData={productsData} />
       </Container>
+      <FloatingGameButton />
     </Core>
   );
 }

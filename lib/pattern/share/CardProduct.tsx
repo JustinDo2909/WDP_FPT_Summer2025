@@ -11,7 +11,7 @@ const CardProduct = ({ product }: { product: IProduct }) => {
       : 0;
 
   return (
-    <Card className="w-fit h-full p-2.5 bg-white rounded-md shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col justify-start items-end gap-1 overflow-hidden">
+    <Card className="w-72 h-full p-2.5 bg-white rounded-md shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col justify-start items-end gap-1 overflow-hidden">
       <Image
         className="self-stretch w-full relative rounded-md object-"
         src={product.image_url || "/placeholder.svg"}
