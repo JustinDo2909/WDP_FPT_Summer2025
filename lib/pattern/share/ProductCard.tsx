@@ -6,20 +6,22 @@ import { Card, Column, Cover, Row, RText, Wrap } from "@/lib/by/Div";
 import { formatPrice } from "../../share/formatPrice";
 import Link from "next/link";
 import CustomTooltip from "./CustomTooltip";
+import { calculateDiscount } from "@/lib/share/calcDiscount";
 
 interface ProductCardProps {
   product: IProduct;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const { id, image_url, title, sale_price, price } = product
   return (
-    <Link href={`/products/${product.id}`} className="flex-1 flex">
-      <Card className="max-w-sm group p-2 cursor-pointer bg-white dark:bg-zinc-900 rounded-xl shadow flex flex-col gap-3">
+    <Link href={`/products/${id}`} className="flex-1 flex">
+      <Card className="max-w-sm flex-1 group p-2 cursor-pointer bg-white dark:bg-zinc-900 rounded-xl shadow flex flex-col gap-3">
         {/* Product Image */}
         <Cover className="relative aspect-square w-full overflow-hidden rounded-lg bg-pink-100">
           <Image
-            src={product.image_url}
-            alt={product.title}
+            src={image_url.length === 0 ? "https://picsum.photos/500" : image_url}
+            alt={title}
             fill
             className="object-cover group-hover:scale-105 transition-transform"
             loading="lazy"
@@ -27,19 +29,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </Cover>
         <Wrap className="flex flex-col p-2 py-0 !items-start flex-1 gap-2">
           <Column className="justify-between items-center w-full">
-          {product.sale_price != null ? (
+          {sale_price != null ? (
               <p className="text-gray-400 line-through text-sm">
-                {formatPrice(product.price)}
+                {formatPrice(price)}
               </p>) : <br/>
             }
             <Row className="flex justify-between w-full">
               
               <RText className="text-pink-600 font-semibold text-lg leading-none mb-1">
-                {formatPrice(product.sale_price ?? product.price)}
+                {formatPrice(sale_price ?? price)}
               </RText>
-              {product.sale_price != null && (
+              {sale_price != null && (
                 <RText className="bg-purple-500 flex items-center text-white rounded-md text-xs px-1 font-semibold">
-                  -10%
+                  -{calculateDiscount(sale_price , price)}%
                 </RText>
               )}
             </Row>
@@ -47,7 +49,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             {product.productBrand.title}
           </RText>
             <h3 className="text-lg font-semibold line-clamp-2 leading-tight">
-              {product.title}
+              {title}
             </h3>
             
           </Column>

@@ -24,7 +24,7 @@ export const SearchResults = ({ initialData }: SearchResultsProps) => {
   });
 
   const shouldFetch = true;
-  const { data: fetchedData , isLoading, refetch } = useGetProductsQuery(
+  const { data: fetchedData , isFetching, refetch } = useGetProductsQuery(
     searchParams
   );
 
@@ -36,7 +36,7 @@ export const SearchResults = ({ initialData }: SearchResultsProps) => {
       <Section className="mb-8">
         <ProductsSearchComponent
           searchParams={searchParams}
-          isLoading={isLoading}
+          isLoading={isFetching}
           onSearch={refetch}
           onChangeParams={(newParams:ProductQueryParams) => {
             // Important: create a NEW object reference
@@ -47,7 +47,7 @@ export const SearchResults = ({ initialData }: SearchResultsProps) => {
 
       <Area className="bg-muted rounded-xl shadow-sm">
         <Content className="mt-4">
-          {!isLoading && !fetchedData.pagination.total ? (
+          {!isFetching && !fetchedData.pagination.total ? (
             <EmptySearchResults />
           ) : (
             <>
