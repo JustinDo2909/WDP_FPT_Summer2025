@@ -55,7 +55,7 @@ export default function CustomersPage() {
   const columns = [
     {
       key: "id" as const,
-      label: "Customer ID",
+      label: "CusID",
       sortable: true,
       render: (customer: Customer) => (
         <RText className="font-mono text-sm font-medium text-blue-600">

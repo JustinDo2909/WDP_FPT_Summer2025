@@ -27,7 +27,8 @@ export const menuItems = [
   { title: "Categories", icon: "Grid3X3", url: "/categories" },
   { title: "Orders", icon: "ShoppingCart", url: "/manage-orders" },
   { title: "Customers", icon: "Users", url: "/manage-customers" },
-  { title: "Voucher", icon: "Ticket", url: "/voucher" },
+  { title: "Voucher", icon: "Ticket", url: "/manage-vouchers" },
   { title: "Review", icon: "MessageSquare", url: "/review" },
-  { title: "Inventory", icon: "Warehouse", url: "/inventory" },
+  { title: "Game", icon: "Warehouse", url: "/manage-game" },
+  { title: "Score", icon: "Warehouse", url: "/manage-score" },
 ];
