@@ -24,7 +24,11 @@ export const menuItems = [
     url: "/dashboard",
   },
   { title: "Products", icon: "Package", url: "/manage-products" },
-  { title: "Categories", icon: "Grid3X3", url: "/categories" },
+  {
+    title: "Categories & Brands",
+    icon: "Grid3X3",
+    url: "/manage-categories-brands",
+  },
   { title: "Orders", icon: "ShoppingCart", url: "/manage-orders" },
   { title: "Customers", icon: "Users", url: "/manage-customers" },
   { title: "Voucher", icon: "Ticket", url: "/manage-vouchers" },
