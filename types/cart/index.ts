@@ -2,7 +2,7 @@ declare global {
   type ICart = {
     id: string;
     user_id: string;
-    cart_items: ICartLineItem[]
+    cartItems: ICartLineItem[]
   };
 
   type ICartLineItem = {

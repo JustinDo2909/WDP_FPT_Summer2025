@@ -48,7 +48,7 @@ export default function CartSummary({
 
       <Row className="flex justify-between text-pink-600 font-bold text-base">
         <RText>Total:</RText>
-        <RText>{formatPrice(total + shipping??0)}</RText>
+        <RText>{formatPrice(total + (shipping ?? 0))}</RText>
       </Row>
 
       <hr className="border-t border-gray-200" />

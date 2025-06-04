@@ -5,6 +5,7 @@ declare global {
     updatedAt: string; // or Date
     productCategory: IProductCategory;
     productBrand: IProductBrand;
+    productSkinType: ISkinType;
     title: string;
     description: string;
     price: number;
@@ -33,6 +34,11 @@ declare global {
     description: string;
   };
 
+  type ISkinType = {
+    product_brand_id: number;
+    title: string;
+    description: string;
+  };
   type IReview = {
     review_id: number;
     product_id: number;

@@ -26,7 +26,7 @@ interface ProductPageProps {
 export default async function ProductPage({ params }: ProductPageProps) {
   const {id} = await params
   const res = await fetchProductById(id); 
-  const product = res.product
+  const product:IProduct = res.product
 
   return (
     <Core className="min-h-screen bg-gray-100">
@@ -34,14 +34,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <Area className="grid lg:grid-cols-2 gap-2 lg:gap-4">
           <Column className="flex flex-col">
             <ProductImages
-              images={mproduct.image_url} 
+              images={[product.image_url, ...(mproduct.image_url || [])]}
               discount={10}
               productName={product.title}
             />
           </Column>
           <Card className="flex flex-col gap-2 shadow-md bg-white rounded-lg p-4 space-y-2">
             <ProductInfo productData={product} />
-            <ProductActions totalStock={product.total_stock} />
+            <ProductActions totalStock={product.total_stock} productId={product.id} />
             <ShopGuarantees />
           </Card>
         </Area>

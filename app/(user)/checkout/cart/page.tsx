@@ -2,13 +2,26 @@
 
 import CartSummary from "@/components/CartPage/CartSummary";
 import { CartTable } from "@/components/CartPage/CartTable";
-import { mockCartItems } from "@/components/CartPage/seg/useCart";
 import Button from "@/components/CustomButton";
 import { Core, Row, RText, Section } from "@/lib/by/Div";
+import { useGetCartQuery } from "@/process/api/apiCart";
 import Link from "next/link";
+import { get, sortBy } from "lodash";
+import {
+  calculateCartTotal,
+  calculateCartTotalOriginalPrice,
+} from "../seg/calculateSubtotal";
 
 export default function CartPage() {
-  const items = mockCartItems;
+  const { data: cartData, isLoading } = useGetCartQuery();
+  const cart = cartData?.cart;
+  const sortedCartItems = sortBy(get(cart, "cartItems", []), (item) =>
+    new Date(item.createdAt).getTime()
+  );
+
+
+  const total = calculateCartTotal(sortedCartItems);
+  const subtotal = calculateCartTotalOriginalPrice(sortedCartItems);
 
   return (
     <Core className="p-4 md:p-8 min-h-screen ">
@@ -18,23 +31,30 @@ export default function CartPage() {
         </h2>
       </Row>
       <Section className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-7xl mx-auto">
-        <CartTable items={items.cart_items} />
-        <CartSummary
-          subtotal={12000}
-          total={12000}
-          actionButton={
-            <Link href='/checkout'>
-            <Button
-              label={
-                <RText className="text-base whitespace-nowrap">
-                  Proceed to Checkout
-                </RText>
+        {!isLoading && cart ? (
+          <>
+            <CartTable items={sortedCartItems} />
+            <CartSummary
+              total={total}
+              subtotal={subtotal}
+              actionButton={
+                <Link href="/checkout">
+                  <Button
+                    disabled={sortedCartItems.length === 0}
+                    label={
+                      <RText className="text-base whitespace-nowrap">
+                        Proceed to Checkout
+                      </RText>
+                    }
+                    className="flex-1 h-12 w-full flex bg-gradient-to-r from-pink-500 to-rose-500 text-white py-2 px-4 rounded-lg font-medium hover:from-pink-600 hover:to-rose-600 transform hover:scale-105 transition-all duration-200 shadow-lg items-center justify-center text-sm"
+                  />
+                </Link>
               }
-              className="flex-1 h-12 w-full flex bg-gradient-to-r from-pink-500 to-rose-500 text-white py-2 px-4 rounded-lg font-medium hover:from-pink-600 hover:to-rose-600 transform hover:scale-105 transition-all duration-200 shadow-lg items-center justify-center text-sm"
             />
-            </Link>
-          }
-        />
+          </>
+        ) : (
+          <p className="col-span-full text-center">Loading your cart...</p>
+        )}
       </Section>
     </Core>
   );

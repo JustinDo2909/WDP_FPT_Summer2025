@@ -7,20 +7,23 @@ import { formatPrice } from "../../share/formatPrice";
 import Link from "next/link";
 import CustomTooltip from "./CustomTooltip";
 import { calculateDiscount } from "@/lib/share/calcDiscount";
+import AddToCartWrapper from "./AddToCartWrapper";
 
 interface ProductCardProps {
   product: IProduct;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const { id, image_url, title, sale_price, price } = product
+  const { id, image_url, title, sale_price, price } = product;
   return (
     <Link href={`/products/${id}`} className="flex-1 flex">
       <Card className="max-w-sm flex-1 group p-2 cursor-pointer bg-white dark:bg-zinc-900 rounded-xl shadow flex flex-col gap-3">
         {/* Product Image */}
         <Cover className="relative aspect-square w-full overflow-hidden rounded-lg bg-pink-100">
           <Image
-            src={image_url.length === 0 ? "https://picsum.photos/500" : image_url}
+            src={
+              image_url.length === 0 ? "https://picsum.photos/500" : image_url
+            }
             alt={title}
             fill
             className="object-cover group-hover:scale-105 transition-transform"
@@ -29,32 +32,30 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </Cover>
         <Wrap className="flex flex-col p-2 py-0 !items-start flex-1 gap-2">
           <Column className="justify-between items-center w-full">
-          {sale_price != null ? (
+            {sale_price != null ? (
               <p className="text-gray-400 line-through text-sm">
                 {formatPrice(price)}
-              </p>) : <br/>
-            }
+              </p>
+            ) : (
+              <br />
+            )}
             <Row className="flex justify-between w-full">
-              
               <RText className="text-pink-600 font-semibold text-lg leading-none mb-1">
                 {formatPrice(sale_price ?? price)}
               </RText>
               {sale_price != null && (
                 <RText className="bg-purple-500 flex items-center text-white rounded-md text-xs px-1 font-semibold">
-                  -{calculateDiscount(sale_price , price)}%
+                  -{calculateDiscount(sale_price, price)}%
                 </RText>
               )}
             </Row>
             <RText className="text-sm text-gray-500 font-bold tracking-base py-1">
-            {product.productBrand.title}
-          </RText>
+              {product.productBrand.title}
+            </RText>
             <h3 className="text-lg font-semibold line-clamp-2 leading-tight">
               {title}
             </h3>
-            
           </Column>
-
-          
 
           <p className="text-sm text-gray-700 line-clamp-2">
             {product.description}
@@ -79,11 +80,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </Row>
 
             <Row className="flex items-center justify-center">
-                <button className="text-pink-500 p-2">
-                  <CustomTooltip text="Add to Cart!" position={"top"}>
-                  <ShoppingBasketIcon size={20} className="transform origin-center"/>
+              <AddToCartWrapper productId={product.id}>
+                <button className="text-pink-500 p-1 rounded-full transition-colors transition-transform duration-150 ease-in-out hover:bg-pink-100 active:scale-90">
+                  <CustomTooltip text="Add to Cart!" position="top">
+                    <ShoppingBasketIcon
+                      size={20}
+                      className="transform origin-center"
+                    />
                   </CustomTooltip>
                 </button>
+              </AddToCartWrapper>
               <RText className="text-xs text-gray-800 mt-0.5">(20)</RText>
             </Row>
           </Row>

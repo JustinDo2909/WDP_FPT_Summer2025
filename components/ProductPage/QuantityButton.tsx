@@ -7,6 +7,7 @@ interface QuantityButtonProps {
   quantity: number;
   increment?: () => void;
   decrement?: () => void;
+  disabled?: boolean;
   size?: 'default' | 'small';
 }
 
@@ -14,6 +15,7 @@ const QuantityButton: React.FC<QuantityButtonProps> = ({
   quantity,
   increment,
   decrement,
+  disabled = false,
   size = 'default',
 }) => {
   const isSmall = size === 'small';
@@ -25,6 +27,7 @@ const QuantityButton: React.FC<QuantityButtonProps> = ({
       }`}
     >
       <Button
+        disabled={disabled}
         label={<Minus size={isSmall ? 14 : 18} />}
         onClick={decrement}
         variant="outline"
@@ -40,6 +43,7 @@ const QuantityButton: React.FC<QuantityButtonProps> = ({
         {quantity}
       </RText>
       <Button
+        disabled={disabled}
         label={<Plus size={isSmall ? 14 : 18} />}
         onClick={increment}
         variant="outline"

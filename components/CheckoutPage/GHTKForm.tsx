@@ -105,7 +105,7 @@ const GHNForm: React.FC<GHNFormProps> = ({
             className={cn(
                 inputClass,
                 !validateVietnamesePhoneNumber(phone_number) && phone_number !== "" &&
-                "border-red-500 focus:ring-red-500 focus:border-red-500 ring-red-500"
+                "border-red-500 focus-visible:ring-red-500 focus-visible:border-red-500 ring-red-500"
             )}
             placeholder="Enter phone number (required)"
             value={phone_number}
@@ -242,3 +242,7 @@ const GHNForm: React.FC<GHNFormProps> = ({
 };
 
 export default GHNForm;
+
+
+
+
