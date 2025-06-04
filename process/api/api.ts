@@ -48,12 +48,13 @@ export const api = createApi({
   endpoints: (build) => ({
     //#region getProducts
     getProducts: build.query<any, ProductQueryParams>({
-      query: ({ category, brand, page = 1, limit = 20, sort, title}) => {
+      query: ({ category, brand, skinType, page = 1, limit = 20, sort, title }) => {
         const params = new URLSearchParams();
 
         if (category) params.append("category", category);
         if (brand) params.append("brand", brand);
         if (title) params.append("title", title);
+        if (skinType) params.append("skinType", skinType);
         params.append("page", page.toString());
         params.append("limit", limit.toString());
         if (sort) params.append("sort", sort);
@@ -61,7 +62,19 @@ export const api = createApi({
       },
       providesTags: ["Products"],
     }),
-   //#endregion 
+    //#endregion 
+    //#region getProductsMeta
+
+    getProductMeta: build.query<any, void>({
+      query: () => ({
+        url: "products/meta",
+        method: "GET",
+      }),
+      providesTags: ["Products"],
+    }),
+    //#endregion 
+
+    
   }),
 });
 

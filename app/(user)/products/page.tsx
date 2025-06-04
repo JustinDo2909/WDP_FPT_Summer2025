@@ -1,6 +1,6 @@
 import { SearchResults } from "@/components/ProductsPage/SearchResults";
 import { Core, Container } from "@/lib/by/Div";
-import { fetchProducts } from "./seg";
+import { fetchProductMeta, fetchProducts } from "./seg";
 import FloatingGameButton from "@/components/floating_game_button";
 
 export default async function SearchPage({ searchParams }: {searchParams: ProductQueryParams}) {
@@ -12,11 +12,13 @@ export default async function SearchPage({ searchParams }: {searchParams: Produc
   };
 
   const productsData:PaginatedResponse<IProduct, 'products'> = await fetchProducts(stringParams);
+  const productMeta = await fetchProductMeta();
+
   
   return (
     <Core className="min-h-screen bg-background py-10">
       <Container className="max-w-7xl mx-auto px-4">
-        <SearchResults initialData={productsData} />
+        <SearchResults productMetas={productMeta.data as IProductMeta} initialData={productsData} />
       </Container>
       <FloatingGameButton />
     </Core>

@@ -5,6 +5,7 @@ declare global {
         category?: string;
         brand?: string;
         page?: number;
+        skinType?: string;
         limit?: number;
         sort?: string;
         title?: string;

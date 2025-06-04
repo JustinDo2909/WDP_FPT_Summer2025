@@ -9,47 +9,52 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { useSearchParams } from 'next/navigation';
+import { map } from 'lodash';
+import { useState } from "react";
+
 interface ProductsSearchComponentProps {
   searchParams: ProductQueryParams;
   onChangeParams: (newParams: Partial<ProductQueryParams>) => void;
-  onSearch: () => void;
-  isLoading: boolean
+  productMetas: IProductMeta;
+  isLoading: boolean;
 }
-
-import { useSearchParams } from 'next/navigation';
-import { map } from 'lodash';
-import { BRANDS, CATEGORIES } from "./seg/utils";
-import { useState } from "react";
-
 
 export const ProductsSearchComponent = ({
   searchParams,
   onChangeParams,
-  isLoading
+  isLoading,
+  productMetas
 }: ProductsSearchComponentProps) => {
   const params = useSearchParams();
   const query = params.get('title') ?? '';
-  const [querry, setQuerry] = useState(query)
+  const [querry, setQuerry] = useState(query);
+
+  const handleClearAll = () => {
+    onChangeParams({
+      title: '',
+      category: '',
+      brand: '',
+      skinType: '',
+      sort: '',
+    });
+    setQuerry('');
+  };
+
+  const handleRemoveFilter = (filter: keyof ProductQueryParams) => {
+    onChangeParams({ [filter]: '' });
+  };
 
   return (
-    <Section className="flex flex-col gap-6 px-4 sm:px-6">
+    <Section className="flex flex-col gap-4 px-4 sm:px-6">
+
       {/* Search Section */}
       <Group className="flex flex-col items-center w-full gap-4">
-        {/* Show heading only if no search query */}
-
         <Group className="relative w-full max-w-3xl">
-          <label htmlFor="search" className="sr-only">
-            What are you looking for today?
-          </label>
           <input
             id="search"
             placeholder="What are you looking for today?..."
-            aria-label="Search for cleansers, supplements, treatments, etc."
-            className="w-full px-6 py-3 text-base rounded-full border-2 border-pink-300 
-                       focus:border-pink-500 focus:outline-none focus:ring-4 focus:ring-pink-100
-                       bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                       placeholder-pink-500 dark:placeholder-pink-400 pr-14
-                       transition-shadow duration-200 hover:shadow-lg"
+            className="w-full px-6 py-3 text-base rounded-full border-2 border-pink-300 focus:border-pink-500 focus:outline-none focus:ring-4 focus:ring-pink-100 pr-14"
             value={querry}
             onChange={(e) => setQuerry(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && onChangeParams({ title: querry })}
@@ -57,9 +62,9 @@ export const ProductsSearchComponent = ({
           <button
             aria-label="Search"
             disabled={isLoading}
-            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-pink-500 hover:bg-pink-600 
-                       border-2 border-pink-500 hover:border-pink-600 rounded-full
-                       transition-transform duration-200 hover:scale-105 focus:ring-2 focus:ring-pink-300
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-pink-500 rounded-full hover:bg-pink-600 
+                       border-2 border-pink-500 hover:border-pink-600
+                       transition-transform duration-200 focus:ring-2 focus:ring-pink-300
                        disabled:opacity-50 shadow-md"
             onClick={() => onChangeParams({ title: querry })}
           >
@@ -89,93 +94,95 @@ export const ProductsSearchComponent = ({
           </button>
         </Group>
 
-        {/* Show results text after search */}
-        {query &&
+        {query && (
           <RText className="text-sm text-pink-600 dark:text-gray-300">
             Showing results for &quot;{query}&quot;
           </RText>
-        }
+        )}
       </Group>
 
-      {/* Filter and Sort Bar */}
+      {/* Active Filters */}
+      <Group className="flex flex-wrap gap-2">
+        {searchParams.title && (
+          <FilterTag label={searchParams.title} onRemove={() => handleRemoveFilter('title')} />
+        )}
+        {searchParams.category && (
+          <FilterTag label={searchParams.category} onRemove={() => handleRemoveFilter('category')} />
+        )}
+        {searchParams.brand && (
+          <FilterTag label={searchParams.brand} onRemove={() => handleRemoveFilter('brand')} />
+        )}
+        {searchParams.skinType && (
+          <FilterTag label={searchParams.skinType} onRemove={() => handleRemoveFilter('skinType')} />
+        )}
+        {searchParams.sort && (
+          <FilterTag label={`Sorted: ${searchParams.sort}`} onRemove={() => handleRemoveFilter('sort')} />
+        )}
+        <Group></Group>
+      </Group>
+
+      {/* Filters and Sort */}
       <Group className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
         <Group className="flex flex-col sm:flex-row gap-4">
+
           {/* Category Filter */}
-          <Select 
-            value={searchParams.category ?? 'all'} 
-            onValueChange={(value) => onChangeParams({ category: value === 'all' ? undefined : value,})}
-          >
-            <SelectTrigger
-              aria-label="Select product category"
-              className="w-full sm:w-[160px] rounded-full border-gray-300 dark:border-gray-600 
-                         shadow-sm text-sm focus:ring-pink-200 dark:focus:ring-pink-300
-                         bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-            >
+          <Select value={searchParams.category ?? 'all'} onValueChange={(value) => onChangeParams({ category: value === 'all' ? undefined : value })}>
+            <SelectTrigger className="w-full sm:w-[160px] rounded-full">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
-              {map(CATEGORIES,(category) => (
-                <SelectItem key={category.value} value={category.value}>
-                  {category.label}
-                </SelectItem>
+              {map(productMetas.categories, category => (
+                <SelectItem key={category.title} value={category.title}>{category.title}</SelectItem>
               ))}
             </SelectContent>
           </Select>
 
           {/* Brand Filter */}
-          <Select 
-            value={searchParams.brand ?? 'all'} 
-            onValueChange={(value) => onChangeParams({ brand: value === 'all' ? undefined : value,})}
-          >
-            <SelectTrigger
-              aria-label="Select brand"
-              className="w-full sm:w-[160px] rounded-full border-gray-300 dark:border-gray-600 
-                         shadow-sm text-sm focus:ring-pink-200 dark:focus:ring-pink-300
-                         bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-            >
+          <Select value={searchParams.brand ?? 'all'} onValueChange={(value) => onChangeParams({ brand: value === 'all' ? undefined : value })}>
+            <SelectTrigger className="w-full sm:w-[160px] rounded-full">
               <SelectValue placeholder="All Brands" />
             </SelectTrigger>
             <SelectContent>
-              {map(BRANDS,(brand) => (
-                <SelectItem key={brand.value} value={brand.value}>
-                  {brand.label}
-                </SelectItem>
+              {map(productMetas.brands, brand => (
+                <SelectItem key={brand.title} value={brand.title}>{brand.title}</SelectItem>
               ))}
             </SelectContent>
           </Select>
 
-          {/* Clear Filters Button */}
+          {/* Skin Type Filter */}
+          <Select value={searchParams.skinType ?? 'all'} onValueChange={(value) => onChangeParams({ skinType: value === 'all' ? undefined : value })}>
+            <SelectTrigger className="w-full sm:w-[160px] rounded-full">
+              <SelectValue placeholder="All Skin Types" />
+            </SelectTrigger>
+            <SelectContent>
+              {map(productMetas.skinTypes, skintype => (
+                <SelectItem key={skintype.id} value={skintype.title}>{skintype.title}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Clear All Button */}
           <button
-            aria-label="Clear all filters"
+            onClick={handleClearAll}
             className="px-4 py-2 text-sm flex items-center rounded-full bg-gray-100 dark:bg-gray-700 
                        text-gray-800 dark:text-gray-200 hover:bg-pink-100 dark:hover:bg-pink-600 
                        transition-colors shadow-sm"
           >
-            <X size={16} className="mr-1"/> Clear 
+            <X size={16} className="mr-1" /> Clear
           </button>
         </Group>
 
-        {/* Sort Buttons */}
+        {/* Sort */}
         <Group className="flex gap-2 items-center">
           <RText className="text-gray-900 dark:text-gray-100 text-sm">Sort by price:</RText>
           <button
-            className={`px-4 py-2 text-sm rounded-full transition-colors shadow-sm
-                       ${
-                         searchParams.sort === "lowToHigh"
-                           ? "bg-pink-500 text-white"
-                           : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-pink-100 dark:hover:bg-pink-600"
-                       }`}
+            className={`px-4 py-2 text-sm rounded-full ${searchParams.sort === "lowToHigh" ? "bg-pink-500 text-white" : "bg-gray-100 dark:bg-gray-700"}`}
             onClick={() => onChangeParams({ sort: "lowToHigh" })}
           >
             Low to High
           </button>
           <button
-            className={`px-4 py-2 text-sm rounded-full transition-colors shadow-sm
-                       ${
-                         searchParams.sort === "highToLow"
-                           ? "bg-pink-500 text-white"
-                           : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-pink-100 dark:hover:bg-pink-600"
-                       }`}
+            className={`px-4 py-2 text-sm rounded-full ${searchParams.sort === "highToLow" ? "bg-pink-500 text-white" : "bg-gray-100 dark:bg-gray-700"}`}
             onClick={() => onChangeParams({ sort: "highToLow" })}
           >
             High to Low
@@ -184,4 +191,14 @@ export const ProductsSearchComponent = ({
       </Group>
     </Section>
   );
-}
+};
+
+// Filter Tag Component
+const FilterTag = ({ label, onRemove }: { label: string, onRemove: () => void }) => (
+  <span className="flex items-center gap-1 px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full">
+    {label}
+    <button onClick={onRemove} className="hover:text-pink-900">
+      <X size={12} />
+    </button>
+  </span>
+);

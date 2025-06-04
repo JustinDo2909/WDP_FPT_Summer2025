@@ -8,6 +8,7 @@ import ProductCard from "@/lib/pattern/share/ProductCard";
 import { fetchProducts } from "../seg"; // Added fetchProduct import
 import { fetchProductById } from "./seg";
 import { mproduct } from "@/constants";
+import { calculateDiscount } from "@/lib/share/calcDiscount";
 
 // Generate static parameters for static site generation
 export async function generateStaticParams() {
@@ -35,11 +36,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <Column className="flex flex-col">
             <ProductImages
               images={[product.image_url, ...(mproduct.image_url || [])]}
-              discount={10}
+              discount={calculateDiscount(product.sale_price, product.price)}
               productName={product.title}
             />
           </Column>
-          <Card className="flex flex-col gap-2 shadow-md bg-white rounded-lg p-4 space-y-2">
+          <Card className="flex flex-col gap-2 shadow-md bg-white rounded-lg p-4 px-6 space-y-2">
             <ProductInfo productData={product} />
             <ProductActions totalStock={product.total_stock} productId={product.id} />
             <ShopGuarantees />

@@ -1,30 +1,41 @@
+import { fetcher } from "@/process/helper/fetcher";
+
+// Converts object to query string
+function toQueryString(params: Record<string, string | undefined>) {
+  return Object.entries(params)
+    .filter(([_, v]) => v !== undefined && v !== "")
+    .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v!)}`)
+    .join("&");
+}
+
 export async function fetchProducts(params: {
   category?: string;
   brand?: string;
   page?: string;
+  skinType?: string;
   limit?: string;
   sort?: string;
 }) {
-  const { category = '', brand = '', page = '1', limit = '10', sort = '' } = params;
-  
-  const url = `https://cosme-play-be.vercel.app/api/products?category=${category}&brand=${brand}&page=${page}&limit=${limit}&sort=${sort}`;
-  
+  const query = toQueryString({
+    category: params.category,
+    brand: params.brand,
+    skinType: params.skinType,
+    page: params.page || "1",
+    limit: params.limit || "10",
+    sort: params.sort,
+  });
+
   try {
-    const response = await fetch(url, {
-      // Enable caching for better performance
-      next: { revalidate: 60 }, // Revalidate every 60 seconds
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Failed to fetch products: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    // console.log(data)
-    return data;
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    // Return empty array or handle error as needed
+    return await fetcher(`/products?${query}`, { revalidate: 60 });
+  } catch {
+    return { products: [], total: 0, page: 1, totalPages: 0 };
+  }
+}
+
+export async function fetchProductMeta() {
+  try {
+    return await fetcher("/products/meta", { revalidate: 60 });
+  } catch {
     return { products: [], total: 0, page: 1, totalPages: 0 };
   }
 }

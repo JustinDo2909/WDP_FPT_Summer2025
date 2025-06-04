@@ -23,22 +23,29 @@ declare global {
   };
 
   type ICategory = {
-    product_category_id: number;
+    id: number;
     title: string;
     description: string;
   };
 
   type IBrand = {
-    product_brand_id: number;
+    id: number;
     title: string;
     description: string;
   };
 
   type ISkinType = {
-    product_brand_id: number;
+    id: number;
     title: string;
     description: string;
   };
+
+  type IProductMeta = {
+    categories: ICategory[];
+    brands: IBrand[];
+    skinTypes: ISkinType[];
+
+  }
   type IReview = {
     review_id: number;
     product_id: number;

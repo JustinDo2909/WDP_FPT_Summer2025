@@ -11,13 +11,15 @@ import CirclePagination from "@/lib/pattern/share/CirclePagination";
 
 interface SearchResultsProps {
   initialData?: PaginatedResponse<IProduct, 'products'>;
+  productMetas: IProductMeta
 }
 
-export const SearchResults = ({ initialData }: SearchResultsProps) => {
+export const SearchResults = ({ initialData, productMetas }: SearchResultsProps) => {
   const [searchParams, setSearchParams] = useState({
     category: "",
     brand: "",
     sort: "",
+    skinType: '',
     page: 1,
     limit: 5,
     title: ""
@@ -35,9 +37,10 @@ export const SearchResults = ({ initialData }: SearchResultsProps) => {
     <>
       <Section className="mb-8">
         <ProductsSearchComponent
+          productMetas={productMetas}
           searchParams={searchParams}
           isLoading={isFetching}
-          onSearch={refetch}
+          // onSearch={refetch}
           onChangeParams={(newParams:ProductQueryParams) => {
             // Important: create a NEW object reference
             setSearchParams((prev) => ({ ...prev, ...newParams }));
