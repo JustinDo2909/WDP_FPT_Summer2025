@@ -82,6 +82,8 @@ declare global {
     breadcrumbItems: string[];
     tabs: ITab[];
   };
+
+  
 }
 
 type IProductCategory = {

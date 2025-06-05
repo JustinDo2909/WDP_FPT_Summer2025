@@ -102,7 +102,7 @@ export const ProductsSearchComponent = ({
       </Group>
 
       {/* Active Filters */}
-      <Group className="flex flex-wrap gap-2">
+      <Group className="flex justify-center flex-wrap gap-2">
         {searchParams.title && (
           <FilterTag label={searchParams.title} onRemove={() => handleRemoveFilter('title')} />
         )}
@@ -118,7 +118,7 @@ export const ProductsSearchComponent = ({
         {searchParams.sort && (
           <FilterTag label={`Sorted: ${searchParams.sort}`} onRemove={() => handleRemoveFilter('sort')} />
         )}
-        <Group></Group>
+        <Group className="py-1 text-sm">&nbsp;</Group>
       </Group>
 
       {/* Filters and Sort */}
