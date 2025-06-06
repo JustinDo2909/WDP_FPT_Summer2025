@@ -2,9 +2,9 @@
 
 import CustomTable from "@/components/CustomTable";
 import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
-import { CustomerDetailModal } from "@/components/admin/Customer/customer-detail-modal";
+import { CustomerDetailModal } from "@/components/admin/Customer/Customer-detail-modal";
 import { getCurrentDate } from "@/components/admin/Dashboard/seg/utils";
-import { AddCustomerModal } from "@/components/admin/Customer/add-customer-modal";
+import { AddCustomerModal } from "@/components/admin/Customer/Add-customer-modal";
 import {
   useCustomersLogic,
   formatCurrency,

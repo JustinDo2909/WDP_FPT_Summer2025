@@ -32,7 +32,6 @@ export const menuItems = [
   { title: "Orders", icon: "ShoppingCart", url: "/manage-orders" },
   { title: "Customers", icon: "Users", url: "/manage-customers" },
   { title: "Voucher", icon: "Ticket", url: "/manage-vouchers" },
-  { title: "Review", icon: "MessageSquare", url: "/review" },
-  { title: "Game", icon: "Warehouse", url: "/manage-game" },
+  { title: "Quiz", icon: "Warehouse", url: "/manage-quizzes" },
   { title: "Score", icon: "Warehouse", url: "/manage-score" },
 ];

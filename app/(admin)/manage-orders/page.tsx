@@ -2,7 +2,7 @@
 
 import CustomTable from "@/components/CustomTable";
 import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
-import { OrderDetailModal } from "@/components/admin/Order/order-detail-modal";
+import { OrderDetailModal } from "@/components/admin/Order/Order-detail-modal";
 import {
   useOrdersLogic,
   formatCurrency,

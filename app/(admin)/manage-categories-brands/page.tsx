@@ -2,8 +2,8 @@
 
 import CustomTable from "@/components/CustomTable";
 import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
-import { AddCategoryModal } from "@/components/admin/Category-Brand/add-category-modal";
-import { AddBrandModal } from "@/components/admin/Category-Brand/add-brand-modal";
+import { AddCategoryModal } from "@/components/admin/Category-Brand/Add-category-modal";
+import { AddBrandModal } from "@/components/admin/Category-Brand/Add-brand-modal";
 import {
   useCategoriesBrandsLogic,
   formatDate,
