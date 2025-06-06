@@ -3,68 +3,69 @@
 import Link from "next/link";
 import { InstagramIcon, FacebookIcon, YoutubeIcon } from "lucide-react";
 import { map } from "lodash";
-
-interface Link {
-  title: string;
-  href: string;
-}
-interface Footer {
-  title: string;
-  links: Link[];
-}
-
-interface FooterProps {
-  footers: Footer[];
-}
+import { Block, Container, Group, Row, RText, Section } from "@/lib/by/Div";
+import { Footer, FooterProps, ILink } from "@/type/homepage";
 
 const FooterMenu = ({ footers }: FooterProps) => {
   return (
-    <div className=" w-full px-24 py-10 bg-[#ffc6c6] inline-flex flex-col justify-center items-center gap-10 overflow-hidden">
-      <div className="self-stretch py-5 inline-flex justify-between items-center">
-        <div className="p-2.5 inline-flex flex-col justify-center items-start gap-y-6 overflow-hidden">
-          <div className="justify-start text-pink-400 text-5xl font-bold">
+    <Container className="w-full h-full px-8 md:px-36 py-16 bg-gradient-to-br from-[#ffc6c6] to-[#aa4444] inline-flex flex-col justify-center items-center gap-12 overflow-hidden">
+      <Section className="self-stretch py-8 inline-flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+        <Section className="p-2.5 inline-flex flex-col justify-center items-start gap-y-8 overflow-hidden">
+          <RText className="justify-start text-white text-4xl md:text-5xl font-bold tracking-tight drop-shadow-lg">
             LOGO!
-          </div>
-          <div className="flex flex-col justify-start items-start gap-2">
-            <span className="justify-start text-black text-xl font-bold font-['Roboto_Flex']">
+          </RText>
+
+          <Group className="flex flex-col justify-start items-start gap-3">
+            <RText className="justify-start text-slate-800 text-xl font-semibold">
               Contact Us
-            </span>
-            <span className="justify-start text-zinc-800 text-xl font-normal font-['Roboto_Flex']">
+            </RText>
+            <RText className="justify-start text-slate-700 text-lg font-normal hover:text-slate-900 transition-colors">
               Phone: 077 961 456
-            </span>
-            <span className="justify-start text-zinc-800 text-xl font-normal font-['Roboto_Flex']">
+            </RText>
+            <RText className="justify-start text-slate-700 text-lg font-normal hover:text-slate-900 transition-colors">
               Email: takeskincare@gmail.com
-            </span>
-          </div>
-          <div className="w-auto py-1.5 inline-flex justify-start items-center gap-x-14 overflow-hidden">
-            <InstagramIcon size={30} />
-            <FacebookIcon size={30} />
-            <YoutubeIcon size={30} />
-          </div>
-        </div>
-        <div className="flex justify-between items-start gap-x-40 overflow-hidden">
+            </RText>
+          </Group>
+
+          <Row className="w-auto py-2 inline-flex justify-start items-center gap-x-6 overflow-hidden">
+            <Group className="p-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full transition-all duration-300 cursor-pointer hover:scale-110">
+              <InstagramIcon size={24} className="text-slate-800" />
+            </Group>
+            <Group className="p-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full transition-all duration-300 cursor-pointer hover:scale-110">
+              <FacebookIcon size={24} className="text-slate-800" />
+            </Group>
+            <Group className="p-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full transition-all duration-300 cursor-pointer hover:scale-110">
+              <YoutubeIcon size={24} className="text-slate-800" />
+            </Group>
+          </Row>
+        </Section>
+
+        <Section className="flex flex-col md:flex-row justify-between items-start gap-8 md:gap-x-16 overflow-hidden">
           {map(footers, (footer: Footer, index: number) => (
-            <div key={index} className="flex flex-col gap-5">
-              <h4 className="text-xl font-bold">{footer.title}</h4>
-              {map(footer.links, (link: Link, linkIndex: number) => (
+            <Group key={index} className="flex flex-col gap-4 min-w-[150px]">
+              <Block className="text-xl font-semibold text-slate-800 mb-2 drop-shadow-sm">
+                {footer.title}
+              </Block>
+              {map(footer.links, (link: ILink, linkIndex: number) => (
                 <Link
                   key={linkIndex}
                   href={link.href}
-                  className="text-xl text-black hover:underline"
+                  className="text-lg text-slate-700 hover:text-slate-900 hover:translate-x-1 transition-all duration-200 drop-shadow-sm"
                 >
                   {link.title}
                 </Link>
               ))}
-            </div>
+            </Group>
           ))}
-        </div>
-      </div>
+        </Section>
+      </Section>
 
-      <div className="devider w-full h-0.5 bg-[#777]" />
-      <span className="self-stretch text-center justify-start text-[#777] text-xl font-normal font-['Roboto_Flex']">
+      <Block className="devider w-full h-px bg-gradient-to-r from-transparent via-slate-600/50 to-transparent" />
+
+      <Block className="self-stretch text-center justify-start text-slate-700 text-lg font-normal drop-shadow-sm">
         © 2025 Take-Skincare. All Rights Reserved
-      </span>
-    </div>
+      </Block>
+    </Container>
   );
 };
 
