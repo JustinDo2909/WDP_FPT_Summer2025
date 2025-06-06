@@ -83,18 +83,47 @@ declare global {
     tabs: ITab[];
   };
 
-  
+  type IProductCategory = {
+    title: string;
+    description: string;
+  };
+
+  type IProductBrand = {
+    title: string;
+    description: string;
+  };
+
+  type IPostStep = {
+    id: number; // Core
+    title: string; // Core
+    description: string; // Core
+    details: string; // Core
+    image_url: string; // Core
+    tips: string[]; // Additional
+
+  };
+
+  type IPostData = {
+    id: number; // Core
+    category: ICategory; //Core
+    category_id: string
+    author: IUser; //Core
+    product_id: string;
+    author_id:string;
+    title: string; // Core
+    thumbnail_url: string; // Core
+    description: string; // Core
+    steps: IPostStep[]; // Core
+    warnings: string[]; // Core
+    benefits: string[]; // Core
+  };
+
+
+
+
 }
 
-type IProductCategory = {
-  title: string;
-  description: string;
-};
 
-type IProductBrand = {
-  title: string;
-  description: string;
-};
 
 export type {
   IProduct,

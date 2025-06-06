@@ -4,7 +4,7 @@ import React from 'react';
 import { useProductActions } from './seg/useProductActions';
 import QuantityButton from './QuantityButton';
 import AddToCartButton from './AddToCartButton';
-import FavouriteButton from './FavouriteButton';
+// import FavouriteButton from './FavouriteButton';
 
 interface ProductActionsProps {
   totalStock: number;
@@ -17,6 +17,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
 }) => {
 
   const { quantity, increment, decrement } = useProductActions(1, 1, totalStock || 99);
+  
   return (
     <Box className="flex flex-col gap-4">
       <Row className='flex items-center gap-4'>
@@ -25,7 +26,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
       </Row>
       <Row className='flex space-x-4'>
         <AddToCartButton productId={productId} quantity={quantity}/>
-        <FavouriteButton isWishlisted={true}/>
+        {/* <FavouriteButton isWishlisted={true}/> */}
       </Row>
     </Box>
   );

@@ -19,7 +19,6 @@ export default function CartPage() {
     new Date(item.createdAt).getTime()
   );
 
-
   const total = calculateCartTotal(sortedCartItems);
   const subtotal = calculateCartTotalOriginalPrice(sortedCartItems);
 

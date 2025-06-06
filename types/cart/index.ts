@@ -9,7 +9,7 @@ declare global {
     id: number;
     cart_id: number;
     product: IProduct;
-    product_id: number;
+    product_id: string;
     quantity: number;
   };
 

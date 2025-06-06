@@ -26,12 +26,12 @@ export default function OrderCard({
 }) {
   return (
     <div className="bg-white rounded shadow p-6 mb-6">
-      <div className="flex items-center justify-between mb-4">
+      {/* <div className="flex items-center justify-between mb-4">
         <a href={shopLink} className="font-semibold text-gray-800 hover:text-pink-600">
           {shopName}
         </a>
         <span className="text-green-600 font-medium">{status}</span>
-      </div>
+      </div> */}
       <div className="divide-y">
         {products.map((product, idx) => (
           <div key={idx} className="flex py-4 items-center">
