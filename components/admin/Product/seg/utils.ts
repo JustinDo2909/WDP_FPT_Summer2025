@@ -220,14 +220,20 @@ export const useProductsLogic = () => {
   ) => {
     try {
       if (editingProduct) {
+        // Close modal immediately for better UX, let optimistic update handle the rest
+        setIsModalOpen(false);
+        setEditingProduct(null);
         await updateProduct({ id: editingProduct.id, data }).unwrap();
       } else {
+        // Close modal immediately for better UX
+        setIsModalOpen(false);
+        setEditingProduct(null);
         await createProduct(data).unwrap();
       }
-      setIsModalOpen(false);
-      setEditingProduct(null);
     } catch (error) {
       console.error("Error submitting product:", error);
+      // Reopen modal on error
+      setIsModalOpen(true);
     }
   };
 

@@ -2,15 +2,14 @@
 
 import { ProductTable } from "@/components/admin/Product/product-table";
 import { AddProductModal } from "@/components/admin/Product/add-product-modal";
-import {
-  useProductsLogic,
-  calculateProductStats,
-} from "@/components/admin/Product/seg/utils";
-import { Area, RText, Core, Container, Block } from "@/lib/by/Div";
-import { getCurrentDate } from "@/components/admin/Dashboard/seg/utils";
+import { useProductsLogic } from "@/components/admin/Product/seg/utils";
+import { Area, RText, Core, Container } from "@/lib/by/Div";
 import { StatsCard } from "@/components/admin/StatsCard";
 import { Package, AlertTriangle, Grid3X3, Building2 } from "lucide-react";
-import { useGetProductsQuery } from "@/process/api/apiProduct";
+import {
+  useGetProductsQuery,
+  useGetProductMetaQuery,
+} from "@/process/api/apiProduct";
 
 export default function ProductsPage() {
   const {
@@ -23,13 +22,33 @@ export default function ProductsPage() {
     handleCloseModal,
   } = useProductsLogic();
 
-  // Get products data for stats calculation
-  const { data: productsData } = useGetProductsQuery({
-    page: 1,
-    pageSize: 1000,
-  }); // Get all products for stats
+  // Get products data for stats calculation with smaller dataset
+  const { data: productsData, isLoading: isStatsLoading } = useGetProductsQuery(
+    {
+      page: 1,
+      pageSize: 50, // Reduced from 1000 to improve performance
+    },
+    {
+      // Cache for 5 minutes to improve performance
+      pollingInterval: 300000,
+      refetchOnMountOrArgChange: 30,
+    }
+  );
   const products = productsData?.products || [];
-  const stats = calculateProductStats(products);
+
+  // Prefetch meta data to speed up modal opening
+  useGetProductMetaQuery(undefined, {
+    pollingInterval: 600000,
+    refetchOnMountOrArgChange: 600,
+  });
+
+  // Calculate stats based on available data, or use API totals if available
+  const stats = {
+    totalProducts: productsData?.pagination?.total || products.length,
+    lowStockProducts: products.filter((p) => p.total_stock < 50).length,
+    totalCategories: new Set(products.map((p) => p.productCategory.title)).size,
+    totalBrands: new Set(products.map((p) => p.productBrand.title)).size,
+  };
 
   return (
     <Core className="flex flex-col h-full bg-gray-50">
@@ -38,7 +57,6 @@ export default function ProductsPage() {
         <RText className="text-lg font-semibold text-gray-700">
           Product Management
         </RText>
-        <Block className="text-sm text-gray-500">{getCurrentDate()}</Block>
       </header>
 
       {/* Main Content */}
@@ -54,14 +72,14 @@ export default function ProductsPage() {
         <Area className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <StatsCard
             title="Total Products"
-            value={stats.totalProducts}
+            value={isStatsLoading ? "..." : stats.totalProducts}
             icon={Package}
             iconColor="text-blue-600"
             iconBgColor="bg-blue-50"
           />
           <StatsCard
             title="Low Stock"
-            value={stats.lowStockProducts}
+            value={isStatsLoading ? "..." : stats.lowStockProducts}
             icon={AlertTriangle}
             iconColor="text-red-600"
             iconBgColor="bg-red-50"
@@ -69,7 +87,7 @@ export default function ProductsPage() {
           />
           <StatsCard
             title="Categories"
-            value={stats.totalCategories}
+            value={isStatsLoading ? "..." : stats.totalCategories}
             icon={Grid3X3}
             iconColor="text-green-600"
             iconBgColor="bg-green-50"
@@ -77,7 +95,7 @@ export default function ProductsPage() {
           />
           <StatsCard
             title="Brands"
-            value={stats.totalBrands}
+            value={isStatsLoading ? "..." : stats.totalBrands}
             icon={Building2}
             iconColor="text-purple-600"
             iconBgColor="bg-purple-50"

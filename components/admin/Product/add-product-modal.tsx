@@ -21,8 +21,12 @@ export function AddProductModal({
     handleSubmit,
   } = useProductForm(editProduct);
 
-  // Load dropdown data from API
-  const { data: metaData } = useGetProductMetaQuery();
+  // Load dropdown data from API with caching
+  const { data: metaData } = useGetProductMetaQuery(undefined, {
+    // Cache meta data for 10 minutes since it changes rarely
+    pollingInterval: 600000,
+    refetchOnMountOrArgChange: 600,
+  });
 
   if (!isOpen) return null;
 

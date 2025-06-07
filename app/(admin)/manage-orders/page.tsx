@@ -19,7 +19,6 @@ import {
 import { Area, RText, Core, Yard, Block, Container } from "@/lib/by/Div";
 import { Eye, Package, TrendingUp, Clock, CreditCard } from "lucide-react";
 import { type Order } from "@/constants/manage-orders/index";
-import { getCurrentDate } from "@/components/admin/Dashboard/seg/utils";
 
 export default function OrdersPage() {
   const {
@@ -152,7 +151,6 @@ export default function OrdersPage() {
         <RText className="text-lg font-semibold text-gray-700">
           Order Management
         </RText>
-        <Block className="text-sm text-gray-500">{getCurrentDate()}</Block>
       </header>
 
       <Container className="flex-1 overflow-auto p-6 space-y-6">

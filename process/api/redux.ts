@@ -7,6 +7,7 @@ import { chatbotApi } from "./apiChatBot";
 import { apiAuth } from "./apiAuth";
 import { apiCart } from "./apiCart";
 import { apiProduct } from "./apiProduct";
+import { metaApi } from "./apiMeta";
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     [apiAuth.reducerPath]: apiAuth.reducer,
     [apiCart.reducerPath]: apiCart.reducer,
     [apiProduct.reducerPath]: apiProduct.reducer,
+    [metaApi.reducerPath]: metaApi.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
@@ -27,7 +29,8 @@ export const store = configureStore({
       chatbotApi.middleware,
       apiAuth.middleware,
       apiCart.middleware,
-      apiProduct.middleware
+      apiProduct.middleware,
+      metaApi.middleware
     ),
 });
 

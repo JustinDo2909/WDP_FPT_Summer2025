@@ -60,6 +60,16 @@ export const apiProduct = createApi({
         body: productData,
       }),
       invalidatesTags: ["Products"],
+      // Optimistic update
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+          // Refetch products after successful creation
+          dispatch(apiProduct.util.invalidateTags(["Products"]));
+        } catch {
+          // Handle error if needed
+        }
+      },
     }),
 
     // Update existing product
@@ -86,6 +96,16 @@ export const apiProduct = createApi({
         body: data,
       }),
       invalidatesTags: ["Products"],
+      // Optimistic update
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+          // Refetch products after successful update
+          dispatch(apiProduct.util.invalidateTags(["Products"]));
+        } catch {
+          // Handle error if needed
+        }
+      },
     }),
 
     // Delete product

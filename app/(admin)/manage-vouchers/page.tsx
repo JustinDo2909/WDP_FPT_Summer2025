@@ -3,7 +3,6 @@
 import CustomTable from "@/components/CustomTable";
 import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
 import { VoucherDetailModal } from "@/components/admin/Voucher/voucher-detail-modal";
-import { getCurrentDate } from "@/components/admin/Dashboard/seg/utils";
 import { AddVoucherModal } from "@/components/admin/Voucher/add-voucher-modal";
 import {
   useVouchersLogic,
@@ -218,7 +217,6 @@ export default function VoucherPage() {
         <RText className="text-lg font-semibold text-gray-700">
           Voucher Management
         </RText>
-        <Block className="text-sm text-gray-500">{getCurrentDate()}</Block>
       </header>
 
       <Container className="flex-1 overflow-auto p-6 space-y-6">
