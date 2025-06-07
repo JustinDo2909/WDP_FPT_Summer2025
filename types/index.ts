@@ -1,11 +1,16 @@
 declare global {
   type IProduct = {
-    product_id: number;
+    id: string;
+    createdAt: string; // or Date
+    updatedAt: string; // or Date
+    productCategory: IProductCategory;
+    productBrand: IProductBrand;
+    productSkinType: ISkinType;
     title: string;
     description: string;
     price: number;
     sale_price: number;
-    image_url: string[];
+    image_url: string;
     product_category_id: number;
     product_brand_id: number;
     total_stock: number;
@@ -18,17 +23,29 @@ declare global {
   };
 
   type ICategory = {
-    product_category_id: number;
+    id: number;
     title: string;
     description: string;
   };
 
   type IBrand = {
-    product_brand_id: number;
+    id: number;
     title: string;
     description: string;
   };
 
+  type ISkinType = {
+    id: number;
+    title: string;
+    description: string;
+  };
+
+  type IProductMeta = {
+    categories: ICategory[];
+    brands: IBrand[];
+    skinTypes: ISkinType[];
+
+  }
   type IReview = {
     review_id: number;
     product_id: number;
@@ -65,7 +82,48 @@ declare global {
     breadcrumbItems: string[];
     tabs: ITab[];
   };
+
+  type IProductCategory = {
+    title: string;
+    description: string;
+  };
+
+  type IProductBrand = {
+    title: string;
+    description: string;
+  };
+
+  type IPostStep = {
+    id: number; // Core
+    title: string; // Core
+    description: string; // Core
+    details: string; // Core
+    image_url: string; // Core
+    tips: string[]; // Additional
+
+  };
+
+  type IPostData = {
+    id: number; // Core
+    category: ICategory; //Core
+    category_id: string
+    author: IUser; //Core
+    product_id: string;
+    author_id:string;
+    title: string; // Core
+    thumbnail_url: string; // Core
+    description: string; // Core
+    steps: IPostStep[]; // Core
+    warnings: string[]; // Core
+    benefits: string[]; // Core
+  };
+
+
+
+
 }
+
+
 
 export type {
   IProduct,
@@ -76,4 +134,6 @@ export type {
   INavLink,
   ITab,
   IProductPageData,
+  IProductCategory,
+  IProductBrand
 };

@@ -34,7 +34,9 @@ export default {
           foreground: "hsl(var(--popover-foreground))",
         },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "#ec4899", // Primary Pink
+          dark: "#db2777",     // Dark Pink
+          light: "#f9a8d4",    // Light Pink
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {

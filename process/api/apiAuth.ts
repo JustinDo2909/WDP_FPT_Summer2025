@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import customBaseQuery from "./customFetchBase";
-``;
+
 
 export const apiAuth = createApi({
   baseQuery: customBaseQuery,
