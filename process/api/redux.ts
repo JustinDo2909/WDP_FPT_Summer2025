@@ -6,6 +6,7 @@ import { ghnApi } from "./apiGHN";
 import { chatbotApi } from "./apiChatBot";
 import { apiAuth } from "./apiAuth";
 import { apiCart } from "./apiCart";
+import { apiProduct } from "./apiProduct";
 
 export const store = configureStore({
   reducer: {
@@ -14,7 +15,8 @@ export const store = configureStore({
     [ghnApi.reducerPath]: ghnApi.reducer,
     [chatbotApi.reducerPath]: chatbotApi.reducer,
     [apiAuth.reducerPath]: apiAuth.reducer,
-    [apiCart.reducerPath]: apiCart.reducer
+    [apiCart.reducerPath]: apiCart.reducer,
+    [apiProduct.reducerPath]: apiProduct.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
@@ -24,7 +26,8 @@ export const store = configureStore({
       ghnApi.middleware,
       chatbotApi.middleware,
       apiAuth.middleware,
-      apiCart.middleware
+      apiCart.middleware,
+      apiProduct.middleware
     ),
 });
 

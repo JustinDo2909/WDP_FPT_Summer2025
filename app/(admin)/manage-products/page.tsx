@@ -1,7 +1,7 @@
 "use client";
 
-import { ProductTable } from "@/components/admin/Product/Product-table";
-import { AddProductModal } from "@/components/admin/Product/Add-product-modal";
+import { ProductTable } from "@/components/admin/Product/product-table";
+import { AddProductModal } from "@/components/admin/Product/add-product-modal";
 import {
   useProductsLogic,
   calculateProductStats,
@@ -10,10 +10,10 @@ import { Area, RText, Core, Container, Block } from "@/lib/by/Div";
 import { getCurrentDate } from "@/components/admin/Dashboard/seg/utils";
 import { StatsCard } from "@/components/admin/StatsCard";
 import { Package, AlertTriangle, Grid3X3, Building2 } from "lucide-react";
+import { useGetProductsQuery } from "@/process/api/apiProduct";
 
 export default function ProductsPage() {
   const {
-    products,
     isModalOpen,
     editingProduct,
     handleAddProduct,
@@ -23,6 +23,12 @@ export default function ProductsPage() {
     handleCloseModal,
   } = useProductsLogic();
 
+  // Get products data for stats calculation
+  const { data: productsData } = useGetProductsQuery({
+    page: 1,
+    pageSize: 1000,
+  }); // Get all products for stats
+  const products = productsData?.products || [];
   const stats = calculateProductStats(products);
 
   return (
@@ -81,7 +87,6 @@ export default function ProductsPage() {
 
         {/* Product Table */}
         <ProductTable
-          products={products}
           onAddProduct={handleAddProduct}
           onEditProduct={handleEditProduct}
           onDeleteProduct={handleDeleteProduct}
