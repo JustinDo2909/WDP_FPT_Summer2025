@@ -1,3 +1,4 @@
+import FloatingGameButton from "@/components/floating_game_button";
 import { ProductsSearchComponent } from "@/components/ProductsPage/ProductSearchComponent";
 import { Core, Container, Section, Area, Content } from "@/lib/by/Div";
 import { ProductGrid } from "@/lib/pattern/share/ProductGrid";
@@ -17,6 +18,7 @@ export default function SearchPage() {
           </Content>
         </Area>
       </Container>
+      <FloatingGameButton />
     </Core>
   );
 }

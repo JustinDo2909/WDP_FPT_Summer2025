@@ -20,59 +20,63 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
   const { user } = useUser();
 
   return (
-    <Container className="w-full px-36 bg-white border-b shadow-md inline-flex justify-between items-center">
+    <Container className="w-full px-8 md:px-36 bg-white/95 backdrop-blur-md border-b border-[#ffc6c6]/30 shadow-lg inline-flex justify-between items-center sticky top-0 z-50">
       <Section className="w-fit inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden">
-        <Link href="/">LOGO!</Link>
+        <Link
+          href="/"
+          className="text-2xl md:text-3xl font-bold text-[#aa4444] hover:text-[#ee4444] transition-colors duration-300 tracking-tight drop-shadow-sm"
+        >
+          LOGO!
+        </Link>
       </Section>
 
-      <Section className="py-2.5 flex justify-start items-center gap-3">
+      <Section className="py-4 flex justify-start items-center gap-1">
         {map(headers, (header: Header, index: number) => (
           <Group key={index} className="flex items-center">
             <Link
               href={header.href}
-              className="px-7 py-2 relative flex justify-center items-center gap-2.5 overflow-hidden rounded-sm
+              className="px-6 py-3 relative flex justify-center items-center gap-2.5 overflow-hidden rounded-lg text-slate-700 font-medium hover:text-[#aa4444] hover:bg-[#ffc6c6]/10 transition-all duration-300
                after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 
-               after:h-[2px] after:w-0 after:bg-[#ffc6c6] after:transition-all after:duration-300    
-               hover:after:w-full"
+               after:h-[3px] after:w-0 after:bg-gradient-to-r after:from-[#ffc6c6] after:to-[#ee4444] after:transition-all after:duration-300 after:rounded-full   
+               hover:after:w-3/4"
             >
               {header.title}
             </Link>
             {index < headers.length - 1 && (
-              <Block className="w-px h-6 bg-gray-300 mx-3" />
+              <Block className="w-px h-6 bg-[#ffc6c6]/50 mx-2" />
             )}
           </Group>
         ))}
 
-        <Block>
-          <button className="p-2.5 bg-zinc-800 rounded-[50px] flex justify-center items-center gap-2.5 overflow-hidden">
-            <span className="justify-start text-white text-sm font-bold font-['Inter']">
+        <Block className="ml-4">
+          <button className="px-4 py-2.5 bg-gradient-to-r from-[#aa4444] to-[#ee4444] hover:from-[#ee4444] hover:to-[#aa4444] rounded-full flex justify-center items-center gap-2.5 overflow-hidden transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105">
+            <span className="justify-start text-white text-sm font-semibold drop-shadow-sm">
               AI Chatbot
             </span>
           </button>
         </Block>
       </Section>
 
-      <Section className="flex justify-start items-center gap-7 overflow-hidden">
+      <Section className="flex justify-start items-center gap-4 overflow-hidden">
         <Link
           href="/cart"
-          className="flex p-2 justify-center items-center gap-2.5 overflow-hidden rounded-full
-        hover:bg-[#ffc6c6] transition-all hover:cursor-pointer"
+          className="flex p-3 justify-center items-center gap-2.5 overflow-hidden rounded-full text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-[#ffc6c6] hover:to-[#ee4444] transition-all duration-300 hover:scale-110 shadow-sm hover:shadow-md"
         >
           <ShoppingBag size={20} />
         </Link>
 
-        <Block className="w-px h-6 bg-gray-300" />
+        <Block className="w-px h-6 bg-[#ffc6c6]/50" />
 
-        <Row className="flex justify-center items-center gap-2.5 overflow-hidden hover:cursor-pointer">
+        <Row className="flex justify-center items-center gap-3 overflow-hidden hover:cursor-pointer">
           <Link
             href="/login"
-            className="flex justify-center items-center gap-2.5"
+            className="flex justify-center items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#ffc6c6]/10 transition-all duration-300"
           >
-            <Block className="px-2 py-1.5 rounded-[10px] flex justify-center items-center gap-2.5 overflow-hidden">
+            <Block className="p-2 rounded-full flex justify-center items-center gap-2.5 overflow-hidden text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-[#aa4444] hover:to-[#ee4444] transition-all duration-300">
               <User size={20} />
             </Block>
 
-            <Block className="justify-start text-black text-sm font-normal font-['Inter']">
+            <Block className="justify-start text-slate-700 text-sm font-medium hover:text-[#aa4444] transition-colors">
               {user ? <RText>Logout</RText> : <RText>Login</RText>}
             </Block>
           </Link>
