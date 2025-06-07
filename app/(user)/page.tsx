@@ -1,10 +1,8 @@
 "use client";
-import { Area, Group, RText, Section, Yard } from "@/lib/by/Div";
-import React from "react";
-import { map } from "lodash";
 import { listProductData } from "@/constants/homepage";
+import { Area, Group, RText, Section, Yard } from "@/lib/by/Div";
 import CardProduct from "@/lib/pattern/share/CardProduct";
-
+import { map } from "lodash";
 export default function Page() {
   return (
     <Area className="bg-zinc-100 gap-y-20">
@@ -49,6 +47,7 @@ export default function Page() {
           <CardProduct key={index} product={product} />
         ))}
       </Section>
+      {/* <Threejs_banner /> */}
     </Area>
   );
 }
