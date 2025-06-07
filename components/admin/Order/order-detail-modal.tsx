@@ -8,33 +8,23 @@ import {
   XCircle,
   Clock,
   CreditCard,
-  Edit2,
-  Save,
 } from "lucide-react";
-import { useState } from "react";
+
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 import {
   formatCurrency,
   formatDate,
   getStatusColor,
-  getPaymentStatusColor,
+  getPaymentMethodColor,
 } from "@/components/admin/Order/seg/utils";
-import {
-  orderStatusOptions,
-  paymentStatusOptions,
-} from "@/constants/manage-orders/index";
-import { type Order } from "@/constants/manage-orders/index";
+import { orderStatusOptions } from "@/types/order/index";
+import { type OrderDetail } from "@/types/order/index";
 
 interface OrderDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
-  order: Order | null;
-  onUpdateStatus?: (orderId: string, newStatus: Order["status"]) => void;
-  onUpdatePaymentStatus?: (
-    orderId: string,
-    newPaymentStatus: Order["paymentStatus"]
-  ) => void;
-  onUpdateTrackingNumber?: (orderId: string, trackingNumber: string) => void;
+  order: OrderDetail | null;
+  onUpdateStatus?: (orderId: string, newStatus: OrderDetail["status"]) => void;
 }
 
 export function OrderDetailModal({
@@ -42,42 +32,22 @@ export function OrderDetailModal({
   onClose,
   order,
   onUpdateStatus,
-  onUpdatePaymentStatus,
-  onUpdateTrackingNumber,
 }: OrderDetailModalProps) {
-  const [isEditingTracking, setIsEditingTracking] = useState(false);
-  const [trackingNumber, setTrackingNumber] = useState("");
-
   if (!isOpen || !order) return null;
 
-  const getStatusIcon = (status: Order["status"]) => {
+  const getStatusIcon = (status: OrderDetail["status"]) => {
     switch (status) {
-      case "pending":
-        return <Clock className="w-5 h-5" />;
-      case "processing":
+      case "PROCESSING":
         return <Package className="w-5 h-5" />;
-      case "shipped":
+      case "SHIPPED":
         return <Truck className="w-5 h-5" />;
-      case "delivered":
+      case "DELIVERED":
         return <CheckCircle className="w-5 h-5" />;
-      case "cancelled":
+      case "CANCELLED":
         return <XCircle className="w-5 h-5" />;
       default:
-        return <Clock className="w-5 h-5" />;
+        return <Package className="w-5 h-5" />;
     }
-  };
-
-  const handleSaveTrackingNumber = () => {
-    if (onUpdateTrackingNumber && trackingNumber.trim()) {
-      onUpdateTrackingNumber(order.id, trackingNumber.trim());
-    }
-    setIsEditingTracking(false);
-    setTrackingNumber("");
-  };
-
-  const startEditingTracking = () => {
-    setTrackingNumber(order.trackingNumber || "");
-    setIsEditingTracking(true);
   };
 
   return (
@@ -136,10 +106,10 @@ export function OrderDetailModal({
                     </Yard>
                     <Yard>
                       <RText className="font-medium capitalize">
-                        {order.status.replace("_", " ")}
+                        {order.status.toLowerCase()}
                       </RText>
                       <RText className="text-sm text-gray-500">
-                        Last updated {formatDate(order.orderDate)}
+                        Last updated {formatDate(order.updatedAt)}
                       </RText>
                     </Yard>
                   </Area>
@@ -149,7 +119,7 @@ export function OrderDetailModal({
                       onChange={(e) =>
                         onUpdateStatus(
                           order.id,
-                          e.target.value as Order["status"]
+                          e.target.value as OrderDetail["status"]
                         )
                       }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -163,90 +133,28 @@ export function OrderDetailModal({
                   )}
                 </Yard>
 
-                {/* Payment Status */}
+                {/* Payment Method */}
                 <Yard>
                   <RText className="text-sm font-medium text-gray-700 mb-2">
-                    Payment Status
+                    Payment Method
                   </RText>
                   <Area className="flex items-center gap-3 mb-3">
                     <Yard
-                      className={`p-2 rounded-full ${getPaymentStatusColor(order.paymentStatus)}`}
+                      className={`p-2 rounded-full ${getPaymentMethodColor(order.payment_method)}`}
                     >
                       <CreditCard className="w-5 h-5" />
                     </Yard>
                     <Yard>
                       <RText className="font-medium capitalize">
-                        {order.paymentStatus.replace("_", " ")}
+                        {order.payment_method.replace("_", " ")}
                       </RText>
-                      <RText className="text-sm text-gray-500 capitalize">
-                        {order.paymentMethod.replace("_", " ")}
+                      <RText className="text-sm text-gray-500">
+                        {formatCurrency(order.total_amount)}
                       </RText>
                     </Yard>
                   </Area>
-                  {onUpdatePaymentStatus && (
-                    <select
-                      value={order.paymentStatus}
-                      onChange={(e) =>
-                        onUpdatePaymentStatus(
-                          order.id,
-                          e.target.value as Order["paymentStatus"]
-                        )
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                      {paymentStatusOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  )}
                 </Yard>
               </Area>
-
-              {/* Tracking Number */}
-              <Yard className="mt-6">
-                <RText className="text-sm font-medium text-gray-700 mb-2">
-                  Tracking Number
-                </RText>
-                {isEditingTracking ? (
-                  <Area className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={trackingNumber}
-                      onChange={(e) => setTrackingNumber(e.target.value)}
-                      placeholder="Enter tracking number"
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                    <button
-                      onClick={handleSaveTrackingNumber}
-                      className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      <Save className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => setIsEditingTracking(false)}
-                      className="px-3 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors"
-                    >
-                      Cancel
-                    </button>
-                  </Area>
-                ) : (
-                  <Area className="flex items-center gap-2">
-                    <RText className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-lg font-mono text-sm">
-                      {order.trackingNumber || "No tracking number"}
-                    </RText>
-                    {onUpdateTrackingNumber && (
-                      <button
-                        onClick={startEditingTracking}
-                        className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </Area>
-                )}
-              </Yard>
             </Yard>
 
             {/* Customer Information */}
@@ -259,26 +167,26 @@ export function OrderDetailModal({
                   <RText className="text-sm font-medium text-gray-500">
                     Name
                   </RText>
-                  <RText className="text-gray-900">{order.customerName}</RText>
+                  <RText className="text-gray-900">{order.user.name}</RText>
                 </Yard>
                 <Yard>
                   <RText className="text-sm font-medium text-gray-500">
                     Email
                   </RText>
-                  <RText className="text-gray-900">{order.customerEmail}</RText>
+                  <RText className="text-gray-900">{order.user.email}</RText>
                 </Yard>
                 <Yard>
                   <RText className="text-sm font-medium text-gray-500">
                     Phone
                   </RText>
-                  <RText className="text-gray-900">{order.customerPhone}</RText>
+                  <RText className="text-gray-900">{order.address.phone}</RText>
                 </Yard>
                 <Yard>
                   <RText className="text-sm font-medium text-gray-500">
                     Order Date
                   </RText>
                   <RText className="text-gray-900">
-                    {formatDate(order.orderDate)}
+                    {formatDate(order.createdAt)}
                   </RText>
                 </Yard>
               </Area>
@@ -293,7 +201,15 @@ export function OrderDetailModal({
                 <RText className="text-sm font-medium text-gray-500">
                   Shipping Address
                 </RText>
-                <RText className="text-gray-900">{order.shippingAddress}</RText>
+                <RText className="text-gray-900">
+                  {order.address.address}, {order.address.city} -{" "}
+                  {order.address.pincode}
+                </RText>
+                {order.address.notes && (
+                  <RText className="text-sm text-gray-500 mt-1">
+                    Note: {order.address.notes}
+                  </RText>
+                )}
               </Yard>
             </Yard>
 
@@ -321,17 +237,17 @@ export function OrderDetailModal({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {order.items.map((item) => (
+                    {order.orderItems.map((item) => (
                       <tr key={item.id}>
                         <td className="px-4 py-3">
                           <Area className="flex items-center">
                             <img
-                              src={item.productImage || "/placeholder.svg"}
-                              alt={item.productName}
+                              src={item.image_url || "/placeholder.svg"}
+                              alt={item.title}
                               className="w-10 h-10 rounded-lg object-cover mr-3"
                             />
                             <RText className="font-medium text-gray-900">
-                              {item.productName}
+                              {item.title}
                             </RText>
                           </Area>
                         </td>
@@ -342,7 +258,7 @@ export function OrderDetailModal({
                           {formatCurrency(item.price)}
                         </td>
                         <td className="px-4 py-3 font-medium text-gray-900">
-                          {formatCurrency(item.total)}
+                          {formatCurrency(item.price * item.quantity)}
                         </td>
                       </tr>
                     ))}
@@ -354,23 +270,11 @@ export function OrderDetailModal({
               <Area className="mt-4 border-t border-gray-200 pt-4">
                 <Yard className="flex justify-end">
                   <RText className="text-xl font-semibold text-gray-900">
-                    Total: {formatCurrency(order.total)}
+                    Total: {formatCurrency(order.total_amount)}
                   </RText>
                 </Yard>
               </Area>
             </Yard>
-
-            {/* Notes */}
-            {order.notes && (
-              <Yard>
-                <RText className="text-lg font-medium text-gray-900 mb-4">
-                  Notes
-                </RText>
-                <Area className="bg-gray-50 rounded-lg p-4">
-                  <RText className="text-gray-700">{order.notes}</RText>
-                </Area>
-              </Yard>
-            )}
           </Container>
         </Container>
       </Core>

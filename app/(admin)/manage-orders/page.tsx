@@ -8,32 +8,62 @@ import {
   formatCurrency,
   formatDate,
   getStatusColor,
-  getPaymentStatusColor,
+  getPaymentMethodColor,
   calculateOrderStats,
 } from "@/components/admin/Order/seg/utils";
-import {
-  orderStatusOptions,
-  paymentMethodOptions,
-  paymentStatusOptions,
-} from "@/constants/manage-orders/index";
-import { Area, RText, Core, Yard, Block, Container } from "@/lib/by/Div";
-import { Eye, Package, TrendingUp, Clock, CreditCard } from "lucide-react";
-import { type Order } from "@/constants/manage-orders/index";
+import { orderStatusOptions, paymentMethodOptions } from "@/types/order/index";
+import { Area, RText, Core, Yard, Container } from "@/lib/by/Div";
+import { Package, TrendingUp, Clock, CreditCard, Eye } from "lucide-react";
+import { type Order } from "@/types/order/index";
 
 export default function OrdersPage() {
   const {
     orders,
     selectedOrder,
     isDetailModalOpen,
+    isLoading,
+    error,
     handleViewOrder,
     handleCloseDetailModal,
     handleUpdateOrderStatus,
-    handleUpdatePaymentStatus,
-    handleUpdateTrackingNumber,
     handleExportOrders,
   } = useOrdersLogic();
 
   const stats = calculateOrderStats(orders);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <Core className="flex flex-col h-full bg-gray-50">
+        <header className="flex h-16 items-center justify-between border-b bg-white px-4">
+          <RText className="text-lg font-semibold text-gray-700">
+            Order Management
+          </RText>
+        </header>
+        <Container className="flex-1 flex items-center justify-center">
+          <RText className="text-gray-500">Loading orders...</RText>
+        </Container>
+      </Core>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <Core className="flex flex-col h-full bg-gray-50">
+        <header className="flex h-16 items-center justify-between border-b bg-white px-4">
+          <RText className="text-lg font-semibold text-gray-700">
+            Order Management
+          </RText>
+        </header>
+        <Container className="flex-1 flex items-center justify-center">
+          <RText className="text-red-500">
+            Error loading orders. Please try again.
+          </RText>
+        </Container>
+      </Core>
+    );
+  }
 
   const columns = [
     {
@@ -42,34 +72,29 @@ export default function OrdersPage() {
       sortable: true,
       render: (order: Order) => (
         <RText className="font-mono text-sm font-medium text-blue-600">
-          {order.id}
+          {order.id.substring(0, 8)}...
         </RText>
       ),
     },
     {
-      key: "customerName" as const,
-      label: "Customer",
+      key: "user_id" as const,
+      label: "User ID",
       sortable: true,
       render: (order: Order) => (
-        <Yard>
-          <RText className="font-medium text-gray-900">
-            {order.customerName}
-          </RText>
-          <RText className="text-sm text-gray-500">{order.customerEmail}</RText>
-        </Yard>
+        <RText className="text-sm text-gray-900">{order.user_id}</RText>
       ),
     },
     {
-      key: "orderDate" as const,
+      key: "createdAt" as const,
       label: "Date",
       sortable: true,
       render: (order: Order) => (
         <Yard>
           <RText className="text-sm text-gray-900">
-            {formatDate(order.orderDate)}
+            {formatDate(order.createdAt)}
           </RText>
           <RText className="text-xs text-gray-500">
-            {order.items.length} items
+            ID: {order.address_id}
           </RText>
         </Yard>
       ),
@@ -82,54 +107,39 @@ export default function OrdersPage() {
         <span
           className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}
         >
-          {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+          {order.status.charAt(0) + order.status.slice(1).toLowerCase()}
         </span>
       ),
     },
     {
-      key: "paymentStatus" as const,
+      key: "payment_method" as const,
       label: "Payment",
       filterable: true,
       render: (order: Order) => (
-        <Yard>
-          <span
-            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getPaymentStatusColor(order.paymentStatus)}`}
-          >
-            {order.paymentStatus.charAt(0).toUpperCase() +
-              order.paymentStatus.slice(1)}
-          </span>
-          <RText className="text-xs text-gray-500 mt-1 capitalize">
-            {order.paymentMethod.replace("_", " ")}
-          </RText>
-        </Yard>
+        <span
+          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getPaymentMethodColor(order.payment_method)}`}
+        >
+          {order.payment_method.replace("_", " ")}
+        </span>
       ),
     },
     {
-      key: "total" as const,
+      key: "total_amount" as const,
       label: "Total",
       sortable: true,
       render: (order: Order) => (
         <RText className="font-semibold text-gray-900">
-          {formatCurrency(order.total)}
+          {formatCurrency(order.total_amount)}
         </RText>
       ),
     },
     {
-      key: "trackingNumber" as const,
-      label: "Tracking",
-      render: (order: Order) => (
-        <RText className="text-sm font-mono text-gray-600">
-          {order.trackingNumber || "—"}
-        </RText>
-      ),
-    },
-    {
-      key: "actions" as const,
+      key: "actions" as any,
       label: "Actions",
       render: (order: Order) => (
         <button
           onClick={() => handleViewOrder(order)}
-          className="text-blue-600 hover:text-blue-800 p-2 hover:bg-blue-50 rounded-lg transition-colors"
+          className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors"
           title="View Details"
         >
           <Eye className="w-4 h-4" />
@@ -139,9 +149,8 @@ export default function OrdersPage() {
   ];
 
   const filters = {
-    status: orderStatusOptions,
-    paymentMethod: paymentMethodOptions,
-    paymentStatus: paymentStatusOptions,
+    status: [...orderStatusOptions],
+    payment_method: [...paymentMethodOptions],
   };
 
   return (
@@ -177,12 +186,12 @@ export default function OrdersPage() {
             valueColor="text-green-600"
           />
           <StatsCard
-            title="Pending Orders"
-            value={stats.pendingOrders}
+            title="Processing Orders"
+            value={stats.processingOrders}
             icon={Clock}
-            iconColor="text-yellow-600"
-            iconBgColor="bg-yellow-50"
-            valueColor="text-yellow-600"
+            iconColor="text-blue-600"
+            iconBgColor="bg-blue-50"
+            valueColor="text-blue-600"
           />
           <StatsCard
             title="Avg Order Value"
@@ -222,7 +231,7 @@ export default function OrdersPage() {
           columns={columns}
           onExport={handleExportOrders}
           headerTitle="All Orders"
-          description="View and manage customer orders"
+          description="Click on the eye icon to view order details"
           filters={filters}
           showExport={true}
           itemsPerPage={15}
@@ -235,8 +244,6 @@ export default function OrdersPage() {
         onClose={handleCloseDetailModal}
         order={selectedOrder}
         onUpdateStatus={handleUpdateOrderStatus}
-        onUpdatePaymentStatus={handleUpdatePaymentStatus}
-        onUpdateTrackingNumber={handleUpdateTrackingNumber}
       />
     </Core>
   );
