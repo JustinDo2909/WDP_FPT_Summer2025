@@ -8,10 +8,12 @@ import FavouriteButton from './FavouriteButton';
 
 interface ProductActionsProps {
   totalStock: number;
+  productId: string;
 }
 
 const ProductActions: React.FC<ProductActionsProps> = ({
-  totalStock
+  totalStock,
+  productId
 }) => {
 
   const { quantity, increment, decrement } = useProductActions(1, 1, totalStock || 99);
@@ -22,7 +24,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
         <RText className='text-gray-500'>{totalStock} left in stock</RText>
       </Row>
       <Row className='flex space-x-4'>
-        <AddToCartButton/>
+        <AddToCartButton productId={productId} quantity={quantity}/>
         <FavouriteButton isWishlisted={true}/>
       </Row>
     </Box>

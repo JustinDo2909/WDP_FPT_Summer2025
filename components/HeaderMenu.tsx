@@ -6,6 +6,7 @@ import { ShoppingBag, User } from "lucide-react";
 import React from "react";
 import { Block, Container, Group, Row, RText, Section } from "@/lib/by/Div";
 import { useUser } from "@/hooks/useUser";
+import { CartIndicatorWrapper } from "./CartIndicatorWrapper";
 
 interface Header {
   title: string;
@@ -57,13 +58,15 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
         </Block>
       </Section>
 
-      <Section className="flex justify-start items-center gap-4 overflow-hidden">
-        <Link
-          href="/cart"
-          className="flex p-3 justify-center items-center gap-2.5 overflow-hidden rounded-full text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-[#ffc6c6] hover:to-[#ee4444] transition-all duration-300 hover:scale-110 shadow-sm hover:shadow-md"
-        >
-          <ShoppingBag size={20} />
-        </Link>
+      <Section className="flex justify-start items-center gap-4 overflow-hidden px-2">
+        <CartIndicatorWrapper>
+          <Link
+            href="/checkout/cart"
+            className="flex p-3 justify-center items-center gap-2.5 overflow-hidden rounded-full text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-[#ffc6c6] hover:to-[#ee4444] transition-all duration-300 hover:scale-110 shadow-sm hover:shadow-md"
+          >
+            <ShoppingBag size={20} />
+          </Link>
+        </CartIndicatorWrapper>
 
         <Block className="w-px h-6 bg-[#ffc6c6]/50" />
 

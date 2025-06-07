@@ -26,7 +26,7 @@ export function Tabs({
 }
 
 export function TabsList({ children }: { children: ReactNode }) {
-  return <div className="flex space-x-10 border-b">{children}</div>;
+  return <div className="flex justify-around border-b">{children}</div>;
 }
 
 export function TabsTrigger({
@@ -44,7 +44,7 @@ export function TabsTrigger({
   return (
     <button
       onClick={() => context.setActiveTab(value)}
-      className={`pb-2 border-b-2 transition-all duration-200 ${
+      className={`pb-2 w-full border-b-2 transition-all duration-200  ${
         isActive
           ? "border-pink-500 text-pink-600 font-semibold"
           : "border-transparent text-gray-500 hover:text-gray-700"

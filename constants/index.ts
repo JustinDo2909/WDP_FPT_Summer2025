@@ -1,6 +1,6 @@
-export const product = {
-  product: {
-    product_id: 1,
+export const mproduct = {
+  
+    id: 1,
     title: "Body Brilliant Exfoliating Serum",
     description:
       "Exfoliating Body Serum with 15% Glycolic Acid. This powerful yet gentle formula helps remove dead skin cells, revealing smoother, brighter skin. Perfect for all skin types.",
@@ -23,13 +23,13 @@ export const product = {
       "Apply 2-3 drops to clean, dry skin. Use 2-3 times per week in the evening. Always follow with sunscreen during the day.",
     rating: 4.8,
     reviews_count: 2,
-  },
-  category: {
+
+  productCategory: {
     product_category_id: 1,
     title: "Body Care",
     description: "Products for body care and skincare",
   },
-  brand: {
+  productBrand: {
     product_brand_id: 1,
     title: "T-Care",
     description: "Premium skincare brand",
@@ -37,7 +37,7 @@ export const product = {
   reviews: [
     {
       review_id: 1,
-      product_id: 1,
+      id: 1,
       r_id: "user123",
       r_name: "Alice Smith",
       r_value: 5,
@@ -47,7 +47,7 @@ export const product = {
     },
     {
       review_id: 2,
-      product_id: 1,
+      id: 1,
       r_id: "user456",
       r_name: "Bob Johnson",
       r_value: 4,
@@ -80,7 +80,7 @@ export const product = {
 export const products = [
   {
     product: {
-      product_id: 2,
+      id: 2,
       title: "HydraBoost Moisturizing Cream",
       description:
         "A rich, hydrating cream infused with Ceramides and Squalane. Locks in moisture for up to 48 hours, leaving skin soft and supple. Ideal for dry and sensitive skin.",
@@ -117,7 +117,7 @@ export const products = [
     reviews: [
       {
         review_id: 3,
-        product_id: 2,
+        id: 2,
         r_id: "user789",
         r_name: "Clara Lee",
         r_value: 5,
@@ -126,7 +126,7 @@ export const products = [
       },
       {
         review_id: 4,
-        product_id: 2,
+        id: 2,
         r_id: "user101",
         r_name: "David Kim",
         r_value: 4,
@@ -135,7 +135,7 @@ export const products = [
       },
       {
         review_id: 5,
-        product_id: 2,
+        id: 2,
         r_id: "user202",
         r_name: "Emma Brown",
         r_value: 5,
@@ -166,7 +166,7 @@ export const products = [
   },
   {
     product: {
-      product_id: 3,
+      id: 3,
       title: "Vitamin C Brightening Serum",
       description:
         "A potent serum with 20% Vitamin C + E Ferulic Acid. Brightens dark spots and evens skin tone for a radiant complexion. Suitable for all skin types.",
@@ -203,7 +203,7 @@ export const products = [
     reviews: [
       {
         review_id: 6,
-        product_id: 3,
+        id: 3,
         r_id: "user303",
         r_name: "Sophie Turner",
         r_value: 5,
@@ -212,7 +212,7 @@ export const products = [
       },
       {
         review_id: 7,
-        product_id: 3,
+        id: 3,
         r_id: "user404",
         r_name: "Liam Carter",
         r_value: 5,
@@ -221,7 +221,7 @@ export const products = [
       },
       {
         review_id: 8,
-        product_id: 3,
+        id: 3,
         r_id: "user505",
         r_name: "Mia Patel",
         r_value: 4,
@@ -230,7 +230,7 @@ export const products = [
       },
       {
         review_id: 9,
-        product_id: 3,
+        id: 3,
         r_id: "user606",
         r_name: "Noah Lee",
         r_value: 5,
@@ -261,7 +261,7 @@ export const products = [
   },
   {
     product: {
-      product_id: 4,
+      id: 4,
       title: "Soothing Aloe Gel",
       description:
         "A lightweight gel with 99% Aloe Vera to calm irritated skin and provide instant hydration. Perfect for post-sun care or sensitive skin.",
@@ -297,7 +297,7 @@ export const products = [
     reviews: [
       {
         review_id: 10,
-        product_id: 4,
+        id: 4,
         r_id: "user707",
         r_name: "Olivia Green",
         r_value: 5,
@@ -306,7 +306,7 @@ export const products = [
       },
       {
         review_id: 11,
-        product_id: 4,
+        id: 4,
         r_id: "user808",
         r_name: "James Wilson",
         r_value: 4,
@@ -337,7 +337,7 @@ export const products = [
   },
   {
     product: {
-      product_id: 5,
+      id: 5,
       title: "Retinol Night Cream",
       description:
         "A powerful anti-aging cream with 0.5% Retinol to reduce fine lines and improve skin texture. Formulated for nightly use.",
@@ -374,7 +374,7 @@ export const products = [
     reviews: [
       {
         review_id: 12,
-        product_id: 5,
+        id: 5,
         r_id: "user909",
         r_name: "Ava Thompson",
         r_value: 5,
@@ -383,7 +383,7 @@ export const products = [
       },
       {
         review_id: 13,
-        product_id: 5,
+        id: 5,
         r_id: "user1010",
         r_name: "Ethan Davis",
         r_value: 4,
@@ -392,7 +392,7 @@ export const products = [
       },
       {
         review_id: 14,
-        product_id: 5,
+        id: 5,
         r_id: "user1111",
         r_name: "Isabella Martinez",
         r_value: 5,
@@ -423,7 +423,7 @@ export const products = [
   },
   {
     product: {
-      product_id: 6,
+      id: 6,
       title: "Cleansing Foam Wash",
       description:
         "A gentle foaming cleanser that removes impurities without stripping skin. Infused with Tea Tree Oil for a refreshed feel.",
@@ -460,7 +460,7 @@ export const products = [
     reviews: [
       {
         review_id: 15,
-        product_id: 6,
+        id: 6,
         r_id: "user1212",
         r_name: "Lucas Brown",
         r_value: 5,
@@ -469,7 +469,7 @@ export const products = [
       },
       {
         review_id: 16,
-        product_id: 6,
+        id: 6,
         r_id: "user1313",
         r_name: "Chloe Adams",
         r_value: 4,
@@ -500,7 +500,7 @@ export const products = [
   },
   {
     product: {
-      product_id: 7,
+      id: 7,
       title: "SPF 50 Sunscreen Lotion",
       description:
         "Broad-spectrum SPF 50 sunscreen with lightweight, non-greasy formula. Protects against UVA/UVB rays and hydrates skin.",
@@ -537,7 +537,7 @@ export const products = [
     reviews: [
       {
         review_id: 17,
-        product_id: 7,
+        id: 7,
         r_id: "user1414",
         r_name: "Harper Lee",
         r_value: 5,
@@ -546,7 +546,7 @@ export const products = [
       },
       {
         review_id: 18,
-        product_id: 7,
+        id: 7,
         r_id: "user1515",
         r_name: "Mason Clark",
         r_value: 4,
@@ -555,7 +555,7 @@ export const products = [
       },
       {
         review_id: 19,
-        product_id: 7,
+        id: 7,
         r_id: "user1616",
         r_name: "Aria White",
         r_value: 5,
@@ -586,7 +586,7 @@ export const products = [
   },
   {
     product: {
-      product_id: 8,
+      id: 8,
       title: "Charcoal Detox Mask",
       description:
         "A deep-cleansing mask with activated charcoal to draw out impurities and unclog pores. Leaves skin refreshed and clear.",
@@ -623,7 +623,7 @@ export const products = [
     reviews: [
       {
         review_id: 20,
-        product_id: 8,
+        id: 8,
         r_id: "user1717",
         r_name: "Elijah Moore",
         r_value: 5,
@@ -632,7 +632,7 @@ export const products = [
       },
       {
         review_id: 21,
-        product_id: 8,
+        id: 8,
         r_id: "user1818",
         r_name: "Zoe Taylor",
         r_value: 4,
@@ -663,7 +663,7 @@ export const products = [
   },
   {
     product: {
-      product_id: 9,
+      id: 9,
       title: "Eye Repair Cream",
       description:
         "A nourishing cream with Caffeine and Peptides to reduce puffiness and dark circles around the eyes. Lightweight and fast-absorbing.",
@@ -700,7 +700,7 @@ export const products = [
     reviews: [
       {
         review_id: 22,
-        product_id: 9,
+        id: 9,
         r_id: "user1919",
         r_name: "Amelia Walker",
         r_value: 5,
@@ -709,7 +709,7 @@ export const products = [
       },
       {
         review_id: 23,
-        product_id: 9,
+        id: 9,
         r_id: "user2020",
         r_name: "Henry Young",
         r_value: 4,
@@ -718,7 +718,7 @@ export const products = [
       },
       {
         review_id: 24,
-        product_id: 9,
+        id: 9,
         r_id: "user2121",
         r_name: "Luna Harris",
         r_value: 5,
@@ -749,7 +749,7 @@ export const products = [
   },
   {
     product: {
-      product_id: 10,
+      id: 10,
       title: "Body Butter Bliss",
       description:
         "A luxurious body butter with Cocoa Butter and Coconut Oil for intense hydration. Leaves skin soft and glowing.",
@@ -785,7 +785,7 @@ export const products = [
     reviews: [
       {
         review_id: 25,
-        product_id: 10,
+        id: 10,
         r_id: "user2222",
         r_name: "Evelyn King",
         r_value: 5,
@@ -794,7 +794,7 @@ export const products = [
       },
       {
         review_id: 26,
-        product_id: 10,
+        id: 10,
         r_id: "user2323",
         r_name: "Gabriel Scott",
         r_value: 4,
@@ -825,7 +825,7 @@ export const products = [
   },
   {
     product: {
-      product_id: 11,
+      id: 11,
       title: "Clay Purifying Mask",
       description:
         "A purifying mask with French Green Clay to detoxify and balance oily skin. Minimizes pores and controls shine.",
@@ -862,7 +862,7 @@ export const products = [
     reviews: [
       {
         review_id: 27,
-        product_id: 11,
+        id: 11,
         r_id: "user2424",
         r_name: "Scarlett Evans",
         r_value: 5,
@@ -871,7 +871,7 @@ export const products = [
       },
       {
         review_id: 28,
-        product_id: 11,
+        id: 11,
         r_id: "user2525",
         r_name: "Jack Lewis",
         r_value: 4,
@@ -880,7 +880,7 @@ export const products = [
       },
       {
         review_id: 29,
-        product_id: 11,
+        id: 11,
         r_id: "user2626",
         r_name: "Lily Walker",
         r_value: 5,

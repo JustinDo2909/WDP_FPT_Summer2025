@@ -60,6 +60,7 @@ export const ghnApi = createApi({
     getShippingFee: builder.mutation<
       any,
       {
+        service_id?: number,
         service_type_id?: number;
         // from_district_id: number;
         // from_ward_code: string;
