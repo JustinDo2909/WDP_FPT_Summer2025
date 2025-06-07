@@ -7,7 +7,7 @@ import {
   getTopProductsData,
   getTopCustomersData,
   getCategoryDistribution,
-} from "@/app/(admin)/dashboard/seg/utils";
+} from "@/components/admin/Dashboard/seg/utils";
 import map from "lodash/map";
 import { StatisticsSectionProps } from "@/types/dashboard/index";
 import {
@@ -15,9 +15,8 @@ import {
   Yard,
   Section,
   Anchor,
-  Box,
-  Column,
-  Row,
+  Core,
+  Container,
   Card,
   Block,
   RText,
@@ -32,13 +31,13 @@ export function StatisticsSection({
   const categoryData = getCategoryDistribution();
 
   return (
-    <Area className="grid gap-4 lg:grid-cols-3">
-      <Yard className="lg:col-span-2 bg-white rounded-lg shadow-sm border">
-        <Section className="p-6 border-b">
+    <Core className="grid gap-4 lg:grid-cols-3">
+      <Container className="lg:col-span-2 bg-white rounded-lg shadow-sm border">
+        <Area className="p-6 border-b">
           <RText className="text-lg font-semibold">Statistics this month</RText>
-        </Section>
-        <Section className="p-6">
-          <Anchor className="flex space-x-1 mb-4">
+        </Area>
+        <Area className="p-6">
+          <Yard className="flex space-x-1 mb-4">
             <button
               onClick={() => setActiveTab("products")}
               className={`px-4 py-2 text-sm font-medium rounded-md ${
@@ -59,25 +58,25 @@ export function StatisticsSection({
             >
               Top Customers
             </button>
-          </Anchor>
+          </Yard>
 
           {activeTab === "products" && (
-            <Block className="space-y-3">
+            <Section className="space-y-3">
               {map(topProducts, (product) => (
-                <Box
+                <Anchor
                   key={product.id}
                   className="flex items-center space-x-4 p-3 rounded-lg bg-slate-50"
                 >
-                  <Column className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                  <Block className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
                     <span className="text-sm font-medium">
                       {product.name.charAt(0)}
                     </span>
-                  </Column>
-                  <Column className="flex-1 min-w-0">
+                  </Block>
+                  <Block className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">
                       {product.name}
                     </p>
-                    <Row className="flex items-center text-xs">
+                    <Card className="flex items-center text-xs">
                       {product.trend === "up" ? (
                         <TrendingUp className="h-3 w-3 text-green-500 mr-1" />
                       ) : (
@@ -95,58 +94,58 @@ export function StatisticsSection({
                       <RText className="text-gray-500 ml-1">
                         vs last month
                       </RText>
-                    </Row>
-                  </Column>
-                  <Column className="text-right">
+                    </Card>
+                  </Block>
+                  <Block className="text-right">
                     <p className="text-sm font-medium">
                       {formatCurrency(product.revenue)}
                     </p>
-                  </Column>
-                </Box>
+                  </Block>
+                </Anchor>
               ))}
-            </Block>
+            </Section>
           )}
 
           {activeTab === "customers" && (
-            <Block className="space-y-3">
+            <Section className="space-y-3">
               {map(topCustomers, (customer) => (
-                <Box
+                <Anchor
                   key={customer.id}
                   className="flex items-center space-x-4 p-3 rounded-lg bg-slate-50"
                 >
-                  <Column className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                  <Block className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
                     <span className="text-sm font-medium">
                       {customer.name.charAt(0)}
                     </span>
-                  </Column>
-                  <Column className="flex-1 min-w-0">
+                  </Block>
+                  <Block className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">
                       {customer.name}
                     </p>
                     <p className="text-xs text-gray-500 truncate">
                       {customer.email}
                     </p>
-                  </Column>
-                  <Column className="text-right">
+                  </Block>
+                  <Block className="text-right">
                     <p className="text-sm font-medium">
                       {formatCurrency(customer.spent)}
                     </p>
                     <p className="text-xs text-gray-500">
                       {customer.orders} orders
                     </p>
-                  </Column>
-                </Box>
+                  </Block>
+                </Anchor>
               ))}
-            </Block>
+            </Section>
           )}
-        </Section>
-      </Yard>
+        </Area>
+      </Container>
 
-      <Yard className="bg-white rounded-lg shadow-sm border">
-        <Section className="p-6 border-b">
+      <Container className="bg-white rounded-lg shadow-sm border">
+        <Area className="p-6 border-b">
           <RText className="text-lg font-semibold">Product Categories</RText>
-        </Section>
-        <Section className="p-6">
+        </Area>
+        <Area className="p-6">
           <ResponsiveContainer width="100%" height={180}>
             <PieChart>
               <Pie
@@ -167,25 +166,25 @@ export function StatisticsSection({
               <Tooltip />
             </PieChart>
           </ResponsiveContainer>
-          <Anchor className="space-y-2 mt-4">
+          <Yard className="space-y-2 mt-4">
             {map(categoryData, (category, index) => (
-              <Card
+              <Section
                 key={index}
                 className="flex items-center justify-between text-sm"
               >
-                <Box className="flex items-center space-x-2">
-                  <Column
+                <Anchor className="flex items-center space-x-2">
+                  <Block
                     className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: category.color }}
                   />
                   <span>{category.name}</span>
-                </Box>
+                </Anchor>
                 <span className="text-gray-500">{category.percentage}</span>
-              </Card>
+              </Section>
             ))}
-          </Anchor>
-        </Section>
-      </Yard>
-    </Area>
+          </Yard>
+        </Area>
+      </Container>
+    </Core>
   );
 }
