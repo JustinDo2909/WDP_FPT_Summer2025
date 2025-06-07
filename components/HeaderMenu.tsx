@@ -17,7 +17,7 @@ interface HeaderMenuProps {
 }
 
 const HeaderMenu = ({ headers }: HeaderMenuProps) => {
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
   return (
     <Container className="w-full px-8 md:px-36 bg-white/95 backdrop-blur-md border-b border-[#ffc6c6]/30 shadow-lg inline-flex justify-between items-center sticky top-0 z-50">
@@ -77,7 +77,8 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
             </Block>
 
             <Block className="justify-start text-slate-700 text-sm font-medium hover:text-[#aa4444] transition-colors">
-              {user ? <RText>Logout</RText> : <RText>Login</RText>}
+              {!loading &&
+                (user ? <RText>Logout</RText> : <RText>Login</RText>)}
             </Block>
           </Link>
         </Row>

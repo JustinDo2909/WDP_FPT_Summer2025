@@ -14,7 +14,6 @@ export default function SearchPage() {
         <Area className="bg-muted rounded-xl shadow-sm">
           <Content className="mt-4">
             <ProductGrid />
-            {/* todo: pass product list from parent */}
           </Content>
         </Area>
       </Container>

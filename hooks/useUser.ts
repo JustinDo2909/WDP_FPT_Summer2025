@@ -11,15 +11,13 @@ export const useUser = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const result = await triggerGetMe().unwrap();
-        setUser(result.user);
-      } catch (error) {
-        console.error("Lỗi khi gọi getMe:", error);
-        setUser(null);
-      }
-
-      setLoading(false);
+      await triggerGetMe()
+        .unwrap()
+        .then((data) => {
+          setUser(data.user);
+          setLoading(false);
+        })
+        .catch(() => setUser(null));
     };
 
     fetchUser();
