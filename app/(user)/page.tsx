@@ -1,13 +1,50 @@
 "use client";
 import { Area, Group, RText, Section, Yard } from "@/lib/by/Div";
 import React from "react";
-import { map } from "lodash";
-import { listProductData } from "@/constants/homepage";
-import CardProduct from "@/lib/pattern/share/CardProduct";
 import Image from "next/image";
 import FloatingGameButton from "@/components/floating_game_button";
+import { useGetProductsQuery } from "@/process/api/api";
+import { useAutoRefetch } from "@/components/ProductsPage/seg/utils";
+import ListProductDisplay from "@/components/ListProductDisplay";
 
 export default function Page() {
+  const productDisplaySearchParams = {
+    category: "",
+    brand: "",
+    sort: "highToLow",
+    skinType: "",
+    page: 1,
+    limit: 6,
+    title: "",
+  };
+  const bestCateSearchParams = {
+    category: "",
+    brand: "",
+    sort: "lowToHigh",
+    skinType: "",
+    page: 1,
+    limit: 4,
+    title: "",
+  };
+
+  const shouldFetch = true;
+  const {
+    data: productsDisplay,
+    isLoading: isLoadingProducts,
+    refetch: refetchProducts,
+  } = useGetProductsQuery(productDisplaySearchParams);
+
+  const {
+    data: featuredProducts,
+    isLoading: isLoadingFeatured,
+    refetch: refetchFeatured,
+  } = useGetProductsQuery(bestCateSearchParams);
+
+  useAutoRefetch(productDisplaySearchParams, refetchProducts, shouldFetch, [
+    "title",
+  ]);
+  useAutoRefetch(bestCateSearchParams, refetchFeatured, shouldFetch, ["title"]);
+
   return (
     <Area className=" gap-y-20 py-5">
       <Yard className="inline-flex flex-col justify-start items-start">
@@ -47,11 +84,21 @@ export default function Page() {
           </RText>
           <Group className="w-16 h-1 bg-gradient-to-r from-[#ffc6c6] to-[#ee4444] rounded-full"></Group>
         </Group>
-
         <Group className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {map(listProductData, (product, index) => (
-            <CardProduct key={index} product={product} />
-          ))}
+          {isLoadingProducts && (
+            <RText className="text-slate-500 col-span-full text-center">
+              Loading products...
+            </RText>
+          )}
+          {productsDisplay?.products?.length > 0 ? (
+            <ListProductDisplay products={productsDisplay.products} />
+          ) : (
+            !isLoadingProducts && (
+              <RText className="text-slate-500 col-span-full text-center">
+                No products found.
+              </RText>
+            )
+          )}
         </Group>
       </Section>
 
@@ -97,9 +144,17 @@ export default function Page() {
           <Group className="w-20 h-1 bg-gradient-to-r from-[#ffc6c6] to-[#ee4444] rounded-full mx-auto mt-4"></Group>
         </Group>
         <Group className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {map(listProductData, (product, index) => (
-            <CardProduct key={index} product={product} />
-          ))}
+          {isLoadingFeatured ? (
+            <RText className="text-slate-500 text-center">
+              Loading featured products...
+            </RText>
+          ) : featuredProducts?.products?.length > 0 ? (
+            <ListProductDisplay products={featuredProducts.products} />
+          ) : (
+            <RText className="text-slate-500 text-center">
+              No featured products found.
+            </RText>
+          )}
         </Group>
       </Section>
 
