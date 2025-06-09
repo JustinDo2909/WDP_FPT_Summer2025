@@ -2,7 +2,9 @@
 
 import { Begin } from "@/lib/by/Div";
 import { useGetCartQuery } from "@/process/api/apiCart";
+import { setCartItems } from "@/process/store/cartSlice";
 import { ReactNode, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 
 interface CartIndicatorProps {
@@ -12,12 +14,14 @@ interface CartIndicatorProps {
 export const CartIndicatorWrapper: React.FC<CartIndicatorProps> = ({ children }) => {
   const { data: cartData, isLoading } = useGetCartQuery();
   const [cartItemCount, setCartItemCount] = useState<number>(0);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (cartData?.cart.cartItems) {
+      dispatch(setCartItems(cartData.cart.cartItems)); //dispatch to redux store
       setCartItemCount(cartData.cart.cartItems.length);
     }
-  }, [cartData]);
+  }, [cartData, dispatch]);
 
   if (isLoading) {
     return (

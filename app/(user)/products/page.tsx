@@ -14,6 +14,8 @@ export default async function SearchPage({ searchParams }: {searchParams: Produc
   const productsData:PaginatedResponse<IProduct, 'products'> = await fetchProducts(stringParams);
   const productMeta = await fetchProductMeta();
 
+  //todo change pagination ui 
+
   
   return (
     <Core className="min-h-screen bg-background py-10">

@@ -49,7 +49,7 @@ export const SearchResults = ({ initialData, productMetas }: SearchResultsProps)
       </Section>
 
       <Area className="bg-muted rounded-xl shadow-sm">
-        <Content className="mt-4">
+        <Content className="mt-4 pb-2">
           {!isFetching && !fetchedData.pagination.total ? (
             <EmptySearchResults />
           ) : (

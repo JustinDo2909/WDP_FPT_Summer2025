@@ -1,7 +1,10 @@
+'use client'
+
 import React from "react";
 import { User, ClipboardList, Ticket, Star } from "lucide-react";
 import Link from "next/link";
 import { Begin, Box, Column, RText, Wrap } from "@/lib/by/Div";
+import { useUser } from "@/hooks/useUser";
 
 const menuItems = [
     { label: "Profile", icon: <User size={18} />, href: "/user" },
@@ -11,12 +14,14 @@ const menuItems = [
 ];
 
 export default function UserSidebar() {
+    const {user} = useUser()
+
     return (
         <aside className="w-64  border-r min-h-screen p-6">
             <Box className="flex items-center space-x-3 mb-8">
                 <Begin className="w-12 h-12 rounded-full bg-gray-200" />
                 <Wrap>
-                    <RText  className="font-semibold">Username</RText>
+                    <RText  className="font-semibold">{user?.name}</RText>
                     <button className="text-xs text-blue-500">Edit Profile</button>
                 </Wrap>
             </Box>

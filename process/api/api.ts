@@ -63,8 +63,8 @@ export const api = createApi({
       providesTags: ["Products"],
     }),
     //#endregion 
+    
     //#region getProductsMeta
-
     getProductMeta: build.query<any, void>({
       query: () => ({
         url: "products/meta",

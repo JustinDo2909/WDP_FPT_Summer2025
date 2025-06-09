@@ -9,6 +9,8 @@ import { apiCart } from "./apiCart";
 import { apiProduct } from "./apiProduct";
 import { metaApi } from "./apiMeta";
 import { orderApi } from "./apiOrder";
+import cartSlice from "../store/cartSlice";
+
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +23,7 @@ export const store = configureStore({
     [apiProduct.reducerPath]: apiProduct.reducer,
     [metaApi.reducerPath]: metaApi.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
+    cart: cartSlice.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
@@ -40,3 +43,5 @@ export const store = configureStore({
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
 // see `setupListeners` docs - takes an optional callback as the 2nd arg for customization
 setupListeners(store.dispatch);
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { map } from "lodash";
 import { ShoppingBag, User } from "lucide-react";
 import React from "react";
-import { Block, Container, Group, Row, RText, Section } from "@/lib/by/Div";
+import { Block, Container, Group, Row, RText, Section, Wrap } from "@/lib/by/Div";
 import { useUser } from "@/hooks/useUser";
 import { CartIndicatorWrapper } from "./CartIndicatorWrapper";
 
@@ -61,7 +61,7 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
       <Section className="flex justify-start items-center gap-4 overflow-hidden px-2">
         <CartIndicatorWrapper>
           <Link
-            href="/checkout/cart"
+            href={user ? `/checkout/cart` : `/login`}
             className="flex p-3 justify-center items-center gap-2.5 overflow-hidden rounded-full text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-[#ffc6c6] hover:to-[#ee4444] transition-all duration-300 hover:scale-110 shadow-sm hover:shadow-md"
           >
             <ShoppingBag size={20} />
@@ -71,18 +71,20 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
         <Block className="w-px h-6 bg-[#ffc6c6]/50" />
 
         <Row className="flex justify-center items-center gap-3 overflow-hidden hover:cursor-pointer">
-          <Link
-            href="/login"
+          <Wrap
             className="flex justify-center items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#ffc6c6]/10 transition-all duration-300"
           >
             <Block className="p-2 rounded-full flex justify-center items-center gap-2.5 overflow-hidden text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-[#aa4444] hover:to-[#ee4444] transition-all duration-300">
+               <Link
+            href="/user">
               <User size={20} />
+              </Link>
             </Block>
-
+            
             <Block className="justify-start text-slate-700 text-sm font-medium hover:text-[#aa4444] transition-colors">
-              {user ? <RText>Logout</RText> : <RText>Login</RText>}
+              {user ? <Link href={''}><RText>Logout</RText></Link> : <Link href='/login'><RText>Login</RText></Link>}
             </Block>
-          </Link>
+            </Wrap>
         </Row>
       </Section>
     </Container>
