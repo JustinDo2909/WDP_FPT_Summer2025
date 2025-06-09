@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Card, Column, Cover, Row, RText, Wrap } from "@/lib/by/Div";
 import { formatPrice } from "../../share/formatPrice";
 import Link from "next/link";
-import CustomTooltip from "./CustomTooltip";
 import { calculateDiscount } from "@/lib/share/calcDiscount";
 import AddToCartWrapper from "./AddToCartWrapper";
 
@@ -81,16 +80,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
             <Row className="flex items-center justify-center">
               <AddToCartWrapper productId={product.id}>
-                <button className="text-pink-500 p-1 rounded-full transition-colors transition-transform duration-150 ease-in-out hover:bg-pink-100 active:scale-90">
-                  <CustomTooltip text="Add to Cart!" position="top">
-                    <ShoppingBasketIcon
-                      size={20}
-                      className="transform origin-center"
-                    />
-                  </CustomTooltip>
+                <button className="text-white p-2 rounded-full items-center transition-colors duration-150 ease-in-out bg-primary hover:bg-primary-light active:scale-90">
+                    <Row className="flex space-x-2 items-center">
+            
+                                  <RText className="text-sm font-bold">Add To Cart</RText>
+                                  </Row>
+
                 </button>
               </AddToCartWrapper>
-              <RText className="text-xs text-gray-800 mt-0.5">(20)</RText>
             </Row>
           </Row>
         </Wrap>

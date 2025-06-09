@@ -1,5 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import customBaseQuery from "./customFetchBase";
+import { LogOut } from "lucide-react";
 
 
 export const apiAuth = createApi({
@@ -66,6 +67,13 @@ export const apiAuth = createApi({
         credentials: "include",
       }),
     }),
+    logOut: build.query<any, void>({
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -77,4 +85,5 @@ export const {
   useVerifyForgotPasswordOtpMutation,
   useResetPasswordMutation,
   useLazyGetUserQuery,
+  useLazyLogOutQuery
 } = apiAuth;

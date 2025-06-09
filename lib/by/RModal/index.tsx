@@ -40,25 +40,23 @@ export function RModal(props: IModalArgs) {
   if (!modalData || !modalData.status) return null;
 
   return (
+  <div
+    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+    style={{ zIndex: _set?.overlay?.zIndex ?? 50 }}
+    onClick={() => onClose()}
+  >
     <div
-      //   className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30"
-      style={{ zIndex: _set?.overlay?.zIndex ?? 50 }}
-      onClick={() => onClose()}
+      className={`bg-white rounded-lg shadow-xl transition-all ${
+        isBottomSheet ? "fixed bottom-0 w-full max-w-screen-md mx-auto" : ""
+      }`}
+      style={_set?.modal}
+      onClick={(e) => e.stopPropagation()}
     >
-      <div
-        className={`bg-white rounded-lg shadow-xl transition-all ${
-          isBottomSheet ? "fixed bottom-0 w-full max-w-screen-md mx-auto" : ""
-        }`}
-        style={_set?.modal}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Chắc chắn render nội dung nếu có */}
-        {typeof children === "function"
-          ? children({ open: modalData, onClose })
-          : null}
-      </div>
+      {typeof children === "function" ? children({ open: modalData, onClose }) : null}
     </div>
-  );
+  </div>
+);
+
 }
 
 // Hook để quản lý state modal

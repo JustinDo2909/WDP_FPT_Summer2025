@@ -7,6 +7,8 @@ import { chatbotApi } from "./apiChatBot";
 import { apiAuth } from "./apiAuth";
 import { apiCart } from "./apiCart";
 import cartSlice from "../store/cartSlice";
+import { apiAddress } from "./apiAddress";
+import { apiOrders } from "./apiOrders";
 
 
 export const store = configureStore({
@@ -17,6 +19,8 @@ export const store = configureStore({
     [chatbotApi.reducerPath]: chatbotApi.reducer,
     [apiAuth.reducerPath]: apiAuth.reducer,
     [apiCart.reducerPath]: apiCart.reducer,
+    [apiAddress.reducerPath]: apiAddress.reducer,
+    [apiOrders.reducerPath]: apiOrders.reducer,
     cart: cartSlice.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
@@ -27,7 +31,9 @@ export const store = configureStore({
       ghnApi.middleware,
       chatbotApi.middleware,
       apiAuth.middleware,
-      apiCart.middleware
+      apiCart.middleware,
+      apiAddress.middleware,
+      apiOrders.middleware
     ),
 });
 

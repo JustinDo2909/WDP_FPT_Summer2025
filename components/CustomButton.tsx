@@ -4,7 +4,7 @@ function cn(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-type ButtonVariant = 'default' | 'primary' | 'secondary' | 'danger' | 'outline';
+type ButtonVariant = 'default' | 'secondary' | 'danger' | 'outline';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label?: React.ReactNode;
@@ -14,11 +14,10 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  default: 'bg-gray-200 text-black hover:bg-gray-300',
-  primary: 'bg-blue-600 text-white hover:bg-blue-700',
+  default: 'bg-primary text-white hover:bg-primary/90 active:bg-primary/80',
   secondary: 'bg-gray-500 text-white hover:bg-gray-600',
   danger: 'bg-red-600 text-white hover:bg-red-700',
-  outline: 'border border-gray-300 text-gray-700 bg-transparent', // 🆕 No hover
+  outline: 'border border-primary text-primary-dark bg-transparent', // 🆕 No hover
 };
 
 const Button: React.FC<ButtonProps> = ({
