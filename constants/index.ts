@@ -1,28 +1,27 @@
 export const mproduct = {
-  
-    id: 1,
-    title: "Body Brilliant Exfoliating Serum",
-    description:
-      "Exfoliating Body Serum with 15% Glycolic Acid. This powerful yet gentle formula helps remove dead skin cells, revealing smoother, brighter skin. Perfect for all skin types.",
-    price: 2800000,
-    sale_price: 2300000,
-    image_url: [
-      "https://picsum.photos/1000",
-      "https://picsum.photos/700",
-      "https://picsum.photos/800",
-      "https://picsum.photos/900",
-    ],
-    product_category_id: 1,
-    product_brand_id: 1,
-    total_stock: 50,
-    created_at: "2025-01-15T10:00:00Z",
-    updated_at: "2025-05-20T14:30:00Z",
-    ingredients:
-      "Glycolic Acid 15%, Hyaluronic Acid, Niacinamide, Vitamin E, Aloe Vera Extract",
-    how_to_use:
-      "Apply 2-3 drops to clean, dry skin. Use 2-3 times per week in the evening. Always follow with sunscreen during the day.",
-    rating: 4.8,
-    reviews_count: 2,
+  id: 1,
+  title: "Body Brilliant Exfoliating Serum",
+  description:
+    "Exfoliating Body Serum with 15% Glycolic Acid. This powerful yet gentle formula helps remove dead skin cells, revealing smoother, brighter skin. Perfect for all skin types.",
+  price: 2800000,
+  sale_price: 2300000,
+  image_url: [
+    "https://picsum.photos/1000",
+    "https://picsum.photos/700",
+    "https://picsum.photos/800",
+    "https://picsum.photos/900",
+  ],
+  product_category_id: 1,
+  product_brand_id: 1,
+  total_stock: 50,
+  created_at: "2025-01-15T10:00:00Z",
+  updated_at: "2025-05-20T14:30:00Z",
+  ingredients:
+    "Glycolic Acid 15%, Hyaluronic Acid, Niacinamide, Vitamin E, Aloe Vera Extract",
+  how_to_use:
+    "Apply 2-3 drops to clean, dry skin. Use 2-3 times per week in the evening. Always follow with sunscreen during the day.",
+  rating: 4.8,
+  reviews_count: 2,
 
   productCategory: {
     product_category_id: 1,
@@ -908,5 +907,85 @@ export const products = [
       { id: "usage", label: "How to Use" },
       { id: "reviews", label: "Reviews (3)" },
     ],
+  },
+];
+
+export const games = [
+  {
+    game_url: "/event/quiz",
+    image_url:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWzhKMNWdFM1HmlgIecpOCBs5u4Jq30fUNxQz6",
+    title: "Glow & Know?",
+    description: "Test your beauty IQ and unlock exclusive rewards!",
+  },
+  {
+    game_url: "/event/coming-soon",
+    image_url:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyW0S07pmjvH6zSQAPTDVLocRxF49K3JjiXNhsb",
+    title: "Skincare Stack",
+    description: "Build Your Routine, Reap Your Rewards!",
+  },
+  {
+    game_url: "/event/coming-soon",
+    image_url:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWCTdpF6gK6gWyXmFVNdlSDA0YwrCjLt1zEn4i",
+    title: "Product Pursuit",
+    description: "Find the Hidden Gems, Win Big!",
+  },
+  {
+    game_url: "/event/coming-soon",
+    image_url:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyW6xVW8OZixv3NHYOfM4SRpTI2B9ak1Ed8CAsl",
+    title: "Pixel Puzzle",
+    description: "Solve colorful pixel puzzles!",
+  },
+  {
+    game_url: "/event/coming-soon",
+    image_url:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWvC7iO7NGpV1B4nfFHYlORQ8udj5PmDSh6A0o",
+    title: "Controller Clash",
+    description: "Test your lightning reflexes!",
+  },
+  {
+    game_url: "/event/coming-soon",
+    image_url:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWRMYfFwa18srvSQHTwJ0C2cUVBDt43pluOfNq",
+    title: "Arcade Adventure",
+    description: "Classic arcade challenges await!",
+  },
+  {
+    game_url: "/event/coming-soon",
+    image_url:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWFohAuXHyeOBfC0Di9EszHlqMXr4T7G1ovPbY",
+    title: "Neon Nights",
+    description: "Race through glowing neon tracks!",
+  },
+  {
+    game_url: "/event/coming-soon",
+    image_url:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWcLYuFiILmGazoRh7MNUyYqtdAEgBe9nsHKx6",
+    title: "Beauty Bingo",
+    description: "Match beauty icons for bonus points!",
+  },
+  {
+    game_url: "/event/coming-soon",
+    image_url:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyW685gxorZixv3NHYOfM4SRpTI2B9ak1Ed8CAs",
+    title: "Product Promo Spin",
+    description: "Spin the wheel for special offers!",
+  },
+  {
+    game_url: "/event/coming-soon",
+    image_url:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyW4UxFoVaPbK52yfwRNaSEDkdHA7lCZTo0nIWB",
+    title: "Beauty Builder",
+    description: "Design your dream beauty product!",
+  },
+  {
+    game_url: "/event/coming-soon",
+    image_url:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWJ9i4Jnb8oq4Kbj9AfXElYCFHPx6VGdDynW1t",
+    title: "Makeup Memory Match",
+    description: "Pair up cosmetics in memory game!",
   },
 ];

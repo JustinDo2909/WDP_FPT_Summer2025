@@ -1,3 +1,4 @@
+import { IGame } from "./index";
 declare global {
   type IProduct = {
     id: string;
@@ -44,8 +45,7 @@ declare global {
     categories: ICategory[];
     brands: IBrand[];
     skinTypes: ISkinType[];
-
-  }
+  };
   type IReview = {
     review_id: number;
     product_id: number;
@@ -100,16 +100,15 @@ declare global {
     details: string; // Core
     image_url: string; // Core
     tips: string[]; // Additional
-
   };
 
   type IPostData = {
     id: number; // Core
     category: ICategory; //Core
-    category_id: string
+    category_id: string;
     author: IUser; //Core
     product_id: string;
-    author_id:string;
+    author_id: string;
     title: string; // Core
     thumbnail_url: string; // Core
     description: string; // Core
@@ -117,13 +116,7 @@ declare global {
     warnings: string[]; // Core
     benefits: string[]; // Core
   };
-
-
-
-
 }
-
-
 
 export type {
   IProduct,
@@ -135,5 +128,16 @@ export type {
   ITab,
   IProductPageData,
   IProductCategory,
-  IProductBrand
+  IProductBrand,
+};
+
+export type IGame = {
+  game_url: string;
+  image_url: string;
+  title: string;
+  description: string;
+};
+
+export type ListGame = {
+  listGame: IGame[];
 };

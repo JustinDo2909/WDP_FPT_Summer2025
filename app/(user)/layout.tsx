@@ -5,17 +5,21 @@ import Header from "@/lib/pattern/core/Header";
 import Footer from "@/lib/pattern/core/Footer";
 import { Toaster } from "react-hot-toast";
 import Providers from "@/app/providers";
+import { usePathname } from "next/navigation";
 
 export default function UserLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isEventRoute = pathname.startsWith("/event");
+
   return (
     <Providers>
-      <Header />
+      {!isEventRoute && <Header />}
       {children}
-      <Footer />
+      {!isEventRoute && <Footer />}
       <Toaster
         position="bottom-right"
         toastOptions={{
