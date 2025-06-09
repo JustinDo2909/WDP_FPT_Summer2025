@@ -147,40 +147,40 @@ function Lipstick(props) {
   );
 }
 
-function BannerText() {
-  return (
-    <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.1}>
-      {" "}
-      {/* Giảm hiệu ứng */}
-      <Text
-        position={[0, 1.2, 0]} // Điều chỉnh vị trí
-        fontSize={0.5} // Giảm kích thước
-        maxWidth={2} // Giới hạn chiều rộng
-        lineHeight={1}
-        letterSpacing={0.02}
-        color="#ffffff"
-        anchorX="center"
-        anchorY="middle"
-        font="https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtY.ttf"
-      >
-        Glow Beauty
-      </Text>
-      <Text
-        position={[0, 0.5, 0]}
-        fontSize={0.2}
-        color="#f8a5c2"
-        anchorX="center"
-        anchorY="middle"
-      >
-        Bộ sưu tập mùa hè 2024
-      </Text>
-    </Float>
-  );
-}
+// function BannerText() {
+//   return (
+//     <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.1}>
+//       {" "}
+//       {/* Giảm hiệu ứng */}
+//       <Text
+//         position={[0, 1.2, 0]} // Điều chỉnh vị trí
+//         fontSize={0.5} // Giảm kích thước
+//         maxWidth={2} // Giới hạn chiều rộng
+//         lineHeight={1}
+//         letterSpacing={0.02}
+//         color="#ffffff"
+//         anchorX="center"
+//         anchorY="middle"
+//         font="https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtY.ttf"
+//       >
+//         Glow Beauty
+//       </Text>
+//       <Text
+//         position={[0, 0.5, 0]}
+//         fontSize={0.2}
+//         color="#f8a5c2"
+//         anchorX="center"
+//         anchorY="middle"
+//       >
+//         Bộ sưu tập mùa hè 2024
+//       </Text>
+//     </Float>
+//   );
+// }
 
 function Sparkles() {
   const particles = useRef();
-  const count = 500; // Giảm đáng kể số lượng particles
+  const count = 1000; // Giảm đáng kể số lượng particles
 
   useFrame((state) => {
     if (particles.current) {
@@ -236,7 +236,7 @@ export default function CosmeticBanner() {
 
   return (
     <ErrorBoundary>
-      <div className="h-[600px] w-full bg-gradient-to-b from-gray-900 to-purple-900 relative">
+      <div className="h-screen w-full bg-gradient-to-b from-gray-900 to-purple-900 relative">
         <Canvas
           ref={canvasRef}
           gl={{
@@ -246,7 +246,7 @@ export default function CosmeticBanner() {
           }}
           camera={{ position: [0, 0, 8], fov: 45 }}
           frameloop="demand" // Tiết kiệm tài nguyên
-          dpr={[1, 2]} // Giảm độ phân giải trên thiết bị yếu
+          dpr={[1, 5]} // Giảm độ phân giải trên thiết bị yếu
         >
           <Suspense fallback={null}>
             <ambientLight intensity={0.3} />
@@ -256,19 +256,10 @@ export default function CosmeticBanner() {
               intensity={1}
               penumbra={0.5}
             />
-            <Environment preset="dawn" /> {/* Sử dụng preset nhẹ hơn */}
+            <Environment preset="night" /> {/* Sử dụng preset nhẹ hơn */}
             <Sparkles />
-            <Float speed={1} rotationIntensity={0.3}>
-              <ProductBottle
-                position={[-1.5, -0.5, 0]}
-                color="#ffc0cb"
-                name="Nước hoa hồng"
-              />
-            </Float>
-            <Float speed={1.5} rotationIntensity={0.2}>
-              <Lipstick position={[1.5, -0.5, 0]} color="#e84393" />
-            </Float>
-            <BannerText />
+
+            {/* <BannerText /> */}
             <OrbitControls
               enableZoom={false}
               autoRotate

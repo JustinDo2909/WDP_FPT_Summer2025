@@ -1,3 +1,11 @@
+import {
+  IEventRewards,
+  IQuestions,
+  IResponseCalculate,
+  IResponseEventRewards,
+  IResponseQuestions,
+  IReward,
+} from "@/types/quiz";
 import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
@@ -40,15 +48,22 @@ const customBaseQuery = async (
   }
 };
 
-
 export const api = createApi({
   baseQuery: customBaseQuery,
   reducerPath: "api",
-  tagTypes: ["Products"],
+  tagTypes: ["Products", "Questions", "Rewards"],
   endpoints: (build) => ({
     //#region getProducts
     getProducts: build.query<any, ProductQueryParams>({
-      query: ({ category, brand, skinType, page = 1, limit = 20, sort, title }) => {
+      query: ({
+        category,
+        brand,
+        skinType,
+        page = 1,
+        limit = 20,
+        sort,
+        title,
+      }) => {
         const params = new URLSearchParams();
 
         if (category) params.append("category", category);
@@ -62,8 +77,8 @@ export const api = createApi({
       },
       providesTags: ["Products"],
     }),
-    //#endregion 
-    
+    //#endregion
+
     //#region getProductsMeta
     getProductMeta: build.query<any, void>({
       query: () => ({
@@ -72,11 +87,47 @@ export const api = createApi({
       }),
       providesTags: ["Products"],
     }),
-    //#endregion 
+    //#endregion
 
-    
+    //#region getRandomQuestion
+    getRandomQuestion: build.query<IQuestions[], void>({
+      query: () => ({
+        url: "events/1/questions/random",
+        method: "GET",
+      }),
+      transformResponse: (response: IResponseQuestions) =>
+        response.questions || [],
+      providesTags: ["Questions"],
+    }),
+
+    //#endregion
+    //#region getRandomQuestion
+    getEventRewards: build.query<IEventRewards[], void>({
+      query: () => ({
+        url: "events/1/rewards",
+        method: "GET",
+      }),
+      transformResponse: (response: IResponseEventRewards) => response.eventRewards || [],
+      providesTags: ["Rewards"],
+    }),
+    //#endregion
+    //#region getRandomQuestion
+    postAnswer: build.mutation<IReward, {correct_answers  : number}>({
+      query: (body) => ({
+        url: "events/1/calculate-reward",
+        method: "POST",
+        body,
+      }),
+      transformResponse: (response: IResponseCalculate) => response.reward || {},
+      invalidatesTags: ["Rewards"],
+    }),
+    //#endregion
   }),
 });
 
-export const { useGetProductsQuery } = api;
-
+export const {
+  useGetProductsQuery,
+  useGetEventRewardsQuery,
+  usePostAnswerMutation,
+  useGetRandomQuestionQuery,
+} = api;

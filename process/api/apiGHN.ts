@@ -44,7 +44,6 @@ export const ghnApi = createApi({
     }),
     // getProvinces
     getWards: builder.query<any[], { districtId: number }>({
-
       query: ({ districtId }) => ({
         url: `/master-data/ward?district_id=${districtId}`,
         method: "GET",
@@ -60,7 +59,7 @@ export const ghnApi = createApi({
     getShippingFee: builder.mutation<
       any,
       {
-        service_id?: number,
+        service_id?: number;
         service_type_id?: number;
         // from_district_id: number;
         // from_ward_code: string;
@@ -91,5 +90,9 @@ export const ghnApi = createApi({
   }),
 });
 
-export const { useGetDistrictsQuery, useGetWardsQuery, useGetProvincesQuery, useGetShippingFeeMutation } =
-  ghnApi;
+export const {
+  useGetDistrictsQuery,
+  useGetWardsQuery,
+  useGetProvincesQuery,
+  useGetShippingFeeMutation,
+} = ghnApi;
