@@ -1,7 +1,6 @@
 "use client";
 
-import { ProductTable } from "@/components/admin/Product/Product-table";
-import { AddProductModal } from "@/components/admin/Product/Add-product-modal";
+
 import {
   useProductsLogic,
   calculateProductStats,
@@ -10,6 +9,8 @@ import { Area, RText, Core, Container, Block } from "@/lib/by/Div";
 import { getCurrentDate } from "@/components/admin/Dashboard/seg/utils";
 import { StatsCard } from "@/components/admin/StatsCard";
 import { Package, AlertTriangle, Grid3X3, Building2 } from "lucide-react";
+import { ProductTable } from "@/components/admin/Product/product-table";
+import { AddProductModal } from "@/components/admin/Product/add-product-modal";
 
 export default function ProductsPage() {
   const {

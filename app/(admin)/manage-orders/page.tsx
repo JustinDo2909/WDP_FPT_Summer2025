@@ -2,7 +2,6 @@
 
 import CustomTable from "@/components/CustomTable";
 import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
-import { OrderDetailModal } from "@/components/admin/Order/Order-detail-modal";
 import {
   useOrdersLogic,
   formatCurrency,
@@ -20,6 +19,7 @@ import { Area, RText, Core, Yard, Block, Container } from "@/lib/by/Div";
 import { Eye, Package, TrendingUp, Clock, CreditCard } from "lucide-react";
 import { type Order } from "@/constants/manage-orders/index";
 import { getCurrentDate } from "@/components/admin/Dashboard/seg/utils";
+import { OrderDetailModal } from "@/components/admin/Order/order-detail-modal";
 
 export default function OrdersPage() {
   const {

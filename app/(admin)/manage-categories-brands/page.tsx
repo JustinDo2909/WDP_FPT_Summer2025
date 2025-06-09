@@ -2,8 +2,7 @@
 
 import CustomTable from "@/components/CustomTable";
 import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
-import { AddCategoryModal } from "@/components/admin/Category-Brand/Add-category-modal";
-import { AddBrandModal } from "@/components/admin/Category-Brand/Add-brand-modal";
+
 import {
   useCategoriesBrandsLogic,
   formatDate,
@@ -27,6 +26,8 @@ import {
   Hash,
   BarChart3,
 } from "lucide-react";
+import { AddCategoryModal } from "@/components/admin/Category-Brand/add-category-modal";
+import { AddBrandModal } from "@/components/admin/Category-Brand/add-brand-modal";
 
 export default function CategoriesPage() {
   const {
