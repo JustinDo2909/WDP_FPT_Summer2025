@@ -1,5 +1,5 @@
 {
-  "name": "Reco_yt",
+  "name": "WDP-ecommerce",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -22,7 +22,8 @@
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-toast": "^1.2.3",
-    "@radix-ui/react-tooltip": "^1.2.7",
+    "@radix-ui/react-tooltip": "^1.1.5",
+    "@react-three/drei": "^10.1.2",
     "@reduxjs/toolkit": "^2.6.0",
     "@sanity/icons": "^3.5.2",
     "@sanity/image-url": "^1.1.0",
@@ -40,11 +41,13 @@
     "next": "15.1.0",
     "next-sanity": "^9.8.27",
     "react": "^19.0.0",
+    "react-confetti": "^6.4.0",
     "react-countup": "^6.5.3",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.4",
     "react-hot-toast": "^2.4.1",
     "react-redux": "^9.2.0",
+    "react-use": "^17.6.0",
     "recharts": "^2.15.3",
     "sanity": "^3.67.1",
     "socket.io-client": "^4.8.1",
@@ -56,6 +59,7 @@
     "tailwind-merge": "^2.5.5",
     "tailwind-scrollbar-hide": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
+    "three": "^0.176.0",
     "zod": "^3.24.2",
     "zustand": "^5.0.2"
   },

@@ -6,6 +6,9 @@ import { ghnApi } from "./apiGHN";
 import { chatbotApi } from "./apiChatBot";
 import { apiAuth } from "./apiAuth";
 import { apiCart } from "./apiCart";
+import { apiProduct } from "./apiProduct";
+import { metaApi } from "./apiMeta";
+import { orderApi } from "./apiOrder";
 import cartSlice from "../store/cartSlice";
 import { apiAddress } from "./apiAddress";
 import { apiOrders } from "./apiOrders";
@@ -19,6 +22,9 @@ export const store = configureStore({
     [chatbotApi.reducerPath]: chatbotApi.reducer,
     [apiAuth.reducerPath]: apiAuth.reducer,
     [apiCart.reducerPath]: apiCart.reducer,
+    [apiProduct.reducerPath]: apiProduct.reducer,
+    [metaApi.reducerPath]: metaApi.reducer,
+    [orderApi.reducerPath]: orderApi.reducer,
     [apiAddress.reducerPath]: apiAddress.reducer,
     [apiOrders.reducerPath]: apiOrders.reducer,
     cart: cartSlice.reducer,
@@ -32,6 +38,9 @@ export const store = configureStore({
       chatbotApi.middleware,
       apiAuth.middleware,
       apiCart.middleware,
+      apiProduct.middleware,
+      metaApi.middleware,
+      orderApi.middleware,
       apiAddress.middleware,
       apiOrders.middleware
     ),

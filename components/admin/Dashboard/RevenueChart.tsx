@@ -16,10 +16,10 @@ import {
   // getTotalYearRevenue,
   // calculateMonthlyGrowth,
   getMonthlyRevenueData,
-} from "@/app/(admin)/dashboard/seg/utils";
+} from "@/components/admin/Dashboard/seg/utils";
 import { MoreHorizontal } from "lucide-react";
 import { TooltipProps } from "@/types/dashboard/index";
-import { Area, Section, Anchor, RText, Yard } from "@/lib/by/Div/index";
+import { Area, RText, Yard, Core, Container } from "@/lib/by/Div/index";
 
 interface RevenueChartProps {
   timeFilter: string;
@@ -36,9 +36,9 @@ export function RevenueChart({ timeFilter, setTimeFilter }: RevenueChartProps) {
       const data = payload[0].payload;
       if (data.hasData && data.revenue > 0) {
         return (
-          <Anchor className="bg-white p-3 border rounded-lg shadow-lg">
+          <Core className="bg-white p-3 border rounded-lg shadow-lg">
             <p className="font-medium">{`${label}: ${formatCurrency(data.revenue)}`}</p>
-          </Anchor>
+          </Core>
         );
       }
     }
@@ -46,19 +46,19 @@ export function RevenueChart({ timeFilter, setTimeFilter }: RevenueChartProps) {
   };
 
   return (
-    <Area className="bg-white rounded-lg shadow-sm border">
-      <Yard className="p-6 border-b">
-        <Section className="flex items-center justify-between">
-          <Anchor>
+    <Core className="bg-white rounded-lg shadow-sm border">
+      <Container className="p-6 border-b">
+        <Area className="flex items-center justify-between">
+          <Yard>
             <RText className="text-lg font-semibold mb-1">Monthly Sales</RText>
-          </Anchor>
-          <Anchor className="flex items-center space-x-2">
+          </Yard>
+          <Yard className="flex items-center space-x-2">
             <button className="p-2 hover:bg-gray-100 rounded">
               <MoreHorizontal className="h-4 w-4 text-gray-500" />
             </button>
-          </Anchor>
-        </Section>
-      </Yard>
+          </Yard>
+        </Area>
+      </Container>
       <Yard className="p-6">
         <ResponsiveContainer width="100%" height={300}>
           <BarChart
@@ -98,6 +98,6 @@ export function RevenueChart({ timeFilter, setTimeFilter }: RevenueChartProps) {
           </BarChart>
         </ResponsiveContainer>
       </Yard>
-    </Area>
+    </Core>
   );
 }

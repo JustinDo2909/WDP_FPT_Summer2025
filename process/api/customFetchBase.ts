@@ -1,5 +1,5 @@
 import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { toast } from "react-hot-toast";
 
 const customBaseQuery = async (

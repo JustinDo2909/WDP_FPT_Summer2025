@@ -3,9 +3,9 @@ import {
   monthlyRevenueData,
   topProducts,
   topCustomers,
-  categoryData,
   recentOrders,
 } from "@/constants/dashboard/index";
+import { categoryData } from "@/constants/share/index";
 
 //#region fomatCurrency
 export const formatCurrency = (amount: number): string => {
@@ -97,13 +97,14 @@ export const getPaymentMethodIcon = (method: string) => {
 //#endregion
 //#region getCurrentDate
 export const getCurrentDate = (): string => {
-  return new Date().toLocaleDateString("vi-VN", {
+  return new Date().toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   });
 };
+
 //#endregion
 //#region getMonthlyRevenueData
 // Data processing functions

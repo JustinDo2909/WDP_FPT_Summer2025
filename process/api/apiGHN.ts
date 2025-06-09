@@ -44,6 +44,7 @@ export const ghnApi = createApi({
     }),
     // getProvinces
     getWards: builder.query<any[], { districtId: number }>({
+
       query: ({ districtId }) => ({
         url: `/master-data/ward?district_id=${districtId}`,
         method: "GET",

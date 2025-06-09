@@ -1,6 +1,6 @@
 export const headerData = [
   { title: "Home", href: "/" },
-  { title: "Category", href: "/category" },
+  { title: "User Manual", href: "/how-to-use" },
   { title: "Product", href: "/products" },
   { title: "Event", href: "/event" },
   { title: "About", href: "/about" },
@@ -10,21 +10,20 @@ export const footerData = [
   {
     title: "Category",
     links: [
-      { title: "Face Care", href: "/category/face-care" },
-      { title: "Body Care", href: "/category/body-care" },
-      { title: "Hand Care", href: "/category/hand-care" },
-      { title: "Special Collections", href: "/category/special-collections" },
-      { title: "Sale", href: "/category/sale" },
+      { title: "Face Care", href: "/products" },
+      { title: "Body Care", href: "/products" },
+      { title: "Hand Care", href: "/products" },
+      { title: "Special Collections", href: "/products" },
+      { title: "Sale", href: "/products" },
     ],
   },
   {
     title: "About",
     links: [
       { title: "About Us", href: "/about" },
-      { title: "Shop", href: "/shop" },
+      { title: "Product", href: "/products" },
       { title: "event", href: "/event" },
-      { title: "Contacts", href: "/contacts" },
-      { title: "Showrooms", href: "/showrooms" },
+      { title: "Contacts", href: "/about" },
     ],
   },
   {
