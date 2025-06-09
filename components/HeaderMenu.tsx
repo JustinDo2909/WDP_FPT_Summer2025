@@ -4,7 +4,15 @@ import Link from "next/link";
 import { map } from "lodash";
 import { ShoppingBag, User } from "lucide-react";
 import React from "react";
-import { Block, Container, Group, Row, RText, Section, Wrap } from "@/lib/by/Div";
+import {
+  Block,
+  Container,
+  Group,
+  Row,
+  RText,
+  Section,
+  Wrap,
+} from "@/lib/by/Div";
 import { useUser } from "@/hooks/useUser";
 import { CartIndicatorWrapper } from "./CartIndicatorWrapper";
 
@@ -18,7 +26,7 @@ interface HeaderMenuProps {
 }
 
 const HeaderMenu = ({ headers }: HeaderMenuProps) => {
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
   return (
     <Container className="w-full px-8 md:px-36 bg-white/95 backdrop-blur-md border-b border-[#ffc6c6]/30 shadow-lg inline-flex justify-between items-center sticky top-0 z-50">
@@ -71,20 +79,26 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
         <Block className="w-px h-6 bg-[#ffc6c6]/50" />
 
         <Row className="flex justify-center items-center gap-3 overflow-hidden hover:cursor-pointer">
-          <Wrap
-            className="flex justify-center items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#ffc6c6]/10 transition-all duration-300"
-          >
+          <Wrap className="flex justify-center items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#ffc6c6]/10 transition-all duration-300">
             <Block className="p-2 rounded-full flex justify-center items-center gap-2.5 overflow-hidden text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-[#aa4444] hover:to-[#ee4444] transition-all duration-300">
-               <Link
-            href="/user">
-              <User size={20} />
+              <Link href="/user">
+                <User size={20} />
               </Link>
             </Block>
-            
+
             <Block className="justify-start text-slate-700 text-sm font-medium hover:text-[#aa4444] transition-colors">
-              {user ? <Link href={''}><RText>Logout</RText></Link> : <Link href='/login'><RText>Login</RText></Link>}
+              {!loading &&
+                (user ? (
+                  <Link href={""}>
+                    <RText>Logout</RText>
+                  </Link>
+                ) : (
+                  <Link href="/login">
+                    <RText>Login</RText>
+                  </Link>
+                ))}
             </Block>
-            </Wrap>
+          </Wrap>
         </Row>
       </Section>
     </Container>
