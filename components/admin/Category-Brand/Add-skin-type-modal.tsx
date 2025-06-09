@@ -1,41 +1,27 @@
 "use client";
 
-import { X, Tag, FileText } from "lucide-react";
+import { X, Users, FileText } from "lucide-react";
 import { useEffect } from "react";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
-import { useCategoryForm } from "@/components/admin/Category-Brand/seg/utils";
-import type {
-  AddCategoryModalProps,
-  CategoryOption,
-} from "@/types/category-brand/index";
+import { useSkinTypeForm } from "@/components/admin/Category-Brand/seg/utils";
+import type { AddSkinTypeModalProps } from "@/types/category-brand/index";
 
-export function AddCategoryModal({
+export function AddSkinTypeModal({
   isOpen,
   onClose,
   onSubmit,
-  editCategory,
-}: AddCategoryModalProps) {
+  editSkinType,
+}: AddSkinTypeModalProps) {
   const { formData, errors, isSubmitting, handleInputChange, handleSubmit } =
-    useCategoryForm(editCategory);
+    useSkinTypeForm(editSkinType);
 
-  // Reset form when editCategory changes
+  // Reset form when editSkinType changes
   useEffect(() => {
-    if (editCategory) {
-      handleInputChange("title", editCategory.title);
-      handleInputChange("description", editCategory.description);
+    if (editSkinType) {
+      handleInputChange("title", editSkinType.title);
+      handleInputChange("description", editSkinType.description);
     }
-  }, [editCategory, handleInputChange]);
-
-  const debugSubmit = async (categoryData: Omit<CategoryOption, "id">) => {
-    // eslint-disable-next-line no-console
-    console.log("Form submission data:", categoryData);
-    try {
-      await onSubmit(categoryData);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error("Modal caught error:", error);
-    }
-  };
+  }, [editSkinType, handleInputChange]);
 
   if (!isOpen) return null;
 
@@ -60,12 +46,12 @@ export function AddCategoryModal({
           <Area className="flex items-center justify-between p-6 border-b border-gray-200">
             <Yard>
               <RText className="text-lg font-semibold text-gray-900">
-                {editCategory ? "Edit Category" : "Add New Category"}
+                {editSkinType ? "Edit Skin Type" : "Add New Skin Type"}
               </RText>
               <RText className="text-sm text-gray-500">
-                {editCategory
-                  ? "Update category information"
-                  : "Create a new product category"}
+                {editSkinType
+                  ? "Update skin type information"
+                  : "Create a new skin type category"}
               </RText>
             </Yard>
             <button
@@ -78,20 +64,20 @@ export function AddCategoryModal({
 
           {/* Form */}
           <form
-            onSubmit={(e) => handleSubmit(e, debugSubmit)}
+            onSubmit={(e) => handleSubmit(e, onSubmit)}
             className="p-6 space-y-4"
           >
-            {/* Category Name */}
+            {/* Skin Type Name */}
             <Yard>
               <RText className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
-                <Tag className="w-4 h-4" />
-                Category Title *
+                <Users className="w-4 h-4" />
+                Skin Type Name *
               </RText>
               <input
                 type="text"
                 value={formData.title}
                 onChange={(e) => handleInputChange("title", e.target.value)}
-                placeholder="Enter category title"
+                placeholder="Enter skin type name"
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
                   errors.title ? "border-red-500" : "border-gray-300"
                 }`}
@@ -114,7 +100,7 @@ export function AddCategoryModal({
                 onChange={(e) =>
                   handleInputChange("description", e.target.value)
                 }
-                placeholder="Enter category description"
+                placeholder="Enter skin type description"
                 rows={3}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
                   errors.description ? "border-red-500" : "border-gray-300"
@@ -126,7 +112,7 @@ export function AddCategoryModal({
                 </RText>
               )}
               <RText className="text-xs text-gray-500 mt-1">
-                Brief description of this category
+                Brief description of this skin type and its characteristics
               </RText>
             </Yard>
 
@@ -146,9 +132,9 @@ export function AddCategoryModal({
               >
                 {isSubmitting
                   ? "Saving..."
-                  : editCategory
-                    ? "Update Category"
-                    : "Add Category"}
+                  : editSkinType
+                    ? "Update Skin Type"
+                    : "Add Skin Type"}
               </button>
             </Area>
           </form>

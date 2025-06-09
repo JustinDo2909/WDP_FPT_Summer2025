@@ -1,35 +1,33 @@
 "use client";
 
 import CustomTable from "@/components/CustomTable";
-import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
-import { getCurrentDate } from "@/components/admin/Dashboard/seg/utils";
+import { AddCustomerModal } from "@/components/admin/Customer/add-customer-modal";
+import { CustomerDetailModal } from "@/components/admin/Customer/customer-detail-modal";
 import {
-  useCustomersLogic,
+  calculateCustomerStats,
   formatCurrency,
   formatDate,
-  getStatusColor,
   getLoyaltyTierColor,
-  calculateCustomerStats,
+  getStatusColor,
+  useCustomersLogic,
 } from "@/components/admin/Customer/seg/utils";
-import { type Customer } from "@/constants/manage-customers/index";
+import { MiniStatsCard, StatsCard } from "@/components/admin/StatsCard";
 import {
   customerStatusOptions,
-  loyaltyTierOptions,
+  loyaltyTierOptions, type Customer
 } from "@/constants/manage-customers/index";
-import { Area, RText, Yard, Core, Container, Block } from "@/lib/by/Div";
+import { Area, Container, Core, RText, Yard } from "@/lib/by/Div";
 import {
-  Eye,
-  Edit,
-  Trash2,
   Ban,
   CheckCircle,
-  Users,
   DollarSign,
-  Trophy,
+  Edit,
+  Eye,
   Star,
+  Trash2,
+  Trophy,
+  Users,
 } from "lucide-react";
-import { CustomerDetailModal } from "@/components/admin/Customer/customer-detail-modal";
-import { AddCustomerModal } from "@/components/admin/Customer/add-customer-modal";
 
 export default function CustomersPage() {
   const {
@@ -216,7 +214,6 @@ export default function CustomersPage() {
         <RText className="text-lg font-semibold text-gray-700">
           Customer Management
         </RText>
-        <Block className="text-sm text-gray-500">{getCurrentDate()}</Block>
       </header>
 
       <Container className="flex-1 overflow-auto p-6 space-y-6">

@@ -1,10 +1,9 @@
 "use client";
-import { useEffect } from "react";
 import { X, Upload, Trash2 } from "lucide-react";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
-import { brandData, categoryData } from "@/constants/share/index";
 import { AddProductModalProps } from "@/types/productManagement/index";
 import { useProductForm } from "@/components/admin/Product/seg/utils";
+import { useGetProductMetaQuery } from "@/process/api/apiProduct";
 
 export function AddProductModal({
   isOpen,
@@ -22,19 +21,12 @@ export function AddProductModal({
     handleSubmit,
   } = useProductForm(editProduct);
 
-  // Reset form when editProduct changes
-  useEffect(() => {
-    if (editProduct) {
-      // Update form data when editing
-      Object.entries(editProduct).forEach(([key, value]) => {
-        if (key === "price" || key === "stock") {
-          handleInputChange(key, value.toString());
-        } else {
-          handleInputChange(key, value);
-        }
-      });
-    }
-  }, [editProduct]);
+  // Load dropdown data from API with caching
+  const { data: metaData } = useGetProductMetaQuery(undefined, {
+    // Cache meta data for 10 minutes since it changes rarely
+    pollingInterval: 600000,
+    refetchOnMountOrArgChange: 600,
+  });
 
   if (!isOpen) return null;
 
@@ -80,16 +72,16 @@ export function AddProductModal({
               </RText>
               <input
                 type="text"
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
+                value={formData.title}
+                onChange={(e) => handleInputChange("title", e.target.value)}
                 placeholder="Enter product name"
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                  errors.name ? "border-red-500" : "border-gray-300"
+                  errors.title ? "border-red-500" : "border-gray-300"
                 }`}
               />
-              {errors.name && (
+              {errors.title && (
                 <RText className="text-red-500 text-sm mt-1">
-                  {errors.name}
+                  {errors.title}
                 </RText>
               )}
             </Yard>
@@ -117,7 +109,7 @@ export function AddProductModal({
               )}
             </Yard>
 
-            {/* Price and Stock */}
+            {/* Price and Sale Price */}
             <Area className="grid grid-cols-2 gap-4">
               <Yard>
                 <RText className="block text-sm font-medium text-gray-700 mb-2">
@@ -142,100 +134,151 @@ export function AddProductModal({
 
               <Yard>
                 <RText className="block text-sm font-medium text-gray-700 mb-2">
-                  Total Stock *
+                  Sale Price ($)
                 </RText>
                 <input
                   type="number"
-                  value={formData.stock}
-                  onChange={(e) => handleInputChange("stock", e.target.value)}
-                  placeholder="0"
+                  step="0.01"
+                  value={formData.sale_price}
+                  onChange={(e) =>
+                    handleInputChange("sale_price", e.target.value)
+                  }
+                  placeholder="0.00"
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.stock ? "border-red-500" : "border-gray-300"
+                    errors.sale_price ? "border-red-500" : "border-gray-300"
                   }`}
                 />
-                {errors.stock && (
+                {errors.sale_price && (
                   <RText className="text-red-500 text-sm mt-1">
-                    {errors.stock}
+                    {errors.sale_price}
                   </RText>
                 )}
               </Yard>
             </Area>
 
-            {/* Brand and Category */}
-            <Area className="grid grid-cols-2 gap-4">
-              <Yard>
-                <RText className="block text-sm font-medium text-gray-700 mb-2">
-                  Brand *
+            {/* Total Stock */}
+            <Yard>
+              <RText className="block text-sm font-medium text-gray-700 mb-2">
+                Total Stock *
+              </RText>
+              <input
+                type="number"
+                value={formData.total_stock}
+                onChange={(e) =>
+                  handleInputChange("total_stock", e.target.value)
+                }
+                placeholder="0"
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  errors.total_stock ? "border-red-500" : "border-gray-300"
+                }`}
+              />
+              {errors.total_stock && (
+                <RText className="text-red-500 text-sm mt-1">
+                  {errors.total_stock}
                 </RText>
-                <select
-                  value={formData.brand}
-                  onChange={(e) => handleInputChange("brand", e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.brand ? "border-red-500" : "border-gray-300"
-                  }`}
-                >
-                  <option value="">Select brand</option>
-                  {brandData.map((brand) => (
-                    <option key={brand.id} value={brand.name}>
-                      {brand.name}
-                    </option>
-                  ))}
-                </select>
-                {errors.brand && (
-                  <RText className="text-red-500 text-sm mt-1">
-                    {errors.brand}
-                  </RText>
-                )}
-              </Yard>
+              )}
+            </Yard>
 
+            {/* Category, Brand, and Skin Type */}
+            <Area className="grid grid-cols-3 gap-4">
               <Yard>
                 <RText className="block text-sm font-medium text-gray-700 mb-2">
                   Category *
                 </RText>
                 <select
-                  value={formData.category}
+                  value={formData.product_category_id}
                   onChange={(e) =>
-                    handleInputChange("category", e.target.value)
+                    handleInputChange("product_category_id", e.target.value)
                   }
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.category ? "border-red-500" : "border-gray-300"
+                    errors.product_category_id
+                      ? "border-red-500"
+                      : "border-gray-300"
                   }`}
                 >
                   <option value="">Select category</option>
-                  {categoryData.map((category) => (
-                    <option key={category.name} value={category.name}>
-                      {category.name}
-                    </option>
-                  ))}
+                  {metaData?.data?.categories?.map(
+                    (category: { id: string; title: string }) => (
+                      <option key={category.id} value={category.id}>
+                        {category.title}
+                      </option>
+                    )
+                  )}
                 </select>
-                {errors.category && (
+                {errors.product_category_id && (
                   <RText className="text-red-500 text-sm mt-1">
-                    {errors.category}
+                    {errors.product_category_id}
+                  </RText>
+                )}
+              </Yard>
+
+              <Yard>
+                <RText className="block text-sm font-medium text-gray-700 mb-2">
+                  Brand *
+                </RText>
+                <select
+                  value={formData.product_brand_id}
+                  onChange={(e) =>
+                    handleInputChange("product_brand_id", e.target.value)
+                  }
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    errors.product_brand_id
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
+                >
+                  <option value="">Select brand</option>
+                  {metaData?.data?.brands?.map(
+                    (brand: { id: string; title: string }) => (
+                      <option key={brand.id} value={brand.id}>
+                        {brand.title}
+                      </option>
+                    )
+                  )}
+                </select>
+                {errors.product_brand_id && (
+                  <RText className="text-red-500 text-sm mt-1">
+                    {errors.product_brand_id}
+                  </RText>
+                )}
+              </Yard>
+
+              <Yard>
+                <RText className="block text-sm font-medium text-gray-700 mb-2">
+                  Skin Type *
+                </RText>
+                <select
+                  value={formData.product_skinType_id}
+                  onChange={(e) =>
+                    handleInputChange("product_skinType_id", e.target.value)
+                  }
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    errors.product_skinType_id
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
+                >
+                  <option value="">Select skin type</option>
+                  {metaData?.data?.skinTypes?.map(
+                    (skinType: { id: string; title: string }) => (
+                      <option key={skinType.id} value={skinType.id}>
+                        {skinType.title}
+                      </option>
+                    )
+                  )}
+                </select>
+                {errors.product_skinType_id && (
+                  <RText className="text-red-500 text-sm mt-1">
+                    {errors.product_skinType_id}
                   </RText>
                 )}
               </Yard>
             </Area>
 
-            {/* Discount */}
+            {/* Image Upload */}
             <Yard>
               <RText className="block text-sm font-medium text-gray-700 mb-2">
-                Discount (%)
-              </RText>
-              <input
-                type="number"
-                min="0"
-                max="100"
-                value={formData.discount}
-                onChange={(e) => handleInputChange("discount", e.target.value)}
-                placeholder="0"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-              />
-            </Yard>
-
-            {/* Images */}
-            <Yard>
-              <RText className="block text-sm font-medium text-gray-700 mb-2">
-                Product Images
+                Product Image *
               </RText>
               <Area className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
                 <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
@@ -247,7 +290,6 @@ export function AddProductModal({
                 </RText>
                 <input
                   type="file"
-                  multiple
                   accept="image/*"
                   onChange={handleImageChange}
                   className="hidden"
@@ -257,30 +299,32 @@ export function AddProductModal({
                   htmlFor="image-upload"
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition-colors inline-block"
                 >
-                  Choose Files
+                  Choose File
                 </label>
               </Area>
 
               {/* Image Preview */}
-              {formData.images.length > 0 && (
-                <Area className="grid grid-cols-4 gap-4 mt-4">
-                  {formData.images.map((image: string, index: number) => (
-                    <Yard key={index} className="relative group">
-                      <img
-                        src={image || "/placeholder.svg"}
-                        alt={`Product ${index + 1}`}
-                        className="w-full h-20 object-cover rounded-lg border border-gray-200"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeImage(index)}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </button>
-                    </Yard>
-                  ))}
+              {formData.image_url && (
+                <Area className="mt-4 relative inline-block">
+                  <img
+                    src={formData.image_url}
+                    alt="Product preview"
+                    className="w-32 h-32 object-cover rounded-lg border border-gray-200"
+                  />
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </button>
                 </Area>
+              )}
+
+              {errors.image_url && (
+                <RText className="text-red-500 text-sm mt-1">
+                  {errors.image_url}
+                </RText>
               )}
             </Yard>
 

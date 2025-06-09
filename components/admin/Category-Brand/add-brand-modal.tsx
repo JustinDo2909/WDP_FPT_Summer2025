@@ -1,18 +1,10 @@
 "use client";
 
-import { X, Building2, Globe, FileText } from "lucide-react";
+import { X, Building2, FileText } from "lucide-react";
 import { useEffect } from "react";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
-import { countryOptions } from "@/constants/manage-categories-brands/index";
 import { useBrandForm } from "@/components/admin/Category-Brand/seg/utils";
-import type { Brand } from "@/constants/manage-categories-brands/index";
-
-interface AddBrandModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (brand: Brand) => void;
-  editBrand?: Brand | null;
-}
+import type { AddBrandModalProps } from "@/types/category-brand/index";
 
 export function AddBrandModal({
   isOpen,
@@ -26,11 +18,10 @@ export function AddBrandModal({
   // Reset form when editBrand changes
   useEffect(() => {
     if (editBrand) {
-      Object.entries(editBrand).forEach(([key, value]) => {
-        handleInputChange(key, value);
-      });
+      handleInputChange("title", editBrand.title);
+      handleInputChange("description", editBrand.description);
     }
-  }, [editBrand]);
+  }, [editBrand, handleInputChange]);
 
   if (!isOpen) return null;
 
@@ -80,47 +71,20 @@ export function AddBrandModal({
             <Yard>
               <RText className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
                 <Building2 className="w-4 h-4" />
-                Brand Name *
+                Brand Title *
               </RText>
               <input
                 type="text"
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                placeholder="Enter brand name"
+                value={formData.title}
+                onChange={(e) => handleInputChange("title", e.target.value)}
+                placeholder="Enter brand title"
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                  errors.name ? "border-red-500" : "border-gray-300"
+                  errors.title ? "border-red-500" : "border-gray-300"
                 }`}
               />
-              {errors.name && (
+              {errors.title && (
                 <RText className="text-red-500 text-sm mt-1">
-                  {errors.name}
-                </RText>
-              )}
-            </Yard>
-
-            {/* Country */}
-            <Yard>
-              <RText className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
-                <Globe className="w-4 h-4" />
-                Country *
-              </RText>
-              <select
-                value={formData.country}
-                onChange={(e) => handleInputChange("country", e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                  errors.country ? "border-red-500" : "border-gray-300"
-                }`}
-              >
-                <option value="">Select country</option>
-                {countryOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              {errors.country && (
-                <RText className="text-red-500 text-sm mt-1">
-                  {errors.country}
+                  {errors.title}
                 </RText>
               )}
             </Yard>
@@ -129,19 +93,26 @@ export function AddBrandModal({
             <Yard>
               <RText className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
                 <FileText className="w-4 h-4" />
-                Description
+                Description *
               </RText>
               <textarea
                 value={formData.description}
                 onChange={(e) =>
                   handleInputChange("description", e.target.value)
                 }
-                placeholder="Enter brand description (optional)"
+                placeholder="Enter brand description"
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  errors.description ? "border-red-500" : "border-gray-300"
+                }`}
               />
+              {errors.description && (
+                <RText className="text-red-500 text-sm mt-1">
+                  {errors.description}
+                </RText>
+              )}
               <RText className="text-xs text-gray-500 mt-1">
-                Optional: Brief description of this brand
+                Brief description of this brand
               </RText>
             </Yard>
 

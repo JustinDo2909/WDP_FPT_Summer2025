@@ -1,185 +1,271 @@
 "use client";
 
 import type React from "react";
-
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import type {
-  Category,
-  Brand,
-} from "@/constants/manage-categories-brands/index";
+  CategoryOption,
+  BrandOption,
+  SkinTypeOption,
+  CategoryFormData,
+  BrandFormData,
+  SkinTypeFormData,
+} from "@/types/category-brand/index";
 import {
-  sampleCategories,
-  sampleBrands,
-} from "@/constants/manage-categories-brands/index";
+  useGetMetaDataQuery,
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
+  useCreateBrandMutation,
+  useUpdateBrandMutation,
+  useDeleteBrandMutation,
+  useCreateSkinTypeMutation,
+  useUpdateSkinTypeMutation,
+  useDeleteSkinTypeMutation,
+} from "@/process/api/apiMeta";
 
-import { sampleProducts } from "@/constants/manage-products/index";
-
-export interface CategoryFormData {
-  name: string;
-  value: string;
-  description: string;
-}
-
-export interface BrandFormData {
-  name: string;
-  country: string;
-  description: string;
-}
-
-// Hook quản lý categories và brands
+// Hook quản lý categories, brands và skin types với API
 export const useCategoriesBrandsLogic = () => {
-  const [categories, setCategories] = useState<Category[]>(sampleCategories);
-  const [brands, setBrands] = useState<Brand[]>(sampleBrands);
-  const [activeTab, setActiveTab] = useState<"categories" | "brands">(
-    "categories"
-  );
+  const { data: metaData, isLoading, error } = useGetMetaDataQuery();
+
+  const [createCategory] = useCreateCategoryMutation();
+  const [updateCategory] = useUpdateCategoryMutation();
+  const [deleteCategory] = useDeleteCategoryMutation();
+
+  const [createBrand] = useCreateBrandMutation();
+  const [updateBrand] = useUpdateBrandMutation();
+  const [deleteBrand] = useDeleteBrandMutation();
+
+  const [createSkinType] = useCreateSkinTypeMutation();
+  const [updateSkinType] = useUpdateSkinTypeMutation();
+  const [deleteSkinType] = useDeleteSkinTypeMutation();
+
+  const [activeTab, setActiveTab] = useState<
+    "categories" | "brands" | "skinTypes"
+  >("categories");
 
   // Category states
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<CategoryOption | null>(
     null
   );
-  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
 
   // Brand states
-  const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
   const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
-  const [editingBrand, setEditingBrand] = useState<Brand | null>(null);
+  const [editingBrand, setEditingBrand] = useState<BrandOption | null>(null);
+
+  // Skin Type states
+  const [isSkinTypeModalOpen, setIsSkinTypeModalOpen] = useState(false);
+  const [editingSkinType, setEditingSkinType] = useState<SkinTypeOption | null>(
+    null
+  );
+
+  // Data from API
+  const categories = metaData?.data?.categories || [];
+  const brands = metaData?.data?.brands || [];
+  const skinTypes = metaData?.data?.skinTypes || [];
+
+  // Utility function to extract error message
+  const getErrorMessage = (error: unknown) => {
+    if (error && typeof error === "object") {
+      const err = error as Record<string, unknown>;
+      if (err.data && typeof err.data === "object") {
+        const data = err.data as Record<string, unknown>;
+        if (typeof data.message === "string") return data.message;
+      }
+      if (typeof err.message === "string") return err.message;
+      if (typeof err.error === "string") return err.error;
+      if (typeof err.status === "number") {
+        return `HTTP ${err.status}: ${err.data || "Request failed"}`;
+      }
+    }
+    if (typeof error === "string") return error;
+    return "An unexpected error occurred. Please check your network connection.";
+  };
 
   // Category handlers
-  const handleAddCategory = () => {
+  const handleAddCategory = useCallback(() => {
     setEditingCategory(null);
     setIsCategoryModalOpen(true);
-  };
+  }, []);
 
-  const handleEditCategory = (category: Category) => {
+  const handleEditCategory = useCallback((category: CategoryOption) => {
     setEditingCategory(category);
     setIsCategoryModalOpen(true);
-  };
+  }, []);
 
-  const handleCloseCategoryModal = () => {
+  const handleCloseCategoryModal = useCallback(() => {
     setIsCategoryModalOpen(false);
     setEditingCategory(null);
-  };
+  }, []);
 
-  const handleSubmitCategory = (categoryData: Category) => {
-    if (editingCategory) {
-      // Update existing category
-      setCategories((prev) =>
-        prev.map((category) =>
-          category.id === categoryData.id ? categoryData : category
+  const handleSubmitCategory = useCallback(
+    async (categoryData: Omit<CategoryOption, "id">) => {
+      try {
+        if (editingCategory) {
+          await updateCategory({
+            ...categoryData,
+            id: editingCategory.id,
+          }).unwrap();
+        } else {
+          await createCategory(categoryData).unwrap();
+        }
+        setIsCategoryModalOpen(false);
+        setEditingCategory(null);
+      } catch (error: unknown) {
+        const errorMessage = getErrorMessage(error);
+        alert(`Failed to save category: ${errorMessage}`);
+        throw new Error(errorMessage);
+      }
+    },
+    [editingCategory, createCategory, updateCategory]
+  );
+
+  const handleDeleteCategory = useCallback(
+    async (categoryId: string) => {
+      const category = categories.find((c) => c.id === categoryId);
+      if (!category) return;
+
+      if (
+        confirm(
+          `Are you sure you want to delete category "${category.title}"? This action cannot be undone.`
         )
-      );
-    } else {
-      // Add new category
-      setCategories((prev) => [...prev, categoryData]);
-    }
-    setIsCategoryModalOpen(false);
-    setEditingCategory(null);
-  };
-
-  const handleDeleteCategory = (categoryId: string) => {
-    const category = categories.find((c) => c.id === categoryId);
-    if (!category) return;
-
-    // Check if category has products
-    const productsInCategory = sampleProducts.filter(
-      (product) => product.category === category.name
-    );
-
-    if (productsInCategory.length > 0) {
-      alert(
-        `Cannot delete category "${category.name}" because it has ${productsInCategory.length} product(s). Please remove all products from this category first.`
-      );
-      return;
-    }
-
-    if (
-      confirm(
-        `Are you sure you want to delete category "${category.name}"? This action cannot be undone.`
-      )
-    ) {
-      setCategories((prev) =>
-        prev.filter((category) => category.id !== categoryId)
-      );
-    }
-  };
+      ) {
+        try {
+          await deleteCategory(category).unwrap();
+        } catch (error: unknown) {
+          const errorMessage = getErrorMessage(error);
+          alert(`Failed to delete category: ${errorMessage}`);
+        }
+      }
+    },
+    [categories, deleteCategory]
+  );
 
   // Brand handlers
-  const handleAddBrand = () => {
+  const handleAddBrand = useCallback(() => {
     setEditingBrand(null);
     setIsBrandModalOpen(true);
-  };
+  }, []);
 
-  const handleEditBrand = (brand: Brand) => {
+  const handleEditBrand = useCallback((brand: BrandOption) => {
     setEditingBrand(brand);
     setIsBrandModalOpen(true);
-  };
+  }, []);
 
-  const handleCloseBrandModal = () => {
+  const handleCloseBrandModal = useCallback(() => {
     setIsBrandModalOpen(false);
     setEditingBrand(null);
-  };
+  }, []);
 
-  const handleSubmitBrand = (brandData: Brand) => {
-    if (editingBrand) {
-      // Update existing brand
-      setBrands((prev) =>
-        prev.map((brand) => (brand.id === brandData.id ? brandData : brand))
-      );
-    } else {
-      // Add new brand
-      setBrands((prev) => [...prev, brandData]);
-    }
-    setIsBrandModalOpen(false);
-    setEditingBrand(null);
-  };
+  const handleSubmitBrand = useCallback(
+    async (brandData: Omit<BrandOption, "id">) => {
+      try {
+        if (editingBrand) {
+          await updateBrand({ ...brandData, id: editingBrand.id }).unwrap();
+        } else {
+          await createBrand(brandData).unwrap();
+        }
+        setIsBrandModalOpen(false);
+        setEditingBrand(null);
+      } catch (error: unknown) {
+        const errorMessage = getErrorMessage(error);
+        alert(`Failed to save brand: ${errorMessage}`);
+        throw new Error(errorMessage);
+      }
+    },
+    [editingBrand, createBrand, updateBrand]
+  );
 
-  const handleDeleteBrand = (brandId: string) => {
-    const brand = brands.find((b) => b.id === brandId);
-    if (!brand) return;
+  const handleDeleteBrand = useCallback(
+    async (brandId: string) => {
+      const brand = brands.find((b) => b.id === brandId);
+      if (!brand) return;
 
-    // Check if brand has products
-    const productsWithBrand = sampleProducts.filter(
-      (product) => product.brand === brand.name
-    );
+      if (
+        confirm(
+          `Are you sure you want to delete brand "${brand.title}"? This action cannot be undone.`
+        )
+      ) {
+        try {
+          await deleteBrand(brand).unwrap();
+        } catch (error: unknown) {
+          const errorMessage = getErrorMessage(error);
+          alert(`Failed to delete brand: ${errorMessage}`);
+        }
+      }
+    },
+    [brands, deleteBrand]
+  );
 
-    if (productsWithBrand.length > 0) {
-      alert(
-        `Cannot delete brand "${brand.name}" because it has ${productsWithBrand.length} product(s). Please remove all products from this brand first.`
-      );
-      return;
-    }
+  // Skin Type handlers
+  const handleAddSkinType = useCallback(() => {
+    setEditingSkinType(null);
+    setIsSkinTypeModalOpen(true);
+  }, []);
 
-    if (
-      confirm(
-        `Are you sure you want to delete brand "${brand.name}"? This action cannot be undone.`
-      )
-    ) {
-      setBrands((prev) => prev.filter((brand) => brand.id !== brandId));
-    }
-  };
+  const handleEditSkinType = useCallback((skinType: SkinTypeOption) => {
+    setEditingSkinType(skinType);
+    setIsSkinTypeModalOpen(true);
+  }, []);
+
+  const handleCloseSkinTypeModal = useCallback(() => {
+    setIsSkinTypeModalOpen(false);
+    setEditingSkinType(null);
+  }, []);
+
+  const handleSubmitSkinType = useCallback(
+    async (skinTypeData: Omit<SkinTypeOption, "id">) => {
+      try {
+        if (editingSkinType) {
+          await updateSkinType({
+            ...skinTypeData,
+            id: editingSkinType.id,
+          }).unwrap();
+        } else {
+          await createSkinType(skinTypeData).unwrap();
+        }
+        setIsSkinTypeModalOpen(false);
+        setEditingSkinType(null);
+      } catch (error: unknown) {
+        const errorMessage = getErrorMessage(error);
+        alert(`Failed to save skin type: ${errorMessage}`);
+        throw new Error(errorMessage);
+      }
+    },
+    [editingSkinType, createSkinType, updateSkinType]
+  );
+
+  const handleDeleteSkinType = useCallback(
+    async (skinTypeId: string) => {
+      const skinType = skinTypes.find((st) => st.id === skinTypeId);
+      if (!skinType) return;
+
+      if (
+        confirm(
+          `Are you sure you want to delete skin type "${skinType.title}"? This action cannot be undone.`
+        )
+      ) {
+        try {
+          await deleteSkinType(skinType).unwrap();
+        } catch (error: unknown) {
+          const errorMessage = getErrorMessage(error);
+          alert(`Failed to delete skin type: ${errorMessage}`);
+        }
+      }
+    },
+    [skinTypes, deleteSkinType]
+  );
 
   // Export handlers
-  const handleExportCategories = () => {
-    const headers = [
-      "Category ID",
-      "Name",
-      "Product Count",
-      "Description",
-      "Created Date",
-      "Updated Date",
-    ];
+  const handleExportCategories = useCallback(() => {
+    const headers = ["Category ID", "Title", "Description"];
     const csvContent = [
       headers.join(","),
       ...categories.map((category) =>
         [
           category.id,
-          `"${category.name}"`,
-          category.value,
+          `"${category.title}"`,
           `"${category.description || ""}"`,
-          new Date(category.createdDate).toLocaleDateString(),
-          new Date(category.updatedDate).toLocaleDateString(),
         ].join(",")
       ),
     ].join("\n");
@@ -191,30 +277,14 @@ export const useCategoriesBrandsLogic = () => {
     a.download = `categories_${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     window.URL.revokeObjectURL(url);
-  };
+  }, [categories]);
 
-  const handleExportBrands = () => {
-    const headers = [
-      "Brand ID",
-      "Name",
-      "Country",
-      "Product Count",
-      "Description",
-      "Created Date",
-      "Updated Date",
-    ];
+  const handleExportBrands = useCallback(() => {
+    const headers = ["Brand ID", "Title", "Description"];
     const csvContent = [
       headers.join(","),
       ...brands.map((brand) =>
-        [
-          brand.id,
-          `"${brand.name}"`,
-          brand.country,
-          brand.productCount,
-          `"${brand.description || ""}"`,
-          new Date(brand.createdDate).toLocaleDateString(),
-          new Date(brand.updatedDate).toLocaleDateString(),
-        ].join(",")
+        [brand.id, `"${brand.title}"`, `"${brand.description || ""}"`].join(",")
       ),
     ].join("\n");
 
@@ -225,24 +295,51 @@ export const useCategoriesBrandsLogic = () => {
     a.download = `brands_${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     window.URL.revokeObjectURL(url);
-  };
+  }, [brands]);
+
+  const handleExportSkinTypes = useCallback(() => {
+    const headers = ["Skin Type ID", "Title", "Description"];
+    const csvContent = [
+      headers.join(","),
+      ...skinTypes.map((skinType) =>
+        [
+          skinType.id,
+          `"${skinType.title}"`,
+          `"${skinType.description || ""}"`,
+        ].join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `skin-types_${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }, [skinTypes]);
 
   return {
     // Data
     categories,
     brands,
+    skinTypes,
     activeTab,
     setActiveTab,
+    isLoading,
+    error,
 
     // Category states
-    selectedCategory,
     isCategoryModalOpen,
     editingCategory,
 
     // Brand states
-    selectedBrand,
     isBrandModalOpen,
     editingBrand,
+
+    // Skin Type states
+    isSkinTypeModalOpen,
+    editingSkinType,
 
     // Category handlers
     handleAddCategory,
@@ -258,43 +355,49 @@ export const useCategoriesBrandsLogic = () => {
     handleSubmitBrand,
     handleDeleteBrand,
 
+    // Skin Type handlers
+    handleAddSkinType,
+    handleEditSkinType,
+    handleCloseSkinTypeModal,
+    handleSubmitSkinType,
+    handleDeleteSkinType,
+
     // Export handlers
     handleExportCategories,
     handleExportBrands,
+    handleExportSkinTypes,
   };
 };
 
 // Hook quản lý category form
-export const useCategoryForm = (editCategory?: Category | null) => {
+export const useCategoryForm = (editCategory?: CategoryOption | null) => {
   const [formData, setFormData] = useState<CategoryFormData>({
-    name: editCategory?.name || "",
-    value: editCategory?.value?.toString() || "0",
+    title: editCategory?.title || "",
     description: editCategory?.description || "",
   });
 
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (field: string, value: any) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev: any) => ({ ...prev, [field]: "" }));
-    }
-  };
+  const handleInputChange = useCallback(
+    (field: string, value: string) => {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+      if (errors[field]) {
+        setErrors((prev) => ({ ...prev, [field]: "" }));
+      }
+    },
+    [errors]
+  );
 
   const validateForm = (data: CategoryFormData) => {
-    const errors: any = {};
+    const errors: Record<string, string> = {};
 
-    if (!data.name?.trim()) {
-      errors.name = "Category name is required";
+    if (!data.title?.trim()) {
+      errors.title = "Category title is required";
     }
 
-    if (data.value && isNaN(Number(data.value))) {
-      errors.value = "Product count must be a number";
-    }
-
-    if (data.value && Number(data.value) < 0) {
-      errors.value = "Product count cannot be negative";
+    if (!data.description?.trim()) {
+      errors.description = "Category description is required";
     }
 
     return errors;
@@ -302,7 +405,7 @@ export const useCategoryForm = (editCategory?: Category | null) => {
 
   const handleSubmit = async (
     e: React.FormEvent,
-    onSubmit: (data: Category) => void
+    onSubmit: (data: Omit<CategoryOption, "id">) => void
   ) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -316,20 +419,10 @@ export const useCategoryForm = (editCategory?: Category | null) => {
       return;
     }
 
-    const categoryData: Category = {
-      ...formData,
-      id:
-        editCategory?.id ||
-        `CAT-${Math.floor(Math.random() * 10000)
-          .toString()
-          .padStart(3, "0")}`,
-      value: Number.parseInt(formData.value) || 0,
-      createdDate: editCategory?.createdDate || new Date().toISOString(),
-      updatedDate: new Date().toISOString(),
-    };
-
     try {
-      await onSubmit(categoryData);
+      await onSubmit(formData);
+      // Reset form after successful submission
+      setFormData({ title: "", description: "" });
     } catch (error) {
       console.error("Error submitting category:", error);
     } finally {
@@ -347,32 +440,34 @@ export const useCategoryForm = (editCategory?: Category | null) => {
 };
 
 // Hook quản lý brand form
-export const useBrandForm = (editBrand?: Brand | null) => {
+export const useBrandForm = (editBrand?: BrandOption | null) => {
   const [formData, setBrandFormData] = useState<BrandFormData>({
-    name: editBrand?.name || "",
-    country: editBrand?.country || "",
+    title: editBrand?.title || "",
     description: editBrand?.description || "",
   });
 
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (field: string, value: any) => {
-    setBrandFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev: any) => ({ ...prev, [field]: "" }));
-    }
-  };
+  const handleInputChange = useCallback(
+    (field: string, value: string) => {
+      setBrandFormData((prev) => ({ ...prev, [field]: value }));
+      if (errors[field]) {
+        setErrors((prev) => ({ ...prev, [field]: "" }));
+      }
+    },
+    [errors]
+  );
 
   const validateForm = (data: BrandFormData) => {
-    const errors: any = {};
+    const errors: Record<string, string> = {};
 
-    if (!data.name?.trim()) {
-      errors.name = "Brand name is required";
+    if (!data.title?.trim()) {
+      errors.title = "Brand title is required";
     }
 
-    if (!data.country?.trim()) {
-      errors.country = "Country is required";
+    if (!data.description?.trim()) {
+      errors.description = "Brand description is required";
     }
 
     return errors;
@@ -380,7 +475,7 @@ export const useBrandForm = (editBrand?: Brand | null) => {
 
   const handleSubmit = async (
     e: React.FormEvent,
-    onSubmit: (data: Brand) => void
+    onSubmit: (data: Omit<BrandOption, "id">) => void
   ) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -394,22 +489,82 @@ export const useBrandForm = (editBrand?: Brand | null) => {
       return;
     }
 
-    const brandData: Brand = {
-      ...formData,
-      id:
-        editBrand?.id ||
-        `BRD-${Math.floor(Math.random() * 10000)
-          .toString()
-          .padStart(3, "0")}`,
-      productCount: editBrand?.productCount || 0,
-      createdDate: editBrand?.createdDate || new Date().toISOString(),
-      updatedDate: new Date().toISOString(),
-    };
-
     try {
-      await onSubmit(brandData);
+      await onSubmit(formData);
+      // Reset form after successful submission
+      setBrandFormData({ title: "", description: "" });
     } catch (error) {
       console.error("Error submitting brand:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return {
+    formData,
+    errors,
+    isSubmitting,
+    handleInputChange,
+    handleSubmit,
+  };
+};
+
+// Hook quản lý skin type form
+export const useSkinTypeForm = (editSkinType?: SkinTypeOption | null) => {
+  const [formData, setSkinTypeFormData] = useState<SkinTypeFormData>({
+    title: editSkinType?.title || "",
+    description: editSkinType?.description || "",
+  });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleInputChange = useCallback(
+    (field: string, value: string) => {
+      setSkinTypeFormData((prev) => ({ ...prev, [field]: value }));
+      if (errors[field]) {
+        setErrors((prev) => ({ ...prev, [field]: "" }));
+      }
+    },
+    [errors]
+  );
+
+  const validateForm = (data: SkinTypeFormData) => {
+    const errors: Record<string, string> = {};
+
+    if (!data.title?.trim()) {
+      errors.title = "Skin type title is required";
+    }
+
+    if (!data.description?.trim()) {
+      errors.description = "Skin type description is required";
+    }
+
+    return errors;
+  };
+
+  const handleSubmit = async (
+    e: React.FormEvent,
+    onSubmit: (data: Omit<SkinTypeOption, "id">) => void
+  ) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrors({});
+
+    const validationErrors = validateForm(formData);
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      await onSubmit(formData);
+      // Reset form after successful submission
+      setSkinTypeFormData({ title: "", description: "" });
+    } catch (error) {
+      console.error("Error submitting skin type:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -433,54 +588,15 @@ export const formatDate = (dateString: string) => {
   });
 };
 
-export const calculateCategoryStats = (categories: Category[]) => {
-  const totalCategories = categories.length;
-  const totalProducts = categories.reduce(
-    (sum, category) => sum + category.value,
-    0
-  );
-  const averageProductsPerCategory =
-    totalCategories > 0 ? totalProducts / totalCategories : 0;
-  const mostPopularCategory = categories.reduce(
-    (max, category) => (category.value > max.value ? category : max),
-    categories[0] || { value: 0, name: "None" }
-  );
-
+export const calculateStats = (
+  categories: CategoryOption[],
+  brands: BrandOption[],
+  skinTypes: SkinTypeOption[]
+) => {
   return {
-    totalCategories,
-    totalProducts,
-    averageProductsPerCategory,
-    mostPopularCategory,
-  };
-};
-
-export const calculateBrandStats = (brands: Brand[]) => {
-  const totalBrands = brands.length;
-  const totalProducts = brands.reduce(
-    (sum, brand) => sum + brand.productCount,
-    0
-  );
-  const averageProductsPerBrand =
-    totalBrands > 0 ? totalProducts / totalBrands : 0;
-
-  const countryCounts = brands.reduce(
-    (acc, brand) => {
-      acc[brand.country] = (acc[brand.country] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>
-  );
-
-  const topCountry = Object.entries(countryCounts).reduce(
-    (max, [country, count]) => (count > max.count ? { country, count } : max),
-    { country: "None", count: 0 }
-  );
-
-  return {
-    totalBrands,
-    totalProducts,
-    averageProductsPerBrand,
-    topCountry,
-    countryCounts,
+    totalCategories: categories.length,
+    totalBrands: brands.length,
+    totalSkinTypes: skinTypes.length,
+    totalItems: categories.length + brands.length + skinTypes.length,
   };
 };

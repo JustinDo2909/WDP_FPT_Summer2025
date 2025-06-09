@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { OverviewCards } from "@/components/admin/Dashboard/OverviewCards";
 import { RevenueChart } from "@/components/admin/Dashboard/RevenueChart";
-import { getCurrentDate } from "@/components/admin/Dashboard/seg/utils";
 import { StatisticsSection } from "@/components/admin/Dashboard/StatisticSection";
 import { TransactionsTable } from "@/components/admin/Dashboard/TransactionTable";
 import { Area, Yard, RText, Core, Block } from "../../../lib/by/Div/index";
@@ -18,9 +17,6 @@ export default function Dashboard() {
       <header className="flex h-16 items-center gap-2 border-b bg-white px-4">
         <Yard className="flex items-center gap-2 text-sm text-gray-500">
           <RText>Dashboard</RText>
-        </Yard>
-        <Yard className="ml-auto flex items-center space-x-4">
-          <Block className="text-sm text-gray-500">{getCurrentDate()}</Block>
         </Yard>
       </header>
 
