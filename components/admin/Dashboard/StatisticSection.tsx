@@ -21,6 +21,7 @@ import {
   Block,
   RText,
 } from "@/lib/by/Div/index";
+import { useEffect, useState } from "react";
 
 export function StatisticsSection({
   activeTab,
@@ -29,7 +30,14 @@ export function StatisticsSection({
   const topProducts = getTopProductsData();
   const topCustomers = getTopCustomersData();
   const categoryData = getCategoryDistribution();
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
+  if (!isMounted) {
+    return null;
+  }
   return (
     <Core className="grid gap-4 lg:grid-cols-3">
       <Container className="lg:col-span-2 bg-white rounded-lg shadow-sm border">

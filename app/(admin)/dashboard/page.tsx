@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { OverviewCards } from "@/components/admin/Dashboard/OverviewCards";
 import { RevenueChart } from "@/components/admin/Dashboard/RevenueChart";
 import { StatisticsSection } from "@/components/admin/Dashboard/StatisticSection";
@@ -8,9 +8,16 @@ import { TransactionsTable } from "@/components/admin/Dashboard/TransactionTable
 import { Area, Yard, RText, Core, Block } from "../../../lib/by/Div/index";
 
 export default function Dashboard() {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   const [timeFilter, setTimeFilter] = useState("last_7_days");
   const [activeTab, setActiveTab] = useState("products");
 
+  if (!isMounted) {
+    return null;
+  }
   return (
     <Core className="flex flex-col h-full bg-gray-50">
       {/* Header */}

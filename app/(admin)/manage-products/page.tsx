@@ -1,7 +1,7 @@
 "use client";
 
-import { ProductTable } from "@/components/admin/Product/product-table";
-import { AddProductModal } from "@/components/admin/Product/add-product-modal";
+import { ProductTable } from "@/components/admin/Product/Product-table";
+import { AddProductModal } from "@/components/admin/Product/Add-product-modal";
 import { useProductsLogic } from "@/components/admin/Product/seg/utils";
 import { Area, RText, Core, Container } from "@/lib/by/Div";
 import { StatsCard } from "@/components/admin/StatsCard";

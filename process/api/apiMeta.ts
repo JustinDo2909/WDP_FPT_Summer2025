@@ -1,44 +1,17 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import Cookies from "js-cookie";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import type {
   MetaDataResponse,
   CategoryOption,
   BrandOption,
   SkinTypeOption,
-} from "@/types/category-brand/index";
-
-const BASE_URL = "https://cosme-play-be.vercel.app/api";
-
-// Types for API requests
-type ItemRequest = {
-  title: string;
-  description: string;
-  type: "category" | "brand" | "skinType";
-};
-
-// Simple API response type matching backend
-type SimpleApiResponse = {
-  success: boolean;
-  message: string;
-};
+  ItemRequest,
+  SimpleApiResponse,
+} from "@/types/meta/index";
+import customBaseQuery from "./customFetchBase";
 
 export const metaApi = createApi({
   reducerPath: "metaApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL,
-    credentials: "include",
-    prepareHeaders: (headers) => {
-      headers.set("Content-Type", "application/json");
-
-      // Add authentication token if available
-      const token = Cookies.get("authToken");
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery: customBaseQuery,
   tagTypes: ["Categories", "Brands", "SkinTypes", "Meta"],
   endpoints: (builder) => ({
     // Get all meta data (categories, brands, skin types)

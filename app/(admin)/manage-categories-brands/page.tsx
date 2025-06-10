@@ -14,7 +14,7 @@ import type {
   CategoryOption,
   BrandOption,
   SkinTypeOption,
-} from "@/types/category-brand/index";
+} from "@/types/meta/index";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 import {
   Edit,

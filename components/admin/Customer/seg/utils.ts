@@ -12,7 +12,7 @@ import {
   sampleCustomers,
   sampleGameScoreTransactions,
 } from "@/constants/manage-customers/index";
-import { sampleOrders } from "@/constants/manage-orders/index";
+// import { sampleOrders } from "@/constants/manage-orders/index";
 
 export interface CustomerFormData {
   name: string;

@@ -9,7 +9,7 @@ import type {
   CategoryFormData,
   BrandFormData,
   SkinTypeFormData,
-} from "@/types/category-brand/index";
+} from "@/types/meta/index";
 import {
   useGetMetaDataQuery,
   useCreateCategoryMutation,

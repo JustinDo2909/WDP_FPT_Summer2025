@@ -1,45 +1,5 @@
-import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import Cookies from "js-cookie";
-import { toast } from "sonner";
-
-const customBaseQuery = async (
-  args: string | FetchArgs,
-  api: BaseQueryApi,
-  extraOptions: any
-) => {
-  const baseQuery = fetchBaseQuery({
-    baseUrl: "https://cosme-play-be.vercel.app/api/",
-    credentials: "include",
-    prepareHeaders: async (headers) => {
-      const token = Cookies.get("authToken");
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  });
-
-  try {
-    const result: any = await baseQuery(args, api, extraOptions);
-
-    if (result.error) {
-      const errorMessage = result.error.data?.message || "An error occurred";
-      toast.error(`Error: ${errorMessage}`);
-      return { error: result.error }; // Trả về lỗi ngay lập tức
-    }
-
-    return result; // ✅ Không truy cập result.data.data
-  } catch (error) {
-    return {
-      error: {
-        status: "FETCH_ERROR",
-        error: (error as Error).message || "Unknown error",
-      },
-    };
-  }
-};
-
+import { createApi } from "@reduxjs/toolkit/query/react";
+import customBaseQuery from "./customFetchBase";
 
 export const api = createApi({
   baseQuery: customBaseQuery,
@@ -48,7 +8,15 @@ export const api = createApi({
   endpoints: (build) => ({
     //#region getProducts
     getProducts: build.query<any, ProductQueryParams>({
-      query: ({ category, brand, skinType, page = 1, limit = 20, sort, title }) => {
+      query: ({
+        category,
+        brand,
+        skinType,
+        page = 1,
+        limit = 20,
+        sort,
+        title,
+      }) => {
         const params = new URLSearchParams();
 
         if (category) params.append("category", category);
@@ -62,7 +30,7 @@ export const api = createApi({
       },
       providesTags: ["Products"],
     }),
-    //#endregion 
+    //#endregion
     //#region getProductsMeta
 
     getProductMeta: build.query<any, void>({
@@ -72,11 +40,8 @@ export const api = createApi({
       }),
       providesTags: ["Products"],
     }),
-    //#endregion 
-
-    
+    //#endregion
   }),
 });
 
 export const { useGetProductsQuery } = api;
-

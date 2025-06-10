@@ -1,24 +1,10 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import Cookies from "js-cookie";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import type { OrdersResponse, OrderDetailResponse } from "@/types/order/index";
+import customBaseQuery from "./customFetchBase";
 
 export const orderApi = createApi({
   reducerPath: "orderApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "https://cosme-play-be.vercel.app/api",
-    credentials: "include",
-    prepareHeaders: (headers) => {
-      headers.set("Content-Type", "application/json");
-
-      // Add authentication token if available
-      const token = Cookies.get("authToken");
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery: customBaseQuery,
   tagTypes: ["Orders", "OrderDetail"],
   endpoints: (builder) => ({
     // Get all orders

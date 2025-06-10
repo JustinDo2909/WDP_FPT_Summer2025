@@ -17,9 +17,17 @@ import {
   Core,
   Container,
 } from "@/lib/by/Div/index";
+import { useEffect, useState } from "react";
 
 export function TransactionsTable() {
   const transactions = getRecentTransactions();
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <Core className="bg-white rounded-lg shadow-sm border">

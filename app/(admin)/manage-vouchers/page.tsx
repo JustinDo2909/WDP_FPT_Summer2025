@@ -2,8 +2,8 @@
 
 import CustomTable from "@/components/CustomTable";
 import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
-import { VoucherDetailModal } from "@/components/admin/Voucher/voucher-detail-modal";
-import { AddVoucherModal } from "@/components/admin/Voucher/add-voucher-modal";
+import { VoucherDetailModal } from "@/components/admin/Voucher/Voucher-detail-modal";
+import { AddVoucherModal } from "@/components/admin/Voucher/Add-voucher-modal";
 import {
   useVouchersLogic,
   formatCurrency,

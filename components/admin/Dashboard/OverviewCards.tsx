@@ -14,8 +14,13 @@ import {
 } from "@/components/admin/Dashboard/seg/utils";
 import { StatsCard } from "@/components/admin/StatsCard";
 import { Area } from "@/lib/by/Div/index";
+import { useEffect, useState } from "react";
 
 export function OverviewCards() {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   const totalRevenue = getTotalYearRevenue();
   const revenueGrowth = calculateMonthlyGrowth();
 
@@ -57,6 +62,9 @@ export function OverviewCards() {
       change: "23 new reviews",
     },
   ];
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <Area className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">

@@ -265,7 +265,7 @@ export const calculateProductStats = (products: Product[]) => {
 
 // Utility functions
 export const formatPrice = (price: number) => {
-  return `$${price.toFixed(2)}`;
+  return `${price.toFixed(0)} VND`;
 };
 
 export const calculateDiscountedPrice = (price: number, sale_price: number) => {

@@ -1,320 +1,355 @@
 "use client";
 
 import CustomTable from "@/components/CustomTable";
-import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
-import { CustomerDetailModal } from "@/components/admin/Customer/Customer-detail-modal";
-import { AddCustomerModal } from "@/components/admin/Customer/Add-customer-modal";
+import { StatsCard } from "@/components/admin/StatsCard";
+import { formatDate } from "@/components/admin/Customer/seg/utils";
 import {
-  useCustomersLogic,
-  formatCurrency,
-  formatDate,
-  getStatusColor,
-  getLoyaltyTierColor,
-  calculateCustomerStats,
-} from "@/components/admin/Customer/seg/utils";
-import { type Customer } from "@/constants/manage-customers/index";
-import {
-  customerStatusOptions,
-  loyaltyTierOptions,
-} from "@/constants/manage-customers/index";
-import { Area, RText, Yard, Core, Container, Block } from "@/lib/by/Div";
-import {
-  Eye,
-  Edit,
-  Trash2,
-  Ban,
-  CheckCircle,
-  Users,
-  DollarSign,
-  Trophy,
-  Star,
-} from "lucide-react";
+  useGetAllUsersQuery,
+  useCreateUserMutation,
+  useUpdateUserMutation,
+} from "@/process/api/apiUser";
+import type { User } from "@/types/user";
+import { useState } from "react";
+import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
+import { Edit, Users, Mail, Calendar } from "lucide-react";
 
 export default function CustomersPage() {
-  const {
-    customers,
-    selectedCustomer,
-    isDetailModalOpen,
-    isAddModalOpen,
-    editingCustomer,
-    handleViewCustomer,
-    handleCloseDetailModal,
-    handleAddCustomer,
-    handleEditCustomer,
-    handleCloseAddModal,
-    handleSubmitCustomer,
-    handleDeleteCustomer,
-    handleDeactivateCustomer,
-    handleUpdateGameScore,
-    handleExportCustomers,
-  } = useCustomersLogic();
+  const { data: users = [], isLoading } = useGetAllUsersQuery();
+  const [createUser] = useCreateUserMutation();
+  const [updateUser] = useUpdateUserMutation();
 
-  const stats = calculateCustomerStats(customers);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+
+  const handleAddUser = () => {
+    setEditingUser(null);
+    setIsAddModalOpen(true);
+  };
+
+  const handleEditUser = (user: User) => {
+    setEditingUser(user);
+    setIsAddModalOpen(true);
+  };
+
+  const handleCloseAddModal = () => {
+    setIsAddModalOpen(false);
+    setEditingUser(null);
+  };
+
+  const handleSubmitUser = async (userData: {
+    id?: string;
+    name: string;
+    email: string;
+    password?: string;
+    role?: string;
+  }) => {
+    try {
+      if (editingUser && userData.id) {
+        const updateData: {
+          id: string;
+          name: string;
+          email: string;
+          password?: string;
+        } = {
+          id: userData.id,
+          name: userData.name,
+          email: userData.email,
+        };
+
+        // Only include password if it's provided
+        if (userData.password && userData.password.trim()) {
+          updateData.password = userData.password;
+        }
+
+        await updateUser(updateData).unwrap();
+      } else {
+        if (!userData.password) {
+          alert("Password is required for new users");
+          return;
+        }
+        await createUser({
+          name: userData.name,
+          email: userData.email,
+          password: userData.password,
+          role: userData.role as "USER" | "ADMIN" | "STAFF",
+        }).unwrap();
+      }
+      setIsAddModalOpen(false);
+      setEditingUser(null);
+    } catch (error) {
+      console.error("Error saving user:", error);
+      alert("Error saving user. Please try again.");
+    }
+  };
+
+  const handleExportUsers = () => {
+    const headers = ["User ID", "Name", "Email", "Role", "Created At"];
+    const csvContent = [
+      headers.join(","),
+      ...users.map((user) =>
+        [
+          user.id,
+          `"${user.name}"`,
+          user.email,
+          user.role,
+          new Date(user.createdAt).toLocaleDateString(),
+        ].join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `users_${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const totalUsers = users.length;
+  const recentSignups = users.filter(
+    (u) =>
+      new Date(u.createdAt) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  ).length;
 
   const columns = [
     {
-      key: "id" as const,
-      label: "CusID",
+      key: "id",
+      label: "User ID",
       sortable: true,
-      render: (customer: Customer) => (
+      render: (user: User) => (
         <RText className="font-mono text-sm font-medium text-blue-600">
-          {customer.id}
+          {user.id}
         </RText>
       ),
     },
     {
-      key: "name" as const,
-      label: "Customer",
+      key: "name",
+      label: "User",
       sortable: true,
-      render: (customer: Customer) => (
+      render: (user: User) => (
         <Area className="flex items-center">
           <Yard className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
-            {customer.name
+            {user.name
               .split(" ")
-              .map((n) => n[0])
+              .map((n: string) => n[0])
               .join("")
               .toUpperCase()}
           </Yard>
           <Yard>
-            <RText className="font-medium text-gray-900">{customer.name}</RText>
-            <RText className="text-sm text-gray-500">{customer.email}</RText>
+            <RText className="font-medium text-gray-900">{user.name}</RText>
+            <RText className="text-sm text-gray-500">{user.email}</RText>
           </Yard>
         </Area>
       ),
     },
+
     {
-      key: "phone" as const,
-      label: "Phone",
+      key: "createdAt",
+      label: "Created",
       sortable: true,
-      render: (customer: Customer) => (
-        <RText className="text-sm text-gray-900">{customer.phone}</RText>
-      ),
-    },
-    {
-      key: "status" as const,
-      label: "Status",
-      filterable: true,
-      render: (customer: Customer) => (
-        <span
-          className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(customer.status)}`}
-        >
-          {customer.status === "active" && <CheckCircle className="w-3 h-3" />}
-          {customer.status === "inactive" && <Ban className="w-3 h-3" />}
-          {customer.status === "blocked" && <Ban className="w-3 h-3" />}
-          {customer.status.charAt(0).toUpperCase() + customer.status.slice(1)}
-        </span>
-      ),
-    },
-    {
-      key: "loyaltyTier" as const,
-      label: "Tier",
-      filterable: true,
-      render: (customer: Customer) => (
-        <span
-          className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full ${getLoyaltyTierColor(customer.loyaltyTier)}`}
-        >
-          <Star className="w-3 h-3" />
-          {customer.loyaltyTier.charAt(0).toUpperCase() +
-            customer.loyaltyTier.slice(1)}
-        </span>
-      ),
-    },
-    {
-      key: "totalOrders" as const,
-      label: "Orders",
-      sortable: true,
-      render: (customer: Customer) => (
-        <RText className="text-sm text-gray-900">{customer.totalOrders}</RText>
-      ),
-    },
-    {
-      key: "totalSpent" as const,
-      label: "Total Spent",
-      sortable: true,
-      render: (customer: Customer) => (
-        <RText className="text-sm font-semibold text-gray-900">
-          {formatCurrency(customer.totalSpent)}
-        </RText>
-      ),
-    },
-    {
-      key: "gameScore" as const,
-      label: "Game Score",
-      sortable: true,
-      render: (customer: Customer) => (
-        <RText className="text-sm font-medium text-purple-600">
-          {customer.gameScore}
-        </RText>
-      ),
-    },
-    {
-      key: "dateJoined" as const,
-      label: "Joined",
-      sortable: true,
-      render: (customer: Customer) => (
+      render: (user: User) => (
         <RText className="text-sm text-gray-900">
-          {formatDate(customer.dateJoined)}
+          {formatDate(user.createdAt)}
         </RText>
       ),
     },
     {
-      key: "actions" as const,
+      key: "updatedAt",
+      label: "Updated",
+      sortable: true,
+      render: (user: User) => (
+        <RText className="text-sm text-gray-900">
+          {formatDate(user.updatedAt)}
+        </RText>
+      ),
+    },
+    {
+      key: "actions",
       label: "Actions",
-      render: (customer: Customer) => (
+      render: (user: User) => (
         <Area className="flex items-center space-x-1">
           <button
-            onClick={() => handleViewCustomer(customer)}
-            className="text-blue-600 hover:text-blue-800 p-1 hover:bg-blue-50 rounded transition-colors"
-            title="View Details"
-          >
-            <Eye className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => handleEditCustomer(customer)}
+            onClick={() => handleEditUser(user)}
             className="text-green-600 hover:text-green-800 p-1 hover:bg-green-50 rounded transition-colors"
-            title="Edit Customer"
+            title="Edit User"
           >
             <Edit className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => handleDeactivateCustomer(customer.id)}
-            className={`p-1 rounded transition-colors ${
-              customer.status === "active"
-                ? "text-yellow-600 hover:text-yellow-800 hover:bg-yellow-50"
-                : "text-green-600 hover:text-green-800 hover:bg-green-50"
-            }`}
-            title={customer.status === "active" ? "Deactivate" : "Activate"}
-          >
-            {customer.status === "active" ? (
-              <Ban className="w-4 h-4" />
-            ) : (
-              <CheckCircle className="w-4 h-4" />
-            )}
-          </button>
-          <button
-            onClick={() => handleDeleteCustomer(customer.id)}
-            className="text-red-600 hover:text-red-800 p-1 hover:bg-red-50 rounded transition-colors"
-            title="Delete Customer"
-          >
-            <Trash2 className="w-4 h-4" />
           </button>
         </Area>
       ),
     },
   ];
 
-  const filters = {
-    status: customerStatusOptions,
-    loyaltyTier: loyaltyTierOptions,
-  };
+  if (isLoading) {
+    return (
+      <Core className="flex flex-col h-full bg-gray-50">
+        <header className="flex h-16 items-center justify-between border-b bg-white px-4">
+          <RText className="text-lg font-semibold text-gray-700">
+            User Management
+          </RText>
+        </header>
+        <Container className="flex-1 overflow-auto p-6 space-y-6">
+          <RText>Loading...</RText>
+        </Container>
+      </Core>
+    );
+  }
 
   return (
     <Core className="flex flex-col h-full bg-gray-50">
       {/* Page Header */}
       <header className="flex h-16 items-center justify-between border-b bg-white px-4">
         <RText className="text-lg font-semibold text-gray-700">
-          Customer Management
+          User Management
         </RText>
       </header>
 
       <Container className="flex-1 overflow-auto p-6 space-y-6">
         <Area>
           <RText className="text-gray-600">
-            Manage customer accounts, loyalty programs, and game scores
+            Manage user accounts and information
           </RText>
         </Area>
+
         {/* Main Stats Cards */}
-        <Area className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <Area className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <StatsCard
-            title="Total Customers"
-            value={stats.totalCustomers}
+            title="Total Users"
+            value={totalUsers}
             icon={Users}
             iconColor="text-blue-600"
             iconBgColor="bg-blue-50"
           />
           <StatsCard
-            title="Total Revenue"
-            value={formatCurrency(stats.totalRevenue)}
-            icon={DollarSign}
+            title="Active Users"
+            value={totalUsers}
+            icon={Mail}
             iconColor="text-green-600"
             iconBgColor="bg-green-50"
             valueColor="text-green-600"
           />
           <StatsCard
-            title="Active Customers"
-            value={stats.activeCustomers}
-            icon={CheckCircle}
+            title="Recent Signups"
+            value={recentSignups}
+            icon={Calendar}
             iconColor="text-purple-600"
             iconBgColor="bg-purple-50"
             valueColor="text-purple-600"
           />
-          <StatsCard
-            title="Total Game Score"
-            value={stats.totalGameScore.toLocaleString()}
-            icon={Trophy}
-            iconColor="text-yellow-600"
-            iconBgColor="bg-yellow-50"
-            valueColor="text-yellow-600"
-          />
         </Area>
 
-        {/* Mini Stats Cards */}
-        <Area className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <MiniStatsCard
-            value={stats.loyaltyTierCounts.bronze || 0}
-            label="Bronze"
-            valueColor="text-orange-600"
-          />
-          <MiniStatsCard
-            value={stats.loyaltyTierCounts.silver || 0}
-            label="Silver"
-            valueColor="text-gray-600"
-          />
-          <MiniStatsCard
-            value={stats.loyaltyTierCounts.gold || 0}
-            label="Gold"
-            valueColor="text-yellow-600"
-          />
-          <MiniStatsCard
-            value={stats.loyaltyTierCounts.platinum || 0}
-            label="Platinum"
-            valueColor="text-purple-600"
-          />
-        </Area>
-
-        {/* Customers Table */}
+        {/* Users Table */}
         <CustomTable
-          data={customers}
+          data={users}
           columns={columns}
-          onAddItem={handleAddCustomer}
-          onExport={handleExportCustomers}
-          headerTitle="All Customers"
-          description="Manage customer accounts and information"
-          filters={filters}
+          onAddItem={handleAddUser}
+          onExport={handleExportUsers}
+          headerTitle="All Users"
+          description="Manage user accounts and information"
           showExport={true}
           showBulkActions={false}
           itemsPerPage={15}
         />
       </Container>
 
-      {/* Customer Detail Modal */}
-      <CustomerDetailModal
-        isOpen={isDetailModalOpen}
-        onClose={handleCloseDetailModal}
-        customer={selectedCustomer}
-        onEdit={handleEditCustomer}
-        onDelete={handleDeleteCustomer}
-        onDeactivate={handleDeactivateCustomer}
-        onUpdateGameScore={handleUpdateGameScore}
-      />
-
-      {/* Add/Edit Customer Modal */}
-      <AddCustomerModal
-        isOpen={isAddModalOpen}
-        onClose={handleCloseAddModal}
-        onSubmit={handleSubmitCustomer}
-        editCustomer={editingCustomer}
-      />
+      {/* Add/Edit User Modal */}
+      {isAddModalOpen && (
+        <Core className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <Container className="bg-white rounded-lg p-6 w-full max-w-md">
+            <RText className="text-lg font-semibold mb-4">
+              {editingUser ? "Edit User" : "Add User"}
+            </RText>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target as HTMLFormElement);
+                handleSubmitUser({
+                  id: editingUser?.id,
+                  name: formData.get("name") as string,
+                  email: formData.get("email") as string,
+                  password: formData.get("password") as string,
+                  role: formData.get("role") as string,
+                });
+              }}
+            >
+              <Area className="space-y-4">
+                <Yard>
+                  <label className="block text-sm font-medium mb-1">Name</label>
+                  <input
+                    name="name"
+                    type="text"
+                    defaultValue={editingUser?.name}
+                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                    required
+                  />
+                </Yard>
+                <Yard>
+                  <label className="block text-sm font-medium mb-1">
+                    Email
+                  </label>
+                  <input
+                    name="email"
+                    type="email"
+                    defaultValue={editingUser?.email}
+                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                    required
+                  />
+                </Yard>
+                <Yard>
+                  <label className="block text-sm font-medium mb-1">
+                    Password{" "}
+                    {editingUser ? "(Leave blank to keep current)" : ""}
+                  </label>
+                  <input
+                    name="password"
+                    type="text"
+                    placeholder={
+                      editingUser
+                        ? "Enter new password or leave blank"
+                        : "Enter password"
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                    required={!editingUser}
+                  />
+                </Yard>
+                {!editingUser && (
+                  <Yard>
+                    <label className="block text-sm font-medium mb-1">
+                      Role
+                    </label>
+                    <select
+                      name="role"
+                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                      defaultValue="USER"
+                      required
+                    >
+                      <option value="USER">User</option>
+                      <option value="ADMIN">Admin</option>
+                      <option value="STAFF">Staff</option>
+                    </select>
+                  </Yard>
+                )}
+              </Area>
+              <Area className="flex gap-2 mt-4">
+                <button
+                  type="button"
+                  onClick={handleCloseAddModal}
+                  className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  {editingUser ? "Update" : "Create"}
+                </button>
+              </Area>
+            </form>
+          </Container>
+        </Core>
+      )}
     </Core>
   );
 }

@@ -20,6 +20,7 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import { TooltipProps } from "@/types/dashboard/index";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div/index";
+import { useEffect, useState } from "react";
 
 interface RevenueChartProps {
   timeFilter: string;
@@ -30,6 +31,10 @@ export function RevenueChart({ timeFilter, setTimeFilter }: RevenueChartProps) {
   const data = getMonthlyRevenueData();
   // const totalRevenue = getTotalYearRevenue();
   // const revenueGrowth = calculateMonthlyGrowth();
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
     if (active && payload && payload.length) {
@@ -44,7 +49,9 @@ export function RevenueChart({ timeFilter, setTimeFilter }: RevenueChartProps) {
     }
     return null;
   };
-
+  if (!isMounted) {
+    return null;
+  }
   return (
     <Core className="bg-white rounded-lg shadow-sm border">
       <Container className="p-6 border-b">
