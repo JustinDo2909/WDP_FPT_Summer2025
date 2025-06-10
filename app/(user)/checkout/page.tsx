@@ -68,7 +68,7 @@ export default function CheckoutPage() {
           setShippingInfo={setShippingInfo}
           getShippingFeeOnWardChange={handleGetShippingFee}
         /> */}
-        <Box className="flex col-span-3">
+        <Box className="flex col-span-3 flex-col space-y-4">
           <CouponAddInput vouchers={dataVouchers?.vouchers} onSelect={(voucher) => setVoucherId(voucher?.id ?? "" )}/>
           <AddressSelector
             selectedAddress={selectedAddress}

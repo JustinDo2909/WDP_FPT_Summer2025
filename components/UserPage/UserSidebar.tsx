@@ -20,7 +20,7 @@ export default function UserSidebar() {
         <aside className="w-64  border-r min-h-screen p-6">
             <Box className="flex items-center space-x-3 mb-8">
                 <Wrap className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center relative">
-                <RText className="font-semibold text-center">{user.name[0]}</RText>
+                <RText className="font-semibold text-center">{user?.name[0]?.toUpperCase()}</RText>
                 </Wrap>
 
                 <Wrap>
