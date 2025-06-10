@@ -51,7 +51,7 @@ const customBaseQuery = async (
 export const api = createApi({
   baseQuery: customBaseQuery,
   reducerPath: "api",
-  tagTypes: ["Products", "Questions", "Rewards"],
+  tagTypes: ["Products", "Questions", "Rewards" , "Vouchers"],
   endpoints: (build) => ({
     //#region getProducts
     getProducts: build.query<any, ProductQueryParams>({
@@ -80,6 +80,7 @@ export const api = createApi({
       providesTags: ["Products"],
     }),
     //#endregion
+    //#endregion 
 
     //#region getProductsMeta
     getProductMeta: build.query<any, void>({
@@ -124,6 +125,17 @@ export const api = createApi({
       invalidatesTags: ["Rewards"],
     }),
     //#endregion
+
+        //#region getAllVouchers
+    getAllVouchers: build.query<IListResponse<IVoucher, 'vouchers'>, void>({
+      query: () => ({
+        url: "vouchers",
+        method: "GET",
+      }),
+      providesTags: ["Vouchers"],
+    })
+
+    //#endregion
   }),
 });
 
@@ -133,4 +145,9 @@ export const {
   usePostAnswerMutation,
   useGetRandomQuestionQuery,
 } = api;
+
+
+
+
+
 

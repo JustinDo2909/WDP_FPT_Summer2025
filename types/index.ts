@@ -116,6 +116,22 @@ declare global {
     warnings: string[]; // Core
     benefits: string[]; // Core
   };
+
+  export interface IVoucher {
+    id: string;
+    user_id: string;
+    event_reward_id: string;
+    stripe_coupon_id: string;
+    discount_value: number;
+    type: "PERCENT" | "AMOUNT";
+    redeemed: boolean;
+    redeemed_at: string | null;
+    created_at: string;
+  }
+
+
+
+
 }
 
 export type {
@@ -140,4 +156,5 @@ export type IGame = {
 
 export type ListGame = {
   listGame: IGame[];
+  IVoucher : IVoucher
 };

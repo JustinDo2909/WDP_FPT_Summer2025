@@ -9,7 +9,7 @@ export const apiOrders = createApi({
         //#region createCheckoutSession
         createCheckoutSession: build.mutation<
             { success: boolean; url: string }, // Response type
-            { shippingCost: number; addressId: string } // Input type
+            { shippingCost: number; addressId: string, couponId: string } // Input type
         >({
             query: (body) => ({
                 url: "orders/create-checkout-session",

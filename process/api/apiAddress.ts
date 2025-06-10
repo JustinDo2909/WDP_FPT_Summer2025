@@ -24,6 +24,9 @@ export const apiAddress = createApi({
             pincode: string;
             phone: string;
             notes: string;
+            to_city_id: string;
+            to_district_id: string;
+            to_ward_code: string;
         }>({
             query: (body) => ({
                 url: "addresses/add",
@@ -43,6 +46,9 @@ export const apiAddress = createApi({
             pincode: string;
             phone: string;
             notes: string;
+            to_city_id: string;
+            to_district_id: string;
+            to_ward_code: string;
         }>({
             query: ({ id, ...rest }) => ({
                 url: `addresses/${id}`,

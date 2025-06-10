@@ -28,9 +28,10 @@ const customBaseQuery = async (
 
       if (refreshResult.data) {
         result = await baseQuery(args, api, extraOptions);
-      } else {
-        toast.error("Session expired. Please log in again.");
-      }
+      } 
+      // else {
+      //   toast.error("Session expired. Please log in again.");
+      // }
     }
 
     if (result.error) {
@@ -39,7 +40,7 @@ const customBaseQuery = async (
         errorData?.message ||
         result.error.status.toString() ||
         "An error occurred";
-      toast.error(`Error: ${errorMessage}`);
+      // toast.error(`Error: ${errorMessage}`);
     }
 
     const isMutationRequest =

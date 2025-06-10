@@ -3,10 +3,10 @@ import { useMemo } from 'react';
 export const mockCartItems: ICart = {
   id: "1",
   user_id: "2",
-  cart_items: [
+  cartItems: [
     {
       id: 1,
-      product_id: 1,
+      product_id: "1",
       cart_id: 1,
       quantity: 1,
       product: {
@@ -33,7 +33,7 @@ export const mockCartItems: ICart = {
     },
     {
       id: 2,
-      product_id: 2,
+      product_id: "2",
       cart_id: 1,
       quantity: 2,
       product: {
@@ -60,7 +60,7 @@ export const mockCartItems: ICart = {
     },
     {
       id: 3,
-      product_id: 3,
+      product_id: "3",
       cart_id: 1,
       quantity: 1,
       product: {
@@ -87,7 +87,7 @@ export const mockCartItems: ICart = {
     },
     {
       id: 4,
-      product_id: 4,
+      product_id: "4",
       cart_id: 1,
       quantity: 1,
       product: {

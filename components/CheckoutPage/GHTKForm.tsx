@@ -45,7 +45,7 @@ const AddressSchema = z.object({
 
 type GHNFormProps = {
   initialShippingInfo?: Partial<IAddress>;
-  onSave: (address: IAddress) => void;
+  onSave: (address: Partial<IAddress>) => void;
   onClose: () => void;
   isLoading: boolean;
 };
@@ -361,7 +361,7 @@ const GHNForm: React.FC<GHNFormProps> = ({
           onClick={onClose}
           variant="outline"
           label={"Cancel"}
-          className="mt-4 text-white py-2 px-4 rounded-x"
+          className="mt-4 py-2 px-4 rounded-x"
         />
         <Button
           isLoading={isLoading}
