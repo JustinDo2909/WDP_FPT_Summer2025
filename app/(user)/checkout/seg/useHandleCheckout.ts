@@ -6,9 +6,9 @@ import { useCallback } from "react";
 export const useHandleCheckout = () => {
   const [createCheckoutSession, { isLoading, error }] = useCreateCheckoutSessionMutation();
 
-  const handleCheckout = useCallback(async (shippingCost: number, addressId: string) => {
+  const handleCheckout = useCallback(async (shippingCost: number, addressId: string, couponId: string) => {
     try {
-      const response = await createCheckoutSession({ shippingCost, addressId }).unwrap();
+      const response = await createCheckoutSession({ shippingCost, addressId, couponId }).unwrap();
 
       if (response.success && response.url) {
         window.location.href = response.url;

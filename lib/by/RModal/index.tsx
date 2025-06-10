@@ -2,7 +2,7 @@ import { Array2Enum } from "@/process/helper/adapt";
 import { eventEmitter } from "@/process/utils";
 import React, { ReactNode, useEffect, useState } from "react";
 
-RModal.EModal = Array2Enum(["Test"] as const);
+RModal.EModal = Array2Enum(["Test","AddressModal"] as const);
 
 export type NameModal = keyof typeof RModal.EModal | "Dynamic";
 

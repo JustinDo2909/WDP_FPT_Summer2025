@@ -12,6 +12,8 @@ import {
 } from "./seg/calculateSubtotal";
 import AddressSelector from "@/components/CheckoutPage/AddressSelector";
 import { useHandleCheckout } from "./seg/useHandleCheckout";
+import CouponAddInput from "@/components/CheckoutPage/CouponAddInput";
+import { useGetAllVouchersQuery } from "@/process/api/api";
 
 export default function CheckoutPage() {
   // const [shippingInfo, setShippingInfo] = useState<IAddress>({
@@ -29,6 +31,8 @@ export default function CheckoutPage() {
   // });
 
   const [selectedAddress, setSelectedAddress] = useState<IAddress>()
+  const [voucherId, setVoucherId] = useState("")
+  
 
   const {
     shippingFee,
@@ -38,6 +42,7 @@ export default function CheckoutPage() {
   } = useShippingFeeHandler({to_district_id: selectedAddress?.to_city_id ?? "" , to_ward_code: selectedAddress?.to_ward_code ?? ""});
 
   const { handleCheckout, isLoading } = useHandleCheckout();
+  const {data: dataVouchers} = useGetAllVouchersQuery()
 
   const isFilled =
     selectedAddress && isRouteHasService;
@@ -48,7 +53,6 @@ export default function CheckoutPage() {
   const total = calculateCartTotal(cartItems);
   const subtotal = calculateCartTotalOriginalPrice(cartItems);
 
-  //todo: Make shipping add button
 
   return (
     <Core className="p-4 md:p-8 min-h-screen ">
@@ -64,10 +68,13 @@ export default function CheckoutPage() {
           setShippingInfo={setShippingInfo}
           getShippingFeeOnWardChange={handleGetShippingFee}
         /> */}
-        <AddressSelector
-          selectedAddress={selectedAddress}
-          setSelectedAddress={setSelectedAddress}
-        />
+        <Box className="flex col-span-3">
+          <CouponAddInput vouchers={dataVouchers?.vouchers} onSelect={(voucher) => setVoucherId(voucher?.id ?? "" )}/>
+          <AddressSelector
+            selectedAddress={selectedAddress}
+            setSelectedAddress={setSelectedAddress}
+          />
+        </Box>
 
         <Box className="">
           <CartSummary
@@ -79,7 +86,7 @@ export default function CheckoutPage() {
               // <Link href="/checkout">
                 <Button
                   onClick={() => {
-                    handleCheckout(shippingFee ?? 0, String(selectedAddress?.id))
+                    handleCheckout(shippingFee ?? 0, String(selectedAddress?.id), String(couponId))
                   }}
                   disabled={!isFilled || isLoading}
                   label={

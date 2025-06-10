@@ -44,7 +44,7 @@ const customBaseQuery = async (
 export const api = createApi({
   baseQuery: customBaseQuery,
   reducerPath: "api",
-  tagTypes: ["Products"],
+  tagTypes: ["Products", "Vouchers"], // Add Vouchers tag if needed
   endpoints: (build) => ({
     //#region getProducts
     getProducts: build.query<any, ProductQueryParams>({
@@ -63,7 +63,7 @@ export const api = createApi({
       providesTags: ["Products"],
     }),
     //#endregion 
-    
+
     //#region getProductsMeta
     getProductMeta: build.query<any, void>({
       query: () => ({
@@ -74,9 +74,22 @@ export const api = createApi({
     }),
     //#endregion 
 
-    
+    //#region getAllVouchers
+    getAllVouchers: build.query<IListResponse<IVoucher, 'vouchers'>, void>({
+      query: () => ({
+        url: "vouchers",
+        method: "GET",
+      }),
+      providesTags: ["Vouchers"],
+    }),
+
+    //#endregion
   }),
 });
 
-export const { useGetProductsQuery } = api;
+
+
+
+
+export const { useGetProductsQuery, useGetAllVouchersQuery } = api;
 

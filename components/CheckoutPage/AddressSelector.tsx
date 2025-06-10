@@ -28,7 +28,7 @@ const AddressSelector = ({
   };
 
   return (
-    <Block className="p-4 flex col-span-3 flex-col gap-6 flex-1 border border-gray-200 rounded-md">
+    <Block className="p-4 flex flex-col gap-6 flex-1 border border-gray-200 rounded-md">
       <Row className="flex space-x-4 items-center">
         <h2 className="text-xl font-bold">Shipping Address</h2>{" "}
         <Button label={'+ Add Address'} variant="default" onClick={openAddAddressModal}>
@@ -57,7 +57,7 @@ const AddressSelector = ({
             >
               <RadioGroupItem value={String(address?.id)} />
               <Wrap className="text-gray-600 text-sm flex justify-between flex-col items-start">
-                <RText className="font-semibold text-base text-black">{address.fullname ?? "Full Name"} <span className="text-sm text-gray-500 font-normal"> | {address.phone}</span></RText>
+                <RText className="font-semibold text-base text-black"> {address.phone}</RText>
                 <RText>{address.address}</RText>
                 <RText>{address.ward ?? "Ward"}, {address.district ?? "District"}, {address.city}</RText>
               </Wrap>

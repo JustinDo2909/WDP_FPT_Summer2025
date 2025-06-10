@@ -23,5 +23,9 @@ declare global {
         totalPages: number;
     };
 
+    type IListResponse<T, N extends string> = Record<N, T[]> & {
+        success: boolean;
+    }
+
 
 }
