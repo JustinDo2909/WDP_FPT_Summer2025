@@ -1,4 +1,5 @@
-import React from "react";
+'use client'
+
 import UserLayout from "../../../../components/UserPage/UserLayout";
 import OrdersList from "../../../../components/OrdersPage/OrdersList";
 import {
@@ -9,8 +10,12 @@ import {
 } from "../../../../lib/pattern/share/Tabs";
 import { OrdersSearch } from "@/components/OrdersPage/OrdersSearch";
 import { Box } from "@/lib/by/Div";
+import { useGetOrdersQuery } from "@/process/api/apiOrders";
 
 export default function OrdersPage() {
+  const {data, isLoading } = useGetOrdersQuery();
+  const orders = data?.orders
+
   return (
     <UserLayout>
       <Box className="flex-1">
@@ -25,9 +30,8 @@ export default function OrdersPage() {
           </TabsList>
           <TabsContent value="all">
             <OrdersSearch />
-            <OrdersList />
+            {!isLoading && <OrdersList orders={orders} /> }
           </TabsContent>
-          {/* Other tab contents can be filtered as needed */}
         </Tabs>
       </Box>
     </UserLayout>

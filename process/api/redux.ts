@@ -10,6 +10,8 @@ import { apiProduct } from "./apiProduct";
 import { metaApi } from "./apiMeta";
 import { orderApi } from "./apiOrder";
 import cartSlice from "../store/cartSlice";
+import { apiAddress } from "./apiAddress";
+import { apiOrders } from "./apiOrders";
 
 
 export const store = configureStore({
@@ -23,6 +25,8 @@ export const store = configureStore({
     [apiProduct.reducerPath]: apiProduct.reducer,
     [metaApi.reducerPath]: metaApi.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
+    [apiAddress.reducerPath]: apiAddress.reducer,
+    [apiOrders.reducerPath]: apiOrders.reducer,
     cart: cartSlice.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
@@ -36,7 +40,9 @@ export const store = configureStore({
       apiCart.middleware,
       apiProduct.middleware,
       metaApi.middleware,
-      orderApi.middleware
+      orderApi.middleware,
+      apiAddress.middleware,
+      apiOrders.middleware
     ),
 });
 

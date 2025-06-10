@@ -87,16 +87,7 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
             </Block>
 
             <Block className="justify-start text-slate-700 text-sm font-medium hover:text-[#aa4444] transition-colors">
-              {!loading &&
-                (user ? (
-                  <Link href={""}>
-                    <RText>Logout</RText>
-                  </Link>
-                ) : (
-                  <Link href="/login">
-                    <RText>Login</RText>
-                  </Link>
-                ))}
+              {user ? <Link href={'/logout'}><RText>Logout</RText></Link> : <Link href='/login'><RText>Login</RText></Link>}
             </Block>
           </Wrap>
         </Row>
