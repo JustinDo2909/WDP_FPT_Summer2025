@@ -16,6 +16,7 @@ export default function Page() {
     page: 1,
     limit: 6,
     title: "",
+    sale: "true",
   };
   const bestCateSearchParams = {
     category: "",
@@ -25,6 +26,7 @@ export default function Page() {
     page: 1,
     limit: 4,
     title: "",
+    sale: "",
   };
 
   const shouldFetch = true;

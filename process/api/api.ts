@@ -63,6 +63,7 @@ export const api = createApi({
         limit = 20,
         sort,
         title,
+        sale,
       }) => {
         const params = new URLSearchParams();
 
@@ -73,6 +74,7 @@ export const api = createApi({
         params.append("page", page.toString());
         params.append("limit", limit.toString());
         if (sort) params.append("sort", sort);
+        if (sale) params.append("sale", sale);
         return `/products?${params.toString()}`;
       },
       providesTags: ["Products"],
@@ -131,3 +133,4 @@ export const {
   usePostAnswerMutation,
   useGetRandomQuestionQuery,
 } = api;
+
