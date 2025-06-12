@@ -1,7 +1,6 @@
 import { Core, Container, Row, Column, RText, Section } from "@/lib/by/Div";
 import HowToUsePostCard from "@/components/HowToUsePage/HowToUsePostCard";
 import HowToUseSearchBar from "@/components/HowToUsePage/HowToUseSearchBar";
-import HowToUsePostInput from "@/components/HowToUsePage/HowToUsePostInput";
 import Link from "next/link";
 import FloatingGameButton from "@/components/floating_game_button";
 

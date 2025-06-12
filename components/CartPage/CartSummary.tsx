@@ -1,4 +1,4 @@
-import { formatPrice } from '../../lib/share/formatPrice';
+import { formatPrice } from "../../lib/share/formatPrice";
 import { Begin, Card, Column, Row, RText } from "@/lib/by/Div";
 
 export default function CartSummary({
@@ -6,14 +6,17 @@ export default function CartSummary({
   total,
   shipping,
   shippingLoading,
-  actionButton
+  actionButton,
+  voucherApplied,
 }: {
   subtotal: number;
   total: number;
   shipping?: number;
   shippingLoading?: boolean;
   actionButton: React.ReactNode;
+  voucherApplied?: IVoucher;
 }) {
+  const finalTotal = total + (shipping ?? 0) - (voucherApplied?.type === "AMOUNT"? voucherApplied.discount_value : (voucherApplied?.discount_value ?? 0)*total/100) 
   return (
     <Card className="border rounded-md p-4 space-y-4 relative pt-4 text-sm">
       {/* Pink top border */}
@@ -23,32 +26,40 @@ export default function CartSummary({
 
       <hr className="border-t border-gray-200" />
       <Column className="flex-col flex space-y-2">
-      <Row className="flex justify-between">
-        <RText>Subtotal:</RText>
-        <RText className="font-semibold">{formatPrice(subtotal)}</RText>
-      </Row>
+        <Row className="flex justify-between">
+          <RText>Subtotal:</RText>
+          <RText className="font-semibold">{formatPrice(subtotal)}</RText>
+        </Row>
 
-      <Row className="flex justify-between">
-        <RText>Discount:</RText>
-        <RText>{formatPrice(subtotal - total) ?? 0}</RText>
-      </Row>
+        <Row className="flex justify-between">
+          <RText>Discount:</RText>
+          <RText> -{formatPrice(subtotal - total) ?? 0}</RText>
+        </Row>
 
-      <Row className="flex text-gray-400 justify-between">
-        <RText>Shipping:</RText>
-        <RText>
-          {shippingLoading
-            ? "Calculating..."
-            : formatPrice(shipping ?? 0)}
-        </RText>
-      </Row>
-            </Column>
+        <Row className="flex text-gray-400 justify-between">
+          <RText>Shipping:</RText>
+          <RText>
+            {shippingLoading ? "Calculating..." : formatPrice(shipping ?? 0)}
+          </RText>
+        </Row>
 
+       {voucherApplied && 
+       <Row className="flex text-primary justify-between">
+          <RText>Voucher:</RText>
+          <RText>
+            -{formatPrice((voucherApplied?.type === "AMOUNT"? voucherApplied.discount_value : (voucherApplied?.discount_value ?? 0)*total/100 ) ?? 0)}
+          </RText>
+        </Row>
+        }
+
+
+      </Column>
 
       <hr className="border-t border-gray-200" />
 
       <Row className="flex justify-between text-pink-600 font-bold text-base">
         <RText>Total:</RText>
-        <RText>{formatPrice(total + (shipping ?? 0))}</RText>
+        <RText>{formatPrice(finalTotal)}</RText>
       </Row>
 
       <hr className="border-t border-gray-200" />

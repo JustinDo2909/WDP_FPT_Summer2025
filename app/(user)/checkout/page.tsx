@@ -31,7 +31,7 @@ export default function CheckoutPage() {
   // });
 
   const [selectedAddress, setSelectedAddress] = useState<IAddress>()
-  const [voucherId, setVoucherId] = useState("")
+  const [voucher, setVoucher] = useState<IVoucher>()
   
 
   const {
@@ -69,7 +69,7 @@ export default function CheckoutPage() {
           getShippingFeeOnWardChange={handleGetShippingFee}
         /> */}
         <Box className="flex col-span-3 flex-col space-y-4">
-          <CouponAddInput vouchers={dataVouchers?.vouchers} onSelect={(voucher) => setVoucherId(voucher?.id ?? "" )}/>
+          <CouponAddInput vouchers={dataVouchers?.vouchers} onSelect={setVoucher}/>
           <AddressSelector
             selectedAddress={selectedAddress}
             setSelectedAddress={setSelectedAddress}
@@ -79,6 +79,7 @@ export default function CheckoutPage() {
         <Box className="">
           <CartSummary
             shippingLoading={feeLoading}
+            voucherApplied={voucher}
             shipping={shippingFee?.data?.total}
             total={total}
             subtotal={subtotal}
@@ -86,7 +87,7 @@ export default function CheckoutPage() {
               // <Link href="/checkout">
                 <Button
                   onClick={() => {
-                    handleCheckout(shippingFee ?? 0, String(selectedAddress?.id), String(couponId))
+                    handleCheckout(shippingFee ?? 0, String(selectedAddress?.id), voucher?.stripe_coupon_id ?? "")
                   }}
                   disabled={!isFilled || isLoading}
                   label={

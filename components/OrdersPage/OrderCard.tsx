@@ -1,4 +1,6 @@
 import { Begin, Card, Column, Row, RText, Wrap } from "@/lib/by/Div";
+import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 interface OrderCardProps {
@@ -21,8 +23,10 @@ export default function OrderCard({
       </Row>
       <Column className="divide-y">
         {orderItems.map((item) => (
-          <Wrap key={item.id} className="flex py-4 items-center">
-            <img
+          <Link href={`/user/orders/${order.id}`} key={item.id} className="flex py-4 items-center">
+            <Image
+              width={64}
+              height={64}
               src={item.image_url}
               alt={item.title}
               className="w-16 h-16 rounded object-cover mr-4"
@@ -42,7 +46,7 @@ export default function OrderCard({
                 ₫{(item.price*item.quantity).toLocaleString()}
               </span>
             </RText>
-          </Wrap>
+          </Link>
         ))}
       </Column>
       <Row className="flex justify-between items-center mt-4">

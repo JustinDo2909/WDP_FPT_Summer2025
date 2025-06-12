@@ -1,3 +1,4 @@
+import { ApiResponse } from "@/types/category-brand";
 import {
   IEventRewards,
   IQuestions,
@@ -6,7 +7,7 @@ import {
   IResponseQuestions,
   IReward,
 } from "@/types/quiz";
-import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
+import { Api, BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
@@ -51,7 +52,7 @@ const customBaseQuery = async (
 export const api = createApi({
   baseQuery: customBaseQuery,
   reducerPath: "api",
-  tagTypes: ["Products", "Questions", "Rewards" , "Vouchers"],
+  tagTypes: ["Products", "Questions", "Rewards" , "Vouchers", "Orders"],
   endpoints: (build) => ({
     //#region getProducts
     getProducts: build.query<any, ProductQueryParams>({
@@ -126,14 +127,23 @@ export const api = createApi({
     }),
     //#endregion
 
-        //#region getAllVouchers
+    //#region getAllVouchers
     getAllVouchers: build.query<IListResponse<IVoucher, 'vouchers'>, void>({
       query: () => ({
         url: "vouchers",
         method: "GET",
       }),
       providesTags: ["Vouchers"],
-    })
+    }),
+    //#endregion
+    //#region getOrderById
+    getOrderById: build.query<IResponse<IOrder, 'order'>, string>({
+    query: (id) => ({
+      url: `orders/details/${id}`,
+      method: "GET",
+    }),
+    providesTags: ["Orders"],
+  }),
 
     //#endregion
   }),
@@ -144,6 +154,8 @@ export const {
   useGetEventRewardsQuery,
   usePostAnswerMutation,
   useGetRandomQuestionQuery,
+  useGetAllVouchersQuery,
+  useGetOrderByIdQuery
 } = api;
 
 
