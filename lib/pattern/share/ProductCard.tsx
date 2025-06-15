@@ -1,6 +1,6 @@
 // components/ProductCard.tsx
 import React from "react";
-import { ShoppingBasketIcon, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import { Card, Column, Cover, Row, RText, Wrap } from "@/lib/by/Div";
 import { formatPrice } from "../../share/formatPrice";
