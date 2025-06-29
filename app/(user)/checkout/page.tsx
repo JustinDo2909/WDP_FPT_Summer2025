@@ -87,7 +87,7 @@ export default function CheckoutPage() {
               // <Link href="/checkout">
                 <Button
                   onClick={() => {
-                    handleCheckout(shippingFee ?? 0, String(selectedAddress?.id), voucher?.stripe_coupon_id ?? "")
+                    handleCheckout(shippingFee.total ?? 0, String(selectedAddress?.id), voucher?.stripe_coupon_id ?? "")
                   }}
                   disabled={!isFilled || isLoading}
                   label={
