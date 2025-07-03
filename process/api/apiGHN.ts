@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+
 export const ghnApi = createApi({
   reducerPath: "ghnApi",
   tagTypes: ["Districts"],

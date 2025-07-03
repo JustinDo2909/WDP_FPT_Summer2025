@@ -35,11 +35,13 @@ export function Carousel({ images, productName, discount }: CarouselProps) {
             className="object-cover group-hover:scale-105 aspect-square  transition-transform duration-500"
             priority
           />
+          {discount && 
           <Begin className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 w-auto">
             <span className="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-2 py-1 sm:px-3 rounded-full text-xs sm:text-sm font-medium">
               -{discount}%
             </span>
           </Begin>
+          }
         </Begin>
 
 

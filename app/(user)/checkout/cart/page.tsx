@@ -11,6 +11,8 @@ import {
   calculateCartTotal,
   calculateCartTotalOriginalPrice,
 } from "../seg/calculateSubtotal";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import EmptyCart from "@/components/CartPage/EmptyCart";
 
 export default function CartPage() {
   const { data: cartData, isLoading } = useGetCartQuery();
@@ -25,12 +27,13 @@ export default function CartPage() {
   return (
     <Core className="p-4 md:p-8 min-h-screen ">
       <Row className="max-w-7xl w-full px-8 py-4">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Checkout" }]} />
         <h2 className="text-3xl tracking-wide font-bold ml-4 text-left">
           Shopping Cart
         </h2>
       </Row>
       <Section className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-7xl mx-auto">
-        {!isLoading && cart ? (
+        {!isLoading && cart.cartItems.length !== 0 ? (
           <>
             <CartTable items={sortedCartItems} />
             <CartSummary
@@ -51,8 +54,10 @@ export default function CartPage() {
               }
             />
           </>
-        ) : (
+        ) : isLoading ? (
           <p className="col-span-full text-center">Loading your cart...</p>
+        ) : (
+          <EmptyCart />
         )}
       </Section>
     </Core>

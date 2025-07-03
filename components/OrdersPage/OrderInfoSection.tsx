@@ -1,4 +1,4 @@
-import { Card, Row, RText, Section } from "@/lib/by/Div";
+import { Card, RText, Section } from "@/lib/by/Div";
 import React from "react";
 import OrderCard from "./OrderCard";
 

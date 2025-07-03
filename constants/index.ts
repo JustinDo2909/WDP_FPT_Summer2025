@@ -72,7 +72,7 @@ export const mproduct = {
     { id: "description", label: "Description" },
     { id: "ingredients", label: "Ingredients" },
     { id: "usage", label: "How to Use" },
-    { id: "reviews", label: "Reviews (2)" },
+    { id: "reviews", label: "Reviews" },
   ],
 };
 

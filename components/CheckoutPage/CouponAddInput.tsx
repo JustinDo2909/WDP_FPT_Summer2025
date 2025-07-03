@@ -2,7 +2,7 @@ import * as React from "react";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import Button from "../CustomButton";
 import { formatPrice } from "@/lib/share/formatPrice";
-import { Row } from "@/lib/by/Div";
+import { Row, Wrap, Column } from "@/lib/by/Div";
 
 // The IVoucher interface remains the same
 export interface IVoucher {
@@ -50,39 +50,39 @@ const VoucherItem: React.FC<{ voucher: IVoucher }> = ({ voucher }) => {
   `;
 
   return (
-    <div className={voucherClasses}>
-      <div className="flex items-start justify-between relative z-10">
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2">
+    <Wrap className={voucherClasses}>
+      <Row className="flex items-start justify-between relative z-10">
+        <Column className="flex flex-col">
+          <Row className="flex items-center gap-2">
             <span className="text-lg font-bold text-gray-800">
               {formatDiscount(voucher)}
             </span>
-          </div>
+          </Row>
           <span className="text-xs text-gray-500 mt-1">
             Coupon 
           </span>
-        </div>
+        </Column>
 
-        <div className="flex flex-col items-end">
-          <div className={statusClasses}>
+        <Column className="flex flex-col items-end">
+          <Wrap className={statusClasses}>
             {isRedeemed ? "Used" : "Valid"}
-          </div>
+          </Wrap>
           {!isRedeemed && (
-            <div className="text-xs text-gray-500 mt-1">
+            <Wrap className="text-xs text-gray-500 mt-1">
               Expires soon
-            </div>
+            </Wrap>
           )}
-        </div>
-      </div>
+        </Column>
+      </Row>
        {/* Voucher pattern background */}
-       <div className="absolute inset-0 opacity-5 pointer-events-none">
-          <div className="w-full h-full" style={{
-            backgroundImage: `radial-gradient(circle at 25% 25%, currentColor 2px, transparent 2px),
-                             radial-gradient(circle at 75% 75%, currentColor 2px, transparent 2px)`,
+       <Wrap className="absolute inset-0 opacity-5 pointer-events-none">
+          <Wrap className="w-full h-full" style={{
+            backgroundImage: `radial-gradient(circle at 25% 25%, currentColumnor 2px, transparent 2px),
+                             radial-gradient(circle at 75% 75%, currentColumnor 2px, transparent 2px)`,
             backgroundSize: '20px 20px'
-          }}></div>
-        </div>
-    </div>
+          }}></Wrap>
+        </Wrap>
+    </Wrap>
   );
 };
 
@@ -117,7 +117,7 @@ export const CouponAddInput: React.FC<CouponAddInputProps> = ({ vouchers, onSele
         </SelectTrigger>
         <SelectContent className="w-80">
           {vouchers?.length === 0 && (
-            <div className="px-4 py-2 text-muted-foreground">No coupons available</div>
+            <Wrap className="px-4 py-2 text-muted-foreground">No coupons available</Wrap>
           )}
           {vouchers?.map(voucher => (
             <SelectItem
@@ -132,7 +132,7 @@ export const CouponAddInput: React.FC<CouponAddInputProps> = ({ vouchers, onSele
         </SelectContent>
       </Select>
       <Button
-        label={'Add'}
+        label={'Apply'}
         type="button"
         disabled={!selectedId}
         onClick={handleAddClick}

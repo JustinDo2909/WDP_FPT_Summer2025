@@ -1,5 +1,5 @@
 import { map } from "lodash";
-import CardProduct from "@/lib/pattern/share/CardProduct";
+import ProductCard from "@/lib/pattern/share/ProductCard";
 
 export default function ListProductDisplay({
   products,
@@ -9,7 +9,7 @@ export default function ListProductDisplay({
   return (
     <>
       {map(products, (product) => (
-        <CardProduct key={product.id} product={product} />
+        <ProductCard key={product.id} product={product} />
       ))}
     </>
   );
