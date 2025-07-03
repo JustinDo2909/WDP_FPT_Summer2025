@@ -13,7 +13,7 @@ import CustomTable from "@/components/CustomTable";
 import {
   useGetProductsQuery,
   useDeleteProductMutation,
-} from "@/process/api/apiProduct";
+} from "@/process/api/api";
 
 export function ProductTable({
   onAddProduct,

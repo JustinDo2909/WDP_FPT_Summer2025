@@ -3,7 +3,7 @@ import { X, Upload, Trash2 } from "lucide-react";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 import { AddProductModalProps } from "@/types/productManagement/index";
 import { useProductForm } from "@/components/admin/Product/seg/utils";
-import { useGetProductMetaQuery } from "@/process/api/apiProduct";
+import { useGetProductMetaQuery } from "@/process/api/api";
 
 export function AddProductModal({
   isOpen,

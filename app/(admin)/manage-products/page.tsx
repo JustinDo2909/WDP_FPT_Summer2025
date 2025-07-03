@@ -6,10 +6,7 @@ import { useProductsLogic } from "@/components/admin/Product/seg/utils";
 import { Area, RText, Core, Container } from "@/lib/by/Div";
 import { StatsCard } from "@/components/admin/StatsCard";
 import { Package, AlertTriangle, Grid3X3, Building2 } from "lucide-react";
-import {
-  useGetProductsQuery,
-  useGetProductMetaQuery,
-} from "@/process/api/apiProduct";
+import { useGetProductsQuery, useGetProductMetaQuery } from "@/process/api/api";
 
 export default function ProductsPage() {
   const {

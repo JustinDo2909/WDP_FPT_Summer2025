@@ -31,7 +31,7 @@ import {
   useCreateRewardMutation,
   useUpdateRewardMutation,
   useDeleteRewardMutation,
-} from "@/process/api/apiEvent";
+} from "@/process/api/api";
 
 import {
   calculateEventStats,

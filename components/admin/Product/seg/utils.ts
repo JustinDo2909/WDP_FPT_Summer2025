@@ -5,7 +5,7 @@ import { Product, ProductFormData } from "@/types/productManagement/index";
 import {
   useCreateProductMutation,
   useUpdateProductMutation,
-} from "@/process/api/apiProduct";
+} from "@/process/api/api";
 
 // Hook to manage search and filter with API query parameters
 export const useProductSearch = () => {

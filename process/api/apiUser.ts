@@ -15,7 +15,6 @@ export const userApi = createApi({
   baseQuery: customBaseQuery,
   tagTypes: ["User"],
   endpoints: (builder) => ({
-    // Get all users with optional filtering
     getAllUsers: builder.query<User[], GetUsersParams | void>({
       query: (params) => {
         const searchParams = new URLSearchParams();
@@ -27,7 +26,6 @@ export const userApi = createApi({
         return `/users?${searchParams.toString()}`;
       },
       transformResponse: (response: UsersResponse) => {
-        // Filter only USER role
         return response.users.filter((user) => user.role === "USER");
       },
       providesTags: ["User"],
@@ -62,8 +60,6 @@ export const userApi = createApi({
         "User",
       ],
     }),
-
-    // Note: No delete endpoint provided, so we'll keep the local delete functionality
   }),
 });
 

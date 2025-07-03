@@ -21,7 +21,7 @@ import {
   useCreateSkinTypeMutation,
   useUpdateSkinTypeMutation,
   useDeleteSkinTypeMutation,
-} from "@/process/api/apiMeta";
+} from "@/process/api/api";
 
 // Hook quản lý categories, brands và skin types với API
 export const useCategoriesBrandsLogic = () => {
