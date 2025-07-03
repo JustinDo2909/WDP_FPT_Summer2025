@@ -79,12 +79,8 @@ export function OverviewCards() {
     },
   ];
 
-  if (!isMounted) {
-    return null;
-  }
-
-  // Show loading state
-  if (ordersLoading || usersLoading || productsLoading) {
+  // Show loading state for both mounting and data loading
+  if (!isMounted || ordersLoading || usersLoading || productsLoading) {
     return (
       <Area className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         {Array.from({ length: 4 }).map((_, index) => (

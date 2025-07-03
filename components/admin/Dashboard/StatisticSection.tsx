@@ -30,6 +30,7 @@ import { useGetAllUsersQuery } from "@/process/api/apiUser";
 import type { OrderDetail, OrderItem } from "@/types/order";
 import { store } from "@/process/api/redux";
 
+// Custom hook to fetch multiple order details using Redux API
 const useMultipleOrderDetails = (orderIds: string[]) => {
   const [orderDetails, setOrderDetails] = useState<OrderDetail[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +43,10 @@ const useMultipleOrderDetails = (orderIds: string[]) => {
 
     setIsLoading(true);
     try {
+      // eslint-disable-next-line no-console
+      console.log("🔄 Fetching details for", ids.length, "orders:", ids);
+
+      // Use Redux API dispatch to fetch order details
       const detailPromises = ids.map(async (orderId) => {
         try {
           const result = await store.dispatch(
@@ -54,7 +59,7 @@ const useMultipleOrderDetails = (orderIds: string[]) => {
           return null;
         } catch (error) {
           // eslint-disable-next-line no-console
-          console.error(`Error fetching order ${orderId}:`, error);
+          console.error(`❌ Error fetching order ${orderId}:`, error);
           return null;
         }
       });
@@ -64,9 +69,19 @@ const useMultipleOrderDetails = (orderIds: string[]) => {
         (detail) => detail !== null
       ) as OrderDetail[];
 
+      validDetails.forEach((order) => {
+        console.log(`📦 Order ${order.id}:`, {
+          itemsCount: order.orderItems?.length || 0,
+          items:
+            order.orderItems?.map(
+              (item) => `${item.title} (qty: ${item.quantity})`
+            ) || [],
+          total: order.total_amount,
+        });
+      });
+
       setOrderDetails(validDetails);
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(" Error fetching order details:", error);
       setOrderDetails([]);
     } finally {
@@ -74,7 +89,7 @@ const useMultipleOrderDetails = (orderIds: string[]) => {
     }
   }, []);
 
-  // Track previous IDs
+  // Track previous IDs to avoid unnecessary refetches
   const previousIdsRef = useRef<string>("");
   const currentIdsString = JSON.stringify([...orderIds].sort());
 
@@ -88,6 +103,7 @@ const useMultipleOrderDetails = (orderIds: string[]) => {
   return { orderDetails, isLoading };
 };
 
+// Calculate real top products from order details
 const calculateRealTopProducts = (orderDetails: OrderDetail[]) => {
   const productCount: {
     [key: string]: { name: string; count: number; totalRevenue: number };
@@ -121,7 +137,7 @@ const calculateRealTopProducts = (orderDetails: OrderDetail[]) => {
       quantity: stats.count,
       revenue: stats.totalRevenue,
     }))
-    .sort((a, b) => b.quantity - a.quantity)
+    .sort((a, b) => b.quantity - a.quantity) // Sort by quantity (số lần xuất hiện)
     .slice(0, 5);
 
   return result;
@@ -136,15 +152,17 @@ export function StatisticsSection({
     setIsMounted(true);
   }, []);
 
+  // API queries
   const { data: ordersData, isLoading: ordersLoading } = useGetAllOrdersQuery();
   const { data: usersData, isLoading: usersLoading } = useGetAllUsersQuery();
   const { data: productsData, isLoading: productsLoading } =
     useGetProductsQuery({
       page: 1,
-      pageSize: 1000,
+      pageSize: 1000, // Get all products
     });
   const { data: metaData, isLoading: metaLoading } = useGetMetaDataQuery();
 
+  // Process data - memoized to prevent unnecessary recalculations
   const orders = useMemo(() => ordersData?.orders || [], [ordersData?.orders]);
   const users = useMemo(() => usersData || [], [usersData]);
   const products = useMemo(
@@ -156,17 +174,21 @@ export function StatisticsSection({
     [metaData?.data?.categories]
   );
 
+  // Memoize current month orders to prevent infinite re-renders
   const currentMonthOrders = useMemo(() => {
     return getCurrentMonthOrders(orders);
   }, [orders]);
 
+  // Get order IDs for dependency array (to avoid object reference issues)
   const currentMonthOrderIds = useMemo(() => {
     return currentMonthOrders.map((order) => order.id);
   }, [currentMonthOrders]);
 
+  // Fetch order details using custom hook
   const { orderDetails, isLoading: orderDetailsLoading } =
     useMultipleOrderDetails(currentMonthOrderIds);
 
+  // Calculate statistics - all memoized to prevent recalculations
   const topProducts = useMemo(() => {
     return calculateRealTopProducts(orderDetails);
   }, [orderDetails]);
@@ -179,11 +201,9 @@ export function StatisticsSection({
     return calculateCategoryDistribution(products, categories);
   }, [products, categories]);
 
-  if (!isMounted) {
-    return null;
-  }
-
+  // Show loading state for both mounting and data loading
   if (
+    !isMounted ||
     ordersLoading ||
     usersLoading ||
     productsLoading ||

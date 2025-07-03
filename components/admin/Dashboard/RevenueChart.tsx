@@ -52,12 +52,8 @@ export function RevenueChart({}: RevenueChartProps) {
     return null;
   };
 
-  if (!isMounted) {
-    return null;
-  }
-
-  // Show loading state
-  if (ordersLoading) {
+  // Show loading state for both mounting and data loading
+  if (!isMounted || ordersLoading) {
     return (
       <Core className="bg-white rounded-lg shadow-sm border">
         <Container className="p-6 border-b">

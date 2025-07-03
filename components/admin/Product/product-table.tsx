@@ -14,13 +14,14 @@ import {
   useGetProductsQuery,
   useDeleteProductMutation,
 } from "@/process/api/api";
+import { ProductFilters } from "@/components/admin/Product/Product-filters";
 
 export function ProductTable({
   onAddProduct,
   onEditProduct,
   onDeleteProduct,
 }: ProductTableProps) {
-  const { searchParams } = useProductSearch();
+  const { searchParams, updateSearchParams } = useProductSearch();
   const [page, setPage] = useState(1);
   const [sortLowStock, setSortLowStock] = useState(false);
   const pageSize = 10;
@@ -69,6 +70,12 @@ export function ProductTable({
 
   const toggleLowStockSort = () => {
     setSortLowStock(!sortLowStock);
+  };
+
+  // Reset page when filters change
+  const handleFilterChange = (field: string, value: string) => {
+    updateSearchParams(field, value);
+    setPage(1); // Reset to first page when filters change
   };
 
   const columns = [
@@ -189,13 +196,18 @@ export function ProductTable({
 
   return (
     <Core className="bg-white rounded-lg shadow-sm border border-gray-200">
+      {/* Filters Section */}
+      <ProductFilters
+        searchParams={searchParams}
+        onUpdateParams={handleFilterChange}
+        isLoading={isLoading}
+      />
+
       <Container className="overflow-x-auto">
         {/* Low Stock Sort Controls */}
         <Area className="flex items-center justify-between p-4 border-b border-gray-200">
           <Area className="flex items-center space-x-4">
-            <RText className="text-sm font-medium text-gray-700">
-              Filters & Sorting
-            </RText>
+            <RText className="text-sm font-medium text-gray-700">Sorting</RText>
             {lowStockCount > 0 && (
               <Area className="flex items-center">
                 <AlertTriangle className="h-4 w-4 text-red-500 mr-1" />

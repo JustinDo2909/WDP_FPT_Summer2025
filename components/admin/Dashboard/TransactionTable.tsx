@@ -1,6 +1,5 @@
 "use client";
 
-import { Filter, ChevronDown } from "lucide-react";
 import {
   formatCurrency,
   getStatusBadgeConfig,
@@ -12,7 +11,6 @@ import {
   Area,
   Yard,
   Section,
-  Anchor,
   RText,
   Core,
   Container,
@@ -36,12 +34,8 @@ export function TransactionsTable() {
   const users = usersData || [];
   const transactions = getRecentTransactions(orders, users);
 
-  if (!isMounted) {
-    return null;
-  }
-
-  // Show loading state
-  if (ordersLoading || usersLoading) {
+  // Show loading state for both mounting and data loading
+  if (!isMounted || ordersLoading || usersLoading) {
     return (
       <Core className="bg-white rounded-lg shadow-sm border">
         <Container className="p-6 border-b">
