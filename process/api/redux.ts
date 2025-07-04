@@ -1,11 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 // Or from '@reduxjs/toolkit/query/react'
 import { setupListeners } from "@reduxjs/toolkit/query";
+import cartSlice from "../store/cartSlice";
 import { api } from "./api";
-import { ghnApi } from "./apiGHN";
-import { chatbotApi } from "./apiChatBot";
+import { apiAddress } from "./apiAddress";
 import { apiAuth } from "./apiAuth";
 import { apiCart } from "./apiCart";
+import { chatbotApi } from "./apiChatBot";
+import { ghnApi } from "./apiGHN";
+import { apiOrders } from "./apiOrders";
+
 import { userApi } from "./apiUser";
 
 export const store = configureStore({
@@ -16,6 +20,10 @@ export const store = configureStore({
     [chatbotApi.reducerPath]: chatbotApi.reducer,
     [apiAuth.reducerPath]: apiAuth.reducer,
     [apiCart.reducerPath]: apiCart.reducer,
+
+    [apiAddress.reducerPath]: apiAddress.reducer,
+    [apiOrders.reducerPath]: apiOrders.reducer,
+    cart: cartSlice.reducer,
     [userApi.reducerPath]: userApi.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
@@ -27,6 +35,9 @@ export const store = configureStore({
       chatbotApi.middleware,
       apiAuth.middleware,
       apiCart.middleware,
+
+      apiAddress.middleware,
+      apiOrders.middleware,
       userApi.middleware
     ),
 });
