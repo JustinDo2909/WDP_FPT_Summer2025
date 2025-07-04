@@ -9,7 +9,16 @@ const customBaseQuery = async (
 ) => {
   const baseQuery = fetchBaseQuery({
     baseUrl: "https://cosme-play-be.vercel.app/api",
-    prepareHeaders: async (headers) => {},
+    prepareHeaders: async (headers) => {
+      // Get token from localStorage
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("token");
+        if (token) {
+          headers.set("Authorization", `Bearer ${token}`);
+        }
+      }
+      return headers;
+    },
     credentials: "include",
   });
 
@@ -34,7 +43,8 @@ const customBaseQuery = async (
       }
     }
 
-    if (result.error) {
+    // Only show error for actual error status codes (400+)
+    if (result.error && result.error.status >= 400) {
       const errorData = result.error.data;
       const errorMessage =
         errorData?.message ||
@@ -46,25 +56,18 @@ const customBaseQuery = async (
     const isMutationRequest =
       (args as FetchArgs).method && (args as FetchArgs).method !== "GET";
 
-    if (isMutationRequest) {
-      const successMessage = result.data?.message;
-      if (successMessage) toast.success(successMessage);
+    // Show success message for successful mutations
+    if (isMutationRequest && result.data && !result.error) {
+      const successMessage =
+        result.data?.message || "Operation completed successfully";
+      toast.success(successMessage);
     }
-
-    // if (result.data) {
-    //   result.data = result.data.data;
-    // } else if (
-    //   result.error?.status === 204 ||
-    //   result.meta?.response?.status === 24
-    // ) {
-    //   return { data: null };
-    // }
 
     return result;
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
-
+    toast.error(`Error: ${errorMessage}`);
     return { error: { status: "FETCH_ERROR", error: errorMessage } };
   }
 };

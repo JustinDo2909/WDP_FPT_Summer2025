@@ -2,13 +2,13 @@
 
 import React from "react";
 import { useParams } from "next/navigation";
-import { useGetOrderByIdQuery } from "@/process/api/api";
 import { TrackingSection } from "@/components/OrdersPage/TrackingSection";
 import { ShippingSection } from "@/components/OrdersPage/ShippingSection";
 import { OrderInfoSection } from "@/components/OrdersPage/OrderInfoSection";
 import { Box, Row, RText } from "@/lib/by/Div";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import { useGetOrderByIdQuery } from '@/process/api/api';
 
 export default function OrderDetailsPage() {
   const params = useParams();

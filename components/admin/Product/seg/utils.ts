@@ -5,7 +5,7 @@ import { Product, ProductFormData } from "@/types/productManagement/index";
 import {
   useCreateProductMutation,
   useUpdateProductMutation,
-} from "@/process/api/apiProduct";
+} from "@/process/api/api";
 
 // Hook to manage search and filter with API query parameters
 export const useProductSearch = () => {
@@ -265,7 +265,7 @@ export const calculateProductStats = (products: Product[]) => {
 
 // Utility functions
 export const formatPrice = (price: number) => {
-  return `$${price.toFixed(2)}`;
+  return `${price.toFixed(0)} VND`;
 };
 
 export const calculateDiscountedPrice = (price: number, sale_price: number) => {

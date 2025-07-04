@@ -4,59 +4,103 @@ import {
   DollarSign,
   ShoppingCart,
   Users,
-  Star,
+  Package,
   TrendingUp,
 } from "lucide-react";
 import {
   formatCurrency,
-  getTotalYearRevenue,
-  calculateMonthlyGrowth,
+  calculateDashboardStats,
 } from "@/components/admin/Dashboard/seg/utils";
 import { StatsCard } from "@/components/admin/StatsCard";
-import { Area } from "@/lib/by/Div/index";
+import { Area, Core, Yard, Block } from "@/lib/by/Div/index";
+import { useEffect, useState } from "react";
+import { useGetAllOrdersQuery } from "@/process/api/api";
+import { useGetAllUsersQuery } from "@/process/api/apiUser";
+import { useGetProductsQuery } from "@/process/api/api";
 
 export function OverviewCards() {
-  const totalRevenue = getTotalYearRevenue();
-  const revenueGrowth = calculateMonthlyGrowth();
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // API queries
+  const { data: ordersData, isLoading: ordersLoading } = useGetAllOrdersQuery();
+  const { data: usersData, isLoading: usersLoading } = useGetAllUsersQuery();
+  const { data: productsData, isLoading: productsLoading } =
+    useGetProductsQuery({
+      page: 1,
+      pageSize: 1000, // Get all products for count
+    });
+
+  // Calculate stats from API data
+  const orders = ordersData?.orders || [];
+  const users = usersData || [];
+  const products = productsData?.products || [];
+
+  const stats = calculateDashboardStats(orders, users, products);
 
   const cards = [
     {
       title: "Total Revenue",
-      value: formatCurrency(totalRevenue),
+      value: formatCurrency(stats.totalRevenue),
       icon: DollarSign,
       iconColor: "text-blue-600",
       iconBgColor: "bg-blue-50",
       valueColor: "text-blue-600",
-      change: `+${revenueGrowth}% from last month`,
+      change: `${stats.totalOrders} orders completed`,
     },
     {
       title: "Orders",
-      value: "1,234",
+      value: stats.totalOrders.toString(),
       icon: ShoppingCart,
       iconColor: "text-green-600",
       iconBgColor: "bg-green-50",
       valueColor: "text-green-600",
-      change: "+8.2% from last week",
+      change: `Total orders processed`,
     },
     {
       title: "Customers",
-      value: "8,945",
+      value: stats.totalCustomers.toString(),
       icon: Users,
       iconColor: "text-purple-600",
       iconBgColor: "bg-purple-50",
       valueColor: "text-purple-600",
-      change: "+156 new this week",
+      change: `Registered customers`,
     },
     {
-      title: "Reviews",
-      value: "4.8",
-      icon: Star,
+      title: "Products",
+      value: stats.totalProducts.toString(),
+      icon: Package,
       iconColor: "text-pink-600",
       iconBgColor: "bg-pink-50",
       valueColor: "text-pink-600",
-      change: "23 new reviews",
+      change: `Products in catalog`,
     },
   ];
+
+  // Show loading state for both mounting and data loading
+  if (!isMounted || ordersLoading || usersLoading || productsLoading) {
+    return (
+      <Area className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <Core
+            key={index}
+            className="bg-white p-6 rounded-lg shadow-sm border animate-pulse"
+          >
+            <Yard className="flex items-center justify-between">
+              <Block>
+                <Block className="h-4 bg-gray-200 rounded w-20 mb-2"></Block>
+                <Block className="h-8 bg-gray-200 rounded w-16"></Block>
+              </Block>
+              <Block className="h-12 w-12 bg-gray-200 rounded-full"></Block>
+            </Yard>
+            <Block className="h-3 bg-gray-200 rounded w-24 mt-4"></Block>
+          </Core>
+        ))}
+      </Area>
+    );
+  }
 
   return (
     <Area className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">

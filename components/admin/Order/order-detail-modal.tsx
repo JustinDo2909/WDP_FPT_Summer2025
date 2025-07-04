@@ -6,7 +6,6 @@ import {
   Truck,
   CheckCircle,
   XCircle,
-  Clock,
   CreditCard,
 } from "lucide-react";
 
@@ -17,8 +16,9 @@ import {
   getStatusColor,
   getPaymentMethodColor,
 } from "@/components/admin/Order/seg/utils";
-import { orderStatusOptions } from "@/types/order/index";
-import { type OrderDetail } from "@/types/order/index";
+import { orderStatusOptions, type OrderDetail } from "@/types/order/index";
+import { useMemo, useCallback } from "react";
+import clsx from "clsx";
 
 interface OrderDetailModalProps {
   isOpen: boolean;
@@ -35,36 +35,44 @@ export function OrderDetailModal({
 }: OrderDetailModalProps) {
   if (!isOpen || !order) return null;
 
-  const getStatusIcon = (status: OrderDetail["status"]) => {
-    switch (status) {
+  const statusIcon = useMemo(() => {
+    const iconProps = { className: "w-5 h-5" };
+    switch (order.status) {
       case "PROCESSING":
-        return <Package className="w-5 h-5" />;
+        return <Package {...iconProps} />;
       case "SHIPPED":
-        return <Truck className="w-5 h-5" />;
+        return <Truck {...iconProps} />;
       case "DELIVERED":
-        return <CheckCircle className="w-5 h-5" />;
+        return <CheckCircle {...iconProps} />;
       case "CANCELLED":
-        return <XCircle className="w-5 h-5" />;
+        return <XCircle {...iconProps} />;
       default:
-        return <Package className="w-5 h-5" />;
+        return <Package {...iconProps} />;
     }
-  };
+  }, [order.status]);
+
+  const handleStatusChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      onUpdateStatus?.(order.id, e.target.value as OrderDetail["status"]);
+    },
+    [onUpdateStatus, order.id]
+  );
 
   return (
     <>
-      {/* Backdrop */}
       <Core
-        className={`fixed inset-0 bg-black transition-opacity duration-300 z-[9998] ${
+        className={clsx(
+          "fixed inset-0 bg-black transition-opacity duration-300 z-[9998]",
           isOpen ? "bg-opacity-60" : "bg-opacity-0"
-        }`}
+        )}
         onClick={onClose}
       />
 
-      {/* Modal */}
       <Core
-        className={`fixed top-0 right-0 h-full w-full max-w-3xl bg-white shadow-2xl z-[9999] transform transition-transform duration-300 ease-in-out ${
+        className={clsx(
+          "fixed top-0 right-0 h-full w-full max-w-3xl bg-white shadow-2xl z-[9999] transform transition-transform duration-300 ease-in-out",
           isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        )}
       >
         <Container className="h-full overflow-y-auto">
           {/* Header */}
@@ -86,23 +94,26 @@ export function OrderDetailModal({
           </Area>
 
           <Container className="p-6 space-y-6">
-            {/* Order Status Management */}
+            {/* Order Management */}
             <Yard className="bg-gray-50 rounded-lg p-6">
               <RText className="text-lg font-medium text-gray-900 mb-4">
                 Order Management
               </RText>
 
               <Area className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Order Status */}
+                {/* Status */}
                 <Yard>
                   <RText className="text-sm font-medium text-gray-700 mb-2">
                     Order Status
                   </RText>
                   <Area className="flex items-center gap-3 mb-3">
                     <Yard
-                      className={`p-2 rounded-full ${getStatusColor(order.status)}`}
+                      className={clsx(
+                        "p-2 rounded-full",
+                        getStatusColor(order.status)
+                      )}
                     >
-                      {getStatusIcon(order.status)}
+                      {statusIcon}
                     </Yard>
                     <Yard>
                       <RText className="font-medium capitalize">
@@ -116,12 +127,7 @@ export function OrderDetailModal({
                   {onUpdateStatus && (
                     <select
                       value={order.status}
-                      onChange={(e) =>
-                        onUpdateStatus(
-                          order.id,
-                          e.target.value as OrderDetail["status"]
-                        )
-                      }
+                      onChange={handleStatusChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       {orderStatusOptions.map((option) => (
@@ -140,7 +146,10 @@ export function OrderDetailModal({
                   </RText>
                   <Area className="flex items-center gap-3 mb-3">
                     <Yard
-                      className={`p-2 rounded-full ${getPaymentMethodColor(order.payment_method)}`}
+                      className={clsx(
+                        "p-2 rounded-full",
+                        getPaymentMethodColor(order.payment_method)
+                      )}
                     >
                       <CreditCard className="w-5 h-5" />
                     </Yard>
@@ -192,7 +201,7 @@ export function OrderDetailModal({
               </Area>
             </Yard>
 
-            {/* Shipping Information */}
+            {/* Shipping Info */}
             <Yard>
               <RText className="text-lg font-medium text-gray-900 mb-4">
                 Shipping Information
@@ -243,7 +252,7 @@ export function OrderDetailModal({
                           <Area className="flex items-center">
                             <img
                               src={item.image_url || "/placeholder.svg"}
-                              alt={item.title}
+                              alt={item.title || "product image"}
                               className="w-10 h-10 rounded-lg object-cover mr-3"
                             />
                             <RText className="font-medium text-gray-900">
@@ -266,7 +275,7 @@ export function OrderDetailModal({
                 </table>
               </Area>
 
-              {/* Order Total */}
+              {/* Total */}
               <Area className="mt-4 border-t border-gray-200 pt-4">
                 <Yard className="flex justify-end">
                   <RText className="text-xl font-semibold text-gray-900">

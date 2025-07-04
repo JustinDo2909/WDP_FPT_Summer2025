@@ -9,7 +9,7 @@ import type {
   CategoryFormData,
   BrandFormData,
   SkinTypeFormData,
-} from "@/types/category-brand/index";
+} from "@/types/meta/index";
 import {
   useGetMetaDataQuery,
   useCreateCategoryMutation,
@@ -21,7 +21,7 @@ import {
   useCreateSkinTypeMutation,
   useUpdateSkinTypeMutation,
   useDeleteSkinTypeMutation,
-} from "@/process/api/apiMeta";
+} from "@/process/api/api";
 
 // Hook quản lý categories, brands và skin types với API
 export const useCategoriesBrandsLogic = () => {

@@ -1,11 +1,6 @@
-import _ from "lodash";
-import {
-  monthlyRevenueData,
-  topProducts,
-  topCustomers,
-  recentOrders,
-} from "@/constants/dashboard/index";
-import { categoryData } from "@/constants/share/index";
+import type { Order, OrderDetail } from "@/types/order";
+import type { User } from "@/types/user";
+import type { Product, CategoryOption } from "@/types/productManagement";
 
 //#region fomatCurrency
 export const formatCurrency = (amount: number): string => {
@@ -27,71 +22,68 @@ export const formatCurrencyShort = (amount: number): string => {
   return amount.toString();
 };
 //#endregion
-//#region getCurrentMonth
-export const getCurrentMonth = (): number => {
-  return new Date().getMonth(); // 0-11, May = 4
-};
-//#endregion
-//#region calculateMonthlyGrowth
-export const calculateMonthlyGrowth = (): string => {
-  const currentMonth = getCurrentMonth();
-  if (currentMonth === 0) return "0";
 
-  const currentRevenue = monthlyRevenueData[currentMonth]?.revenue || 0;
-  const previousRevenue = monthlyRevenueData[currentMonth - 1]?.revenue || 0;
-
-  if (previousRevenue === 0) return "0";
-
-  const growth = (
-    ((currentRevenue - previousRevenue) / previousRevenue) *
-    100
-  ).toFixed(1);
-  return growth;
-};
-//#endregion
-//#region getTotalYearRevenue
-export const getTotalYearRevenue = (): number => {
-  const currentMonth = getCurrentMonth();
-  return _.sumBy(_.take(monthlyRevenueData, currentMonth + 1), "revenue");
-};
-//#endregion
 //#region getStatusBadgeConfig
 export const getStatusBadgeConfig = (status: string) => {
   const statusConfig = {
-    completed: {
-      label: "Completed",
+    PROCESSING: {
+      label: "Processing",
+      className: "bg-blue-100 text-blue-800 border-blue-200",
+    },
+    SHIPPED: {
+      label: "Shipped",
+      className: "bg-yellow-100 text-yellow-800 border-yellow-200",
+    },
+    DELIVERED: {
+      label: "Delivered",
       className: "bg-green-100 text-green-800 border-green-200",
     },
-    cancelled: {
+    CANCELLED: {
       label: "Cancelled",
       className: "bg-red-100 text-red-800 border-red-200",
     },
-    in_progress: {
-      label: "In progress",
-      className: "bg-blue-100 text-blue-800 border-blue-200",
-    },
-    in_review: {
-      label: "In review",
-      className: "bg-yellow-100 text-yellow-800 border-yellow-200",
-    },
   };
 
-  return statusConfig[status as keyof typeof statusConfig];
+  return (
+    statusConfig[status as keyof typeof statusConfig] || {
+      label: status,
+      className: "bg-gray-100 text-gray-800 border-gray-200",
+    }
+  );
 };
 //#endregion
 //#region getPaymentMethodIcon
 export const getPaymentMethodIcon = (method: string) => {
-  if (method === "mastercard") {
+  if (method === "card") {
     return {
       className:
-        "w-8 h-5 bg-gradient-to-r from-red-500 to-yellow-500 rounded text-white text-xs flex items-center justify-center font-bold",
-      text: "MC",
+        "w-8 h-5 bg-gradient-to-r from-blue-600 to-blue-800 rounded text-white text-xs flex items-center justify-center font-bold",
+      text: "CARD",
+    };
+  } else if (method === "paypal") {
+    return {
+      className:
+        "w-8 h-5 bg-gradient-to-r from-blue-500 to-blue-700 rounded text-white text-xs flex items-center justify-center font-bold",
+      text: "PP",
+    };
+  } else if (method === "bank_transfer") {
+    return {
+      className:
+        "w-8 h-5 bg-gradient-to-r from-green-500 to-green-700 rounded text-white text-xs flex items-center justify-center font-bold",
+      text: "BANK",
+    };
+  } else if (method === "cash_on_delivery") {
+    return {
+      className:
+        "w-8 h-5 bg-gradient-to-r from-orange-500 to-orange-700 rounded text-white text-xs flex items-center justify-center font-bold",
+      text: "COD",
     };
   }
+
   return {
     className:
-      "w-8 h-5 bg-gradient-to-r from-blue-600 to-blue-800 rounded text-white text-xs flex items-center justify-center font-bold",
-    text: "VISA",
+      "w-8 h-5 bg-gradient-to-r from-gray-500 to-gray-700 rounded text-white text-xs flex items-center justify-center font-bold",
+    text: "OTHER",
   };
 };
 //#endregion
@@ -106,52 +98,276 @@ export const getCurrentDate = (): string => {
 };
 
 //#endregion
-//#region getMonthlyRevenueData
-// Data processing functions
-export const getMonthlyRevenueData = () => {
-  const currentMonth = getCurrentMonth();
-  return _.map(monthlyRevenueData, (item, index) => ({
-    ...item,
-    revenue: index <= currentMonth ? item.revenue : 0,
-    hasData: index <= currentMonth,
-  }));
-};
-//#endregion
-//#region getTopProductsData
-export const getTopProductsData = () => {
-  return _.take(_.orderBy(topProducts, ["revenue"], ["desc"]), 5);
-};
-//#endregion
-//#region getTopCustomersData
-export const getTopCustomersData = () => {
-  return _.take(_.orderBy(topCustomers, ["spent"], ["desc"]), 5);
-};
-//#endregion
-//#region getCategoryDistribution
-export const getCategoryDistribution = () => {
-  return _.map(categoryData, (category) => ({
-    ...category,
-    percentage: `${category.value}%`,
-  }));
-};
-//#endregion
-//#region getRecentTransactions
-export const getRecentTransactions = () => {
-  return _.take(_.orderBy(recentOrders, ["date"], ["desc"]), 5);
-};
-//#endregion
-//#region getOverviewMetrics
-export const getOverviewMetrics = () => {
-  const totalRevenue = getTotalYearRevenue();
-  const totalOrders = 1234;
-  const totalCustomers = 8945;
-  const averageRating = 4.8;
+
+// Color palette for categories
+const CATEGORY_COLORS = [
+  "#3b82f6", // blue
+  "#ef4444", // red
+  "#22c55e", // green
+  "#f59e0b", // amber
+  "#8b5cf6", // violet
+  "#06b6d4", // cyan
+  "#f97316", // orange
+  "#84cc16", // lime
+  "#ec4899", // pink
+  "#6b7280", // gray
+];
+
+//#region API-based utility functions
+
+// Calculate dashboard stats from API data
+export const calculateDashboardStats = (
+  orders: any[],
+  users: any[],
+  products: any[]
+) => {
+  const totalRevenue = orders.reduce(
+    (sum, order) => sum + (order.total_amount || 0),
+    0
+  );
+  const totalOrders = orders.length;
+  const totalCustomers = users.filter((user) => user.role === "USER").length;
+  const totalProducts = products.length;
 
   return {
-    revenue: totalRevenue,
-    orders: totalOrders,
-    customers: totalCustomers,
-    rating: averageRating,
+    totalRevenue,
+    totalOrders,
+    totalCustomers,
+    totalProducts,
   };
 };
+
+// Calculate monthly revenue from orders
+export const calculateMonthlyRevenue = (orders: any[]) => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth();
+
+  // Initialize all months with 0 revenue
+  const monthlyData = months.map((month, index) => ({
+    name: month,
+    revenue: 0,
+    hasData: index <= currentMonth,
+  }));
+
+  // Calculate revenue for each month
+  orders.forEach((order) => {
+    const orderDate = new Date(order.createdAt);
+    if (orderDate.getFullYear() === currentYear) {
+      const monthIndex = orderDate.getMonth();
+      if (monthIndex <= currentMonth) {
+        monthlyData[monthIndex].revenue += order.total_amount || 0;
+      }
+    }
+  });
+
+  return monthlyData;
+};
+
+// Calculate top products from order items
+export const calculateTopProducts = (orders: any[]) => {
+  // eslint-disable-next-line no-console
+  console.log("calculateTopProducts - Input orders:", orders.length);
+  // eslint-disable-next-line no-console
+  console.log("calculateTopProducts - First order structure:", orders[0]);
+
+  // TEMPORARY FIX: Since getAllOrders doesn't have orderItems,
+  // we'll create mock data based on order amounts until we implement proper order details fetching
+  if (orders.length === 0) {
+    return [];
+  }
+
+  // Check if orders have orderItems
+  const hasOrderItems = orders.some((order) => order.orderItems);
+  // eslint-disable-next-line no-console
+  console.log("calculateTopProducts - Orders have orderItems:", hasOrderItems);
+
+  if (!hasOrderItems) {
+    // MOCK DATA: Create fake top products from order data
+    // This is temporary until we properly fetch order details
+    return [
+      {
+        id: "mock-product-1",
+        name: "Product A (Mock - Need orderItems)",
+        revenue:
+          orders.reduce((sum, order) => sum + (order.total_amount || 0), 0) *
+          0.3,
+        quantity: Math.floor(orders.length * 1.5),
+      },
+      {
+        id: "mock-product-2",
+        name: "Product B (Mock - Need orderItems)",
+        revenue:
+          orders.reduce((sum, order) => sum + (order.total_amount || 0), 0) *
+          0.25,
+        quantity: Math.floor(orders.length * 1.2),
+      },
+      {
+        id: "mock-product-3",
+        name: "Product C (Mock - Need orderItems)",
+        revenue:
+          orders.reduce((sum, order) => sum + (order.total_amount || 0), 0) *
+          0.2,
+        quantity: Math.floor(orders.length * 1.0),
+      },
+    ];
+  }
+
+  // Original logic for when we have orderItems
+  const productStats: {
+    [key: string]: { name: string; revenue: number; quantity: number };
+  } = {};
+
+  orders.forEach((order) => {
+    if (order.orderItems) {
+      order.orderItems.forEach((item: any) => {
+        const productId = item.product_id;
+        const productName = item.title;
+        const revenue = (item.price || 0) * (item.quantity || 0);
+        const quantity = item.quantity || 0;
+
+        if (productStats[productId]) {
+          productStats[productId].revenue += revenue;
+          productStats[productId].quantity += quantity;
+        } else {
+          productStats[productId] = {
+            name: productName,
+            revenue,
+            quantity,
+          };
+        }
+      });
+    }
+  });
+
+  const result = Object.entries(productStats)
+    .map(([id, stats]) => ({ id, ...stats }))
+    .sort((a, b) => b.revenue - a.revenue)
+    .slice(0, 5);
+
+  // eslint-disable-next-line no-console
+  console.log("calculateTopProducts - Final result:", result);
+
+  return result;
+};
+
+// Calculate top customers from orders
+export const calculateTopCustomers = (orders: any[], users: any[]) => {
+  const customerStats: {
+    [key: string]: { totalSpent: number; totalOrders: number };
+  } = {};
+
+  orders.forEach((order) => {
+    const userId = order.user_id;
+    const amount = order.total_amount || 0;
+
+    if (customerStats[userId]) {
+      customerStats[userId].totalSpent += amount;
+      customerStats[userId].totalOrders += 1;
+    } else {
+      customerStats[userId] = {
+        totalSpent: amount,
+        totalOrders: 1,
+      };
+    }
+  });
+
+  const topCustomers = Object.entries(customerStats)
+    .map(([userId, stats]) => {
+      const user = users.find((u) => u.id === userId);
+      return {
+        id: userId,
+        name: user?.name || "Unknown User",
+        email: user?.email || "Unknown Email",
+        ...stats,
+      };
+    })
+    .sort((a, b) => b.totalSpent - a.totalSpent)
+    .slice(0, 5);
+
+  return topCustomers;
+};
+
+// Calculate category distribution from products
+export const calculateCategoryDistribution = (
+  products: any[],
+  categories: any[]
+) => {
+  const categoryStats: { [key: string]: number } = {};
+
+  products.forEach((product) => {
+    const categoryId = product.product_category_id;
+    categoryStats[categoryId] = (categoryStats[categoryId] || 0) + 1;
+  });
+
+  const totalProducts = products.length;
+
+  return Object.entries(categoryStats)
+    .map(([categoryId, count], index) => {
+      const category = categories.find((c) => c.id === categoryId);
+      const percentage = totalProducts > 0 ? (count / totalProducts) * 100 : 0;
+
+      return {
+        name: category?.title || "Unknown Category",
+        value: count,
+        percentage: `${percentage.toFixed(1)}%`,
+        color: CATEGORY_COLORS[index % CATEGORY_COLORS.length],
+      };
+    })
+    .sort((a, b) => b.value - a.value);
+};
+
+// Get recent transactions from orders
+export const getRecentTransactions = (orders: any[], users: any[]) => {
+  return [...orders] // Create a copy to avoid mutating the original read-only array
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
+    .slice(0, 5)
+    .map((order) => {
+      const user = users.find((u) => u.id === order.user_id);
+
+      return {
+        id: order.id,
+        customer: user?.name || "Unknown Customer",
+        amount: order.total_amount || 0,
+        date: new Date(order.createdAt).toLocaleDateString(),
+        status: order.status,
+        paymentMethod: order.payment_method,
+        reference:
+          order.checkout_session_id || order.payment_intent_id || order.id,
+      };
+    });
+};
+
+// Filter current month orders
+export const getCurrentMonthOrders = (orders: any[]) => {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+
+  return orders.filter((order) => {
+    const orderDate = new Date(order.createdAt);
+    return (
+      orderDate.getMonth() === currentMonth &&
+      orderDate.getFullYear() === currentYear
+    );
+  });
+};
+
 //#endregion

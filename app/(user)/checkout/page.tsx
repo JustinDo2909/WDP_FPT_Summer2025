@@ -1,19 +1,19 @@
 "use client";
 
 import CartSummary from "@/components/CartPage/CartSummary";
+import AddressSelector from "@/components/CheckoutPage/AddressSelector";
+import CouponAddInput from "@/components/CheckoutPage/CouponAddInput";
 import Button from "@/components/CustomButton";
 import { Box, Core, Row, RText, Section } from "@/lib/by/Div";
-import { useState } from "react";
-import { useShippingFeeHandler } from "./seg/useShippingFee";
+import { useGetAllVouchersQuery } from "@/process/api/api";
 import { useGetCartQuery } from "@/process/api/apiCart";
+import { useState } from "react";
 import {
   calculateCartTotal,
   calculateCartTotalOriginalPrice,
 } from "./seg/calculateSubtotal";
-import AddressSelector from "@/components/CheckoutPage/AddressSelector";
 import { useHandleCheckout } from "./seg/useHandleCheckout";
-import CouponAddInput from "@/components/CheckoutPage/CouponAddInput";
-import { useGetAllVouchersQuery } from "@/process/api/api";
+import { useShippingFeeHandler } from "./seg/useShippingFee";
 
 export default function CheckoutPage() {
   // const [shippingInfo, setShippingInfo] = useState<IAddress>({
@@ -30,29 +30,29 @@ export default function CheckoutPage() {
   //   notes: "",
   // });
 
-  const [selectedAddress, setSelectedAddress] = useState<IAddress>()
-  const [voucher, setVoucher] = useState<IVoucher>()
-  
+  const [selectedAddress, setSelectedAddress] = useState<IAddress>();
+  const [voucher, setVoucher] = useState<IVoucher>();
 
   const {
     shippingFee,
     feeLoading,
     isRouteHasService,
     serviceNotAvailableText,
-  } = useShippingFeeHandler({to_district_id: selectedAddress?.to_city_id ?? "" , to_ward_code: selectedAddress?.to_ward_code ?? ""});
+  } = useShippingFeeHandler({
+    to_district_id: selectedAddress?.to_city_id ?? "",
+    to_ward_code: selectedAddress?.to_ward_code ?? "",
+  });
 
   const { handleCheckout, isLoading } = useHandleCheckout();
-  const {data: dataVouchers} = useGetAllVouchersQuery()
+  const { data: dataVouchers } = useGetAllVouchersQuery();
 
-  const isFilled =
-    selectedAddress && isRouteHasService;
+  const isFilled = selectedAddress && isRouteHasService;
 
   const { data: cartData } = useGetCartQuery();
   const cart = cartData?.cart;
   const cartItems = cart?.cartItems || [];
   const total = calculateCartTotal(cartItems);
   const subtotal = calculateCartTotalOriginalPrice(cartItems);
-
 
   return (
     <Core className="p-4 md:p-8 min-h-screen ">
@@ -69,7 +69,10 @@ export default function CheckoutPage() {
           getShippingFeeOnWardChange={handleGetShippingFee}
         /> */}
         <Box className="flex col-span-3 flex-col space-y-4">
-          <CouponAddInput vouchers={dataVouchers?.vouchers} onSelect={setVoucher}/>
+          <CouponAddInput
+            vouchers={dataVouchers?.vouchers}
+            onSelect={setVoucher}
+          />
           <AddressSelector
             selectedAddress={selectedAddress}
             setSelectedAddress={setSelectedAddress}

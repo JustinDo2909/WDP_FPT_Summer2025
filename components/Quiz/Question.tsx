@@ -58,8 +58,7 @@ export default function Question({ question, onAnswer, onTimeout }: QuestionProp
           ];
 
           return (
-            <button key={index} onClick={() => onAnswer(option)}>
-            
+            <button key={index} onClick={() => onAnswer(option)}>    
               <ShapeCard
                 shape={shapeMap[index % shapeMap.length]} 
                 backgroundColor={colorMap[index % colorMap.length]} 

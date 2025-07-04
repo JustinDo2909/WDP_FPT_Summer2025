@@ -4,7 +4,7 @@ import { X, Building2, FileText } from "lucide-react";
 import { useEffect } from "react";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 import { useBrandForm } from "@/components/admin/Category-Brand/seg/utils";
-import type { AddBrandModalProps } from "@/types/category-brand/index";
+import type { AddBrandModalProps } from "@/types/meta/index";
 
 export function AddBrandModal({
   isOpen,
