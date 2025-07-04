@@ -99,7 +99,7 @@ export default function CheckoutPage() {
                 disabled={!isFilled || isLoading}
                 label={
                   <RText className="flex items-center text-base font-bold leading-none whitespace-nowrap">
-                    Pay with
+                    Pay with card
                     <svg
                       width="60px"
                       height="80px"
