@@ -51,7 +51,7 @@ const customBaseQuery = async (
 export const api = createApi({
   baseQuery: customBaseQuery,
   reducerPath: "api",
-  tagTypes: ["Products", "Questions", "Rewards" , "Vouchers"],
+  tagTypes: ["Products", "Questions", "Rewards", "Vouchers"],
   endpoints: (build) => ({
     //#region getProducts
     getProducts: build.query<any, ProductQueryParams>({
@@ -80,7 +80,7 @@ export const api = createApi({
       providesTags: ["Products"],
     }),
     //#endregion
-    //#endregion 
+    //#endregion
 
     //#region getProductsMeta
     getProductMeta: build.query<any, void>({
@@ -110,32 +110,30 @@ export const api = createApi({
         url: "events/1/rewards",
         method: "GET",
       }),
-      transformResponse: (response: IResponseEventRewards) => response.eventRewards || [],
+      transformResponse: (response: IResponseEventRewards) =>
+        response.eventRewards || [],
       providesTags: ["Rewards"],
     }),
     //#endregion
     //#region getRandomQuestion
-    postAnswer: build.mutation<IReward, {correct_answers  : number}>({
+    postAnswer: build.mutation<IReward, { correct_answers: number }>({
       query: (body) => ({
         url: "events/1/calculate-reward",
         method: "POST",
         body,
       }),
-      transformResponse: (response: IResponseCalculate) => response.reward || {},
+      transformResponse: (response: IResponseCalculate) =>
+        response.reward || {},
       invalidatesTags: ["Rewards"],
     }),
     //#endregion
-
-        //#region getAllVouchers
-    getAllVouchers: build.query<IListResponse<IVoucher, 'vouchers'>, void>({
+    getAllVouchers: build.query<IListResponse<IVoucher, "vouchers">, void>({
       query: () => ({
         url: "vouchers",
         method: "GET",
       }),
       providesTags: ["Vouchers"],
-    })
-
-    //#endregion
+    }),
   }),
 });
 
@@ -144,10 +142,8 @@ export const {
   useGetEventRewardsQuery,
   usePostAnswerMutation,
   useGetRandomQuestionQuery,
+  useGetAllVouchersQuery,
 } = api;
+//#region getAllVouchers
 
-
-
-
-
-
+//#endregion
