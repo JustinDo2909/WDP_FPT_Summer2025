@@ -23,10 +23,15 @@ declare global {
     pageSize: number;
     totalPages: number;
   };
+
+  type IListResponse<T, N extends string> = Record<N, T[]> & {
+        success: boolean;
+  }
+
+  type IResponse<T, N extends string> = Record<N, T> & {
+        success: boolean;
+  }
 }
    
 
-    type IListResponse<T, N extends string> = Record<N, T[]> & {
-        success: boolean;
-    }
 

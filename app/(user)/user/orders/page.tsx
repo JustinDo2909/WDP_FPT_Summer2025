@@ -1,6 +1,5 @@
 'use client'
 
-import UserLayout from "../../../../components/UserPage/UserLayout";
 import OrdersList from "../../../../components/OrdersPage/OrdersList";
 import {
   Tabs,
@@ -17,7 +16,6 @@ export default function OrdersPage() {
   const orders = data?.orders
 
   return (
-    <UserLayout>
       <Box className="flex-1">
         <Tabs defaultValue="all">
           <TabsList>
@@ -34,6 +32,5 @@ export default function OrdersPage() {
           </TabsContent>
         </Tabs>
       </Box>
-    </UserLayout>
   );
 }

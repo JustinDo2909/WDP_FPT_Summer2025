@@ -117,7 +117,7 @@ declare global {
     benefits: string[]; // Core
   };
 
-  export interface IVoucher {
+  type IVoucher = {
     id: string;
     user_id: string;
     event_reward_id: string;
