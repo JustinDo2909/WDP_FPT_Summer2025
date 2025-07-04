@@ -1,6 +1,6 @@
 // components/ProductCard.tsx
 import React from "react";
-import { Star } from "lucide-react";
+import { ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import { Card, Column, Cover, Row, RText, Wrap } from "@/lib/by/Div";
 import { formatPrice } from "../../share/formatPrice";
@@ -62,20 +62,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
           {/* Rating & Favorite at the bottom */}
           <Row className="flex justify-between items-center w-full mt-auto">
-            <Row className="flex items-center justify-center text-yellow-500 text-xs">
+            <Row className="flex items-center justify-center text-yellow-500 text-sm">
               <RText className="mt-0.5 text-gray-800 mr-1 ">
                 {product?.rating != null
                   ? Number(product.rating).toFixed(2)
                   : "N/A"}
               </RText>
-              <Star size={14} className={`${"text-yellow-400 fill-current"}`} />
-              <RText className="text- text-gray-800 ml-1">
+              <Star size={18} className={`${"text-yellow-400 fill-current"}`} />
+              {/* <RText className="text- text-gray-800 ml-1">
                 <span>
                   {product?.reviews_count != null
                     ? Number(product.reviews_count)
                     : "N/A"}
                 </span>
-              </RText>
+              </RText> */}
             </Row>
 
             <Row className="flex items-center justify-center">
@@ -83,7 +83,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 <button className="text-white p-2 rounded-full items-center transition-colors duration-150 ease-in-out bg-primary hover:bg-primary-light active:scale-90">
                     <Row className="flex space-x-2 items-center">
             
-                                  <RText className="text-sm font-bold">Add To Cart</RText>
+                                  <RText className="text-sm font-bold">Add</RText> <ShoppingCart size={20}/>
                                   </Row>
 
                 </button>

@@ -9,6 +9,7 @@ import { fetchProducts } from "../seg"; // Added fetchProduct import
 import { fetchProductById } from "./seg";
 import { mproduct } from "@/constants";
 import { calculateDiscount } from "@/lib/share/calcDiscount";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 // Generate static parameters for static site generation
 export async function generateStaticParams() {
@@ -31,7 +32,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <Core className="min-h-screen bg-gray-100">
-      <Container className="flex flex-col flex-1 py-4 px-6 gap-4 max-w-7xl mx-auto sm:px-6 lg:px-8 sm:py-8">
+      <Container className="flex flex-col flex-1 py-4 px-6 gap-4 max-w-7xl mx-auto sm:px-6 lg:px-4 sm:py-10">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Products", href: "/products" }, {label: product.title}]} />
         <Area className="grid lg:grid-cols-2 gap-2 lg:gap-4">
           <Column className="flex flex-col">
             <ProductImages

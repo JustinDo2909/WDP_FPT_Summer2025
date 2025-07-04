@@ -38,9 +38,9 @@ const customBaseQuery = async (
       if (refreshResult.data) {
         result = await baseQuery(args, api, extraOptions);
       } 
-      // else {
-      //   toast.error("Session expired. Please log in again.");
-      // }
+      else {
+        toast.error("Session expired. Please log in again.");
+      }
     }
 
     // Only show error for actual error status codes (400+)
@@ -50,7 +50,7 @@ const customBaseQuery = async (
         errorData?.message ||
         result.error.status.toString() ||
         "An error occurred";
-      // toast.error(`Error: ${errorMessage}`);
+      toast.error(`${errorMessage}`);
     }
 
     const isMutationRequest =

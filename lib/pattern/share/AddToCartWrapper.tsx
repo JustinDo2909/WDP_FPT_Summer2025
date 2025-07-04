@@ -42,7 +42,7 @@ const AddToCartWrapper: React.FC<AddToCartWrapperProps> = ({
     <Wrap className="flex-1">
       {React.cloneElement(children, {
         onClick: handleClick,
-        disabled: isLoading || children.props.disabled || isExceedQuanity,
+        disabled: isLoading || (children.props?.disabled ?? false) || isExceedQuanity,
       })}
       {showErrorMsg && isExceedQuanity && (
         <RText className="text-red-500 text-sm mt-1">You&apos;ve added the maximum stock for this product.</RText>

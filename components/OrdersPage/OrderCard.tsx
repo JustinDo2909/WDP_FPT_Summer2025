@@ -23,30 +23,42 @@ export default function OrderCard({
       </Row>
       <Column className="divide-y">
         {orderItems.map((item) => (
-          <Link href={`/user/orders/${order.id}`} key={item.id} className="flex py-4 items-center">
-            <Image
-              width={64}
-              height={64}
-              src={item.image_url}
-              alt={item.title}
-              className="w-16 h-16 rounded object-cover mr-4"
-            />
-            <Begin className="flex-1">
-              <RText className="font-medium text-gray-900">{item.title}</RText>
-              <RText className="text-xs text-gray-500">x{item.quantity}</RText>
-            </Begin>
-
-            <Begin className="flex-1">
-              <RText className="text-xs text-gray-900">Price</RText>
-              <RText className=" text-gray-500">₫{item.price.toLocaleString()}</RText>
-            </Begin>
-            
-            <RText className="text-right">
-              <span className="text-pink-600 font-semibold">
-                ₫{(item.price*item.quantity).toLocaleString()}
-              </span>
-            </RText>
-          </Link>
+          <Row key={item.id} className="flex py-4 items-center w-full">
+            <Link
+              href={`/user/orders/${order.id}`}
+              className="flex items-center flex-1 min-w-0"
+            >
+              <Image
+                width={64}
+                height={64}
+                src={item.image_url}
+                alt={item.title}
+                className="w-16 h-16 rounded object-cover mr-4"
+              />
+              <Begin className="flex-1 min-w-0">
+                <RText className="font-medium text-gray-900 truncate">{item.title}</RText>
+                <RText className="text-xs text-gray-500">x{item.quantity}</RText>
+              </Begin>
+              <Begin className="flex-1">
+                <RText className="text-xs text-gray-900">Price</RText>
+                <RText className=" text-gray-500">₫{item.price.toLocaleString()}</RText>
+              </Begin>
+              <RText className="text-right">
+                <span className="text-pink-600 font-semibold">
+                  ₫{(item.price * item.quantity).toLocaleString()}
+                </span>
+              </RText>
+            </Link>
+            <Wrap className="ml-4">
+              <Link
+                href={`/products/${item.product_id}#reviews`}
+                className="px-3 py-1 bg-primary text-white rounded hover:bg-primary-dark transition-all text-xs"
+                scroll={true}
+              >
+                Review
+              </Link>
+            </Wrap>
+          </Row>
         ))}
       </Column>
       <Row className="flex justify-between items-center mt-4">

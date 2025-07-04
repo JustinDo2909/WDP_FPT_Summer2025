@@ -4,7 +4,7 @@ import { useLazyGetUserQuery } from "@/process/api/apiAuth";
 import { useEffect, useState } from "react";
 
 export const useUser = () => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<IUser>();
   const [loading, setLoading] = useState(true);
 
   const [triggerGetMe] = useLazyGetUserQuery(); // dùng lazy để gọi thủ công
@@ -17,7 +17,7 @@ export const useUser = () => {
           setUser(data.user);
           setLoading(false);
         })
-        .catch(() => setUser(null));
+        .catch(() => setUser(undefined));
     };
 
     fetchUser();
