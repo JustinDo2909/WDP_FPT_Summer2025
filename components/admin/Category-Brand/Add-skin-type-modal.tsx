@@ -4,7 +4,7 @@ import { X, Users, FileText } from "lucide-react";
 import { useEffect } from "react";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 import { useSkinTypeForm } from "@/components/admin/Category-Brand/seg/utils";
-import type { AddSkinTypeModalProps } from "@/types/category-brand/index";
+import type { AddSkinTypeModalProps } from "@/types/meta/index";
 
 export function AddSkinTypeModal({
   isOpen,

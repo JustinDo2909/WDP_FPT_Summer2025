@@ -66,3 +66,16 @@ export interface ApiResponse<T> {
   data: T;
   message?: string;
 }
+
+// Types for API requests
+export interface ItemRequest {
+  title: string;
+  description: string;
+  type: "category" | "brand" | "skinType";
+}
+
+// Simple API response type matching backend
+export interface SimpleApiResponse {
+  success: boolean;
+  message: string;
+}

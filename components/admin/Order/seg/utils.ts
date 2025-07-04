@@ -6,7 +6,7 @@ import {
   useGetAllOrdersQuery,
   useGetOrderDetailQuery,
   useUpdateOrderStatusMutation,
-} from "@/process/api/apiOrder";
+} from "@/process/api/api";
 
 // Hook quản lý orders với real API
 export const useOrdersLogic = () => {

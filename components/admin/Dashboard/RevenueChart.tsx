@@ -8,28 +8,35 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  ReferenceLine,
 } from "recharts";
 import {
   formatCurrency,
   formatCurrencyShort,
-  // getTotalYearRevenue,
-  // calculateMonthlyGrowth,
-  getMonthlyRevenueData,
+  calculateMonthlyRevenue,
 } from "@/components/admin/Dashboard/seg/utils";
 import { MoreHorizontal } from "lucide-react";
 import { TooltipProps } from "@/types/dashboard/index";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div/index";
+import { useEffect, useState } from "react";
+import { useGetAllOrdersQuery } from "@/process/api/api";
 
 interface RevenueChartProps {
   timeFilter: string;
   setTimeFilter: (value: string) => void;
 }
 
-export function RevenueChart({ timeFilter, setTimeFilter }: RevenueChartProps) {
-  const data = getMonthlyRevenueData();
-  // const totalRevenue = getTotalYearRevenue();
-  // const revenueGrowth = calculateMonthlyGrowth();
+export function RevenueChart({}: RevenueChartProps) {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // API query
+  const { data: ordersData, isLoading: ordersLoading } = useGetAllOrdersQuery();
+
+  // Calculate monthly revenue from API data
+  const orders = ordersData?.orders || [];
+  const data = calculateMonthlyRevenue(orders);
 
   const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
     if (active && payload && payload.length) {
@@ -44,6 +51,26 @@ export function RevenueChart({ timeFilter, setTimeFilter }: RevenueChartProps) {
     }
     return null;
   };
+
+  // Show loading state for both mounting and data loading
+  if (!isMounted || ordersLoading) {
+    return (
+      <Core className="bg-white rounded-lg shadow-sm border">
+        <Container className="p-6 border-b">
+          <Area className="flex items-center justify-between">
+            <Yard>
+              <RText className="text-lg font-semibold mb-1">
+                Monthly Sales
+              </RText>
+            </Yard>
+          </Area>
+        </Container>
+        <Yard className="p-6 animate-pulse">
+          <Core className="h-80 bg-gray-200 rounded"></Core>
+        </Yard>
+      </Core>
+    );
+  }
 
   return (
     <Core className="bg-white rounded-lg shadow-sm border">
@@ -79,16 +106,8 @@ export function RevenueChart({ timeFilter, setTimeFilter }: RevenueChartProps) {
               tickLine={false}
               axisLine={false}
               tickFormatter={(value) => formatCurrencyShort(value)}
-              domain={[0, 400000000]}
-              ticks={[0, 100000000, 200000000, 300000000, 400000000]}
             />
             <Tooltip content={<CustomTooltip />} />
-            <ReferenceLine
-              y={100000000}
-              stroke="#e5e7eb"
-              strokeDasharray="2 2"
-              strokeWidth={1}
-            />
             <Bar
               dataKey="revenue"
               fill="#3b82f6"

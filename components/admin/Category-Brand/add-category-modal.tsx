@@ -4,10 +4,7 @@ import { X, Tag, FileText } from "lucide-react";
 import { useEffect } from "react";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 import { useCategoryForm } from "@/components/admin/Category-Brand/seg/utils";
-import type {
-  AddCategoryModalProps,
-  CategoryOption,
-} from "@/types/category-brand/index";
+import type { AddCategoryModalProps, CategoryOption } from "@/types/meta/index";
 
 export function AddCategoryModal({
   isOpen,

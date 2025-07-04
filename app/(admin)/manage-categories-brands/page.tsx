@@ -9,12 +9,12 @@ import {
   useCategoriesBrandsLogic
 } from "@/components/admin/Category-Brand/seg/utils";
 import { StatsCard } from "@/components/admin/StatsCard";
-import { Area, Container, Core, RText, Yard } from "@/lib/by/Div";
 import type {
   BrandOption,
   CategoryOption,
   SkinTypeOption,
-} from "@/types/category-brand/index";
+} from "@/types/meta/index";
+import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 import {
   BarChart3,
   Building2,
@@ -349,7 +349,7 @@ export default function CategoriesBrandsPage() {
         {activeTab === "categories" && (
           <CustomTable
             data={categories}
-            columns={categoryColumns}
+            columns={categoryColumns }
             onAddItem={handleAddCategory}
             onExport={handleExportCategories}
             headerTitle="All Categories"
