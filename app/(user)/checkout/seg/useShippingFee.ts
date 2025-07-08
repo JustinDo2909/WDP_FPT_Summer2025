@@ -27,7 +27,6 @@ export function useShippingFeeHandler(shippingInfo: {
     if (!isReady) return;
 
     const payload = {
-      service_id: 53320,
       service_type_id: 2,
       to_district_id: Number(shippingInfo.to_district_id),
       to_ward_code: shippingInfo.to_ward_code,
