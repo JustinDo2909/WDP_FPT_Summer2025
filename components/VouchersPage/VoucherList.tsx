@@ -5,7 +5,7 @@ import { map } from "lodash";
 
 export default function VoucherList({ vouchers }: { readonly vouchers: IVoucher[] }) {
   return (
-    <Box>
+    <Box className="flex-col flex space-y-4">
       {map(vouchers, (voucher) => (
         <VoucherCard key={voucher.id} voucher={voucher} />
       ))}

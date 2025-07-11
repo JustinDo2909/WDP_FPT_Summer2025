@@ -39,6 +39,7 @@ export default function CartPage() {
             <CartSummary
               total={total}
               subtotal={subtotal}
+              voucherDiscount={0}
               actionButton={
                 <Link href="/checkout">
                   <Button
