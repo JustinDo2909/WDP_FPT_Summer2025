@@ -542,10 +542,21 @@ export const api = createApi({
       transformResponse: (response: VouchersResponse) => response.vouchers,
       providesTags: ["Vouchers"],
       keepUnusedDataFor: 300, // 5 minutes cache
-
   }),
 
     //#endregion
+
+    //#region UserVouchers
+    getUserVouchers: build.query<IResponse<IVoucher[], 'vouchers'>, void>({
+      query: () => ({
+        url: "vouchers",
+        method: "GET",
+      }),
+      providesTags: ["Vouchers"],
+  }),
+
+    //#endregion
+
 
     //#region getReviewsById
     getReviewsById: build.query<IResponse<IReview, 'reviews'>, string>({
@@ -629,6 +640,7 @@ export const {
 
   // Vouchers
   useGetAllVouchersQuery,
+  useGetUserVouchersQuery,
   useGetOrderByIdQuery,
   useLazyGetReviewsByIdQuery,
   usePostReviewMutation

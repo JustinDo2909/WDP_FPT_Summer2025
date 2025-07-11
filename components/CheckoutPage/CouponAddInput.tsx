@@ -1,141 +1,101 @@
-import * as React from "react";
+'use client';
+
+import { useMemo, useState } from "react";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import Button from "../CustomButton";
-import { formatPrice } from "@/lib/share/formatPrice";
-import { Row, Wrap, Column } from "@/lib/by/Div";
-
-// The IVoucher interface remains the same
-export interface IVoucher {
-  id: string;
-  user_id: string;
-  event_reward_id: string;
-  stripe_coupon_id: string;
-  discount_value: number;
-  type: "PERCENT" | "AMOUNT";
-  redeemed: boolean;
-  redeemed_at: string | null;
-  created_at: string;
-}
+import { Row, Wrap } from "@/lib/by/Div";
+import { calculateVoucherSavings, formatDiscount } from "./seg/calculateVoucherDiscount";
+import { VoucherItem } from "./VoucherItem";
 
 interface CouponAddInputProps {
   vouchers?: IVoucher[];
+  setVoucherDiscount: (voucherDiscount: number) => void;
   onSelect: (voucher: IVoucher) => void;
+  cartItems: ICartLineItem[];
 }
 
-// Helper function to format the discount for display
-const formatDiscount = (voucher: IVoucher) => {
-  return voucher.type === "PERCENT"
-    ? `${voucher.discount_value}% OFF`
-    : `${formatPrice(voucher.discount_value)} OFF`;
-};
+export const CouponAddInput: React.FC<CouponAddInputProps> = ({
+  vouchers,
+  setVoucherDiscount,
+  onSelect,
+  cartItems,
+}) => {
+  const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
 
-// A dedicated component for rendering the voucher item for better readability
-const VoucherItem: React.FC<{ voucher: IVoucher }> = ({ voucher }) => {
-  const isRedeemed = voucher.redeemed;
-
-  const voucherClasses = `
-    relative w-full p-4 min-w-72 rounded-lg border-2 border-dashed transition-all duration-200
-    ${isRedeemed
-      ? 'border-gray-300 bg-gray-50 opacity-60 cursor-not-allowed'
-      : 'border-primary-light bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100'
-    }
-  `;
-  
-  const statusClasses = `
-    px-2 py-1 rounded-full text-xs font-medium uppercase tracking-wide
-    ${isRedeemed
-      ? 'bg-red-100 text-red-700'
-      : 'bg-green-100 text-green-700'
-    }
-  `;
-
-  return (
-    <Wrap className={voucherClasses}>
-      <Row className="flex items-start justify-between relative z-10">
-        <Column className="flex flex-col">
-          <Row className="flex items-center gap-2">
-            <span className="text-lg font-bold text-gray-800">
-              {formatDiscount(voucher)}
-            </span>
-          </Row>
-          <span className="text-xs text-gray-500 mt-1">
-            Coupon 
-          </span>
-        </Column>
-
-        <Column className="flex flex-col items-end">
-          <Wrap className={statusClasses}>
-            {isRedeemed ? "Used" : "Valid"}
-          </Wrap>
-          {!isRedeemed && (
-            <Wrap className="text-xs text-gray-500 mt-1">
-              Expires soon
-            </Wrap>
-          )}
-        </Column>
-      </Row>
-       {/* Voucher pattern background */}
-       <Wrap className="absolute inset-0 opacity-5 pointer-events-none">
-          <Wrap className="w-full h-full" style={{
-            backgroundImage: `radial-gradient(circle at 25% 25%, currentColumnor 2px, transparent 2px),
-                             radial-gradient(circle at 75% 75%, currentColumnor 2px, transparent 2px)`,
-            backgroundSize: '20px 20px'
-          }}></Wrap>
-        </Wrap>
-    </Wrap>
+  const cartProductIds = useMemo(
+    () => cartItems.map(item => item.product_id),
+    [cartItems]
   );
-};
 
+  const sortedVouchers = useMemo(() => {
+    if (!vouchers) return [];
+    return vouchers
+      .map(voucher => {
+        const applicable = Array.isArray(voucher.voucherProducts) &&
+          voucher.voucherProducts.some(vp => cartProductIds.includes(vp.product.id));
+        const savings = applicable ? calculateVoucherSavings(voucher, cartItems) : 0;
+        return { voucher, applicable, savings };
+      })
+      .sort((a, b) => {
+        if (a.applicable !== b.applicable) return a.applicable ? -1 : 1;
+        return b.savings - a.savings; // Sort by savings in descending order
+      });
+  }, [vouchers, cartProductIds, cartItems]);
 
-export const CouponAddInput: React.FC<CouponAddInputProps> = ({ vouchers, onSelect }) => {
-  const [selectedId, setSelectedId] = React.useState<string | undefined>(undefined);
-  const selectedVoucher = vouchers?.find(v => v.id === selectedId);
+  const selected = sortedVouchers.find(v => v.voucher.id === selectedId);
 
-  // Decoupled handler: Selecting only updates the state. The button click triggers the onSelect prop.
-  const handleAddClick = () => {
-    if (selectedVoucher) {
-      onSelect(selectedVoucher);
-      // Optional: Clear selection after adding
-      // setSelectedId(undefined); 
+  const handleApply = () => {
+    if (selected?.voucher && selected.applicable) {
+      const discount = calculateVoucherSavings(selected.voucher, cartItems);
+      onSelect(selected.voucher);
+      setVoucherDiscount(discount);
     }
   };
 
   return (
-    // The `items-end` class will align the bottom of the Select and Button for a cleaner look
     <Row className="flex items-end gap-2">
       <Select value={selectedId} onValueChange={setSelectedId}>
-        {/* Removed fixed height `h-20` to allow for natural content height and better alignment with button */}
-        <SelectTrigger className="w-80 border-2 border-dashed border-primary bg-gradient-to-r from-primary/5 to-primary/10 hover:from-primary/10 hover:to-primary/15 transition-all duration-200 focus-visible:ring-0">
-          <SelectValue placeholder="🎫 Select a voucher" className="text-primary font-medium">
-            {/* When a voucher is selected, display its value in the trigger */}
-            {selectedVoucher ? (
-              <span className="text-primary font-semibold">{formatDiscount(selectedVoucher)}</span>
+        <SelectTrigger className="
+          w-[450px] border-2 border-dashed border-primary
+          bg-gradient-to-r from-primary/5 to-primary/10
+          hover:from-primary/10 hover:to-primary/15
+          transition-all duration-200 focus-visible:ring-0
+        ">
+          <SelectValue placeholder="🎫 Select a voucher">
+            {selected?.voucher ? (
+              <span className="text-primary font-semibold">{formatDiscount(selected.voucher)}</span>
             ) : (
-              "🎫 Select a voucher"
+              "Select a voucher"
             )}
           </SelectValue>
         </SelectTrigger>
-        <SelectContent className="w-80">
-          {vouchers?.length === 0 && (
-            <Wrap className="px-4 py-2 text-muted-foreground">No coupons available</Wrap>
+        <SelectContent className="w-[450px] max-h-[400px] overflow-y-auto">
+          {sortedVouchers.length === 0 && (
+            <Wrap className="px-4 py-2 text-muted-foreground">
+              No coupons available
+            </Wrap>
           )}
-          {vouchers?.map(voucher => (
+          {sortedVouchers.map(({ voucher, applicable }) => (
             <SelectItem
               key={voucher.id}
               value={voucher.id}
-              disabled={voucher.redeemed}
-              className="p-0 focus:bg-transparent" // Use p-0 to let child fill the space
+              disabled={voucher.redeemed || !applicable}
+              className="py-1 px-0 focus:bg-transparent"
             >
-              <VoucherItem voucher={voucher} />
+              <VoucherItem
+                voucher={voucher}
+                applicable={applicable}
+                cartItems={cartItems}
+              />
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
       <Button
-        label={'Apply'}
+        label="Apply"
         type="button"
-        disabled={!selectedId}
-        onClick={handleAddClick}
+        disabled={!selected?.voucher || !selected.applicable}
+        onClick={handleApply}
       />
     </Row>
   );
