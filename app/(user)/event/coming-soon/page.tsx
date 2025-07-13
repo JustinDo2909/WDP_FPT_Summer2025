@@ -28,7 +28,7 @@ export default function ComingSoonPage() {
 
       <Section className="relative z-10 flex flex-col items-center justify-center text-center gap-6 max-w-4xl mx-auto py-12 px-6 bg-black/40 rounded-xl backdrop-blur-sm shadow-2xl border border-purple-800">
         <RText className="text-5xl md:text-7xl font-extrabold text-[#FFD700] drop-shadow-lg animate-fade-in-up">
-          Coming Soon!
+          Comming Soon!
         </RText>
 
         <RText className="text-2xl md:text-4xl font-bold text-[#9747FF] animate-fade-in-up delay-200">
