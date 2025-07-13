@@ -1,10 +1,10 @@
-import Quiz from "@/components/Quiz/Quiz";
+import Quiz_game from "@/components/Event/Quiz/quiz_game";
+import { Container } from "@/lib/by/Div";
 
 export default function Game() {
   return (
-  <main className="flex min-h-screen items-center justify-center">
-  <Quiz />
-</main>
-
+    <Container>
+      <Quiz_game />
+    </Container>
   );
 }

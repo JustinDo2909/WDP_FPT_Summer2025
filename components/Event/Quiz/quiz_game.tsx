@@ -17,9 +17,6 @@ export default function QuizGame() {
     return <MenuQuiz onPlay={() => setHasStarted(true)} />;
   }
 
-  console.log(fetchTierRewards, "Reward");
-  console.log(fetchQuestions, "q");
-
   return (
     <GamePlay
       questions={fetchQuestions?.questions ?? []}

@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { VITAMINS, HARMFUL_ITEMS, MULTIPLIERS } from "@/constants";
-
+type GameState = "menu" | "modeSelect" | "playing" | "gameOver";
 export function useGameLogic(
   gameModes: { [key: string]: GameMode },
   selectedMode: string,
   gameState: string,
-  setGameState: (state: string) => void
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>
 ) {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30);

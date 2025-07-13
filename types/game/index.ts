@@ -40,4 +40,16 @@ declare global {
       basketSize: { width: number; height: number };
     };
   }
+
+  interface GameLogic {
+    score: number;
+    timeLeft: number;
+    powerUp: PowerUp | null;
+    basket: Basket;
+    gameItems: GameItem[];
+    CANVAS_WIDTH: number;
+    CANVAS_HEIGHT: number;
+    gameLoopRef: React.MutableRefObject<number>;
+    updateGame: () => void;
+  }
 }

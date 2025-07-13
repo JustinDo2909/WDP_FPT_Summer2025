@@ -6,7 +6,7 @@ import { useImageLoader } from "@/hooks/useImageLoader";
 import GameUI from "./gameUI";
 
 interface GameCanvasProps {
-  gameLogic: any;
+  gameLogic: GameLogic;
   selectedMode: string;
   currentMode: GameMode;
   onEndGame: () => void;
@@ -96,7 +96,7 @@ export default function GameCanvas({
     ctx.stroke();
 
     // Draw game items
-    gameLogic.gameItems.forEach((item: any) => {
+    gameLogic.gameItems.forEach((item: GameItem) => {
       ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
       ctx.shadowBlur = 8;
       ctx.shadowOffsetY = 3;
@@ -171,6 +171,7 @@ export default function GameCanvas({
         cancelAnimationFrame(gameLogic.gameLoopRef.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameLoop]);
 
   return (
