@@ -24,6 +24,15 @@ declare global {
     totalPages: number;
   };
 
+  type IListResponse<T, N extends string> = Record<N, T[]> & {
+        success: boolean;
+  }
+
+  type IResponse<T, N extends string> = Record<N, T> & {
+        success: boolean;
+  }
+}
+   
   //region Event
   type QuizQuestion = {
     id: string;

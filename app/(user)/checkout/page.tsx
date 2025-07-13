@@ -1,50 +1,58 @@
 "use client";
 
 import CartSummary from "@/components/CartPage/CartSummary";
-import GHNForm from "@/components/CheckoutPage/GHTKForm";
+import AddressSelector from "@/components/CheckoutPage/AddressSelector";
+import CouponAddInput from "@/components/CheckoutPage/CouponAddInput";
 import Button from "@/components/CustomButton";
 import { Box, Core, Row, RText, Section } from "@/lib/by/Div";
-import { validateVietnamesePhoneNumber } from "@/lib/share/validateVNNumber";
-import Link from "next/link";
-import { useState } from "react";
-import { useShippingFeeHandler } from "./seg/useShippingFee";
+import { useGetAllVouchersQuery } from "@/process/api/api";
 import { useGetCartQuery } from "@/process/api/apiCart";
+import { useState } from "react";
 import {
   calculateCartTotal,
   calculateCartTotalOriginalPrice,
 } from "./seg/calculateSubtotal";
+import { useHandleCheckout } from "./seg/useHandleCheckout";
+import { useShippingFeeHandler } from "./seg/useShippingFee";
 
 export default function CheckoutPage() {
-  const [shippingInfo, setShippingInfo] = useState({
-    province: "",
-    district: "",
-    ward: "",
-    fullname: "",
-    phone_number: "",
-    street_address: "",
-  });
+  // const [shippingInfo, setShippingInfo] = useState<IAddress>({
+  //   to_city_id: "",
+  //   to_ward_code: "",
+  //   city: "",
+  //   district: "",
+  //   ward: "",
+  //   fullname: "",
+  //   phone: "",
+  //   address: "",
+  //   user_id: "",
+  //   pincode: "",
+  //   notes: "",
+  // });
+
+  const [selectedAddress, setSelectedAddress] = useState<IAddress>();
+  const [voucher, setVoucher] = useState<IVoucher>();
 
   const {
-    handleGetShippingFee,
     shippingFee,
     feeLoading,
     isRouteHasService,
     serviceNotAvailableText,
-  } = useShippingFeeHandler(shippingInfo);
+  } = useShippingFeeHandler({
+    to_district_id: selectedAddress?.to_city_id ?? "",
+    to_ward_code: selectedAddress?.to_ward_code ?? "",
+  });
 
-  const isFilled =
-    shippingInfo.street_address &&
-    shippingInfo.fullname &&
-    validateVietnamesePhoneNumber(shippingInfo.phone_number) &&
-    isRouteHasService;
+  const { handleCheckout, isLoading } = useHandleCheckout();
+  const { data: dataVouchers } = useGetAllVouchersQuery();
+
+  const isFilled = selectedAddress && isRouteHasService;
 
   const { data: cartData } = useGetCartQuery();
   const cart = cartData?.cart;
   const cartItems = cart?.cartItems || [];
   const total = calculateCartTotal(cartItems);
   const subtotal = calculateCartTotalOriginalPrice(cartItems);
-
-  //todo: Make shipping add button
 
   return (
     <Core className="p-4 md:p-8 min-h-screen ">
@@ -55,22 +63,36 @@ export default function CheckoutPage() {
       </Row>
 
       <Section className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-7xl mx-auto">
-        <GHNForm
+        {/* <GHNForm
           shippingInfo={shippingInfo}
           setShippingInfo={setShippingInfo}
           getShippingFeeOnWardChange={handleGetShippingFee}
-        />
+        /> */}
+        <Box className="flex col-span-3 flex-col space-y-4">
+          <CouponAddInput
+            vouchers={dataVouchers?.vouchers}
+            onSelect={setVoucher}
+          />
+          <AddressSelector
+            selectedAddress={selectedAddress}
+            setSelectedAddress={setSelectedAddress}
+          />
+        </Box>
 
         <Box className="">
           <CartSummary
             shippingLoading={feeLoading}
+            voucherApplied={voucher}
             shipping={shippingFee?.data?.total}
             total={total}
             subtotal={subtotal}
             actionButton={
-              <Link href="/checkout">
+              // <Link href="/checkout">
                 <Button
-                  disabled={!isFilled}
+                  onClick={() => {
+                    handleCheckout(shippingFee.data.total ?? 0, String(selectedAddress?.id), voucher?.stripe_coupon_id ?? "")
+                  }}
+                  disabled={!isFilled || isLoading}
                   label={
                     <RText className="flex items-center text-base font-bold leading-none whitespace-nowrap">
                       Pay with
@@ -101,7 +123,7 @@ export default function CheckoutPage() {
                   }
                   className="flex-1 h-12 w-full flex bg-gradient-to-r from-pink-500 to-rose-500 text-white py-2 px-4 rounded-lg font-medium hover:from-pink-600 hover:to-rose-600 transform hover:scale-105 transition-all duration-200 shadow-lg items-center justify-center text-sm"
                 />
-              </Link>
+              // </Link>
             }
           />
           {!isRouteHasService && (

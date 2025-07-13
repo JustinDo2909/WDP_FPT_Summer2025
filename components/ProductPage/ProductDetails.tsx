@@ -2,6 +2,7 @@ import { mproduct } from "@/constants";
 import { Card, Area, Begin } from "@/lib/by/Div";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/lib/pattern/share/Tabs";
 import { map } from "lodash";
+import ReviewSection from "./ReviewSection";
 
 export function ProductDetailsTabs({
   productData,
@@ -35,7 +36,7 @@ export function ProductDetailsTabs({
             <p>{productData.how_to_use}</p>
           </TabsContent>
           <TabsContent value="reviews">
-            <p>No reviews yet.</p>
+            <ReviewSection productId={productData.id} />
           </TabsContent>
         </Area>
       </Tabs>

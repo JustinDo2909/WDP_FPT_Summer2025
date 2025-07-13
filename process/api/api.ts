@@ -1,3 +1,11 @@
+import {
+  IEventRewards,
+  IQuestions,
+  IResponseCalculate,
+  IResponseEventRewards,
+  IResponseQuestions,
+  IReward,
+} from "@/types/quiz";
 import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
@@ -43,7 +51,23 @@ const customBaseQuery = async (
 export const api = createApi({
   baseQuery: customBaseQuery,
   reducerPath: "api",
-  tagTypes: ["Products"],
+  tagTypes: [
+    "Products",
+    "Categories",
+    "Brands",
+    "SkinTypes",
+    "Meta",
+    "ProductMeta",
+    "Orders",
+    "OrderDetail",
+    "Event",
+    "Question",
+    "Reward",
+    "Vouchers",
+    "Questions",
+    "Rewards",
+    "Reviews",
+  ],
   endpoints: (build) => ({
     //#region getProducts
     getProducts: build.query<any, ProductQueryParams>({
@@ -58,10 +82,11 @@ export const api = createApi({
         sale,
       }) => {
         const params = new URLSearchParams();
-
+        params.append("page", page.toString());
+        // params.append("pageSize", pageSize.toString());
+        if (title) params.append("title", title);
         if (category) params.append("category", category);
         if (brand) params.append("brand", brand);
-        if (title) params.append("title", title);
         if (skinType) params.append("skinType", skinType);
         params.append("page", page.toString());
         params.append("limit", limit.toString());
@@ -71,6 +96,7 @@ export const api = createApi({
       },
       providesTags: ["Products"],
     }),
+    //#endregion
     //#endregion
 
     //#region getProductsMeta
@@ -82,7 +108,139 @@ export const api = createApi({
       providesTags: ["Products"],
     }),
     //#endregion
+
+    //#region getRandomQuestion
+    getRandomQuestion: build.query<IQuestions[], void>({
+      query: () => ({
+        url: "events/1/questions/random",
+        method: "GET",
+      }),
+      transformResponse: (response: IResponseQuestions) =>
+        response.questions || [],
+      providesTags: ["Questions"],
+    }),
+
+    //#endregion
+    //#region getRandomQuestion
+    getEventRewards: build.query<IEventRewards[], void>({
+      query: () => ({
+        url: "events/1/rewards",
+        method: "GET",
+      }),
+      transformResponse: (response: IResponseEventRewards) =>
+        response.eventRewards || [],
+      providesTags: ["Rewards"],
+    }),
+    //#endregion
+    //#region getRandomQuestion
+    postAnswer: build.mutation<IReward, { correct_answers: number }>({
+      query: (body) => ({
+        url: "events/1/calculate-reward",
+        method: "POST",
+        body,
+      }),
+      transformResponse: (response: IResponseCalculate) =>
+        response.reward || {},
+      invalidatesTags: ["Rewards"],
+    }),
+    //#endregion
+    getAllVouchers: build.query<IListResponse<IVoucher, "vouchers">, void>({
+      query: () => ({
+        url: "vouchers",
+        method: "GET",
+      }),
+      providesTags: ["Vouchers"],
+      keepUnusedDataFor: 300, // 5 minutes cache
+    }),
+
+    //#endregion
+
+    //#region getReviewsById
+    getReviewsById: build.query<IResponse<IReview, "reviews">, string>({
+      query: (id) => ({
+        url: `reviews/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Reviews"],
+    }),
+
+    //#endregion
+
+    //#region getOrderById
+    getOrderById: build.query<IResponse<IOrder, "order">, string>({
+      query: (id) => ({
+        url: `orders/details/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Orders"],
+    }),
+
+    //#endregion
+
+    //#region postReview
+    postReview: build.mutation<
+      IReview,
+      { productId: string; reviewValue: number; reviewMessage: string }
+    >({
+      query: (payload) => ({
+        url: `reviews/add`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["Reviews"],
+    }),
   }),
 });
 
-export const { useGetProductsQuery } = api;
+export const {
+  useGetProductsQuery,
+  useGetEventRewardsQuery,
+  usePostAnswerMutation,
+  useGetRandomQuestionQuery,
+  useGetAllVouchersQuery,
+  useGetOrderByIdQuery,
+  useLazyGetReviewsByIdQuery,
+  usePostReviewMutation,
+} = api;
+
+// import { Api, BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
+// import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+// import Cookies from "js-cookie";
+// import { toast } from "sonner";
+
+// const customBaseQuery = async (
+//   args: string | FetchArgs,
+//   api: BaseQueryApi,
+//   extraOptions: any
+// ) => {
+//   const baseQuery = fetchBaseQuery({
+//     baseUrl: "https://cosme-play-be.vercel.app/api/",
+//     credentials: "include",
+//     prepareHeaders: async (headers) => {
+//       const token = Cookies.get("authToken");
+//       if (token) {
+//         headers.set("Authorization", `Bearer ${token}`);
+//       }
+//       return headers;
+//     },
+//   });
+
+//   try {
+//     const result: any = await baseQuery(args, api, extraOptions);
+
+//     if (result.error) {
+//       const errorMessage = result.error.data?.message || "An error occurred";
+//       toast.error(`Error: ${errorMessage}`);
+//       return { error: result.error }; // Trả về lỗi ngay lập tức
+//     }
+
+//     return result; // ✅ Không truy cập result.data.data
+//   } catch (error) {
+//     return {
+//       error: {
+//         status: "FETCH_ERROR",
+//         error: (error as Error).message || "Unknown error",
+//       },
+//     };
+//   }
+// };

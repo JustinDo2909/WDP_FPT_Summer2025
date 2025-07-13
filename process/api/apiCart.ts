@@ -2,7 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import customBaseQuery from "./customFetchBase";
 
 export const apiCart = createApi({
-  baseQuery: customBaseQuery, // Assumes cookies are handled here
+  baseQuery: customBaseQuery,
   reducerPath: "apiCart",
   tagTypes: ["Carts"],
   endpoints: (build) => ({
@@ -14,7 +14,7 @@ export const apiCart = createApi({
       }),
       providesTags: ["Carts"],
     }),
-    //#endregion 
+    //#endregion
 
     //#region addToCart
     addToCart: build.mutation<any, { productId: string; quantity: number }>({
@@ -25,7 +25,7 @@ export const apiCart = createApi({
       }),
       invalidatesTags: ["Carts"],
     }),
-    //#endregion 
+    //#endregion
 
     //#region updateCart
     updateCart: build.mutation<any, { productId: string; quantity: number }>({
@@ -36,7 +36,7 @@ export const apiCart = createApi({
       }),
       invalidatesTags: ["Carts"],
     }),
-    //#endregion 
+    //#endregion
 
     //#region removeFromCart
     removeFromCart: build.mutation<any, string>({
@@ -46,7 +46,7 @@ export const apiCart = createApi({
       }),
       invalidatesTags: ["Carts"],
     }),
-    //#endregion 
+    //#endregion
   }),
 });
 

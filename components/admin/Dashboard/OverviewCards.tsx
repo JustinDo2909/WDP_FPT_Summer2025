@@ -4,71 +4,122 @@ import {
   DollarSign,
   ShoppingCart,
   Users,
-  Star,
+  Package,
   TrendingUp,
 } from "lucide-react";
 import {
   formatCurrency,
-  getTotalYearRevenue,
-  calculateMonthlyGrowth,
-} from "@/app/(admin)/dashboard/seg/utils";
-import map from "lodash/map";
-import { Area, Block, Section, Anchor } from "@/lib/by/Div/index";
+  calculateDashboardStats,
+} from "@/components/admin/Dashboard/seg/utils";
+import { StatsCard } from "@/components/admin/StatsCard";
+import { Area, Core, Yard, Block } from "@/lib/by/Div/index";
+import { useEffect, useState } from "react";
+import { useGetAllOrdersQuery } from "@/process/api/api";
+import { useGetAllUsersQuery } from "@/process/api/apiUser";
+import { useGetProductsQuery } from "@/process/api/api";
 
 export function OverviewCards() {
-  const totalRevenue = getTotalYearRevenue();
-  const revenueGrowth = calculateMonthlyGrowth();
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // API queries
+  const { data: ordersData, isLoading: ordersLoading } = useGetAllOrdersQuery();
+  const { data: usersData, isLoading: usersLoading } = useGetAllUsersQuery();
+  const { data: productsData, isLoading: productsLoading } =
+    useGetProductsQuery({
+      page: 1,
+      pageSize: 1000, // Get all products for count
+    });
+
+  // Calculate stats from API data
+  const orders = ordersData?.orders || [];
+  const users = usersData || [];
+  const products = productsData?.products || [];
+
+  const stats = calculateDashboardStats(orders, users, products);
 
   const cards = [
     {
       title: "Total Revenue",
-      value: formatCurrency(totalRevenue),
+      value: formatCurrency(stats.totalRevenue),
       icon: DollarSign,
-      gradient: "from-blue-500 to-blue-600",
-      change: `+${revenueGrowth}% from last month`,
+      iconColor: "text-blue-600",
+      iconBgColor: "bg-blue-50",
+      valueColor: "text-blue-600",
+      change: `${stats.totalOrders} orders completed`,
     },
     {
       title: "Orders",
-      value: "1,234",
+      value: stats.totalOrders.toString(),
       icon: ShoppingCart,
-      gradient: "from-green-500 to-green-600",
-      change: "+8.2% from last week",
+      iconColor: "text-green-600",
+      iconBgColor: "bg-green-50",
+      valueColor: "text-green-600",
+      change: `Total orders processed`,
     },
     {
       title: "Customers",
-      value: "8,945",
+      value: stats.totalCustomers.toString(),
       icon: Users,
-      gradient: "from-purple-500 to-purple-600",
-      change: "+156 new this week",
+      iconColor: "text-purple-600",
+      iconBgColor: "bg-purple-50",
+      valueColor: "text-purple-600",
+      change: `Registered customers`,
     },
     {
-      title: "Reviews",
-      value: "4.8",
-      icon: Star,
-      gradient: "from-pink-500 to-pink-600",
-      change: "23 new reviews",
+      title: "Products",
+      value: stats.totalProducts.toString(),
+      icon: Package,
+      iconColor: "text-pink-600",
+      iconBgColor: "bg-pink-50",
+      valueColor: "text-pink-600",
+      change: `Products in catalog`,
     },
   ];
 
+  // Show loading state for both mounting and data loading
+  if (!isMounted || ordersLoading || usersLoading || productsLoading) {
+    return (
+      <Area className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <Core
+            key={index}
+            className="bg-white p-6 rounded-lg shadow-sm border animate-pulse"
+          >
+            <Yard className="flex items-center justify-between">
+              <Block>
+                <Block className="h-4 bg-gray-200 rounded w-20 mb-2"></Block>
+                <Block className="h-8 bg-gray-200 rounded w-16"></Block>
+              </Block>
+              <Block className="h-12 w-12 bg-gray-200 rounded-full"></Block>
+            </Yard>
+            <Block className="h-3 bg-gray-200 rounded w-24 mt-4"></Block>
+          </Core>
+        ))}
+      </Area>
+    );
+  }
+
   return (
-    <Area className="grid gap-4 md:grid-cols-4">
-      {map(cards, (card, index) => (
-        <Section
+    <Area className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      {cards.map((card, index) => (
+        <StatsCard
           key={index}
-          className={`bg-gradient-to-br ${card.gradient} text-white border-0 rounded-lg shadow-sm`}
-        >
-          <Anchor className="flex flex-row items-center justify-between space-y-0 pb-2 p-6">
-            <h3 className="text-sm font-medium opacity-90">{card.title}</h3>
-            <card.icon className="h-4 w-4 opacity-90" />
-          </Anchor>
-          <Anchor className="px-6 pb-6">
-            <Block className="text-2xl font-bold">{card.value}</Block>
-            <p className="text-xs opacity-90">
-              <TrendingUp className="inline h-3 w-3 mr-1" />
+          title={card.title}
+          value={card.value}
+          icon={card.icon}
+          iconColor={card.iconColor}
+          iconBgColor={card.iconBgColor}
+          valueColor={card.valueColor}
+          description={
+            <span className="flex items-center gap-1 text-xs text-gray-500">
+              <TrendingUp className="h-3 w-3" />
               {card.change}
-            </p>
-          </Anchor>
-        </Section>
+            </span>
+          }
+        />
       ))}
     </Area>
   );

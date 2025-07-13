@@ -1,4 +1,3 @@
-import { IGame } from "./index";
 declare global {
   type IProduct = {
     id: string;
@@ -47,13 +46,13 @@ declare global {
     skinTypes: ISkinType[];
   };
   type IReview = {
-    review_id: number;
-    product_id: number;
-    r_id: string;
-    r_name: string;
-    r_value: number;
-    r_message: string;
-    created_at: string;
+    id: string;
+    user_id: string;
+    product_id: string;
+    user_name: string;
+    review_value: number;
+    review_message: string;
+    createdAt: string;
   };
 
   type IThumbnail = {
@@ -116,6 +115,22 @@ declare global {
     warnings: string[]; // Core
     benefits: string[]; // Core
   };
+
+  type IVoucher = {
+    id: string;
+    user_id: string;
+    event_reward_id: string;
+    stripe_coupon_id: string;
+    discount_value: number;
+    type: "PERCENT" | "AMOUNT";
+    redeemed: boolean;
+    redeemed_at: string | null;
+    created_at: string;
+  }
+
+
+
+
 }
 
 export type {
@@ -140,4 +155,5 @@ export type IGame = {
 
 export type ListGame = {
   listGame: IGame[];
+  IVoucher : IVoucher
 };

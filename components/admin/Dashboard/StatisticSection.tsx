@@ -1,13 +1,12 @@
 "use client";
 
-import { TrendingUp, TrendingDown } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import {
   formatCurrency,
-  getTopProductsData,
-  getTopCustomersData,
-  getCategoryDistribution,
-} from "@/app/(admin)/dashboard/seg/utils";
+  calculateTopCustomers,
+  calculateCategoryDistribution,
+  getCurrentMonthOrders,
+} from "@/components/admin/Dashboard/seg/utils";
 import map from "lodash/map";
 import { StatisticsSectionProps } from "@/types/dashboard/index";
 import {
@@ -15,30 +14,234 @@ import {
   Yard,
   Section,
   Anchor,
-  Box,
-  Column,
-  Row,
-  Card,
+  Core,
+  Container,
   Block,
   RText,
 } from "@/lib/by/Div/index";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
+import {
+  useGetAllOrdersQuery,
+  useGetProductsQuery,
+  useGetMetaDataQuery,
+  api,
+} from "@/process/api/api";
+import { useGetAllUsersQuery } from "@/process/api/apiUser";
+import type { OrderDetail, OrderItem } from "@/types/order";
+import { store } from "@/process/api/redux";
+
+// Custom hook to fetch multiple order details using Redux API
+const useMultipleOrderDetails = (orderIds: string[]) => {
+  const [orderDetails, setOrderDetails] = useState<OrderDetail[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchOrderDetails = useCallback(async (ids: string[]) => {
+    if (ids.length === 0) {
+      setOrderDetails([]);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // eslint-disable-next-line no-console
+      console.log("🔄 Fetching details for", ids.length, "orders:", ids);
+
+      // Use Redux API dispatch to fetch order details
+      const detailPromises = ids.map(async (orderId) => {
+        try {
+          const result = await store.dispatch(
+            api.endpoints.getOrderDetail.initiate(orderId)
+          );
+
+          if (result.data?.order) {
+            return result.data.order;
+          }
+          return null;
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(`❌ Error fetching order ${orderId}:`, error);
+          return null;
+        }
+      });
+
+      const details = await Promise.all(detailPromises);
+      const validDetails = details.filter(
+        (detail) => detail !== null
+      ) as OrderDetail[];
+
+      validDetails.forEach((order) => {
+        console.log(`📦 Order ${order.id}:`, {
+          itemsCount: order.orderItems?.length || 0,
+          items:
+            order.orderItems?.map(
+              (item) => `${item.title} (qty: ${item.quantity})`
+            ) || [],
+          total: order.total_amount,
+        });
+      });
+
+      setOrderDetails(validDetails);
+    } catch (error) {
+      console.error(" Error fetching order details:", error);
+      setOrderDetails([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Track previous IDs to avoid unnecessary refetches
+  const previousIdsRef = useRef<string>("");
+  const currentIdsString = JSON.stringify([...orderIds].sort());
+
+  useEffect(() => {
+    if (previousIdsRef.current !== currentIdsString) {
+      previousIdsRef.current = currentIdsString;
+      fetchOrderDetails(orderIds);
+    }
+  }, [currentIdsString, fetchOrderDetails, orderIds]);
+
+  return { orderDetails, isLoading };
+};
+
+// Calculate real top products from order details
+const calculateRealTopProducts = (orderDetails: OrderDetail[]) => {
+  const productCount: {
+    [key: string]: { name: string; count: number; totalRevenue: number };
+  } = {};
+
+  orderDetails.forEach((order) => {
+    if (order.orderItems && order.orderItems.length > 0) {
+      order.orderItems.forEach((item: OrderItem) => {
+        const productId = item.product_id;
+        const productName = item.title;
+        const revenue = (item.price || 0) * (item.quantity || 0);
+
+        if (productCount[productId]) {
+          productCount[productId].count += item.quantity || 1;
+          productCount[productId].totalRevenue += revenue;
+        } else {
+          productCount[productId] = {
+            name: productName,
+            count: item.quantity || 1,
+            totalRevenue: revenue,
+          };
+        }
+      });
+    }
+  });
+
+  const result = Object.entries(productCount)
+    .map(([id, stats]) => ({
+      id,
+      name: stats.name,
+      quantity: stats.count,
+      revenue: stats.totalRevenue,
+    }))
+    .sort((a, b) => b.quantity - a.quantity) // Sort by quantity (số lần xuất hiện)
+    .slice(0, 5);
+
+  return result;
+};
 
 export function StatisticsSection({
   activeTab,
   setActiveTab,
 }: StatisticsSectionProps) {
-  const topProducts = getTopProductsData();
-  const topCustomers = getTopCustomersData();
-  const categoryData = getCategoryDistribution();
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // API queries
+  const { data: ordersData, isLoading: ordersLoading } = useGetAllOrdersQuery();
+  const { data: usersData, isLoading: usersLoading } = useGetAllUsersQuery();
+  const { data: productsData, isLoading: productsLoading } =
+    useGetProductsQuery({
+      page: 1,
+      pageSize: 1000, // Get all products
+    });
+  const { data: metaData, isLoading: metaLoading } = useGetMetaDataQuery();
+
+  // Process data - memoized to prevent unnecessary recalculations
+  const orders = useMemo(() => ordersData?.orders || [], [ordersData?.orders]);
+  const users = useMemo(() => usersData || [], [usersData]);
+  const products = useMemo(
+    () => productsData?.products || [],
+    [productsData?.products]
+  );
+  const categories = useMemo(
+    () => metaData?.data?.categories || [],
+    [metaData?.data?.categories]
+  );
+
+  // Memoize current month orders to prevent infinite re-renders
+  const currentMonthOrders = useMemo(() => {
+    return getCurrentMonthOrders(orders);
+  }, [orders]);
+
+  // Get order IDs for dependency array (to avoid object reference issues)
+  const currentMonthOrderIds = useMemo(() => {
+    return currentMonthOrders.map((order) => order.id);
+  }, [currentMonthOrders]);
+
+  // Fetch order details using custom hook
+  const { orderDetails, isLoading: orderDetailsLoading } =
+    useMultipleOrderDetails(currentMonthOrderIds);
+
+  // Calculate statistics - all memoized to prevent recalculations
+  const topProducts = useMemo(() => {
+    return calculateRealTopProducts(orderDetails);
+  }, [orderDetails]);
+
+  const topCustomers = useMemo(() => {
+    return calculateTopCustomers(currentMonthOrders, users);
+  }, [currentMonthOrders, users]);
+
+  const categoryData = useMemo(() => {
+    return calculateCategoryDistribution(products, categories);
+  }, [products, categories]);
+
+  // Show loading state for both mounting and data loading
+  if (
+    !isMounted ||
+    ordersLoading ||
+    usersLoading ||
+    productsLoading ||
+    metaLoading ||
+    orderDetailsLoading
+  ) {
+    return (
+      <Core className="grid gap-4 lg:grid-cols-3">
+        <Container className="lg:col-span-2 bg-white rounded-lg shadow-sm border">
+          <Area className="p-6 border-b">
+            <RText className="text-lg font-semibold">
+              Statistics this month
+            </RText>
+          </Area>
+          <Area className="p-6 animate-pulse">
+            <Core className="h-60 bg-gray-200 rounded"></Core>
+          </Area>
+        </Container>
+        <Container className="bg-white rounded-lg shadow-sm border">
+          <Area className="p-6 border-b">
+            <RText className="text-lg font-semibold">Product Categories</RText>
+          </Area>
+          <Area className="p-6 animate-pulse">
+            <Core className="h-60 bg-gray-200 rounded"></Core>
+          </Area>
+        </Container>
+      </Core>
+    );
+  }
 
   return (
-    <Area className="grid gap-4 lg:grid-cols-3">
-      <Yard className="lg:col-span-2 bg-white rounded-lg shadow-sm border">
-        <Section className="p-6 border-b">
+    <Core className="grid gap-4 lg:grid-cols-3">
+      <Container className="lg:col-span-2 bg-white rounded-lg shadow-sm border">
+        <Area className="p-6 border-b">
           <RText className="text-lg font-semibold">Statistics this month</RText>
-        </Section>
-        <Section className="p-6">
-          <Anchor className="flex space-x-1 mb-4">
+        </Area>
+        <Area className="p-6">
+          <Yard className="flex space-x-1 mb-4">
             <button
               onClick={() => setActiveTab("products")}
               className={`px-4 py-2 text-sm font-medium rounded-md ${
@@ -59,133 +262,147 @@ export function StatisticsSection({
             >
               Top Customers
             </button>
-          </Anchor>
+          </Yard>
 
           {activeTab === "products" && (
-            <Block className="space-y-3">
-              {map(topProducts, (product) => (
-                <Box
-                  key={product.id}
-                  className="flex items-center space-x-4 p-3 rounded-lg bg-slate-50"
-                >
-                  <Column className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-sm font-medium">
-                      {product.name.charAt(0)}
-                    </span>
-                  </Column>
-                  <Column className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">
-                      {product.name}
-                    </p>
-                    <Row className="flex items-center text-xs">
-                      {product.trend === "up" ? (
-                        <TrendingUp className="h-3 w-3 text-green-500 mr-1" />
-                      ) : (
-                        <TrendingDown className="h-3 w-3 text-red-500 mr-1" />
-                      )}
-                      <span
-                        className={
-                          product.trend === "up"
-                            ? "text-green-500"
-                            : "text-red-500"
-                        }
-                      >
-                        {product.change}%
+            <Section className="space-y-3">
+              {orderDetailsLoading ? (
+                <RText className="text-blue-500 text-center py-8">
+                  Loading order details to calculate top products...
+                </RText>
+              ) : topProducts.length === 0 ? (
+                <RText className="text-gray-500 text-center py-8">
+                  No products data available for this month
+                  <br />
+                  <span className="text-xs">
+                    ({currentMonthOrders.length} orders found,{" "}
+                    {orderDetails.length} details fetched)
+                  </span>
+                </RText>
+              ) : (
+                map(topProducts, (product) => (
+                  <Anchor
+                    key={product.id}
+                    className="flex items-center space-x-4 p-3 rounded-lg bg-slate-50"
+                  >
+                    <Block className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                      <span className="text-sm font-medium text-blue-600">
+                        {product.name.charAt(0)}
                       </span>
-                      <RText className="text-gray-500 ml-1">
-                        vs last month
-                      </RText>
-                    </Row>
-                  </Column>
-                  <Column className="text-right">
-                    <p className="text-sm font-medium">
-                      {formatCurrency(product.revenue)}
-                    </p>
-                  </Column>
-                </Box>
-              ))}
-            </Block>
+                    </Block>
+                    <Block className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">
+                        {product.name}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Quantity sold: {product.quantity} items
+                      </p>
+                    </Block>
+                    <Block className="text-right">
+                      <p className="text-sm font-medium">
+                        {formatCurrency(product.revenue)}
+                      </p>
+                      <p className="text-xs text-blue-500">
+                        #{product.quantity} sold
+                      </p>
+                    </Block>
+                  </Anchor>
+                ))
+              )}
+            </Section>
           )}
 
           {activeTab === "customers" && (
-            <Block className="space-y-3">
-              {map(topCustomers, (customer) => (
-                <Box
-                  key={customer.id}
-                  className="flex items-center space-x-4 p-3 rounded-lg bg-slate-50"
-                >
-                  <Column className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-sm font-medium">
-                      {customer.name.charAt(0)}
-                    </span>
-                  </Column>
-                  <Column className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">
-                      {customer.name}
-                    </p>
-                    <p className="text-xs text-gray-500 truncate">
-                      {customer.email}
-                    </p>
-                  </Column>
-                  <Column className="text-right">
-                    <p className="text-sm font-medium">
-                      {formatCurrency(customer.spent)}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {customer.orders} orders
-                    </p>
-                  </Column>
-                </Box>
-              ))}
-            </Block>
+            <Section className="space-y-3">
+              {topCustomers.length === 0 ? (
+                <RText className="text-gray-500 text-center py-8">
+                  No customers data available for this month
+                </RText>
+              ) : (
+                map(topCustomers, (customer) => (
+                  <Anchor
+                    key={customer.id}
+                    className="flex items-center space-x-4 p-3 rounded-lg bg-slate-50"
+                  >
+                    <Block className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                      <span className="text-sm font-medium">
+                        {customer.name.charAt(0)}
+                      </span>
+                    </Block>
+                    <Block className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">
+                        {customer.name}
+                      </p>
+                      <p className="text-xs text-gray-500 truncate">
+                        {customer.email}
+                      </p>
+                    </Block>
+                    <Block className="text-right">
+                      <p className="text-sm font-medium">
+                        {formatCurrency(customer.totalSpent)}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {customer.totalOrders} orders
+                      </p>
+                    </Block>
+                  </Anchor>
+                ))
+              )}
+            </Section>
           )}
-        </Section>
-      </Yard>
+        </Area>
+      </Container>
 
-      <Yard className="bg-white rounded-lg shadow-sm border">
-        <Section className="p-6 border-b">
+      <Container className="bg-white rounded-lg shadow-sm border">
+        <Area className="p-6 border-b">
           <RText className="text-lg font-semibold">Product Categories</RText>
-        </Section>
-        <Section className="p-6">
-          <ResponsiveContainer width="100%" height={180}>
-            <PieChart>
-              <Pie
-                data={categoryData}
-                cx="50%"
-                cy="50%"
-                outerRadius={70}
-                fill="#8884d8"
-                dataKey="value"
-                label={({ name, percent }) =>
-                  `${name} ${(percent * 100).toFixed(0)}%`
-                }
-              >
-                {map(categoryData, (entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+        </Area>
+        <Area className="p-6">
+          {categoryData.length === 0 ? (
+            <RText className="text-gray-500 text-center py-8">
+              No categories data available
+            </RText>
+          ) : (
+            <>
+              <ResponsiveContainer width="100%" height={180}>
+                <PieChart>
+                  <Pie
+                    data={categoryData}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={70}
+                    fill="#8884d8"
+                    dataKey="value"
+                    label={({ name, value }) => `${name}: ${value}`}
+                  >
+                    {map(categoryData, (entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+              <Yard className="space-y-2 mt-4">
+                {map(categoryData, (category, index) => (
+                  <Section
+                    key={index}
+                    className="flex items-center justify-between text-sm"
+                  >
+                    <Anchor className="flex items-center space-x-2">
+                      <Block
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: category.color }}
+                      />
+                      <span>{category.name}</span>
+                    </Anchor>
+                    <span className="text-gray-500">{category.percentage}</span>
+                  </Section>
                 ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-          <Anchor className="space-y-2 mt-4">
-            {map(categoryData, (category, index) => (
-              <Card
-                key={index}
-                className="flex items-center justify-between text-sm"
-              >
-                <Box className="flex items-center space-x-2">
-                  <Column
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: category.color }}
-                  />
-                  <span>{category.name}</span>
-                </Box>
-                <span className="text-gray-500">{category.percentage}</span>
-              </Card>
-            ))}
-          </Anchor>
-        </Section>
-      </Yard>
-    </Area>
+              </Yard>
+            </>
+          )}
+        </Area>
+      </Container>
+    </Core>
   );
 }

@@ -1,5 +1,5 @@
 import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { toast } from "react-hot-toast";
 
 const customBaseQuery = async (
@@ -9,7 +9,16 @@ const customBaseQuery = async (
 ) => {
   const baseQuery = fetchBaseQuery({
     baseUrl: "https://cosme-play-be.vercel.app/api",
-    prepareHeaders: async (headers) => {},
+    prepareHeaders: async (headers) => {
+      // Get token from localStorage
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("token");
+        if (token) {
+          headers.set("Authorization", `Bearer ${token}`);
+        }
+      }
+      return headers;
+    },
     credentials: "include",
   });
 
@@ -28,42 +37,37 @@ const customBaseQuery = async (
 
       if (refreshResult.data) {
         result = await baseQuery(args, api, extraOptions);
-      } else {
+      } 
+      else {
         toast.error("Session expired. Please log in again.");
       }
     }
 
-    if (result.error) {
+    // Only show error for actual error status codes (400+)
+    if (result.error && result.error.status >= 400) {
       const errorData = result.error.data;
       const errorMessage =
         errorData?.message ||
         result.error.status.toString() ||
         "An error occurred";
-      toast.error(`Error: ${errorMessage}`);
+      toast.error(`${errorMessage}`);
     }
 
     const isMutationRequest =
       (args as FetchArgs).method && (args as FetchArgs).method !== "GET";
 
-    if (isMutationRequest) {
-      const successMessage = result.data?.message;
-      if (successMessage) toast.success(successMessage);
+    // Show success message for successful mutations
+    if (isMutationRequest && result.data && !result.error) {
+      const successMessage =
+        result.data?.message || "Operation completed successfully";
+      toast.success(successMessage);
     }
-
-    // if (result.data) {
-    //   result.data = result.data.data;
-    // } else if (
-    //   result.error?.status === 204 ||
-    //   result.meta?.response?.status === 24
-    // ) {
-    //   return { data: null };
-    // }
 
     return result;
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
-
+    toast.error(`Error: ${errorMessage}`);
     return { error: { status: "FETCH_ERROR", error: errorMessage } };
   }
 };
