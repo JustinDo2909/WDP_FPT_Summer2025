@@ -10,7 +10,6 @@ import {
 // Hook to manage search and filter with API query parameters
 export const useProductSearch = () => {
   const [searchParams, setSearchParams] = useState({
-    title: "",
     category: "",
     brand: "",
     skinType: "",
@@ -265,7 +264,7 @@ export const calculateProductStats = (products: Product[]) => {
 
 // Utility functions
 export const formatPrice = (price: number) => {
-  return `${price.toFixed(0)} VND`;
+  return `${price.toLocaleString("vi-VN")} đ`;
 };
 
 export const calculateDiscountedPrice = (price: number, sale_price: number) => {

@@ -10,6 +10,46 @@ import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
+import type {
+  MetaDataResponse,
+  CategoryOption,
+  BrandOption,
+  SkinTypeOption,
+  ItemRequest,
+  SimpleApiResponse,
+} from "@/types/meta/index";
+import type {
+  Product,
+  ProductsResponse,
+  ProductQueryParams,
+  ProductMetaResponse,
+} from "@/types/productManagement/index";
+import type { OrdersResponse, OrderDetailResponse } from "@/types/order/index";
+import type {
+  Event,
+  Question,
+  EventReward,
+  EventsResponse,
+  EventResponse,
+  QuestionsResponse,
+  RewardsResponse,
+  ApiResponse,
+  CreateEventRequest,
+  UpdateEventRequest,
+  CreateQuestionRequest,
+  UpdateQuestionRequest,
+  CreateRewardRequest,
+  UpdateRewardRequest,
+} from "@/types/event";
+import type { Voucher, VouchersResponse } from "@/types/voucher/index";
+import type {
+  Batch,
+  BatchesResponse,
+  CreateBatchRequest,
+  CreateBatchResponse,
+  PaginatedBatchesResponse,
+  BatchPaginationParams,
+} from "@/types/warehouse/index";
 
 const customBaseQuery = async (
   args: string | FetchArgs,
@@ -67,6 +107,7 @@ export const api = createApi({
     "Questions",
     "Rewards",
     "Reviews",
+    "Batches",
   ],
   endpoints: (build) => ({
     //#region getProducts
@@ -189,6 +230,54 @@ export const api = createApi({
       }),
       invalidatesTags: ["Reviews"],
     }),
+    //#region Warehouse - Batches
+    getAllBatches: build.query<PaginatedBatchesResponse, BatchPaginationParams>(
+      {
+        query: (params = {}) => {
+          const searchParams = new URLSearchParams();
+
+          if (params.search) searchParams.append("search", params.search);
+          if (params.month) searchParams.append("month", params.month);
+          if (params.isExpired !== undefined)
+            searchParams.append("isExpired", params.isExpired.toString());
+          if (params.page !== undefined)
+            searchParams.append("page", params.page.toString());
+          if (params.limit !== undefined)
+            searchParams.append("limit", params.limit.toString());
+
+          const queryString = searchParams.toString();
+          return `/products/batches${queryString ? `?${queryString}` : ""}`;
+        },
+        providesTags: ["Batches"],
+        keepUnusedDataFor: 60, // 1 minute cache for paginated data
+      }
+    ),
+
+    getProductBatches: build.query<Batch[], string>({
+      query: (productId) => `/products/${productId}/batches`,
+      transformResponse: (response: BatchesResponse) => response.batches,
+      providesTags: (result, error, productId) => [
+        { type: "Batches", id: productId },
+        "Batches",
+      ],
+    }),
+
+    createProductBatch: build.mutation<
+      CreateBatchResponse,
+      { productId: string; data: CreateBatchRequest }
+    >({
+      query: ({ productId, data }) => ({
+        url: `/products/${productId}/batches`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: (result, error, { productId }) => [
+        { type: "Batches", id: productId },
+        "Batches",
+        "Products", // Also invalidate products cache in case batch creation affects inventory
+      ],
+    }),
+    //#endregion
   }),
 });
 
@@ -201,6 +290,11 @@ export const {
   useGetOrderByIdQuery,
   useLazyGetReviewsByIdQuery,
   usePostReviewMutation,
+
+  // Warehouse - Batches
+  useGetAllBatchesQuery,
+  useGetProductBatchesQuery,
+  useCreateProductBatchMutation,
 } = api;
 
 // import { Api, BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";

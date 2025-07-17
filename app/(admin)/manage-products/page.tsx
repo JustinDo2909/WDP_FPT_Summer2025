@@ -6,7 +6,7 @@ import { StatsCard } from "@/components/admin/StatsCard";
 import { Package, AlertTriangle, Grid3X3, Building2 } from "lucide-react";
 import { useGetProductsQuery, useGetProductMetaQuery } from "@/process/api/api";
 import { ProductTable } from "@/components/admin/Product/product-table";
-import { AddProductModal } from "@/components/admin/Product/add-product-modal";
+import { AddProductModal } from "@/components/admin/Product/Add-product-modal";
 
 export default function ProductsPage() {
   const {
