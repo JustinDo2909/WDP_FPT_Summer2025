@@ -16,6 +16,7 @@ import { useHandleCheckout } from "./seg/useHandleCheckout";
 import { useShippingFeeHandler } from "./seg/useShippingFee";
 import { roundDownToNearestMultiple } from "@/lib/share/roundTo";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { CartTable } from "@/components/CartPage/CartTable";
 
 export default function CheckoutPage() {
   // const [shippingInfo, setShippingInfo] = useState<IAddress>({
@@ -50,7 +51,6 @@ export default function CheckoutPage() {
   const { data: dataVouchers } = useGetUserVouchersQuery();
 
   const isFilled = selectedAddress && isRouteHasService;
-
   const { data: cartData } = useGetCartQuery();
   const cart = cartData?.cart;
   const cartItems = cart?.cartItems || [];
@@ -73,15 +73,21 @@ export default function CheckoutPage() {
           getShippingFeeOnWardChange={handleGetShippingFee}
         /> */}
         <Box className="flex col-span-3 flex-col space-y-4">
+  
+          <AddressSelector
+            selectedAddress={selectedAddress}
+            setSelectedAddress={setSelectedAddress}
+          />
+
+          <h2 className="text-xl font-bold">2. Order Summary</h2>
+
+          <CartTable items={cartItems} isSimple={true} voucher = {voucher} />
+
           <CouponAddInput
             vouchers={dataVouchers?.vouchers}
             setVoucherDiscount={setVoucherDiscount}
             onSelect={setVoucher}
             cartItems={cartItems}
-          />
-          <AddressSelector
-            selectedAddress={selectedAddress}
-            setSelectedAddress={setSelectedAddress}
           />
         </Box>
 

@@ -37,7 +37,7 @@ export const VoucherItem: React.FC<{
           </Wrap>
           <Wrap className="inline-block mt-2 px-2 py-0.5 bg-pink-500 text-white text-xs rounded">
             {applicable
-              ? `Save ${formatPrice(savings)}`
+              ? `Save ${formatPrice(savings)} on products`
               : "Cannot apply for product"}
           </Wrap>
         </Column>

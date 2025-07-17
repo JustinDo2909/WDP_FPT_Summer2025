@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import Button from "../CustomButton";
-import { Row, Wrap } from "@/lib/by/Div";
+import { Box, Row, Wrap } from "@/lib/by/Div";
 import { calculateVoucherSavings, formatDiscount } from "./seg/calculateVoucherDiscount";
 import { VoucherItem } from "./VoucherItem";
 
@@ -53,6 +53,9 @@ export const CouponAddInput: React.FC<CouponAddInputProps> = ({
   };
 
   return (
+    <Box><Row className="flex space-x-4 items-center">
+            <h2 className="text-xl font-bold">3. Redeem Vouchers</h2>
+          </Row>
     <Row className="flex items-end gap-2">
       <Select value={selectedId} onValueChange={setSelectedId}>
         <SelectTrigger className="
@@ -98,6 +101,7 @@ export const CouponAddInput: React.FC<CouponAddInputProps> = ({
         onClick={handleApply}
       />
     </Row>
+    </Box>
   );
 };
 
