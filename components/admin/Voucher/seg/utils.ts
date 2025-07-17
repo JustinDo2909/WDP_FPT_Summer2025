@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useGetAllVouchersQuery } from "@/process/api/api";
+import { useGetAllVoucherssQuery } from "@/process/api/api";
 import type {
   Voucher,
   VoucherDisplay,
@@ -26,7 +26,7 @@ export const useVouchersApiLogic = () => {
     isLoading,
     error,
     refetch,
-  } = useGetAllVouchersQuery();
+  } = useGetAllVoucherssQuery();
 
   // Transform vouchers để thêm computed properties
   const vouchersDisplay: VoucherDisplay[] = useMemo(() => {
