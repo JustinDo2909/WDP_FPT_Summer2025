@@ -15,6 +15,8 @@ import {
 } from "@/lib/by/Div";
 import { useUser } from "@/hooks/useUser";
 import { CartIndicatorWrapper } from "./CartIndicatorWrapper";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface Header {
   title: string;
@@ -27,17 +29,19 @@ interface HeaderMenuProps {
 
 const HeaderMenu = ({ headers }: HeaderMenuProps) => {
   const { user, isLogged } = useUser();
-
+  const router = useRouter()
   return (
     <Container className="w-full px-8 md:px-36 bg-white/95 backdrop-blur-md border-b border-[#ffc6c6]/30 shadow-lg inline-flex justify-between items-center sticky top-0 z-50">
-      <Section className="w-fit inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden">
-        <Link
-          href="/"
-          className="text-2xl md:text-3xl font-bold text-[#aa4444] hover:text-[#ee4444] transition-colors duration-300 tracking-tight drop-shadow-sm"
-        >
-          LOGO!
-        </Link>
-      </Section>
+         
+          <Image
+            src="/images/icon.png"
+            alt="Logo"
+            width={100}
+            height={100}
+            priority
+            className="hover:scale-105 transition-transform"
+            onClick={() => router.push('/')}
+          />
 
       <Section className="py-4 flex justify-start items-center gap-1">
         {map(headers, (header: Header, index: number) => (

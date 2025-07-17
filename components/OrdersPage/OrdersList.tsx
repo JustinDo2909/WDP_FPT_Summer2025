@@ -1,12 +1,14 @@
 import React from "react";
 import OrderCard from "../OrdersPage/OrderCard";
 import { Box } from "@/lib/by/Div";
-import { map } from "lodash";
+import { orderBy } from "lodash"; // change from map to orderBy
 
-export default function OrdersList({orders}:{orders: IOrder[]}) {
+export default function OrdersList({ orders }: { orders: IOrder[] }) {
+  const sortedOrders = orderBy(orders, ["createdAt"], ["desc"]);
+
   return (
     <Box>
-      {map(orders, (order) => (
+      {sortedOrders.map((order) => (
         <OrderCard key={order.id} order={order} />
       ))}
     </Box>

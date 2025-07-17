@@ -63,7 +63,7 @@ export const api = createApi({
       }) => {
         const params = new URLSearchParams();
         params.append("page", page.toString());
-        params.append("pageSize", pageSize.toString());
+        params.append("limit", pageSize.toString());
         if (title) params.append("title", title);
         if (category) params.append("category", category);
         if (brand) params.append("brand", brand);
