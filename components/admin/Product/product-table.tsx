@@ -29,7 +29,6 @@ export function ProductTable({
   const { data, isLoading, isError, error } = useGetProductsQuery({
     page,
     pageSize,
-    title: searchParams.title,
     category: searchParams.category,
     brand: searchParams.brand,
     skinType: searchParams.skinType,
@@ -200,7 +199,6 @@ export function ProductTable({
       <ProductFilters
         searchParams={searchParams}
         onUpdateParams={handleFilterChange}
-        isLoading={isLoading}
       />
 
       <Container className="overflow-x-auto">

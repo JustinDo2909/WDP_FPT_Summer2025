@@ -32,6 +32,14 @@ import type {
   UpdateRewardRequest,
 } from "@/types/event";
 import type { Voucher, VouchersResponse } from "@/types/voucher/index";
+import type {
+  Batch,
+  BatchesResponse,
+  CreateBatchRequest,
+  CreateBatchResponse,
+  PaginatedBatchesResponse,
+  BatchPaginationParams,
+} from "@/types/warehouse/index";
 
 export const api = createApi({
   baseQuery: customBaseQuery,
@@ -49,6 +57,7 @@ export const api = createApi({
     "Question",
     "Reward",
     "Vouchers",
+    "Batches",
   ],
   endpoints: (build) => ({
     //#region Products
@@ -545,6 +554,55 @@ export const api = createApi({
       keepUnusedDataFor: 300, // 5 minutes cache
     }),
     //#endregion
+
+    //#region Warehouse - Batches
+    getAllBatches: build.query<PaginatedBatchesResponse, BatchPaginationParams>(
+      {
+        query: (params = {}) => {
+          const searchParams = new URLSearchParams();
+
+          if (params.search) searchParams.append("search", params.search);
+          if (params.month) searchParams.append("month", params.month);
+          if (params.isExpired !== undefined)
+            searchParams.append("isExpired", params.isExpired.toString());
+          if (params.page !== undefined)
+            searchParams.append("page", params.page.toString());
+          if (params.limit !== undefined)
+            searchParams.append("limit", params.limit.toString());
+
+          const queryString = searchParams.toString();
+          return `/products/batches${queryString ? `?${queryString}` : ""}`;
+        },
+        providesTags: ["Batches"],
+        keepUnusedDataFor: 60, // 1 minute cache for paginated data
+      }
+    ),
+
+    getProductBatches: build.query<Batch[], string>({
+      query: (productId) => `/products/${productId}/batches`,
+      transformResponse: (response: BatchesResponse) => response.batches,
+      providesTags: (result, error, productId) => [
+        { type: "Batches", id: productId },
+        "Batches",
+      ],
+    }),
+
+    createProductBatch: build.mutation<
+      CreateBatchResponse,
+      { productId: string; data: CreateBatchRequest }
+    >({
+      query: ({ productId, data }) => ({
+        url: `/products/${productId}/batches`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: (result, error, { productId }) => [
+        { type: "Batches", id: productId },
+        "Batches",
+        "Products", // Also invalidate products cache in case batch creation affects inventory
+      ],
+    }),
+    //#endregion
   }),
 });
 
@@ -595,4 +653,9 @@ export const {
 
   // Vouchers
   useGetAllVouchersQuery,
+
+  // Warehouse - Batches
+  useGetAllBatchesQuery,
+  useGetProductBatchesQuery,
+  useCreateProductBatchMutation,
 } = api;
