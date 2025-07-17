@@ -1,5 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import customBaseQuery from "./customFetchBase";
+import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
+import Cookies from "js-cookie";
+import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { toast } from "sonner";
 import type {
   MetaDataResponse,
   CategoryOption,
@@ -40,6 +43,43 @@ import type {
   PaginatedBatchesResponse,
   BatchPaginationParams,
 } from "@/types/warehouse/index";
+
+const customBaseQuery = async (
+  args: string | FetchArgs,
+  api: BaseQueryApi,
+  extraOptions: any
+) => {
+  const baseQuery = fetchBaseQuery({
+    baseUrl: "https://cosme-play-be.vercel.app/api/",
+    credentials: "include",
+    prepareHeaders: async (headers) => {
+      const token = Cookies.get("authToken");
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  });
+
+  try {
+    const result: any = await baseQuery(args, api, extraOptions);
+
+    if (result.error) {
+      const errorMessage = result.error.data?.message || "An error occurred";
+      toast.error(`Error: ${errorMessage}`);
+      return { error: result.error }; // Trả về lỗi ngay lập tức
+    }
+
+    return result; // ✅ Không truy cập result.data.data
+  } catch (error) {
+    return {
+      error: {
+        status: "FETCH_ERROR",
+        error: (error as Error).message || "Unknown error",
+      },
+    };
+  }
+};
 
 export const api = createApi({
   baseQuery: customBaseQuery,
