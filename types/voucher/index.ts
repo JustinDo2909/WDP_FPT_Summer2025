@@ -34,7 +34,7 @@ export interface VoucherStats {
   total: number;
   redeemed: number;
   available: number;
-  totalValue: number;
+  usageRate: number;
   percentVouchers: number;
   amountVouchers: number;
 }
