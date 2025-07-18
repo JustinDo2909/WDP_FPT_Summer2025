@@ -31,7 +31,7 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
   const { user, isLogged } = useUser();
   const router = useRouter()
   return (
-    <Container className="w-full px-8 md:px-36 bg-white/95 backdrop-blur-md border-b border-[#ffc6c6]/30 shadow-lg inline-flex justify-between items-center sticky top-0 z-50">
+    <Container className="w-full px-8 md:px-36 bg-white inline-flex justify-between items-center sticky top-0 z-50">
          
           <Image
             src="/images/icon.png"
@@ -74,7 +74,7 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
         <CartIndicatorWrapper>
           <Link
             href={user ? `/checkout/cart` : `/login`}
-            className="flex p-3 justify-center items-center gap-2.5 overflow-hidden rounded-full text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-[#ffc6c6] hover:to-[#ee4444] transition-all duration-300 hover:scale-110 shadow-sm hover:shadow-md"
+            className="flex p-3 justify-center items-center gap-2.5 overflow-hidden rounded-full text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-[#ffc6c6] hover:to-[#ee4444] transition-all duration-300 hover:scale-110  hover:shadow-md"
           >
             <ShoppingBag size={20} />
           </Link>
