@@ -156,29 +156,6 @@ export function AddProductModal({
               </Yard>
             </Area>
 
-            {/* Total Stock */}
-            <Yard>
-              <RText className="block text-sm font-medium text-gray-700 mb-2">
-                Total Stock *
-              </RText>
-              <input
-                type="number"
-                value={formData.total_stock}
-                onChange={(e) =>
-                  handleInputChange("total_stock", e.target.value)
-                }
-                placeholder="0"
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                  errors.total_stock ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.total_stock && (
-                <RText className="text-red-500 text-sm mt-1">
-                  {errors.total_stock}
-                </RText>
-              )}
-            </Yard>
-
             {/* Category, Brand, and Skin Type */}
             <Area className="grid grid-cols-3 gap-4">
               <Yard>
