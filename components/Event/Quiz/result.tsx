@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { TicketPercent } from "lucide-react";
 import clsx from "clsx";
 import Image from "next/image";
+import Button from "@/components/CustomButton";
 
 interface RewardTier {
   correct: number;
@@ -19,18 +20,24 @@ interface FinalScore {
 export default function ResultRender({
   finalScore,
   rewardTiers,
+  reward,
+  isCalculatingReward,
 }: {
   finalScore: FinalScore;
   rewardTiers: RewardTier[];
+  reward: EventReward | null;
+  isCalculatingReward: boolean;
 }) {
   const router = useRouter();
 
-  const getEarnedReward = (correctCount: number) => {
-    const sorted = [...rewardTiers].sort((a, b) => b.correct - a.correct);
-    return sorted.find((tier) => correctCount >= tier.correct)?.reward ?? null;
+  const formatReward = (reward: EventReward | null) => {
+    if (!reward || !reward.discount_value || !reward.type) {
+      return "No reward achieved";
+    }
+    return reward.type === "PERCENT"
+      ? `${reward.discount_value}% voucher`
+      : `${reward.discount_value} VND discount`;
   };
-
-  const earnedReward = getEarnedReward(finalScore.correct);
 
   const rewardHookItems = Array.from(
     { length: finalScore.total },
@@ -48,15 +55,17 @@ export default function ResultRender({
     <Area className="bg-[#fff0f5] h-screen overflow-hidden px-6 relative">
       {/* Absolute Header */}
       <Section className="absolute top-4 left-4 right-4 flex justify-between z-10">
-        <button
+        <Button
           className="bg-white text-slate-700 px-5 py-2 rounded-full shadow font-semibold"
           onClick={() => router.push("/event")}
-        >
-          Menu
-        </button>
-        <button className="bg-white text-slate-700 px-5 py-2 rounded-full shadow font-semibold">
-          Redeem
-        </button>
+          label="Menu"
+        />
+        <Button
+          className="bg-white text-slate-700 px-5 py-2 rounded-full shadow font-semibold"
+          disabled={!reward || isCalculatingReward}
+          onClick={() => router.push("/products")}
+          label="Shop"
+        />
       </Section>
 
       {/* Main Layout */}
@@ -85,9 +94,9 @@ export default function ResultRender({
             </RText>
             <RText className="mt-3 text-lg font-medium text-slate-700">
               You got{" "}
-              <span className="text-red-500 font-bold">
+              <RText className="text-red-500 font-bold">
                 {finalScore.correct}/{finalScore.total}
-              </span>{" "}
+              </RText>{" "}
               correct answers!
             </RText>
           </Section>
@@ -95,9 +104,15 @@ export default function ResultRender({
           {/* Reward Summary */}
           <Section className="bg-white rounded-xl p-3 shadow flex items-center gap-4 max-w-md mx-auto">
             <TicketPercent className="text-red-500 w-6 h-6" />
-            <RText className="text-base font-semibold text-red-500">
-              {earnedReward || "No reward achieved"}
-            </RText>
+            {isCalculatingReward ? (
+              <RText className="text-base font-semibold text-red-500">
+                Calculating reward...
+              </RText>
+            ) : (
+              <RText className="text-base font-semibold text-red-500">
+                {formatReward(reward)}
+              </RText>
+            )}
           </Section>
 
           {/* Decorative text */}
