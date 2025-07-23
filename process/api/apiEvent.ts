@@ -1,6 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import customBaseQuery from "./customFetchBase";
-import { playEvent } from "@/components/admin/Event/seg/utils";
 
 export const apiEvent = createApi({
   baseQuery: customBaseQuery, // Assumes cookies are handled here
@@ -8,9 +7,9 @@ export const apiEvent = createApi({
   tagTypes: ["Quiz", "Reward", "PlayStatus"],
   endpoints: (build) => ({
     //#region getRandomQuiz
-    getQuestions: build.query<IQuestionResponse, void>({
-      query: () => ({
-        url: "events/1/questions/random",
+    getQuestions: build.query<IQuestionResponse, { eventId: number }>({
+      query: ({ eventId }) => ({
+        url: `events/${eventId}/questions/random`,
         method: "GET",
       }),
       providesTags: ["Quiz"],
@@ -18,9 +17,9 @@ export const apiEvent = createApi({
     //#endregion
 
     //#region getReward
-    getRewardHooks: build.query<EventRewardResponse, void>({
-      query: () => ({
-        url: "events/1/rewards",
+    getRewardHooks: build.query<EventRewardResponse, { eventId: number }>({
+      query: ({ eventId }) => ({
+        url: `events/${eventId}/rewards`,
         method: "GET",
       }),
       providesTags: ["Reward"],
@@ -28,11 +27,14 @@ export const apiEvent = createApi({
     //#endregion
 
     //#region calculateReward
-    calculateReward: build.mutation<EventReward, { correct_answers: number }>({
-      query: (body) => ({
-        url: "events/1/calculate-reward",
+    calculateReward: build.mutation<
+      EventReward,
+      { eventId: number; correct_answers: number }
+    >({
+      query: ({ eventId, correct_answers }) => ({
+        url: `events/${eventId}/calculate-reward`,
         method: "POST",
-        body,
+        body: { correct_answers },
       }),
       transformResponse: (response: IResponseCalculate) =>
         response.reward || {},

@@ -7,7 +7,7 @@ export default function MenuQuiz({ onPlay }: { onPlay: () => void }) {
   const router = useRouter();
 
   return (
-    <Area className="bg-[#fff0f5] min-h-screen py-10">
+    <Area className="bg-[#fff0f5] min-h-screen py-10 flex flex-col justify-center items-center">
       <Section className="text-center mb-10">
         <RText className="text-4xl font-bold text-red-500">Glow & Know</RText>
         <RText className="text-lg text-orange-500 font-semibold mt-2">

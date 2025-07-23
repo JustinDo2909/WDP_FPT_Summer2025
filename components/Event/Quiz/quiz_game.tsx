@@ -11,8 +11,8 @@ import {
 export default function QuizGame() {
   const [hasStarted, setHasStarted] = useState(false);
 
-  const { data: fetchQuestions } = useGetQuestionsQuery();
-  const { data: fetchTierRewards } = useGetRewardHooksQuery();
+  const { data: fetchQuestions } = useGetQuestionsQuery({ eventId: 1 });
+  const { data: fetchTierRewards } = useGetRewardHooksQuery({ eventId: 1 });
   if (!hasStarted) {
     return <MenuQuiz onPlay={() => setHasStarted(true)} />;
   }

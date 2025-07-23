@@ -84,7 +84,7 @@ export default function GameUI({
         </Box>
         <Box className="flex items-center gap-2 text-slate-600">
           <Shield className="w-4 h-4" />
-          <RText className="text-sm">← → or A/D to move</RText>
+          <RText className="text-sm">A/D to move</RText>
         </Box>
       </Block>
 

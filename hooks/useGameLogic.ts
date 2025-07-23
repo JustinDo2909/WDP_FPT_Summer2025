@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { VITAMINS, HARMFUL_ITEMS, MULTIPLIERS } from "@/constants";
-type GameState = "menu" | "modeSelect" | "playing" | "gameOver";
+type GameState = "menu" | "modeSelect" | "playing" | "gameOver" | "restricted";
 export function useGameLogic(
   gameModes: { [key: string]: GameMode },
   selectedMode: string,

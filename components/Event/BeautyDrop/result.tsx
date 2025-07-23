@@ -9,6 +9,7 @@ interface GameOverProps {
   score: number;
   selectedMode: string;
   currentMode: GameMode;
+  reward: EventReward | null;
   onPlayAgain: () => void;
   onModeSelect: () => void;
   onBackToMenu: () => void;
@@ -18,6 +19,7 @@ export default function GameOver({
   score,
   selectedMode,
   currentMode,
+  reward,
   onPlayAgain,
   onModeSelect,
   onBackToMenu,
@@ -44,6 +46,15 @@ export default function GameOver({
       if (score >= 500) return { text: "Good Try!", color: "text-blue-500" };
       return { text: "Keep Training!", color: "text-orange-600" };
     }
+  };
+
+  const formatReward = (reward: EventReward | null) => {
+    if (!reward || !reward.discount_value || !reward.type) {
+      return "No reward";
+    }
+    return reward.type === "PERCENT"
+      ? `${reward.discount_value}% voucher`
+      : `₫${reward.discount_value.toLocaleString()} discount`;
   };
 
   const scoreMessage = getScoreMessage();
@@ -94,10 +105,10 @@ export default function GameOver({
               🎉 Congratulations!
             </RText>
             <RText className="text-sm text-gray-600 mt-1">
-              You have earned a discount voucher.
+              {formatReward(reward)}
             </RText>
             <RText className="text-xs italic text-gray-500 mt-1">
-              Details will be sent to your email.
+              Voucher will be save to your profile.
             </RText>
           </Box>
 

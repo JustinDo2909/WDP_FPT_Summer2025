@@ -1010,7 +1010,7 @@ export const VITAMINS = [
   {
     name: "C",
     color: "#FFF3E0",
-    points: 20,
+    points: 8,
     imageUrl:
       "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWdjWJVXqPGcex8au1v5Q0LRgCkVDYrBHbdZW4",
   },
@@ -1024,14 +1024,14 @@ export const VITAMINS = [
   {
     name: "E",
     color: "#FCE4EC",
-    points: 18,
+    points: 4,
     imageUrl:
       "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWCZdc5ZK6gWyXmFVNdlSDA0YwrCjLt1zEn4i2",
   },
   {
     name: "K",
     color: "#F1F8E9",
-    points: 8,
+    points: 6,
     imageUrl:
       "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWq18P4pwfLVkaZUw754nRBF9zOYiNMprlG8PA",
   },

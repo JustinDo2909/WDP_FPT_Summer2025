@@ -41,7 +41,8 @@ declare global {
   };
 
   export interface IPlayResponse {
-    success: boolean;
+    success?: boolean;
+    status?: string;
     message?: string;
   }
   //endregion
