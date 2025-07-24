@@ -2,11 +2,11 @@
 
 import CustomTable from "@/components/CustomTable";
 import { AddSkinTypeModal } from "@/components/admin/Category-Brand/Add-skin-type-modal";
-import { AddBrandModal } from "@/components/admin/Category-Brand/add-brand-modal";
-import { AddCategoryModal } from "@/components/admin/Category-Brand/add-category-modal";
+import { AddBrandModal } from "@/components/admin/Category-Brand/Add-brand-modal";
+import { AddCategoryModal } from "@/components/admin/Category-Brand/Add-category-modal";
 import {
   calculateStats,
-  useCategoriesBrandsLogic
+  useCategoriesBrandsLogic,
 } from "@/components/admin/Category-Brand/seg/utils";
 import { StatsCard } from "@/components/admin/StatsCard";
 import type {
@@ -349,7 +349,7 @@ export default function CategoriesBrandsPage() {
         {activeTab === "categories" && (
           <CustomTable
             data={categories}
-            columns={categoryColumns }
+            columns={categoryColumns}
             onAddItem={handleAddCategory}
             onExport={handleExportCategories}
             headerTitle="All Categories"

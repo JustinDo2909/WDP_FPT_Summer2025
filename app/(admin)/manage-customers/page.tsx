@@ -40,7 +40,6 @@ export default function CustomersPage() {
     id?: string;
     name: string;
     email: string;
-    password?: string;
     role?: string;
   }) => {
     try {
@@ -49,28 +48,18 @@ export default function CustomersPage() {
           id: string;
           name: string;
           email: string;
-          password?: string;
         } = {
           id: userData.id,
           name: userData.name,
           email: userData.email,
         };
 
-        // Only include password if it's provided
-        if (userData.password && userData.password.trim()) {
-          updateData.password = userData.password;
-        }
-
         await updateUser(updateData).unwrap();
       } else {
-        if (!userData.password) {
-          alert("Password is required for new users");
-          return;
-        }
         await createUser({
           name: userData.name,
           email: userData.email,
-          password: userData.password,
+          password: "defaultPassword123", // Temporary default password for new users
           role: userData.role as "USER" | "ADMIN" | "STAFF",
         }).unwrap();
       }
@@ -268,7 +257,6 @@ export default function CustomersPage() {
                   id: editingUser?.id,
                   name: formData.get("name") as string,
                   email: formData.get("email") as string,
-                  password: formData.get("password") as string,
                   role: formData.get("role") as string,
                 });
               }}
@@ -294,23 +282,6 @@ export default function CustomersPage() {
                     defaultValue={editingUser?.email}
                     className="w-full px-3 py-2 border border-gray-300 rounded"
                     required
-                  />
-                </Yard>
-                <Yard>
-                  <label className="block text-sm font-medium mb-1">
-                    Password{" "}
-                    {editingUser ? "(Leave blank to keep current)" : ""}
-                  </label>
-                  <input
-                    name="password"
-                    type="text"
-                    placeholder={
-                      editingUser
-                        ? "Enter new password or leave blank"
-                        : "Enter password"
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    required={!editingUser}
                   />
                 </Yard>
                 {!editingUser && (

@@ -32,7 +32,6 @@ export interface ProductFormData {
   price: string;
   sale_price: string;
   image_url: string;
-  total_stock: string;
   product_category_id: string;
   product_brand_id: string;
   product_skinType_id: string;
@@ -68,6 +67,10 @@ export interface ProductQueryParams {
   category?: string;
   brand?: string;
   skinType?: string;
+  limit?: number;
+  sort?: string;
+  sale?: string;
+
 }
 
 export interface ProductsResponse {

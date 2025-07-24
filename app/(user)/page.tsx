@@ -90,7 +90,7 @@ export default function Page() {
               </Wrap>
 
               {/* Call-to-Actions */}
-              <Wrap className="flex justify-between flex-wrap items-center gap-4">
+              <Wrap className="flex justify-center flex-wrap items-center gap-4">
                 {/* Button 1 */}
                 <Link className="cursor-pointer" href={"/products"}>
                   <Wrap className="flex items-center gap-3 px-2 pr-6 py-2 bg-rose-400 text-white rounded-full font-semibold shadow-lg hover:bg-rose-500 transition">
@@ -108,7 +108,7 @@ export default function Page() {
 
                 {/* Button 2 */}
                 <Link className="cursor-pointer" href={"/event"}>
-                  <Wrap className="flex flex-1 items-center gap-3 px-2 py-2 bg-rose-400 text-white rounded-full font-semibold shadow-lg hover:bg-rose-500 transition">
+                  <Wrap className="flex pr-6 items-center gap-3 px-2 py-2 bg-rose-400 text-white rounded-full font-semibold shadow-lg hover:bg-rose-500 transition">
                     <Wrap className="w-10 h-10 flex-shrink-0 rounded-full bg-white flex items-center justify-center">
                       <Gamepad2 className="w-5 h-5 text-rose-400" />
                     </Wrap>

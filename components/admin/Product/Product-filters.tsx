@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { Search, X, Filter } from "lucide-react";
+import { X, Filter } from "lucide-react";
 import { Area, RText, Group } from "@/lib/by/Div";
 import {
   Select,
@@ -14,69 +13,30 @@ import { useGetProductMetaQuery } from "@/process/api/api";
 
 interface ProductFiltersProps {
   searchParams: {
-    title: string;
     category: string;
     brand: string;
     skinType: string;
   };
   onUpdateParams: (field: string, value: string) => void;
-  isLoading?: boolean;
 }
 
 export function ProductFilters({
   searchParams,
   onUpdateParams,
-  isLoading = false,
 }: ProductFiltersProps) {
-  const [searchInput, setSearchInput] = useState(searchParams.title);
   const { data: productMeta } = useGetProductMetaQuery();
 
   const handleClearAll = () => {
-    onUpdateParams("title", "");
     onUpdateParams("category", "");
     onUpdateParams("brand", "");
     onUpdateParams("skinType", "");
-    setSearchInput("");
-  };
-
-  const handleSearchSubmit = () => {
-    onUpdateParams("title", searchInput);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleSearchSubmit();
-    }
   };
 
   const hasActiveFilters =
-    searchParams.title ||
-    searchParams.category ||
-    searchParams.brand ||
-    searchParams.skinType;
+    searchParams.category || searchParams.brand || searchParams.skinType;
 
   return (
     <Area className="bg-white border-b border-gray-200 p-4 space-y-4">
-      {/* Search Input */}
-      <Group className="relative">
-        <input
-          type="text"
-          placeholder="Search products by name..."
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          className="w-full pl-10 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-        <button
-          onClick={handleSearchSubmit}
-          disabled={isLoading}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 disabled:opacity-50"
-        >
-          {isLoading ? "..." : "Search"}
-        </button>
-      </Group>
-
       {/* Filter Dropdowns */}
       <Group className="flex flex-wrap items-center gap-4">
         <Group className="flex items-center gap-2">
@@ -159,15 +119,6 @@ export function ProductFilters({
       {/* Active Filters Display */}
       {hasActiveFilters && (
         <Group className="flex flex-wrap gap-2">
-          {searchParams.title && (
-            <FilterTag
-              label={`Search: "${searchParams.title}"`}
-              onRemove={() => {
-                onUpdateParams("title", "");
-                setSearchInput("");
-              }}
-            />
-          )}
           {searchParams.category && (
             <FilterTag
               label={`Category: ${searchParams.category}`}
