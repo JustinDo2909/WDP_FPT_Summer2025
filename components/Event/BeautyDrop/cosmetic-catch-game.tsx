@@ -21,7 +21,6 @@ export default function CosmeticCatchGame() {
   >("menu");
   const [selectedMode, setSelectedMode] = useState<string>("");
   const [playError, setPlayError] = useState<string | null>(null);
-  const [reward, setReward] = useState<EventReward | null>(null);
 
   const { imagesLoaded } = useImageLoader();
   const gameLogic = useGameLogic(
@@ -37,19 +36,16 @@ export default function CosmeticCatchGame() {
   const startGame = async (mode: string) => {
     setSelectedMode(mode);
     if (mode === "official") {
-      try {
-        const result = await playEvent().unwrap();
-        if (result.success === true) {
-          setGameState("playing");
-          return;
-        }
-      } catch {
-        setPlayError(
-          "You have already played today! Please come back tomorrow!"
-        );
-        setGameState("restricted");
-        return;
-      }
+      await playEvent()
+        .unwrap()
+        .then(() => setGameState("playing"))
+        .catch(() => {
+          setGameState("restricted");
+          setPlayError(
+            "You have already played today! Please come back tomorrow!"
+          );
+        });
+      return;
     }
     gameLogic.startGame(mode);
     setGameState("playing");
@@ -59,14 +55,11 @@ export default function CosmeticCatchGame() {
     setGameState("gameOver");
     if (selectedMode === "official") {
       try {
-        const result = await calculateReward({
-          eventId: 2,
+        await calculateReward({
+          eventId: "23308dcf-e9d0-45ea-b2d3-6035e086d0f4",
           correct_answers: gameLogic.score,
         }).unwrap();
-        setReward(result);
-      } catch {
-        setReward(null);
-      }
+      } catch {}
     }
   };
 
@@ -98,7 +91,6 @@ export default function CosmeticCatchGame() {
         score={gameLogic.score}
         selectedMode={selectedMode}
         currentMode={gameModes[selectedMode] || gameModes.practice}
-        reward={selectedMode === "official" ? reward : null}
         onPlayAgain={() => startGame(selectedMode)}
         onModeSelect={goToModeSelect}
         onBackToMenu={goToMenu}

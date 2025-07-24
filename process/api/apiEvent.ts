@@ -7,7 +7,7 @@ export const apiEvent = createApi({
   tagTypes: ["Quiz", "Reward", "PlayStatus"],
   endpoints: (build) => ({
     //#region getRandomQuiz
-    getQuestions: build.query<IQuestionResponse, { eventId: number }>({
+    getQuestions: build.query<IQuestionResponse, { eventId: string }>({
       query: ({ eventId }) => ({
         url: `events/${eventId}/questions/random`,
         method: "GET",
@@ -17,7 +17,7 @@ export const apiEvent = createApi({
     //#endregion
 
     //#region getReward
-    getRewardHooks: build.query<EventRewardResponse, { eventId: number }>({
+    getRewardHooks: build.query<EventRewardResponse, { eventId: string }>({
       query: ({ eventId }) => ({
         url: `events/${eventId}/rewards`,
         method: "GET",
@@ -29,7 +29,7 @@ export const apiEvent = createApi({
     //#region calculateReward
     calculateReward: build.mutation<
       EventReward,
-      { eventId: number; correct_answers: number }
+      { eventId: string; correct_answers: number }
     >({
       query: ({ eventId, correct_answers }) => ({
         url: `events/${eventId}/calculate-reward`,
