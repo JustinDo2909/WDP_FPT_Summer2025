@@ -4,12 +4,10 @@ import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
 import { VoucherDetailModal } from "@/components/admin/Voucher/Voucher-detail-modal";
 import {
   useVouchersApiLogic,
-  formatCurrency,
   getStatusColor,
   getDiscountDisplay,
 } from "@/components/admin/Voucher/seg/utils";
 import type {
-  VoucherDisplay,
   VoucherFilterType,
   VoucherStatusType,
 } from "@/types/voucher/index";
@@ -18,11 +16,8 @@ import {
   Eye,
   Ticket,
   TrendingUp,
-  Gift,
-  DollarSign,
   CheckCircle,
   Clock,
-  Download,
   RefreshCw,
   Search,
   Filter,
@@ -44,7 +39,7 @@ export default function VoucherPage() {
     setSearchTerm,
     handleViewVoucher,
     handleCloseDetailModal,
-    handleExportVouchers,
+    // handleExportVouchers,
     refetch,
   } = useVouchersApiLogic();
 
@@ -104,12 +99,12 @@ export default function VoucherPage() {
             iconBgColor="bg-purple-50"
           />
           <StatsCard
-            title="Total Value"
-            value={formatCurrency(stats.totalValue)}
-            icon={DollarSign}
-            iconColor="text-green-600"
-            iconBgColor="bg-green-50"
-            valueColor="text-green-600"
+            title="Usage Rate"
+            value={`${stats.usageRate}%`}
+            icon={TrendingUp}
+            iconColor="text-orange-600"
+            iconBgColor="bg-orange-50"
+            valueColor="text-orange-600"
           />
         </Area>
 

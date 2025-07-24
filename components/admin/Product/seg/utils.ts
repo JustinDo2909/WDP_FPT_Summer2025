@@ -10,7 +10,6 @@ import {
 // Hook to manage search and filter with API query parameters
 export const useProductSearch = () => {
   const [searchParams, setSearchParams] = useState({
-    title: "",
     category: "",
     brand: "",
     skinType: "",
@@ -34,7 +33,6 @@ export const useProductForm = (editProduct?: Product | null) => {
     price: "",
     sale_price: "",
     image_url: "",
-    total_stock: "",
     product_category_id: "",
     product_brand_id: "",
     product_skinType_id: "",
@@ -56,9 +54,6 @@ export const useProductForm = (editProduct?: Product | null) => {
           ? editProduct.sale_price.toString()
           : "",
         image_url: editProduct.image_url || "",
-        total_stock: editProduct.total_stock
-          ? editProduct.total_stock.toString()
-          : "",
         product_category_id: editProduct.product_category_id || "",
         product_brand_id: editProduct.product_brand_id || "",
         product_skinType_id: editProduct.product_skinType_id || "",
@@ -72,7 +67,6 @@ export const useProductForm = (editProduct?: Product | null) => {
         price: "",
         sale_price: "",
         image_url: "",
-        total_stock: "",
         product_category_id: "",
         product_brand_id: "",
         product_skinType_id: "",
@@ -113,7 +107,6 @@ export const useProductForm = (editProduct?: Product | null) => {
       price: "",
       sale_price: "",
       image_url: "",
-      total_stock: "",
       product_category_id: "",
       product_brand_id: "",
       product_skinType_id: "",
@@ -155,7 +148,7 @@ export const useProductForm = (editProduct?: Product | null) => {
         ? Number.parseFloat(formData.sale_price)
         : 0,
       image_url: formData.image_url,
-      total_stock: Number.parseInt(formData.total_stock),
+      total_stock: 0, // Stock is managed through warehouse system
       product_category_id: formData.product_category_id,
       product_brand_id: formData.product_brand_id,
       product_skinType_id: formData.product_skinType_id,
@@ -265,7 +258,7 @@ export const calculateProductStats = (products: Product[]) => {
 
 // Utility functions
 export const formatPrice = (price: number) => {
-  return `${price.toFixed(0)} VND`;
+  return `${price.toLocaleString("vi-VN")} đ`;
 };
 
 export const calculateDiscountedPrice = (price: number, sale_price: number) => {
@@ -289,10 +282,6 @@ export const validateProductForm = (formData: ProductFormData) => {
 
   if (formData.sale_price && Number.parseFloat(formData.sale_price) < 0) {
     errors.sale_price = "Sale price cannot be negative";
-  }
-
-  if (!formData.total_stock || Number.parseInt(formData.total_stock) < 0) {
-    errors.total_stock = "Valid stock quantity is required";
   }
 
   if (!formData.product_category_id) {

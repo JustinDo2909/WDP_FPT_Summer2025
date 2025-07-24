@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useGetAllVouchersQuery } from "@/process/api/api";
+import { useGetAllVoucherssQuery } from "@/process/api/api";
 import type {
   Voucher,
   VoucherDisplay,
@@ -26,7 +26,7 @@ export const useVouchersApiLogic = () => {
     isLoading,
     error,
     refetch,
-  } = useGetAllVouchersQuery();
+  } = useGetAllVoucherssQuery();
 
   // Transform vouchers để thêm computed properties
   const vouchersDisplay: VoucherDisplay[] = useMemo(() => {
@@ -189,13 +189,8 @@ export const calculateVoucherStats = (
   const redeemed = vouchers.filter((v) => v.redeemed).length;
   const available = total - redeemed;
 
-  const totalValue = vouchers.reduce((sum, voucher) => {
-    // Chỉ tính value của vouchers đã redeem
-    if (voucher.redeemed) {
-      return sum + voucher.discount_value;
-    }
-    return sum;
-  }, 0);
+  // Calculate usage rate as percentage of redeemed vouchers
+  const usageRate = total > 0 ? Math.round((redeemed / total) * 100) : 0;
 
   const percentVouchers = vouchers.filter((v) => v.type === "PERCENT").length;
   const amountVouchers = vouchers.filter((v) => v.type === "AMOUNT").length;
@@ -204,7 +199,7 @@ export const calculateVoucherStats = (
     total,
     redeemed,
     available,
-    totalValue,
+    usageRate,
     percentVouchers,
     amountVouchers,
   };

@@ -1,7 +1,7 @@
 "use client";
 
 import CustomTable from "@/components/CustomTable";
-import { OrderDetailModal } from "@/components/admin/Order/order-detail-modal";
+import { OrderDetailModal } from "@/components/admin/Order/Order-detail-modal";
 import {
   calculateOrderStats,
   formatCurrency,
@@ -12,7 +12,11 @@ import {
 } from "@/components/admin/Order/seg/utils";
 import { MiniStatsCard, StatsCard } from "@/components/admin/StatsCard";
 import { Area, Container, Core, RText, Yard } from "@/lib/by/Div";
-import { orderStatusOptions, paymentMethodOptions, type Order } from "@/types/order/index";
+import {
+  orderStatusOptions,
+  paymentMethodOptions,
+  type Order,
+} from "@/types/order/index";
 import { Clock, CreditCard, Eye, Package, TrendingUp } from "lucide-react";
 
 export default function OrdersPage() {
