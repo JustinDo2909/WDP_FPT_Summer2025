@@ -16,7 +16,7 @@ export default function Page() {
     sort: "highToLow",
     skinType: "",
     page: 1,
-    pageSize: 6,
+    limit: 6,
     title: "",
     sale: "true",
   };
@@ -26,7 +26,7 @@ export default function Page() {
     sort: "lowToHigh",
     skinType: "",
     page: 1,
-    pageSize: 5,
+    limit: 5,
     title: "",
     sale: "",
   };
