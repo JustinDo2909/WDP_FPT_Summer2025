@@ -1,7 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import customBaseQuery from "./customFetchBase";
-import { LogOut } from "lucide-react";
-
+import type { UserResponse } from "@/types/user";
 
 export const apiAuth = createApi({
   baseQuery: customBaseQuery,
@@ -28,7 +27,7 @@ export const apiAuth = createApi({
         body,
       }),
     }),
-    login: build.mutation<any, { email: string; password: string }>({
+    login: build.mutation<UserResponse, { email: string; password: string }>({
       query: (body) => ({
         url: "/auth/login",
         method: "POST",
@@ -85,5 +84,5 @@ export const {
   useVerifyForgotPasswordOtpMutation,
   useResetPasswordMutation,
   useLazyGetUserQuery,
-  useLazyLogOutQuery
+  useLazyLogOutQuery,
 } = apiAuth;

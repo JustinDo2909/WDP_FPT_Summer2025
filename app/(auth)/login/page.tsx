@@ -25,14 +25,16 @@ const LoginPage = () => {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    await login(data)
-      .unwrap()
-      .then(() => {
+    try {
+      const response = await login(data).unwrap();
+      if (response.user?.role === "ADMIN") {
+        router.push("/dashboard");
+      } else {
         router.push("/");
-      })
-      .catch((error) => {
-        console.log("Login failed:", error);
-      });
+      }
+    } catch (error) {
+      alert("Login failed. Please check your credentials.");
+    }
   };
 
   return (
