@@ -1,7 +1,7 @@
 "use client";
 
 import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
-import { VoucherDetailModal } from "@/components/admin/Voucher/Voucher-detail-modal";
+import { VoucherDetailModal } from "@/components/admin/Voucher/voucher-detail-modal";
 import {
   useVouchersApiLogic,
   getStatusColor,

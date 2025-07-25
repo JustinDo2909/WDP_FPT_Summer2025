@@ -4,8 +4,19 @@ import customBaseQuery from "./customFetchBase";
 export const apiEvent = createApi({
   baseQuery: customBaseQuery, // Assumes cookies are handled here
   reducerPath: "apiEvent",
-  tagTypes: ["Quiz", "Reward", "PlayStatus"],
+  tagTypes: ["Quiz", "Reward", "PlayStatus", "Events"],
   endpoints: (build) => ({
+    //region getEvent
+    getEvents: build.query<IEvent[], void>({
+      query: () => ({
+        url: `events/get`,
+        method: "GET",
+      }),
+      transformResponse: (response: EventResponse) => response.events || {},
+      providesTags: ["Events"],
+    }),
+    // endregion
+
     //#region getRandomQuiz
     getQuestions: build.query<IQuestionResponse, { eventId: string }>({
       query: ({ eventId }) => ({
@@ -56,6 +67,7 @@ export const apiEvent = createApi({
 });
 
 export const {
+  useGetEventsQuery,
   useGetQuestionsQuery,
   useGetRewardHooksQuery,
   useCalculateRewardMutation,

@@ -1,19 +1,28 @@
 import { Box, Column, RText } from "@/lib/by/Div";
-import { IGame } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 
-export const CardGame = ({ game }: { game: IGame }) => {
+export const CardGame = ({ game }: { game: IEvent }) => {
+  const fallbackImage = "/placeholder.svg";
+
   return (
     <Link
-      href={game.game_url}
+      href={
+        game.is_active
+          ? game.type === "DROP"
+            ? "/event/BeautyDrop"
+            : game.type === "QUIZ"
+              ? "/event/Quiz"
+              : "/event/coming-soon"
+          : "/event/coming-soon"
+      }
       className="shadow-xl h-56 w-72 flex flex-col justify-between items-center rounded-lg bg-[url('https://90sj56vdp0.ufs.sh/f/rSQkHC8t0FOUCNH4GXgNEZRdGL4mshnW0g53kYyDOSeQlIc2')] bg-no-repeat bg-cover
       hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out cursor-pointer group relative overflow-hidden"
     >
       <Box className="relative h-3/5 w-full overflow-hidden mb-4">
         <Image
-          src={game.image_url}
-          alt={game.title}
+          src={game.image_url || fallbackImage}
+          alt={game.title || "Game Image"}
           fill
           className="object-cover rounded-xl group-hover:scale-110 transition-transform duration-300"
         />

@@ -1,6 +1,23 @@
 export {};
 declare global {
   //region Event
+
+  type EventResponse = {
+    success: boolean;
+    events: IEvent[];
+  };
+  interface IEvent {
+    id?: string;
+    title?: string;
+    description?: string;
+    image_url?: string;
+    start_time?: Date;
+    end_time?: Date;
+    type?: string;
+    is_active?: boolean;
+    created_at?: Date;
+  }
+
   type QuizQuestion = {
     id: string;
     event_id: string;
