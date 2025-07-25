@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const CardGame = ({ game }: { game: IEvent }) => {
-  const fallbackImage = "/placeholder.svg";
+  const fallbackImage =
+    "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWF3EMjVHyeOBfC0Di9EszHlqMXr4T7G1ovPbY";
 
   return (
     <Link
