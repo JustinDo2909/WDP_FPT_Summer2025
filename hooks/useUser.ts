@@ -3,9 +3,10 @@
 import { useLazyGetUserQuery } from "@/process/api/apiAuth";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import type { User } from "@/types/user";
 
 export const useUser = () => {
-  const [user, setUser] = useState<IUser>();
+  const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
   const [isLogged, setIsLogged] = useState(false);
 

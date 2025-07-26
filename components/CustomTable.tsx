@@ -1,7 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Plus, Filter, Download, ChevronDown } from "lucide-react";
+import {
+  Search,
+  Plus,
+  Filter,
+  Download,
+  ChevronDown,
+  Edit,
+  Trash2,
+} from "lucide-react";
 
 interface ColumnDef<T> {
   key: keyof T;
@@ -316,16 +324,18 @@ const CustomTable = <T extends { id?: number | string }>({
                           <button
                             onClick={() => onUpdate(item)}
                             className="text-blue-600 hover:text-blue-800 p-1 hover:bg-blue-50 rounded transition-colors"
+                            title="Edit"
                           >
-                            Edit
+                            <Edit className="w-4 h-4" />
                           </button>
                         )}
                         {onDelete && (
                           <button
                             onClick={() => onDelete(item)}
                             className="text-red-600 hover:text-red-800 p-1 hover:bg-red-50 rounded transition-colors"
+                            title="Delete"
                           >
-                            Delete
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         )}
                       </div>

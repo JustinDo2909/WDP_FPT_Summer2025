@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { menuItems } from "@/constants/share/index";
+import { useUser } from "@/hooks/useUser";
 import map from "lodash/map";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 
@@ -30,7 +31,18 @@ const iconMap = {
 };
 
 export function Sidebar() {
-  const pathname = usePathname(); // 👉 Lấy URL hiện tại
+  const pathname = usePathname();
+  const { user } = useUser();
+
+  const filteredMenuItems = menuItems.filter((item) => {
+    if (
+      (item.title === "Customers" || item.title === "Dashboard") &&
+      user?.role === "STAFF"
+    ) {
+      return false;
+    }
+    return true;
+  });
 
   return (
     <Core className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen">
@@ -52,7 +64,7 @@ export function Sidebar() {
             Main Menu
           </RText>
           <nav className="space-y-1">
-            {map(menuItems, (item) => {
+            {map(filteredMenuItems, (item) => {
               const IconComponent = iconMap[item.icon as keyof typeof iconMap];
               const isActive = pathname === item.url; // ✅ So sánh URL
 
@@ -78,12 +90,16 @@ export function Sidebar() {
       <Container className="border-t p-4">
         <Area className="flex items-center space-x-2 mb-2">
           <Yard className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-            <span className="text-sm font-medium">AD</span>
+            <span className="text-sm font-medium">
+              {user?.name ? user.name.substring(0, 2).toUpperCase() : "AD"}
+            </span>
           </Yard>
           <Yard className="flex-1 min-w-0">
-            <RText className="text-sm font-medium truncate">Admin User</RText>
+            <RText className="text-sm font-medium truncate">
+              {user?.name || "Admin User"}
+            </RText>
             <RText className="text-xs text-gray-500 truncate">
-              admin@beauty.com
+              {user?.email || "admin@beauty.com"}
             </RText>
           </Yard>
         </Area>

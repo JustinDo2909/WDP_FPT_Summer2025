@@ -1,12 +1,12 @@
 "use client";
 
+import { ProductTable } from "@/components/admin/Product/product-table";
+import { AddProductModal } from "@/components/admin/Product/add-product-modal";
 import { useProductsLogic } from "@/components/admin/Product/seg/utils";
 import { Area, RText, Core, Container } from "@/lib/by/Div";
 import { StatsCard } from "@/components/admin/StatsCard";
 import { Package, AlertTriangle, Grid3X3, Building2 } from "lucide-react";
 import { useGetProductsQuery, useGetProductMetaQuery } from "@/process/api/api";
-import { ProductTable } from "@/components/admin/Product/product-table";
-import { AddProductModal } from "@/components/admin/Product/add-product-modal";
 import type { Product } from "@/types/productManagement/index";
 
 export default function ProductsPage() {
@@ -24,7 +24,7 @@ export default function ProductsPage() {
   const { data: productsData, isLoading: isStatsLoading } = useGetProductsQuery(
     {
       page: 1,
-      pageSize: 50, // Reduced from 1000 to improve performance
+      pageSize: 50,
     },
     {
       // Cache for 5 minutes to improve performance

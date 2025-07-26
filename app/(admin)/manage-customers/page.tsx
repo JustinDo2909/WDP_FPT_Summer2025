@@ -40,6 +40,7 @@ export default function CustomersPage() {
     id?: string;
     name: string;
     email: string;
+    password?: string;
     role?: string;
   }) => {
     try {
@@ -56,10 +57,14 @@ export default function CustomersPage() {
 
         await updateUser(updateData).unwrap();
       } else {
+        if (!userData.password) {
+          alert("Password is required for new users");
+          return;
+        }
         await createUser({
           name: userData.name,
           email: userData.email,
-          password: "defaultPassword123", // Temporary default password for new users
+          password: userData.password,
           role: userData.role as "USER" | "ADMIN" | "STAFF",
         }).unwrap();
       }
@@ -257,6 +262,7 @@ export default function CustomersPage() {
                   id: editingUser?.id,
                   name: formData.get("name") as string,
                   email: formData.get("email") as string,
+                  password: formData.get("password") as string,
                   role: formData.get("role") as string,
                 });
               }}
@@ -299,6 +305,19 @@ export default function CustomersPage() {
                       <option value="ADMIN">Admin</option>
                       <option value="STAFF">Staff</option>
                     </select>
+                  </Yard>
+                )}
+                {!editingUser && (
+                  <Yard>
+                    <label className="block text-sm font-medium mb-1">
+                      Password
+                    </label>
+                    <input
+                      name="password"
+                      type="password"
+                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                      required
+                    />
                   </Yard>
                 )}
               </Area>

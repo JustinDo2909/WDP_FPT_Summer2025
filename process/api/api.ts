@@ -198,7 +198,8 @@ export const api = createApi({
 
     //#region postReview
     postReview: build.mutation<
-      IReview, { productId: string; reviewValue: number; reviewMessage: string }
+      IReview,
+      { productId: string; reviewValue: number; reviewMessage: string }
     >({
       query: (payload) => ({
         url: `reviews/add`,
@@ -632,10 +633,14 @@ export const api = createApi({
     }),
 
     createQuestion: build.mutation<ApiResponse, CreateQuestionRequest>({
-      query: ({ event_id, ...questionData }) => ({
+      query: ({ event_id, content, image_url, questionOptions }) => ({
         url: `/events/${event_id}/questions/add`,
         method: "POST",
-        body: questionData,
+        body: {
+          content,
+          image_url,
+          options: questionOptions,
+        },
       }),
       invalidatesTags: (result, error, { event_id }) => [
         { type: "Question", id: event_id },
@@ -644,10 +649,13 @@ export const api = createApi({
     }),
 
     updateQuestion: build.mutation<ApiResponse, UpdateQuestionRequest>({
-      query: ({ id, event_id, ...questionData }) => ({
+      query: ({ id, event_id, content, questionOptions }) => ({
         url: `/events/${event_id}/questions/update/${id}`,
         method: "PUT",
-        body: questionData,
+        body: {
+          content,
+          options: questionOptions,
+        },
       }),
       invalidatesTags: (result, error, { event_id }) => [
         { type: "Question", id: event_id },
@@ -724,29 +732,29 @@ export const api = createApi({
       transformResponse: (response: VouchersResponse) => response.vouchers,
       providesTags: ["Vouchers"],
       keepUnusedDataFor: 300, // 5 minutes cache
-  }),
+    }),
 
     //#endregion
 
     //#region UserVouchers
-    getUserVouchers: build.query<IResponse<IVoucher[], 'vouchers'>, void>({
+    getUserVouchers: build.query<IResponse<IVoucher[], "vouchers">, void>({
       query: () => ({
         url: "vouchers",
         method: "GET",
       }),
       providesTags: ["Vouchers"],
-  }),
+    }),
 
     //#endregion
 
     //#region getOrderById
-    getOrderById: build.query<IResponse<IOrder, 'order'>, string>({
-    query: (id) => ({
-      url: `orders/details/${id}`,
-      method: "GET",
+    getOrderById: build.query<IResponse<IOrder, "order">, string>({
+      query: (id) => ({
+        url: `orders/details/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Orders"],
     }),
-    providesTags: ["Orders"],
-  }),
 
     //#endregion
   }),
