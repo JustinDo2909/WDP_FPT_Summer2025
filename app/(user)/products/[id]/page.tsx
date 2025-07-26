@@ -12,7 +12,6 @@ import { calculateDiscount } from "@/lib/share/calcDiscount";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import FloatingGameButton from "@/components/floating_game_button";
 
-// Generate static parameters for static site generation
 export async function generateStaticParams() {
   const products: PaginatedResponse<IProduct, "products"> = await fetchProducts(
     {}
@@ -22,7 +21,6 @@ export async function generateStaticParams() {
   }));
 }
 
-// Define props interface for ProductPage
 interface ProductPageProps {
   params: Promise<{ id: string }>;
 }

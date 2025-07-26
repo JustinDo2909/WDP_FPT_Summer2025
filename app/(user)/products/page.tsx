@@ -7,7 +7,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: ProductQueryParams;
+  searchParams: Promise<ProductQueryParams>;
 }) {
   const params = await searchParams;
   const stringParams = {

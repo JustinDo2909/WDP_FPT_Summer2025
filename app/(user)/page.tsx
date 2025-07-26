@@ -219,7 +219,7 @@ export default function Page() {
               <RText className="text-lg text-slate-600 leading-relaxed">
                 Our approach transcends traditional skincare. We combine
                 cutting-edge science with time-honored botanical wisdom to
-                create products that don't just treat your skin—they transform
+                create products that don&apos;t just treat your skin—they transform
                 it.
               </RText>
 
