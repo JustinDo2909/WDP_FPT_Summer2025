@@ -11,7 +11,6 @@ import { mproduct } from "@/constants";
 import { calculateDiscount } from "@/lib/share/calcDiscount";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
-// Generate static parameters for static site generation
 export async function generateStaticParams() {
   const products: PaginatedResponse<IProduct, 'products'> = await fetchProducts({});
   return products.products.map((p) => ({
@@ -19,16 +18,15 @@ export async function generateStaticParams() {
   }));
 }
 
-// Define props interface for ProductPage
 interface ProductPageProps {
   params: Promise<{ id: string }>;
 }
 
 // Make ProductPage an async function component
 export default async function ProductPage({ params }: ProductPageProps) {
-  const {id} = await params
+  const { id } = await params;
   const res = await fetchProductById(id); 
-  const product:IProduct = res.product
+  const product: IProduct = res.product
 
   return (
     <Core className="min-h-screen bg-gray-100">
