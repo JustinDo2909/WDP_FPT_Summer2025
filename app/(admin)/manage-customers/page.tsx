@@ -103,7 +103,7 @@ export default function CustomersPage() {
 
   const columns = [
     {
-      key: "id",
+      key: "id" as keyof User,
       label: "User ID",
       sortable: true,
       render: (user: User) => (
@@ -113,7 +113,7 @@ export default function CustomersPage() {
       ),
     },
     {
-      key: "name",
+      key: "name" as keyof User,
       label: "User",
       sortable: true,
       render: (user: User) => (
@@ -134,7 +134,7 @@ export default function CustomersPage() {
     },
 
     {
-      key: "createdAt",
+      key: "createdAt" as keyof User,
       label: "Created",
       sortable: true,
       render: (user: User) => (
@@ -144,7 +144,7 @@ export default function CustomersPage() {
       ),
     },
     {
-      key: "updatedAt",
+      key: "updatedAt" as keyof User,
       label: "Updated",
       sortable: true,
       render: (user: User) => (
@@ -154,7 +154,7 @@ export default function CustomersPage() {
       ),
     },
     {
-      key: "actions",
+      key: "actions" as keyof User,
       label: "Actions",
       render: (user: User) => (
         <Area className="flex items-center space-x-1">

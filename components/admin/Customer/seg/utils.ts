@@ -12,7 +12,8 @@ import {
   sampleCustomers,
   sampleGameScoreTransactions,
 } from "@/constants/manage-customers/index";
-// import { sampleOrders } from "@/constants/manage-orders/index";
+// Temporary: define empty sampleOrders until constants file is created
+const sampleOrders: any[] = [];
 
 export interface CustomerFormData {
   name: string;
@@ -368,11 +369,11 @@ export const getLoyaltyTierColor = (tier: Customer["loyaltyTier"]) => {
 export const getCustomerOrders = (customerId: string): CustomerOrder[] => {
   return sampleOrders
     .filter(
-      (order) =>
+      (order: any) =>
         order.customerEmail ===
         sampleCustomers.find((c) => c.id === customerId)?.email
     )
-    .map((order) => ({
+    .map((order: any) => ({
       id: order.id,
       date: order.orderDate,
       status: order.status,
