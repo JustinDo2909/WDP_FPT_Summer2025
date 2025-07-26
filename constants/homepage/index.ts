@@ -29,11 +29,11 @@ export const footerData = [
   {
     title: "Terms & Policy",
     links: [
-      { title: "Term of Service", href: "/terms" },
-      { title: "Return & Refund", href: "/return-refund" },
-      { title: "Cookie Policy", href: "/cookie-policy" },
-      { title: "Payment Terms", href: "/payment-terms" },
-      { title: "Disclaimer", href: "/disclaimer" },
+      { title: "Term of Service", href: "/products" },
+      { title: "Return & Refund", href: "/products" },
+      { title: "Cookie Policy", href: "/products" },
+      { title: "Payment Terms", href: "/products" },
+      { title: "Disclaimer", href: "/products" },
     ],
   },
 ];
