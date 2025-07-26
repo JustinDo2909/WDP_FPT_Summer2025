@@ -189,8 +189,9 @@ export function ProductTable({
   ];
 
   const lowStockCount = useMemo(() => {
-    return (data?.products || []).filter((product) => product.total_stock < 50)
-      .length;
+    return (data?.products || []).filter(
+      (product: Product) => product.total_stock < 50
+    ).length;
   }, [data?.products]);
 
   return (

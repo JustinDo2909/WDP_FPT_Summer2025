@@ -6,7 +6,8 @@ import { StatsCard } from "@/components/admin/StatsCard";
 import { Package, AlertTriangle, Grid3X3, Building2 } from "lucide-react";
 import { useGetProductsQuery, useGetProductMetaQuery } from "@/process/api/api";
 import { ProductTable } from "@/components/admin/Product/product-table";
-import { AddProductModal } from "@/components/admin/Product/Add-product-modal";
+import { AddProductModal } from "@/components/admin/Product/add-product-modal";
+import type { Product } from "@/types/productManagement/index";
 
 export default function ProductsPage() {
   const {
@@ -42,9 +43,13 @@ export default function ProductsPage() {
   // Calculate stats based on available data, or use API totals if available
   const stats = {
     totalProducts: productsData?.pagination?.total || products.length,
-    lowStockProducts: products.filter((p) => p.total_stock < 50).length,
-    totalCategories: new Set(products.map((p) => p.productCategory.title)).size,
-    totalBrands: new Set(products.map((p) => p.productBrand.title)).size,
+    lowStockProducts: products.filter((p: Product) => p.total_stock < 50)
+      .length,
+    totalCategories: new Set(
+      products.map((p: Product) => p.productCategory.title)
+    ).size,
+    totalBrands: new Set(products.map((p: Product) => p.productBrand.title))
+      .size,
   };
 
   return (

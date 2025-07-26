@@ -8,6 +8,7 @@ import {
   useGetProductsQuery,
 } from "@/process/api/api";
 import type { CreateBatchRequest } from "@/types/warehouse/index";
+import type { Product } from "@/types/productManagement/index";
 
 interface AddBatchModalProps {
   isOpen: boolean;
@@ -44,7 +45,7 @@ export function AddBatchModal({
 
   // Filter products based on search term
   const filteredProducts = products.filter(
-    (product) =>
+    (product: Product) =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.productBrand?.title
         .toLowerCase()
@@ -123,7 +124,7 @@ export function AddBatchModal({
 
   const handleProductSelect = (productId: string) => {
     setSelectedProductId(productId);
-    const selectedProduct = products.find((p) => p.id === productId);
+    const selectedProduct = products.find((p: Product) => p.id === productId);
     setSearchTerm(
       selectedProduct
         ? `${selectedProduct.title} - ${selectedProduct.productBrand?.title}`
@@ -134,7 +135,9 @@ export function AddBatchModal({
 
   if (!isOpen) return null;
 
-  const selectedProduct = products.find((p) => p.id === selectedProductId);
+  const selectedProduct = products.find(
+    (p: Product) => p.id === selectedProductId
+  );
 
   return (
     <Yard className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -212,7 +215,7 @@ export function AddBatchModal({
                         : "No products available"}
                     </div>
                   ) : (
-                    filteredProducts.map((product) => (
+                    filteredProducts.map((product: Product) => (
                       <button
                         key={product.id}
                         type="button"

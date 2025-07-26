@@ -1,4 +1,3 @@
-// Warehouse Batch Types
 export interface Batch {
   id: string;
   product_id: string;
@@ -42,7 +41,6 @@ export interface CreateBatchResponse {
   batch: Batch;
 }
 
-// Computed properties for UI
 export interface BatchWithStatus extends Batch {
   status: "active" | "expired" | "out-of-stock";
   discount?: number;

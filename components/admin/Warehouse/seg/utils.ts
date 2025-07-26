@@ -218,7 +218,7 @@ export function useWarehouseLogic() {
 
   // Get product info
   const getProductInfo = (productId: string): Product | undefined => {
-    return products.find((product) => product.id === productId);
+    return products.find((product: Product) => product.id === productId);
   };
 
   return {

@@ -49,10 +49,38 @@ export function QuestionModal({
         content: "",
         image_url: "",
         questionOptions: [
-          { content: "", is_correct: false },
-          { content: "", is_correct: false },
-          { content: "", is_correct: false },
-          { content: "", is_correct: false },
+          {
+            id: "",
+            content: "",
+            is_correct: false,
+            question_id: "",
+            createdAt: "",
+            updatedAt: "",
+          },
+          {
+            id: "",
+            content: "",
+            is_correct: false,
+            question_id: "",
+            createdAt: "",
+            updatedAt: "",
+          },
+          {
+            id: "",
+            content: "",
+            is_correct: false,
+            question_id: "",
+            createdAt: "",
+            updatedAt: "",
+          },
+          {
+            id: "",
+            content: "",
+            is_correct: false,
+            question_id: "",
+            createdAt: "",
+            updatedAt: "",
+          },
         ],
       });
     }
