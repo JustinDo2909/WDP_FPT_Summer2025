@@ -76,7 +76,8 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
         <Row className="flex justify-center items-center gap-3 overflow-hidden hover:cursor-pointer">
           <Wrap className="flex justify-center items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#ffc6c6]/10 transition-all duration-300">
             <Block className="p-2 rounded-full flex justify-center items-center gap-2.5 overflow-hidden text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-[#aa4444] hover:to-[#ee4444] transition-all duration-300">
-              <Link href="/user">
+              <Link             href={user ? `/user` : `/login`}
+>
                 <User size={20} />
               </Link>
             </Block>

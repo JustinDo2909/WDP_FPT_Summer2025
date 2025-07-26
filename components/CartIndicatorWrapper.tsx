@@ -1,7 +1,8 @@
 "use client";
 
+import { useUser } from "@/hooks/useUser";
 import { Begin } from "@/lib/by/Div";
-import { useGetCartQuery } from "@/process/api/apiCart";
+import { useGetCartQuery } from "@/process/api/apiAuth";
 import { setCartItems } from "@/process/store/cartSlice";
 import { ReactNode, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -14,6 +15,7 @@ export const CartIndicatorWrapper: React.FC<CartIndicatorProps> = ({
   children,
 }) => {
   const { data: cartData, isLoading } = useGetCartQuery();
+  const { isLogged } = useUser();
   const [cartItemCount, setCartItemCount] = useState<number>(0);
   const dispatch = useDispatch();
 
@@ -38,9 +40,10 @@ export const CartIndicatorWrapper: React.FC<CartIndicatorProps> = ({
   return (
     <Begin className="relative inline-block">
       {children}
-      <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center z-10">
-        {cartItemCount ?? 0}
-      </span>
+       {isLogged && <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center z-10">
+         {cartItemCount ?? 0}
+        </span>
+        }
     </Begin>
   );
 };

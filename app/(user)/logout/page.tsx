@@ -2,24 +2,17 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useLazyLogOutQuery } from "@/process/api/apiAuth";
+import { useUser } from "@/hooks/useUser";
 export default function LogoutPage() {
-  const [triggerLogOut] = useLazyLogOutQuery();
+  const {logout} = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    const logout = async () => {
-      try {
-        await triggerLogOut().unwrap();
-      } catch (err) {
-        console.error("Logout failed:", err);
-      } finally {
-        router.replace("/"); // Redirect to home
-        router.refresh();
-      }
+    const doLogout = async () => {
+      await logout();
     };
-    logout();
-  }, [triggerLogOut, router]);
+    doLogout();
+  }, [logout, router]);
 
   return (
     <div

@@ -4,7 +4,6 @@ import CartSummary from "@/components/CartPage/CartSummary";
 import { CartTable } from "@/components/CartPage/CartTable";
 import Button from "@/components/CustomButton";
 import { Core, Row, RText, Section } from "@/lib/by/Div";
-import { useGetCartQuery } from "@/process/api/apiCart";
 import Link from "next/link";
 import { get, sortBy } from "lodash";
 import {
@@ -13,6 +12,7 @@ import {
 } from "../seg/calculateSubtotal";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import EmptyCart from "@/components/CartPage/EmptyCart";
+import { useGetCartQuery } from "@/process/api/apiAuth";
 
 export default function CartPage() {
   const { data: cartData, isLoading } = useGetCartQuery();

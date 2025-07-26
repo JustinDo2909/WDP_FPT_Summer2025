@@ -7,13 +7,7 @@ export const apiCart = createApi({
   tagTypes: ["Carts"],
   endpoints: (build) => ({
     //#region getCart
-    getCart: build.query<any, void>({
-      query: () => ({
-        url: "cart/get-cart",
-        method: "GET",
-      }),
-      providesTags: ["Carts"],
-    }),
+
     //#endregion
 
     //#region addToCart
@@ -51,7 +45,7 @@ export const apiCart = createApi({
 });
 
 export const {
-  useGetCartQuery,
+  // useGetCartQuery,
   useAddToCartMutation,
   useUpdateCartMutation,
   useRemoveFromCartMutation,
