@@ -116,6 +116,10 @@ declare global {
     benefits: string[]; // Core
   };
 
+  type IVoucherProduct = {
+    product: IProduct;
+  };
+
   type IVoucher = {
     id: string;
     user_id: string;
@@ -126,6 +130,7 @@ declare global {
     redeemed: boolean;
     redeemed_at: string | null;
     created_at: string;
+    voucherProducts?: IVoucherProduct[];
   }
 
 

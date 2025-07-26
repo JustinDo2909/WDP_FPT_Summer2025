@@ -5,7 +5,7 @@ import { ShoppingCart } from "lucide-react";
 
 export default function EmptyCart() {
   return (
-    <Section className="flex flex-col items-center justify-center py-16 px-4 text-center w-screen">
+    <Section className="flex col-span-4 flex-col items-center justify-center py-16 px-4 text-center">
       <Box className="w-24 h-24 mb-6 rounded-full bg-muted flex items-center justify-center">
         <svg 
           className="w-12 h-12 text-muted-foreground" 

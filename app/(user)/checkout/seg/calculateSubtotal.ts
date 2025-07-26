@@ -10,3 +10,9 @@ export function calculateCartTotalOriginalPrice(cartItems: ICartLineItem[]): num
     return total + item.product.price * item.quantity;
   }, 0);
 }
+
+export function calculateOrderTotalOriginalPrice(orderItems: IOrderItem[]): number {
+  return orderItems.reduce((total, item) => {
+    return total + item.price * item.quantity;
+  }, 0);
+}

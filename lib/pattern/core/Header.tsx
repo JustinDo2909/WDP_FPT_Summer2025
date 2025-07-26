@@ -6,7 +6,7 @@ import { Core } from "@/lib/by/Div";
 
 const Header = () => {
   return (
-    <Core className="sticky top-0 z-50 shadow-sm">
+    <Core className="sticky top-0 z-50 ">
       <HeaderMenu headers={headerData} />
     </Core>
   );

@@ -1,9 +1,8 @@
 import { Block, RText, Section } from "@/lib/by/Div";
-import { IGame } from "@/types";
 import { map } from "lodash";
 import { CardGame } from "./CardGame";
 
-export const MenuGame = ({ listGame }: { listGame: IGame[] }) => {
+export const MenuGame = ({ listGame }: { listGame: IEvent[] }) => {
   return (
     <Section
       className="py-12 bg-[#2A0A4A] rounded-lg mx-auto max-w-6xl

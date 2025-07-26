@@ -20,7 +20,6 @@ import type {
 } from "@/types/meta/index";
 import type {
   Product,
-  ProductsResponse,
   ProductQueryParams,
   ProductMetaResponse,
 } from "@/types/productManagement/index";
@@ -140,16 +139,6 @@ export const api = createApi({
     //#endregion
     //#endregion
 
-    //#region getProductsMeta
-    getProductMeta: build.query<any, void>({
-      query: () => ({
-        url: "products/meta",
-        method: "GET",
-      }),
-      providesTags: ["Products"],
-    }),
-    //#endregion
-
     //#region getRandomQuestion
     getRandomQuestion: build.query<IQuestions[], void>({
       query: () => ({
@@ -207,21 +196,9 @@ export const api = createApi({
 
     //#endregion
 
-    //#region getOrderById
-    getOrderById: build.query<IResponse<IOrder, "order">, string>({
-      query: (id) => ({
-        url: `orders/details/${id}`,
-        method: "GET",
-      }),
-      providesTags: ["Orders"],
-    }),
-
-    //#endregion
-
     //#region postReview
     postReview: build.mutation<
-      IReview,
-      { productId: string; reviewValue: number; reviewMessage: string }
+      IReview, { productId: string; reviewValue: number; reviewMessage: string }
     >({
       query: (payload) => ({
         url: `reviews/add`,
@@ -747,7 +724,30 @@ export const api = createApi({
       transformResponse: (response: VouchersResponse) => response.vouchers,
       providesTags: ["Vouchers"],
       keepUnusedDataFor: 300, // 5 minutes cache
+  }),
+
+    //#endregion
+
+    //#region UserVouchers
+    getUserVouchers: build.query<IResponse<IVoucher[], 'vouchers'>, void>({
+      query: () => ({
+        url: "vouchers",
+        method: "GET",
+      }),
+      providesTags: ["Vouchers"],
+  }),
+
+    //#endregion
+
+    //#region getOrderById
+    getOrderById: build.query<IResponse<IOrder, 'order'>, string>({
+    query: (id) => ({
+      url: `orders/details/${id}`,
+      method: "GET",
     }),
+    providesTags: ["Orders"],
+  }),
+
     //#endregion
   }),
 });
@@ -806,6 +806,7 @@ export const {
 
   // Vouchers
   useGetAllVouchersQuery, //qdao
+  useGetUserVouchersQuery,
   useGetAllVoucherssQuery, //khoa
 
   // Warehouse - Batches

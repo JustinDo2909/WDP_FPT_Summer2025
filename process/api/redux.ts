@@ -9,8 +9,8 @@ import { apiCart } from "./apiCart";
 import { chatbotApi } from "./apiChatBot";
 import { ghnApi } from "./apiGHN";
 import { apiOrders } from "./apiOrders";
-
 import { userApi } from "./apiUser";
+import { apiEvent } from "./apiEvent";
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +23,7 @@ export const store = configureStore({
 
     [apiAddress.reducerPath]: apiAddress.reducer,
     [apiOrders.reducerPath]: apiOrders.reducer,
+    [apiEvent.reducerPath]: apiEvent.reducer,
     cart: cartSlice.reducer,
     [userApi.reducerPath]: userApi.reducer,
   },
@@ -38,7 +39,9 @@ export const store = configureStore({
 
       apiAddress.middleware,
       apiOrders.middleware,
-      userApi.middleware
+      userApi.middleware,
+      apiCart.middleware,
+      apiEvent.middleware
     ),
 });
 

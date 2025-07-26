@@ -1,4 +1,4 @@
-import { Container, Core } from "@/lib/by/Div";
+import { Column, Container, Core, Section } from "@/lib/by/Div";
 import React from "react";
 import UserSidebar from "./UserSidebar";
 
@@ -15,13 +15,13 @@ export default function UserLayout({
       </Container>
       {/* Main Content */}
       <main className="flex-1 p-6">
-        <div className="flex">
-          <div className="hidden md:block">
+        <Section className="flex">
+          <Column className="hidden md:block">
             <UserSidebar />
-          </div>
+          </Column>
 
           {children}
-        </div>
+        </Section>
       </main>
     </Core>
   );

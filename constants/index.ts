@@ -912,18 +912,19 @@ export const products = [
 
 export const games = [
   {
-    game_url: "/event/quiz",
+    game_url: "/event/Quiz",
     image_url:
       "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWzhKMNWdFM1HmlgIecpOCBs5u4Jq30fUNxQz6",
     title: "Glow & Know?",
     description: "Test your beauty IQ and unlock exclusive rewards!",
   },
   {
-    game_url: "/event/coming-soon",
+    game_url: "/event/BeautyDrop",
     image_url:
       "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyW0S07pmjvH6zSQAPTDVLocRxF49K3JjiXNhsb",
-    title: "Skincare Stack",
-    description: "Build Your Routine, Reap Your Rewards!",
+    title: "Beauty Drop",
+    description:
+      "The ultimate beauty collecting game! Catch falling makeup, unlock new looks, and become the ultimate beauty guru.",
   },
   {
     game_url: "/event/coming-soon",
@@ -989,3 +990,157 @@ export const games = [
     description: "Pair up cosmetics in memory game!",
   },
 ];
+
+//region Game Drop
+export const VITAMINS = [
+  {
+    name: "A",
+    color: "#E8F5E8",
+    points: 15,
+    imageUrl:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWtceauLU8AxO6L3m1gWG2FaR7oeTJHfZ9v8YD",
+  },
+  {
+    name: "B",
+    color: "#E3F2FD",
+    points: 10,
+    imageUrl:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWXfe0jNlPK8xMcnVoJ5hZ7kGugevHs62NR1Ft",
+  },
+  {
+    name: "C",
+    color: "#FFF3E0",
+    points: 8,
+    imageUrl:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWdjWJVXqPGcex8au1v5Q0LRgCkVDYrBHbdZW4",
+  },
+  {
+    name: "D",
+    color: "#F3E5F5",
+    points: 12,
+    imageUrl:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWLNq8TevD3Ntnf69S7mrTUlF1jEehAaQxZIgz",
+  },
+  {
+    name: "E",
+    color: "#FCE4EC",
+    points: 4,
+    imageUrl:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWCZdc5ZK6gWyXmFVNdlSDA0YwrCjLt1zEn4i2",
+  },
+  {
+    name: "K",
+    color: "#F1F8E9",
+    points: 6,
+    imageUrl:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWq18P4pwfLVkaZUw754nRBF9zOYiNMprlG8PA",
+  },
+];
+
+export const HARMFUL_ITEMS = [
+  {
+    name: "UV",
+    color: "#FFEBEE",
+    points: -100,
+    imageUrl:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWdv1rWtqPGcex8au1v5Q0LRgCkVDYrBHbdZW4",
+  },
+  {
+    name: "CO2",
+    color: "#EFEBE9",
+    points: -150,
+    imageUrl:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWsqsktd5puPxTBasbNvKnjZzRAoIOXMS7cLdU",
+  },
+  {
+    name: "Alcohol",
+    color: "#F3E5F5",
+    points: -200,
+    imageUrl:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWlLhKRNVrEI9Nij0g2ycwz3GAJC7HObfKvFTo",
+  },
+];
+
+export const MULTIPLIERS = [
+  {
+    value: 2,
+    name: "Double Points Serum",
+    color: "#FFF8E1",
+    points: 0,
+    imageUrl:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWIAIvLxevmZlOBPHLx9dAMy5gj23CUIoThDq8",
+  },
+  {
+    value: 3,
+    name: "Triple Glow Essence",
+    color: "#FFF3E0",
+    points: 0,
+    imageUrl:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWqbA0htwfLVkaZUw754nRBF9zOYiNMprlG8PA",
+  },
+];
+
+export const VOUCHER_REWARDS = [
+  {
+    min: 700,
+    max: 899,
+    type: "AMOUNT",
+    value: 50000,
+  },
+  {
+    min: 900,
+    max: 1199,
+    type: "PERCENT",
+    value: 10,
+  },
+  {
+    min: 1200,
+    max: 1499,
+    type: "PERCENT",
+    value: 15,
+  },
+  {
+    min: 1500,
+    max: 1799,
+    type: "PERCENT",
+    value: 20,
+  },
+  {
+    min: 1800,
+    max: 9999,
+    type: "PERCENT",
+    value: 25,
+  },
+];
+
+export const GAME_MODES = {
+  practice: {
+    name: "Practice Mode",
+    description: "Easy and friendly for beginners",
+    settings: {
+      vitaminChance: 0.85, // 85% vitamin
+      harmfulChance: 0.05, // 5% harmful
+      multiplierChance: 0.1, // 10% multiplier
+      spawnRate: 0.015, // Slower spawn
+      itemSpeed: { min: 1, max: 2.5 }, // Slower fall speed
+      basketSpeed: 10, // Faster basket
+      gameTime: 45, // Longer time
+      basketSize: { width: 150, height: 50 }, // Larger basket
+    },
+  },
+  official: {
+    name: "Official Mode",
+    description: "A true challenge for skilled players",
+    settings: {
+      vitaminChance: 0.7, // 70% vitamin
+      harmfulChance: 0.2, // 20% harmful
+      multiplierChance: 0.1, // 10% multiplier
+      spawnRate: 0.03, // Faster spawn
+      itemSpeed: { min: 2, max: 4 }, // Faster fall speed
+      basketSpeed: 8, // Slower basket
+      gameTime: 30, // Shorter time
+      basketSize: { width: 100, height: 50 }, // Smaller basket
+    },
+  },
+};
+//endregion

@@ -8,7 +8,7 @@ export const useHandleCheckout = () => {
 
   const handleCheckout = useCallback(async (shippingCost: number, addressId: string , couponId?: string) => {
     try {
-      const response = await createCheckoutSession({ shippingCost , addressId, couponId: couponId ?? "" }).unwrap();
+      const response = await createCheckoutSession({ shippingCost , addressId, couponId: couponId ?? "", isMobile: false }).unwrap();
 
       if (response.success && response.url) {
         window.location.href = response.url;

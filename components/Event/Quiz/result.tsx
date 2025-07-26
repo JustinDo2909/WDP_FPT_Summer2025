@@ -1,0 +1,161 @@
+"use client";
+
+import { Area, Block, RText, Section } from "@/lib/by/Div";
+import { useRouter } from "next/navigation";
+import { TicketPercent } from "lucide-react";
+import clsx from "clsx";
+import Image from "next/image";
+import Button from "@/components/CustomButton";
+
+interface RewardTier {
+  correct: number;
+  reward: string;
+}
+
+interface FinalScore {
+  correct: number;
+  total: number;
+}
+
+export default function ResultRender({
+  finalScore,
+  rewardTiers,
+  reward,
+  isCalculatingReward,
+}: {
+  finalScore: FinalScore;
+  rewardTiers: RewardTier[];
+  reward: EventReward | null;
+  isCalculatingReward: boolean;
+}) {
+  const router = useRouter();
+
+  const formatReward = (reward: EventReward | null) => {
+    if (!reward || !reward.discount_value || !reward.type) {
+      return "No reward achieved";
+    }
+    return reward.type === "PERCENT"
+      ? `${reward.discount_value}% voucher`
+      : `${reward.discount_value} VND discount`;
+  };
+
+  const rewardHookItems = Array.from(
+    { length: finalScore.total },
+    (_, i) => finalScore.total - i
+  );
+
+  const getMessageByScore = (score: number) => {
+    if (score >= 18) return "You're a beauty genius!";
+    if (score >= 13) return "Well done, beauty pro!";
+    if (score >= 8) return "Nice try! Keep glowing!";
+    return "Don't worry, keep learning!";
+  };
+
+  return (
+    <Area className="bg-[#fff0f5] h-screen overflow-hidden px-6 relative">
+      {/* Absolute Header */}
+      <Section className="absolute top-4 left-4 right-4 flex justify-between z-10">
+        <Button
+          className="bg-white text-slate-700 px-5 py-2 rounded-full shadow font-semibold"
+          onClick={() => router.push("/event")}
+          label="Menu"
+        />
+        <Button
+          className="bg-white text-slate-700 px-5 py-2 rounded-full shadow font-semibold"
+          disabled={!reward || isCalculatingReward}
+          onClick={() => router.push("/products")}
+          label="Shop"
+        />
+      </Section>
+
+      {/* Main Layout */}
+      <Section className="flex flex-col md:flex-row gap-8 mt-20 mx-24">
+        {/* Left: Image or message */}
+        <Block className="flex flex-col items-end justify-center text-center px-4">
+          {/* Example illustration (can be replaced with your own image) */}
+          <Image
+            src="https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWPZHJqpOrulwk1UO3YLnpZhyJsMeibzfd0mVt"
+            width={400}
+            height={400}
+            alt="Congrats"
+            className="mb-4"
+          />
+          <RText className="text-2xl font-bold text-orange-500">
+            {getMessageByScore(finalScore.correct)}
+          </RText>
+        </Block>
+
+        {/* Right: Result info */}
+        <Block className="flex-1 flex-col items-end justify-center w-full">
+          {/* Congratulation */}
+          <Section className="text-center mb-6">
+            <RText className="text-3xl font-bold text-red-500">
+              Congratulation!
+            </RText>
+            <RText className="mt-3 text-lg font-medium text-slate-700">
+              You got{" "}
+              <RText className="text-red-500 font-bold">
+                {finalScore.correct}/{finalScore.total}
+              </RText>{" "}
+              correct answers!
+            </RText>
+          </Section>
+
+          {/* Reward Summary */}
+          <Section className="bg-white rounded-xl p-3 shadow flex items-center gap-4 max-w-md mx-auto">
+            <TicketPercent className="text-red-500 w-6 h-6" />
+            {isCalculatingReward ? (
+              <RText className="text-base font-semibold text-red-500">
+                Calculating reward...
+              </RText>
+            ) : (
+              <RText className="text-base font-semibold text-red-500">
+                {formatReward(reward)}
+              </RText>
+            )}
+          </Section>
+
+          {/* Decorative text */}
+          <Section className="my-5 text-center opacity-60">
+            <RText className="text-3xl font-cursive text-orange-400">
+              Congratulations!
+            </RText>
+          </Section>
+
+          {/* Reward Hooks */}
+          <Section className="bg-white rounded-xl p-5 shadow max-w-md mx-auto">
+            <RText className="text-lg font-bold text-slate-800 mb-4">
+              Reward Hooks
+            </RText>
+            <Block className="space-y-3 h-[200px] overflow-y-auto pr-2">
+              {rewardHookItems.map((num) => {
+                const tier = rewardTiers.find((t) => t.correct === num);
+                return (
+                  <Block
+                    key={num}
+                    className={clsx(
+                      "flex justify-between items-center px-4 py-3 rounded-lg border",
+                      finalScore.correct === num
+                        ? "bg-red-50 border-red-400"
+                        : "border-slate-200"
+                    )}
+                  >
+                    <RText className="text-sm font-medium text-slate-700">
+                      {num}/{finalScore.total} correct
+                    </RText>
+                    {tier && (
+                      <Block className="flex items-center gap-2 text-red-500 font-semibold text-sm">
+                        <TicketPercent className="w-4 h-4" />
+                        <span>{tier.reward}</span>
+                      </Block>
+                    )}
+                  </Block>
+                );
+              })}
+            </Block>
+          </Section>
+        </Block>
+      </Section>
+    </Area>
+  );
+}
