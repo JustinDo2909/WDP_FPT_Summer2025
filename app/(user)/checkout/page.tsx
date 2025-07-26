@@ -6,7 +6,6 @@ import CouponAddInput from "@/components/CheckoutPage/CouponAddInput";
 import Button from "@/components/CustomButton";
 import { Box, Core, Row, RText, Section } from "@/lib/by/Div";
 import { useGetUserVouchersQuery } from "@/process/api/api";
-import { useGetCartQuery } from "@/process/api/apiCart";
 import { useState } from "react";
 import {
   calculateCartTotal,
@@ -17,6 +16,7 @@ import { useShippingFeeHandler } from "./seg/useShippingFee";
 import { roundDownToNearestMultiple } from "@/lib/share/roundTo";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { CartTable } from "@/components/CartPage/CartTable";
+import { useGetCartQuery } from "@/process/api/apiAuth";
 
 export default function CheckoutPage() {
   // const [shippingInfo, setShippingInfo] = useState<IAddress>({
