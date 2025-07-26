@@ -113,38 +113,34 @@ const postData = {
   ],
 };
 
-const relatedPosts = [
-  {
-    id: 2,
-    title: "The Right Way to Use Niacinamide Serum",
-    thumbnail:
-      "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=300&h=200&fit=crop",
-    category: "Serum",
-    readTime: "4 min",
-  },
-  {
-    id: 3,
-    title: "Sunscreen Application: Common Mistakes",
-    thumbnail:
-      "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=300&h=200&fit=crop",
-    category: "Sunscreen",
-    readTime: "6 min",
-  },
-  {
-    id: 4,
-    title: "Retinol for Beginners Guide",
-    thumbnail:
-      "https://images.unsplash.com/photo-1556228591-08ae302de1d0?w=300&h=200&fit=crop",
-    category: "Treatment",
-    readTime: "8 min",
-  },
-];
+// const relatedPosts = [
+//   {
+//     id: 2,
+//     title: "The Right Way to Use Niacinamide Serum",
+//     thumbnail:
+//       "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=300&h=200&fit=crop",
+//     category: "Serum",
+//     readTime: "4 min",
+//   },
+//   {
+//     id: 3,
+//     title: "Sunscreen Application: Common Mistakes",
+//     thumbnail:
+//       "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=300&h=200&fit=crop",
+//     category: "Sunscreen",
+//     readTime: "6 min",
+//   },
+//   {
+//     id: 4,
+//     title: "Retinol for Beginners Guide",
+//     thumbnail:
+//       "https://images.unsplash.com/photo-1556228591-08ae302de1d0?w=300&h=200&fit=crop",
+//     category: "Treatment",
+//     readTime: "8 min",
+//   },
+// ];
 
-export default function HowToUseDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function HowToUseDetailPage() {
   return (
     <Core className="min-h-screen bg-gray-50 py-6 sm:py-8 lg:py-12">
       <Container className="max-w-7xl mx-auto px-4 sm:px-6">

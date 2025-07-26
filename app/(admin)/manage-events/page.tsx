@@ -43,7 +43,7 @@ export default function EventManagement() {
   const [activeTab, setActiveTab] = useState<"events" | "rewards">("events");
   const [selectedEventId, setSelectedEventId] = useState<string>("");
   const [showEventQuestions, setShowEventQuestions] = useState<string | null>(
-    null
+    null,
   );
 
   const [eventModal, setEventModal] = useState({
@@ -67,7 +67,7 @@ export default function EventManagement() {
     undefined,
     {
       refetchOnMountOrArgChange: 30, // Cache for 30 seconds
-    }
+    },
   );
 
   const { data: questions = [] } = useGetQuestionsByEventIdQuery(
@@ -75,7 +75,7 @@ export default function EventManagement() {
     {
       skip: !showEventQuestions,
       refetchOnMountOrArgChange: 30,
-    }
+    },
   );
 
   const { data: rewards = [] } = useGetRewardsByEventIdQuery(selectedEventId!, {
@@ -110,7 +110,7 @@ export default function EventManagement() {
   // Memoized computed values
   const filteredRewards = useMemo(
     () => (selectedEventId ? rewards : []),
-    [selectedEventId, rewards]
+    [selectedEventId, rewards],
   );
 
   const allQuestions = useMemo(() => [], []); // Empty array if not needed
@@ -119,7 +119,7 @@ export default function EventManagement() {
 
   const questionStats = useMemo(
     () => calculateQuestionStats(allQuestions, events),
-    [allQuestions, events]
+    [allQuestions, events],
   );
 
   const rewardStats = useMemo(() => calculateRewardStats(rewards), [rewards]);
@@ -187,7 +187,7 @@ export default function EventManagement() {
         ),
       },
     ],
-    []
+    [],
   );
 
   const questionColumns = useMemo(
@@ -206,7 +206,7 @@ export default function EventManagement() {
         label: "Correct Answer",
         render: (question: Question) => {
           const correctOption = question.questionOptions.find(
-            (opt) => opt.is_correct
+            (opt) => opt.is_correct,
           );
           return (
             <Yard className="max-w-xs truncate text-green-600 font-medium">
@@ -231,7 +231,7 @@ export default function EventManagement() {
         ),
       },
     ],
-    []
+    [],
   );
 
   const rewardColumns = useMemo(
@@ -269,7 +269,7 @@ export default function EventManagement() {
         ),
       },
     ],
-    []
+    [],
   );
 
   // Optimized event handlers with useCallback
@@ -300,7 +300,7 @@ export default function EventManagement() {
         alert("Error saving event. Please try again.");
       }
     },
-    [eventModal.mode, eventModal.event, createEvent, updateEvent]
+    [eventModal.mode, eventModal.event, createEvent, updateEvent],
   );
 
   const handleQuestionSave = useCallback(
@@ -328,7 +328,12 @@ export default function EventManagement() {
         alert("Error saving question. Please try again.");
       }
     },
-    [questionModal.mode, questionModal.question, createQuestion, updateQuestion]
+    [
+      questionModal.mode,
+      questionModal.question,
+      createQuestion,
+      updateQuestion,
+    ],
   );
 
   const handleRewardSave = useCallback(
@@ -356,7 +361,7 @@ export default function EventManagement() {
         alert("Error saving reward. Please try again.");
       }
     },
-    [rewardModal.mode, rewardModal.reward, createReward, updateReward]
+    [rewardModal.mode, rewardModal.reward, createReward, updateReward],
   );
 
   // Memoized tab configuration
@@ -365,7 +370,7 @@ export default function EventManagement() {
       { key: "events", label: "Events", icon: Calendar },
       { key: "rewards", label: "Rewards", icon: Gift },
     ],
-    []
+    [],
   );
 
   // Event handlers for delete operations
@@ -383,7 +388,7 @@ export default function EventManagement() {
         }
       }
     },
-    [deleteQuestion]
+    [deleteQuestion],
   );
 
   const handleDeleteEvent = useCallback(
@@ -397,7 +402,7 @@ export default function EventManagement() {
         }
       }
     },
-    [deleteEvent]
+    [deleteEvent],
   );
 
   const handleDeleteReward = useCallback(
@@ -414,7 +419,7 @@ export default function EventManagement() {
         }
       }
     },
-    [deleteReward]
+    [deleteReward],
   );
 
   // Memoized export handler
@@ -422,7 +427,7 @@ export default function EventManagement() {
     const csv = events
       .map(
         (e) =>
-          `${e.title},${e.description},${e.start_time},${e.end_time},${e.is_active}`
+          `${e.title},${e.description},${e.start_time},${e.end_time},${e.is_active}`,
       )
       .join("\n");
     const blob = new Blob([csv], { type: "text/csv" });

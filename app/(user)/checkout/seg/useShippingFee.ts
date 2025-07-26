@@ -1,9 +1,8 @@
-'use client'
+"use client";
 
 import { useEffect } from "react";
 import { useGetShippingFeeMutation } from "@/process/api/apiGHN";
 import { useCalculateFeeErrorHandler } from "./useCalculateFeeErrorHandler";
-
 
 export function useShippingFeeHandler(shippingInfo: {
   to_district_id: string;
@@ -19,8 +18,7 @@ export function useShippingFeeHandler(shippingInfo: {
   } = useCalculateFeeErrorHandler();
 
   useEffect(() => {
-    const isReady =
-      shippingInfo.to_district_id && shippingInfo.to_ward_code;
+    const isReady = shippingInfo.to_district_id && shippingInfo.to_ward_code;
 
     if (!isReady) return;
 
@@ -30,8 +28,8 @@ export function useShippingFeeHandler(shippingInfo: {
       to_ward_code: shippingInfo.to_ward_code,
       weight: 100,
       items: [
-      { name: "Sample Product A", quantity: 2 },
-      { name: "Sample Product B", quantity: 1 },
+        { name: "Sample Product A", quantity: 2 },
+        { name: "Sample Product B", quantity: 1 },
       ],
     };
 

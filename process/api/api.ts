@@ -53,7 +53,7 @@ import type {
 const customBaseQuery = async (
   args: string | FetchArgs,
   api: BaseQueryApi,
-  extraOptions: any
+  extraOptions: any,
 ) => {
   const baseQuery = fetchBaseQuery({
     baseUrl: "https://cosme-play-be.vercel.app/api/",
@@ -198,7 +198,8 @@ export const api = createApi({
 
     //#region postReview
     postReview: build.mutation<
-      IReview, { productId: string; reviewValue: number; reviewMessage: string }
+      IReview,
+      { productId: string; reviewValue: number; reviewMessage: string }
     >({
       query: (payload) => ({
         url: `reviews/add`,
@@ -227,7 +228,7 @@ export const api = createApi({
         },
         providesTags: ["Batches"],
         keepUnusedDataFor: 60, // 1 minute cache for paginated data
-      }
+      },
     ),
 
     getProductBatches: build.query<Batch[], string>({
@@ -332,7 +333,7 @@ export const api = createApi({
       {
         query: (id) => `/products/${id}`,
         providesTags: ["Products"],
-      }
+      },
     ),
     //#endregion
 
@@ -369,19 +370,19 @@ export const api = createApi({
       }),
       async onQueryStarted(
         { id, ...categoryData },
-        { dispatch, queryFulfilled }
+        { dispatch, queryFulfilled },
       ) {
         const patchResult = dispatch(
           api.util.updateQueryData("getMetaData", undefined, (draft) => {
             if (draft?.data?.categories) {
               const categoryIndex = draft.data.categories.findIndex(
-                (cat) => cat.id === id
+                (cat) => cat.id === id,
               );
               if (categoryIndex !== -1) {
                 draft.data.categories[categoryIndex] = { id, ...categoryData };
               }
             }
-          })
+          }),
         );
         try {
           await queryFulfilled;
@@ -430,13 +431,13 @@ export const api = createApi({
           api.util.updateQueryData("getMetaData", undefined, (draft) => {
             if (draft?.data?.brands) {
               const brandIndex = draft.data.brands.findIndex(
-                (brand) => brand.id === id
+                (brand) => brand.id === id,
               );
               if (brandIndex !== -1) {
                 draft.data.brands[brandIndex] = { id, ...brandData };
               }
             }
-          })
+          }),
         );
         try {
           await queryFulfilled;
@@ -485,19 +486,19 @@ export const api = createApi({
       }),
       async onQueryStarted(
         { id, ...skinTypeData },
-        { dispatch, queryFulfilled }
+        { dispatch, queryFulfilled },
       ) {
         const patchResult = dispatch(
           api.util.updateQueryData("getMetaData", undefined, (draft) => {
             if (draft?.data?.skinTypes) {
               const skinTypeIndex = draft.data.skinTypes.findIndex(
-                (st) => st.id === id
+                (st) => st.id === id,
               );
               if (skinTypeIndex !== -1) {
                 draft.data.skinTypes[skinTypeIndex] = { id, ...skinTypeData };
               }
             }
-          })
+          }),
         );
         try {
           await queryFulfilled;
@@ -551,7 +552,7 @@ export const api = createApi({
           api.util.updateQueryData("getAllOrders", undefined, (draft) => {
             if (draft?.orders) {
               const orderIndex = draft.orders.findIndex(
-                (order) => order.id === orderId
+                (order) => order.id === orderId,
               );
               if (orderIndex !== -1) {
                 draft.orders[orderIndex].status = status as
@@ -562,7 +563,7 @@ export const api = createApi({
                 draft.orders[orderIndex].updatedAt = new Date().toISOString();
               }
             }
-          })
+          }),
         );
 
         try {
@@ -714,7 +715,7 @@ export const api = createApi({
           { type: "Reward", id: event_id },
           "Reward",
         ],
-      }
+      },
     ),
     //#endregion
 
@@ -724,29 +725,29 @@ export const api = createApi({
       transformResponse: (response: VouchersResponse) => response.vouchers,
       providesTags: ["Vouchers"],
       keepUnusedDataFor: 300, // 5 minutes cache
-  }),
+    }),
 
     //#endregion
 
     //#region UserVouchers
-    getUserVouchers: build.query<IResponse<IVoucher[], 'vouchers'>, void>({
+    getUserVouchers: build.query<IResponse<IVoucher[], "vouchers">, void>({
       query: () => ({
         url: "vouchers",
         method: "GET",
       }),
       providesTags: ["Vouchers"],
-  }),
+    }),
 
     //#endregion
 
     //#region getOrderById
-    getOrderById: build.query<IResponse<IOrder, 'order'>, string>({
-    query: (id) => ({
-      url: `orders/details/${id}`,
-      method: "GET",
+    getOrderById: build.query<IResponse<IOrder, "order">, string>({
+      query: (id) => ({
+        url: `orders/details/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Orders"],
     }),
-    providesTags: ["Orders"],
-  }),
 
     //#endregion
   }),

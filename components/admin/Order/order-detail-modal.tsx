@@ -27,17 +27,22 @@ interface OrderDetailModalProps {
   onUpdateStatus?: (orderId: string, newStatus: OrderDetail["status"]) => void;
 }
 
+// Hooks must always run, so we move them outside any conditional return
 export function OrderDetailModal({
   isOpen,
   onClose,
   order,
   onUpdateStatus,
 }: OrderDetailModalProps) {
-  if (!isOpen || !order) return null;
+  // Safe fallback
+  const orderStatus = order?.status;
+  const orderId = order?.id;
 
   const statusIcon = useMemo(() => {
     const iconProps = { className: "w-5 h-5" };
-    switch (order.status) {
+    if (!orderStatus) return null;
+
+    switch (orderStatus) {
       case "PROCESSING":
         return <Package {...iconProps} />;
       case "SHIPPED":
@@ -49,21 +54,24 @@ export function OrderDetailModal({
       default:
         return <Package {...iconProps} />;
     }
-  }, [order.status]);
+  }, [orderStatus]);
 
   const handleStatusChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      onUpdateStatus?.(order.id, e.target.value as OrderDetail["status"]);
+      if (!orderId) return;
+      onUpdateStatus?.(orderId, e.target.value as OrderDetail["status"]);
     },
-    [onUpdateStatus, order.id]
+    [onUpdateStatus, orderId],
   );
+
+  if (!isOpen || !order) return null;
 
   return (
     <>
       <Core
         className={clsx(
           "fixed inset-0 bg-black transition-opacity duration-300 z-[9998]",
-          isOpen ? "bg-opacity-60" : "bg-opacity-0"
+          isOpen ? "bg-opacity-60" : "bg-opacity-0",
         )}
         onClick={onClose}
       />
@@ -71,7 +79,7 @@ export function OrderDetailModal({
       <Core
         className={clsx(
           "fixed top-0 right-0 h-full w-full max-w-3xl bg-white shadow-2xl z-[9999] transform transition-transform duration-300 ease-in-out",
-          isOpen ? "translate-x-0" : "translate-x-full"
+          isOpen ? "translate-x-0" : "translate-x-full",
         )}
       >
         <Container className="h-full overflow-y-auto">
@@ -110,7 +118,7 @@ export function OrderDetailModal({
                     <Yard
                       className={clsx(
                         "p-2 rounded-full",
-                        getStatusColor(order.status)
+                        getStatusColor(order.status),
                       )}
                     >
                       {statusIcon}
@@ -148,7 +156,7 @@ export function OrderDetailModal({
                     <Yard
                       className={clsx(
                         "p-2 rounded-full",
-                        getPaymentMethodColor(order.payment_method)
+                        getPaymentMethodColor(order.payment_method),
                       )}
                     >
                       <CreditCard className="w-5 h-5" />
@@ -275,7 +283,6 @@ export function OrderDetailModal({
                 </table>
               </Area>
 
-              {/* Total */}
               <Area className="mt-4 border-t border-gray-200 pt-4">
                 <Yard className="flex justify-end">
                   <RText className="text-xl font-semibold text-gray-900">

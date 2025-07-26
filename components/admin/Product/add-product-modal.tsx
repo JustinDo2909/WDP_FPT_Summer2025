@@ -179,7 +179,7 @@ export function AddProductModal({
                       <option key={category.id} value={category.id}>
                         {category.title}
                       </option>
-                    )
+                    ),
                   )}
                 </select>
                 {errors.product_category_id && (
@@ -210,7 +210,7 @@ export function AddProductModal({
                       <option key={brand.id} value={brand.id}>
                         {brand.title}
                       </option>
-                    )
+                    ),
                   )}
                 </select>
                 {errors.product_brand_id && (
@@ -241,7 +241,7 @@ export function AddProductModal({
                       <option key={skinType.id} value={skinType.id}>
                         {skinType.title}
                       </option>
-                    )
+                    ),
                   )}
                 </select>
                 {errors.product_skinType_id && (

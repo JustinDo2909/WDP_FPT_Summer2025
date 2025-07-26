@@ -1,26 +1,26 @@
 import { mproduct } from "@/constants";
 import { Card, Area, Begin } from "@/lib/by/Div";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/lib/pattern/share/Tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/lib/pattern/share/Tabs";
 import { map } from "lodash";
 import ReviewSection from "./ReviewSection";
 
-export function ProductDetailsTabs({
-  productData,
-}: {
-  productData: IProduct;
-}) {
+export function ProductDetailsTabs({ productData }: { productData: IProduct }) {
   return (
     <Card className="flex flex-col gap-2 shadow-md bg-white rounded-lg p-4 min-h-[400px] flex-1">
       <Tabs defaultValue="description">
         <Area>
           <Begin>
             <TabsList>
-                {map(mproduct.tabs, (tab) => (
-               
-                  <TabsTrigger key={tab.id} value={tab.id}>
+              {map(mproduct.tabs, (tab) => (
+                <TabsTrigger key={tab.id} value={tab.id}>
                   {tab.label}
-                  </TabsTrigger>
-                ))}
+                </TabsTrigger>
+              ))}
             </TabsList>
           </Begin>
         </Area>

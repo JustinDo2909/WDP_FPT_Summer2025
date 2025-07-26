@@ -1,14 +1,17 @@
-'use client';
+"use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from 'react';
-import omit from 'lodash/omit';
-import isEqual from 'lodash/isEqual';
+import { useEffect, useRef } from "react";
+import omit from "lodash/omit";
+import isEqual from "lodash/isEqual";
 
 /**
  * Custom hook to handle product search and sorting
  */
-export function useProductSearch(searchQuery: string, sortOption: string | null) {
+export function useProductSearch(
+  searchQuery: string,
+  sortOption: string | null,
+) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -32,7 +35,7 @@ export function useProductSearch(searchQuery: string, sortOption: string | null)
 
   return {
     handleSortChange,
-    handleSearch
+    handleSearch,
   };
 }
 
@@ -40,14 +43,14 @@ export const useAutoRefetch = (
   searchParams: ProductQueryParams,
   refetch: () => void,
   shouldFetch: boolean,
-  excludeKeys: string[] = ['title']
+  excludeKeys: string[] = ["title"],
 ) => {
   const prevParamsRef = useRef(searchParams);
 
   useEffect(() => {
     const prevFiltered = omit(prevParamsRef.current, excludeKeys);
     const currentFiltered = omit(searchParams, excludeKeys);
-    
+
     if (!isEqual(prevFiltered, currentFiltered) && shouldFetch) {
       refetch();
     }
@@ -56,22 +59,20 @@ export const useAutoRefetch = (
   }, [searchParams, refetch, shouldFetch, excludeKeys]);
 };
 
-
 export const CATEGORIES = [
-  { value: 'all', label: 'All Categories' },
-  { value: 'skincare', label: 'Chăm sóc da' },
-  { value: 'treatment', label: 'Điều trị da' },
-  { value: 'toner', label: 'Nước cân bằng' },
+  { value: "all", label: "All Categories" },
+  { value: "skincare", label: "Chăm sóc da" },
+  { value: "treatment", label: "Điều trị da" },
+  { value: "toner", label: "Nước cân bằng" },
 ];
 
 export const BRANDS = [
-  { value: 'all', label: 'All Brands' },
-  { value: 'larocheposay', label: 'La Roche-Posay' },
-  { value: 'cerave', label: 'CeraVe' },
-  { value: 'paulaschoice', label: "Paula's Choice" },
-  { value: 'bioderma', label: 'Bioderma' },
-  { value: 'somebymi', label: 'Some By Mi' },
-  { value: 'acnes', label: 'Acnes' },
-  { value: 'theordinary', label: 'The Ordinary' },
+  { value: "all", label: "All Brands" },
+  { value: "larocheposay", label: "La Roche-Posay" },
+  { value: "cerave", label: "CeraVe" },
+  { value: "paulaschoice", label: "Paula's Choice" },
+  { value: "bioderma", label: "Bioderma" },
+  { value: "somebymi", label: "Some By Mi" },
+  { value: "acnes", label: "Acnes" },
+  { value: "theordinary", label: "The Ordinary" },
 ];
-

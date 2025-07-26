@@ -62,7 +62,12 @@ const DebouncedAddressIndicator: React.FC<AddressIndicatorProps> = ({
     };
   }, [debouncedComputeAddress]);
 
-  if (!debouncedAddress) return <Begin><RText>&nbsp;</RText></Begin>
+  if (!debouncedAddress)
+    return (
+      <Begin>
+        <RText>&nbsp;</RText>
+      </Begin>
+    );
 
   return (
     <Begin className="flex items-center text-pink-500 text-xs mt-1 gap-1">
@@ -71,6 +76,5 @@ const DebouncedAddressIndicator: React.FC<AddressIndicatorProps> = ({
     </Begin>
   );
 };
-
 
 export default DebouncedAddressIndicator;

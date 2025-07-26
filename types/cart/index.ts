@@ -2,7 +2,7 @@ declare global {
   type ICart = {
     id: string;
     user_id: string;
-    cartItems: ICartLineItem[]
+    cartItems: ICartLineItem[];
   };
 
   type ICartLineItem = {
@@ -12,7 +12,6 @@ declare global {
     product_id: string;
     quantity: number;
   };
-
 
   type IAddress = {
     id?: string;
@@ -24,18 +23,12 @@ declare global {
     notes?: string;
     //add them
     to_city_id: string;
-    to_ward_code: string
+    to_ward_code: string;
     to_district_id: string;
     fullname: string;
     district: string;
     ward: string;
-  }
-
-
+  };
 }
 
-export type {
-  ICart,
-  ICartLineItem,
-  IAddress
-};
+export type { ICart, ICartLineItem, IAddress };

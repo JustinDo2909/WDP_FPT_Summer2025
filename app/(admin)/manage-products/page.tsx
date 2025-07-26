@@ -30,7 +30,7 @@ export default function ProductsPage() {
       // Cache for 5 minutes to improve performance
       pollingInterval: 300000,
       refetchOnMountOrArgChange: 30,
-    }
+    },
   );
   const products = productsData?.products || [];
 
@@ -46,7 +46,7 @@ export default function ProductsPage() {
     lowStockProducts: products.filter((p: Product) => p.total_stock < 50)
       .length,
     totalCategories: new Set(
-      products.map((p: Product) => p.productCategory.title)
+      products.map((p: Product) => p.productCategory.title),
     ).size,
     totalBrands: new Set(products.map((p: Product) => p.productBrand.title))
       .size,

@@ -33,7 +33,7 @@ const AddressModal = () => {
                   notes: formData.notes ?? "",
                   to_district_id: formData.to_district_id ?? "",
                   to_city_id: formData.to_city_id ?? "",
-                  to_ward_code: formData.to_ward_code ?? ""
+                  to_ward_code: formData.to_ward_code ?? "",
                 }).unwrap();
                 onClose();
               } catch (err) {

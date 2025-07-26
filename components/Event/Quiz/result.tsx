@@ -41,7 +41,7 @@ export default function ResultRender({
 
   const rewardHookItems = Array.from(
     { length: finalScore.total },
-    (_, i) => finalScore.total - i
+    (_, i) => finalScore.total - i,
   );
 
   const getMessageByScore = (score: number) => {
@@ -137,7 +137,7 @@ export default function ResultRender({
                       "flex justify-between items-center px-4 py-3 rounded-lg border",
                       finalScore.correct === num
                         ? "bg-red-50 border-red-400"
-                        : "border-slate-200"
+                        : "border-slate-200",
                     )}
                   >
                     <RText className="text-sm font-medium text-slate-700">

@@ -1,4 +1,4 @@
-import { Area, Yard } from "@/lib/by/Div"
+import { Area, Yard } from "@/lib/by/Div";
 
 export default function WarehouseLoading() {
   return (
@@ -19,7 +19,10 @@ export default function WarehouseLoading() {
             <Yard className="h-6 w-32 bg-gray-200 rounded animate-pulse mb-4" />
             <Yard className="space-y-2">
               {[...Array(6)].map((_, i) => (
-                <Yard key={i} className="h-12 bg-gray-100 rounded animate-pulse" />
+                <Yard
+                  key={i}
+                  className="h-12 bg-gray-100 rounded animate-pulse"
+                />
               ))}
             </Yard>
           </Yard>
@@ -65,5 +68,5 @@ export default function WarehouseLoading() {
         </Yard>
       </Area>
     </Yard>
-  )
+  );
 }

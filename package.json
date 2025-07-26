@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "test": "npm run lint:types && npm run lint-next && npm run prettier",
-    "prettier": "prettier --write **/*.{ts,tsx,js} **/*.scss",
+    "prettier": "prettier --write **/*.{ts,tsx,js} ",
     "lint": "eslint . --fix --ext .ts,.tsx ",
     "lint:es": "eslint -c .eslintrc.json --fix **/*.{ts,tsx}",
     "lint:types": "tsc -p . --noEmit",

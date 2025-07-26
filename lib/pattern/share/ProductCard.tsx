@@ -81,11 +81,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <Row className="flex items-center justify-center">
               <AddToCartWrapper productId={product.id}>
                 <button className="text-white p-2 rounded-full items-center transition-colors duration-150 ease-in-out bg-primary hover:bg-primary-light active:scale-90">
-                    <Row className="flex space-x-2 items-center">
-            
-                                  <RText className="text-sm font-bold">Add</RText> <ShoppingCart size={20}/>
-                                  </Row>
-
+                  <Row className="flex space-x-2 items-center">
+                    <RText className="text-sm font-bold">Add</RText>{" "}
+                    <ShoppingCart size={20} />
+                  </Row>
                 </button>
               </AddToCartWrapper>
             </Row>

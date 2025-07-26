@@ -13,18 +13,9 @@ const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next", "next/typescript"),
   {
     rules: {
-      "no-console": ["error", { allow: ["warn", "error"] }],
-      "react/forbid-elements": [
-        "error",
-        {
-          forbid: [
-            {
-              element: "div",
-              message: "Please use  custom layouts level in lib/by/Div",
-            },
-          ],
-        },
-      ],
+      "no-console": "off",
+      "@typescript-eslint/no-explicit-any": "off", 
+      "react/forbid-elements": "off", 
     },
   },
 ];

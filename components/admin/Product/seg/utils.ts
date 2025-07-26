@@ -80,7 +80,7 @@ export const useProductForm = (editProduct?: Product | null) => {
       setFormData((prev) => ({ ...prev, [field]: value }));
       setErrors((prev) => ({ ...prev, [field]: "" }));
     },
-    []
+    [],
   );
 
   const handleImageChange = useCallback(
@@ -93,7 +93,7 @@ export const useProductForm = (editProduct?: Product | null) => {
         handleInputChange("image_url", url);
       }
     },
-    [handleInputChange]
+    [handleInputChange],
   );
 
   const removeImage = useCallback(() => {
@@ -126,8 +126,8 @@ export const useProductForm = (editProduct?: Product | null) => {
         | "productCategory"
         | "productBrand"
         | "productSkinType"
-      >
-    ) => void
+      >,
+    ) => void,
   ) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -209,7 +209,7 @@ export const useProductsLogic = () => {
       | "productCategory"
       | "productBrand"
       | "productSkinType"
-    >
+    >,
   ) => {
     try {
       if (editingProduct) {

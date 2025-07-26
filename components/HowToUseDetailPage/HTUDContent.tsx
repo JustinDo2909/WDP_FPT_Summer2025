@@ -24,9 +24,14 @@ export default function HowToUseDetailContent({ post }: { post: any }) {
           </RText>
           <Row className="flex flex-wrap gap-3">
             {post.benefits.map((benefit: string, index: number) => (
-              <Row key={index} className="flex items-center gap-2 bg-green-50 px-3 py-2 rounded-lg">
+              <Row
+                key={index}
+                className="flex items-center gap-2 bg-green-50 px-3 py-2 rounded-lg"
+              >
                 <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
-                <RText className="text-sm text-green-800 font-medium">{benefit}</RText>
+                <RText className="text-sm text-green-800 font-medium">
+                  {benefit}
+                </RText>
               </Row>
             ))}
           </Row>
@@ -39,7 +44,7 @@ export default function HowToUseDetailContent({ post }: { post: any }) {
           <RText className="text-xl font-bold text-gray-900">
             Step-by-Step Application Guide
           </RText>
-          
+
           <Column className="flex-col flex gap-8">
             {post.steps.map((step: any, index: number) => (
               <Column key={step.id} className="flex-col flex gap-4">
@@ -49,8 +54,12 @@ export default function HowToUseDetailContent({ post }: { post: any }) {
                     <RText className="font-bold text-sm">{step.id}</RText>
                   </Section>
                   <Column className="flex-1">
-                    <RText className="font-bold text-lg text-gray-900">{step.title}</RText>
-                    <RText className="text-pink-600 font-medium">{step.description}</RText>
+                    <RText className="font-bold text-lg text-gray-900">
+                      {step.title}
+                    </RText>
+                    <RText className="text-pink-600 font-medium">
+                      {step.description}
+                    </RText>
                   </Column>
                 </Row>
 
@@ -58,8 +67,8 @@ export default function HowToUseDetailContent({ post }: { post: any }) {
                 <Row className="flex gap-6 flex-col sm:flex-row">
                   {/* Step Image */}
                   <Section className="w-full sm:w-40 h-32 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
-                    <img 
-                      src={step.image} 
+                    <img
+                      src={step.image}
                       alt={step.title}
                       className="w-full h-full object-cover"
                     />
@@ -76,13 +85,20 @@ export default function HowToUseDetailContent({ post }: { post: any }) {
                       <Section className="bg-blue-50 p-4 rounded-lg">
                         <Row className="flex items-start gap-2 mb-2">
                           <Lightbulb className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                          <RText className="font-medium text-blue-900 text-sm">Pro Tips:</RText>
+                          <RText className="font-medium text-blue-900 text-sm">
+                            Pro Tips:
+                          </RText>
                         </Row>
                         <Column className="flex-col flex gap-1 ml-6">
                           {step.tips.map((tip: string, tipIndex: number) => (
-                            <Row key={tipIndex} className="flex items-start gap-2">
+                            <Row
+                              key={tipIndex}
+                              className="flex items-start gap-2"
+                            >
                               <Section className="w-1 h-1 bg-blue-400 rounded-full mt-2 flex-shrink-0"></Section>
-                              <RText className="text-sm text-blue-800">{tip}</RText>
+                              <RText className="text-sm text-blue-800">
+                                {tip}
+                              </RText>
                             </Row>
                           ))}
                         </Column>
@@ -112,9 +128,14 @@ export default function HowToUseDetailContent({ post }: { post: any }) {
           </Row>
           <Column className="flex-col flex gap-2">
             {post.warnings.map((warning: string, index: number) => (
-              <Row key={index} className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg">
+              <Row
+                key={index}
+                className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg"
+              >
                 <Section className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-2 flex-shrink-0"></Section>
-                <RText className="text-amber-800 text-sm font-medium">{warning}</RText>
+                <RText className="text-amber-800 text-sm font-medium">
+                  {warning}
+                </RText>
               </Row>
             ))}
           </Column>

@@ -1,9 +1,14 @@
 import { Column, Row, Wrap } from "@/lib/by/Div";
-import { calculateVoucherSavings, formatDiscount } from "./seg/calculateVoucherDiscount";
+import {
+  calculateVoucherSavings,
+  formatDiscount,
+} from "./seg/calculateVoucherDiscount";
 import { formatPrice } from "@/lib/share/formatPrice";
 
 const formatExpiryDate = (voucher: IVoucher) => {
-  const expiry = new Date(new Date(voucher.created_at).getTime() + 2 * 24 * 60 * 60 * 1000);
+  const expiry = new Date(
+    new Date(voucher.created_at).getTime() + 2 * 24 * 60 * 60 * 1000,
+  );
   return expiry.toLocaleDateString("vi-VN");
 };
 
@@ -20,7 +25,7 @@ export const VoucherItem: React.FC<{
     <Row
       className={`
         flex w-full min-w-[450px] overflow-hidden rounded-lg border border-gray-200
-        ${isRedeemed || !applicable ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer'}
+        ${isRedeemed || !applicable ? "opacity-50 cursor-not-allowed grayscale" : "cursor-pointer"}
       `}
     >
       {/* Left Pill */}

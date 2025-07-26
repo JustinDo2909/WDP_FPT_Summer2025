@@ -14,7 +14,11 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   quantity,
 }) => {
   return (
-    <AddToCartWrapper productId={productId} quantity={quantity} showErrorMsg={true}>
+    <AddToCartWrapper
+      productId={productId}
+      quantity={quantity}
+      showErrorMsg={true}
+    >
       <Button
         label={
           <Row className="flex items-center gap-2">

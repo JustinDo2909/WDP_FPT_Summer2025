@@ -1,7 +1,6 @@
 "use client";
 
 import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
-import { VoucherDetailModal } from "@/components/admin/Voucher/Voucher-detail-modal";
 import {
   useVouchersApiLogic,
   getStatusColor,
@@ -22,6 +21,7 @@ import {
   Search,
   Filter,
 } from "lucide-react";
+import { VoucherDetailModal } from "@/components/admin/Voucher/voucher-detail-modal";
 
 export default function VoucherPage() {
   const {

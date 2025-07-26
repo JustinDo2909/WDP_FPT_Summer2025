@@ -25,7 +25,7 @@ export const onSetLoading = (status: boolean = false) => {
 
 // 4. Type-safe event listener for SignInViewFile
 export const onSignInViewFile = (
-  callback: (data: any) => Promise<void> | void
+  callback: (data: any) => Promise<void> | void,
 ) => {
   eventEmitter.on("SignInViewFile", (data) => {
     callback(data);

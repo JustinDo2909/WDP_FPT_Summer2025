@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React from "react";
 import { useAddToCartMutation } from "@/process/api/apiCart";
@@ -18,11 +18,13 @@ const AddToCartWrapper: React.FC<AddToCartWrapperProps> = ({
   productId,
   quantity = 1,
   children,
-  showErrorMsg = false
+  showErrorMsg = false,
 }) => {
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const cartItem = cartItems.find((c) => c.product_id === productId);
-  const isExceedQuanity = (quantity + (cartItem?.quantity ?? 0)) > (cartItem?.product.total_stock ?? 999);
+  const isExceedQuanity =
+    quantity + (cartItem?.quantity ?? 0) >
+    (cartItem?.product.total_stock ?? 999);
   const [addToCart, { isLoading }] = useAddToCartMutation();
 
   const handleClick = async (event: React.MouseEvent) => {
@@ -42,10 +44,13 @@ const AddToCartWrapper: React.FC<AddToCartWrapperProps> = ({
     <Wrap className="flex-1">
       {React.cloneElement(children, {
         onClick: handleClick,
-        disabled: isLoading || (children.props?.disabled ?? false) || isExceedQuanity,
+        disabled:
+          isLoading || (children.props?.disabled ?? false) || isExceedQuanity,
       })}
       {showErrorMsg && isExceedQuanity && (
-        <RText className="text-red-500 text-sm mt-1">You&apos;ve added the maximum stock for this product.</RText>
+        <RText className="text-red-500 text-sm mt-1">
+          You&apos;ve added the maximum stock for this product.
+        </RText>
       )}
     </Wrap>
   );

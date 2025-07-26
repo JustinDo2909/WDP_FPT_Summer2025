@@ -16,8 +16,8 @@ export default function HowToUseDetailHeader({ post }: { post: any }) {
 
       {/* Hero Image */}
       <Section className="relative h-64 sm:h-80 lg:h-96 rounded-2xl overflow-hidden bg-gray-200">
-        <img 
-          src={post.thumbnail} 
+        <img
+          src={post.thumbnail}
           alt={post.title}
           className="w-full h-full object-cover"
         />
@@ -48,7 +48,11 @@ export default function HowToUseDetailHeader({ post }: { post: any }) {
         <Row className="flex items-center gap-4">
           <Section className="w-12 h-12 rounded-full overflow-hidden bg-pink-100 flex items-center justify-center flex-shrink-0">
             {post.avatar ? (
-              <img src={post.avatar} alt={post.author} className="w-full h-full object-cover" />
+              <img
+                src={post.avatar}
+                alt={post.author}
+                className="w-full h-full object-cover"
+              />
             ) : (
               <User className="w-6 h-6 text-pink-600" />
             )}
@@ -62,7 +66,10 @@ export default function HowToUseDetailHeader({ post }: { post: any }) {
         {/* Tags */}
         <Row className="flex gap-2 flex-wrap">
           {post.skinTypes.map((type: string) => (
-            <RText key={type} className="bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm font-medium">
+            <RText
+              key={type}
+              className="bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm font-medium"
+            >
               {type} Skin
             </RText>
           ))}

@@ -50,7 +50,7 @@ const useMultipleOrderDetails = (orderIds: string[]) => {
       const detailPromises = ids.map(async (orderId) => {
         try {
           const result = await store.dispatch(
-            api.endpoints.getOrderDetail.initiate(orderId)
+            api.endpoints.getOrderDetail.initiate(orderId),
           );
 
           if (result.data?.order) {
@@ -66,7 +66,7 @@ const useMultipleOrderDetails = (orderIds: string[]) => {
 
       const details = await Promise.all(detailPromises);
       const validDetails = details.filter(
-        (detail) => detail !== null
+        (detail) => detail !== null,
       ) as OrderDetail[];
 
       validDetails.forEach((order) => {
@@ -74,7 +74,7 @@ const useMultipleOrderDetails = (orderIds: string[]) => {
           itemsCount: order.orderItems?.length || 0,
           items:
             order.orderItems?.map(
-              (item) => `${item.title} (qty: ${item.quantity})`
+              (item) => `${item.title} (qty: ${item.quantity})`,
             ) || [],
           total: order.total_amount,
         });
@@ -167,11 +167,11 @@ export function StatisticsSection({
   const users = useMemo(() => usersData || [], [usersData]);
   const products = useMemo(
     () => productsData?.products || [],
-    [productsData?.products]
+    [productsData?.products],
   );
   const categories = useMemo(
     () => metaData?.data?.categories || [],
-    [metaData?.data?.categories]
+    [metaData?.data?.categories],
   );
 
   // Memoize current month orders to prevent infinite re-renders
