@@ -13,7 +13,6 @@ import {
 } from "../seg/calculateSubtotal";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import EmptyCart from "@/components/CartPage/EmptyCart";
-import FloatingGameButton from "@/components/floating_game_button";
 
 export default function CartPage() {
   const { data: cartData, isLoading } = useGetCartQuery();
@@ -63,7 +62,6 @@ export default function CartPage() {
         ) : (
           <EmptyCart />
         )}
-        <FloatingGameButton />
       </Section>
     </Core>
   );

@@ -1,4 +1,3 @@
-import FloatingGameButton from "@/components/floating_game_button";
 import HowToUseDetailContent from "@/components/HowToUseDetailPage/HTUDContent";
 import HowToUseDetailHeader from "@/components/HowToUseDetailPage/HTUDHeader";
 import HowToUseDetailSidebar from "@/components/HowToUseDetailPage/HTUDSidebar";
@@ -166,7 +165,6 @@ export default function HowToUseDetailPage({
 
         {/* Related Posts */}
         {/* <HowToUseRelatedPosts posts={relatedPosts} /> */}
-        <FloatingGameButton />
       </Container>
     </Core>
   );

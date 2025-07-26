@@ -1,7 +1,6 @@
 import { SearchResults } from "@/components/ProductsPage/SearchResults";
 import { Core, Container } from "@/lib/by/Div";
 import { fetchProductMeta, fetchProducts } from "./seg";
-import FloatingGameButton from "@/components/floating_game_button";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 export default async function SearchPage({
@@ -25,13 +24,14 @@ export default async function SearchPage({
   return (
     <Core className="min-h-screen bg-background py-10">
       <Container className="max-w-7xl mx-auto px-4">
-        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Products" }]} />
+        <Breadcrumbs
+          items={[{ label: "Home", href: "/" }, { label: "Products" }]}
+        />
         <SearchResults
           productMetas={productMeta.data as IProductMeta}
           initialData={productsData}
         />
       </Container>
-      <FloatingGameButton />
     </Core>
   );
 }

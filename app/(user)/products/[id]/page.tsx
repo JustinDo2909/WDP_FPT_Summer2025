@@ -10,7 +10,6 @@ import { fetchProductById } from "./seg";
 import { mproduct } from "@/constants";
 import { calculateDiscount } from "@/lib/share/calcDiscount";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import FloatingGameButton from "@/components/floating_game_button";
 
 export async function generateStaticParams() {
   const products: PaginatedResponse<IProduct, "products"> = await fetchProducts(
@@ -67,7 +66,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <ProductCard product={product} />
           </Card>
         </Area>
-        <FloatingGameButton />
       </Container>
     </Core>
   );

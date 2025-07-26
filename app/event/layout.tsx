@@ -1,20 +1,16 @@
-import "../globals.css";
-import Header from "@/lib/pattern/core/Header";
-import Footer from "@/lib/pattern/core/Footer";
-import { Toaster } from "react-hot-toast";
-import Providers from "@/app/providers";
-import FloatingGameButton from "@/components/floating_game_button";
+"use client";
 
-export default function UserLayout({
+import Providers from "@/app/providers";
+import { Toaster } from "react-hot-toast";
+
+export default function EventLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <Providers>
-      <Header />
       {children}
-      <Footer />
       <Toaster
         position="bottom-right"
         toastOptions={{
@@ -24,7 +20,6 @@ export default function UserLayout({
           },
         }}
       />
-      <FloatingGameButton />
     </Providers>
   );
 }
