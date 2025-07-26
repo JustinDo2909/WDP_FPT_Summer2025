@@ -15,6 +15,8 @@ import {
 } from "@/lib/by/Div";
 import { useUser } from "@/hooks/useUser";
 import { CartIndicatorWrapper } from "./CartIndicatorWrapper";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface Header {
   title: string;
@@ -26,18 +28,20 @@ interface HeaderMenuProps {
 }
 
 const HeaderMenu = ({ headers }: HeaderMenuProps) => {
-  const { user, loading } = useUser();
-
+  const { user, isLogged } = useUser();
+  const router = useRouter()
   return (
-    <Container className="w-full px-8 md:px-36 bg-white/95 backdrop-blur-md border-b border-[#ffc6c6]/30 shadow-lg inline-flex justify-between items-center sticky top-0 z-50">
-      <Section className="w-fit inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden">
-        <Link
-          href="/"
-          className="text-2xl md:text-3xl font-bold text-[#aa4444] hover:text-[#ee4444] transition-colors duration-300 tracking-tight drop-shadow-sm"
-        >
-          LOGO!
-        </Link>
-      </Section>
+    <Container className="w-full px-8 md:px-36 bg-white inline-flex justify-between items-center sticky top-0 z-50">
+         
+          <Image
+            src="/images/icon.png"
+            alt="Logo"
+            width={100}
+            height={100}
+            priority
+            className="hover:scale-105 transition-transform"
+            onClick={() => router.push('/')}
+          />
 
       <Section className="py-4 flex justify-start items-center gap-1">
         {map(headers, (header: Header, index: number) => (
@@ -70,7 +74,7 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
         <CartIndicatorWrapper>
           <Link
             href={user ? `/checkout/cart` : `/login`}
-            className="flex p-3 justify-center items-center gap-2.5 overflow-hidden rounded-full text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-[#ffc6c6] hover:to-[#ee4444] transition-all duration-300 hover:scale-110 shadow-sm hover:shadow-md"
+            className="flex p-3 justify-center items-center gap-2.5 overflow-hidden rounded-full text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-[#ffc6c6] hover:to-[#ee4444] transition-all duration-300 hover:scale-110  hover:shadow-md"
           >
             <ShoppingBag size={20} />
           </Link>
@@ -87,7 +91,7 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
             </Block>
 
             <Block className="justify-start text-slate-700 text-sm font-medium hover:text-[#aa4444] transition-colors">
-              {user ? <Link href={'/logout'}><RText>Logout</RText></Link> : <Link href='/login'><RText>Login</RText></Link>}
+              {isLogged ? <Link href={'/logout'}><RText>Logout</RText></Link> : <Link href='/login'><RText>Login</RText></Link>}
             </Block>
           </Wrap>
         </Row>

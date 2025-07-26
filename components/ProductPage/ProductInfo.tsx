@@ -18,9 +18,9 @@ export function ProductInfo({ productData }: { productData: IProduct }) {
             />
           ))}
           <RText className="w-auto mx-2">{productData.rating}</RText>
-          <RText className="text-gray-500">
+          {/* <RText className="text-gray-500">
           ({productData.reviews_count ?? 0} reviews)
-        </RText>
+        </RText> */}
         </Wrap>
       </Row>
 

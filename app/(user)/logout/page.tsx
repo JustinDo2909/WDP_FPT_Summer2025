@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLazyLogOutQuery } from '@/process/api/apiAuth';
-
 export default function LogoutPage() {
   const [triggerLogOut] = useLazyLogOutQuery();
   const router = useRouter();
@@ -11,17 +10,18 @@ export default function LogoutPage() {
   useEffect(() => {
     const logout = async () => {
       try {
-        await triggerLogOut().unwrap();
+        await triggerLogOut().unwrap(); 
       } catch (err) {
         console.error('Logout failed:', err);
       } finally {
         router.replace('/');     // Redirect to home
-        router.refresh();        // Force re-fetch of server components and layout
+        router.refresh(); 
       }
     };
-
-    logout();
+    logout()
   }, [triggerLogOut, router]);
+
+
 
 return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>

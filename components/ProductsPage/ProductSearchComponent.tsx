@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import { useSearchParams } from 'next/navigation';
 import { map } from 'lodash';
 import { useState } from "react";
@@ -118,7 +117,7 @@ export const ProductsSearchComponent = ({
         {searchParams.sort && (
           <FilterTag label={`Sorted: ${searchParams.sort}`} onRemove={() => handleRemoveFilter('sort')} />
         )}
-        <Group className="py-1 text-sm">&nbsp;</Group>
+        <Group className="py-1 text-sm"> </Group>
       </Group>
 
       {/* Filters and Sort */}
@@ -127,7 +126,8 @@ export const ProductsSearchComponent = ({
 
           {/* Category Filter */}
           <Select value={searchParams.category ?? 'all'} onValueChange={(value) => onChangeParams({ category: value === 'all' ? undefined : value })}>
-            <SelectTrigger className="w-full sm:w-[160px] rounded-full">
+            <SelectTrigger className="w-full sm:w-[180px] rounded-full flex items-center gap-2 border-2 border-pink-300 focus:border-pink-500 focus:outline-none focus:ring-4 focus:ring-pink-100">
+              <img src="/images/category.png" alt="Category Icon" className="w-8 h-8" />
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
@@ -139,7 +139,8 @@ export const ProductsSearchComponent = ({
 
           {/* Brand Filter */}
           <Select value={searchParams.brand ?? 'all'} onValueChange={(value) => onChangeParams({ brand: value === 'all' ? undefined : value })}>
-            <SelectTrigger className="w-full sm:w-[160px] rounded-full">
+            <SelectTrigger className="w-full sm:w-[160px] rounded-full flex items-center gap-2 border-2 border-pink-300 focus:border-pink-500 focus:outline-none focus:ring-4 focus:ring-pink-100">
+              <img src="/images/brand.png" alt="Brand Icon" className="w-8 h-8" />
               <SelectValue placeholder="All Brands" />
             </SelectTrigger>
             <SelectContent>
@@ -151,7 +152,8 @@ export const ProductsSearchComponent = ({
 
           {/* Skin Type Filter */}
           <Select value={searchParams.skinType ?? 'all'} onValueChange={(value) => onChangeParams({ skinType: value === 'all' ? undefined : value })}>
-            <SelectTrigger className="w-full sm:w-[160px] rounded-full">
+            <SelectTrigger className="w-full sm:w-auto rounded-full flex items-center gap-2 border-2 border-pink-300 focus:border-pink-500 focus:outline-none focus:ring-4 focus:ring-pink-100">
+              <img src="/images/skintype.png" alt="Skin Type Icon" className="w-7 h-7" />
               <SelectValue placeholder="All Skin Types" />
             </SelectTrigger>
             <SelectContent>

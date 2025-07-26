@@ -1,16 +1,15 @@
 'use client'
 
 import React from "react";
-import { User, ClipboardList, Ticket, Star } from "lucide-react";
+import { User, ClipboardList, Ticket } from "lucide-react";
 import Link from "next/link";
-import { Begin, Box, Column, RText, Wrap } from "@/lib/by/Div";
+import { Box, Column, RText, Wrap } from "@/lib/by/Div";
 import { useUser } from "@/hooks/useUser";
 
 const menuItems = [
     { label: "Profile", icon: <User size={18} />, href: "/user" },
     { label: "Orders", icon: <ClipboardList size={18} />, href: "/user/orders" },
-    { label: "Vouchers", icon: <Ticket size={18} />, href: "/user/vouchers" },
-    { label: "Favorites", icon: <Star size={18} />, href: "/user/favorites" },
+    { label: "Vouchers", icon: <Ticket size={18} />, href: "/user/vouchers" }
 ];
 
 export default function UserSidebar() {

@@ -71,6 +71,46 @@
   margin: 0;
   padding: 0;
 }
+
+@font-face {
+  font-family: 'Raleway';
+  src: url('./fonts/Raleway.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Modak';
+  src: url('./fonts/Modak-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Raleway-Bold';
+  src: url('./fonts/Raleway-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --font-raleway: "Raleway", sans-serif;
+  --font-modak: "Modak", serif;
+  --font-raleway-bold: "Raleway-Bold", serif;
+}
+
+.font-modak {
+  font-family: var(--font-modak);
+}
+
+.font-raleway {
+  font-family: var(--font-raleway-bold);
+}
+
+body {
+  font-family: var(--font-raleway);
+}
+
 /* @layer base {
   * {
     @apply border-border;
@@ -84,12 +124,8 @@
 } */
 
 /* Our font setup */
-/* :root {
-  --font-raleway: "Raleway", sans-serif;
-}
-body {
-  font-family: var(--font-raleway);
-} */
+
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

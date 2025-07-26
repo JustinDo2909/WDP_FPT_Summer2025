@@ -5,7 +5,7 @@ import AddressSelector from "@/components/CheckoutPage/AddressSelector";
 import CouponAddInput from "@/components/CheckoutPage/CouponAddInput";
 import Button from "@/components/CustomButton";
 import { Box, Core, Row, RText, Section } from "@/lib/by/Div";
-import { useGetAllVouchersQuery } from "@/process/api/api";
+import { useGetUserVouchersQuery } from "@/process/api/api";
 import { useGetCartQuery } from "@/process/api/apiCart";
 import { useState } from "react";
 import {
@@ -14,6 +14,9 @@ import {
 } from "./seg/calculateSubtotal";
 import { useHandleCheckout } from "./seg/useHandleCheckout";
 import { useShippingFeeHandler } from "./seg/useShippingFee";
+import { roundDownToNearestMultiple } from "@/lib/share/roundTo";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { CartTable } from "@/components/CartPage/CartTable";
 
 export default function CheckoutPage() {
   // const [shippingInfo, setShippingInfo] = useState<IAddress>({
@@ -32,6 +35,7 @@ export default function CheckoutPage() {
 
   const [selectedAddress, setSelectedAddress] = useState<IAddress>();
   const [voucher, setVoucher] = useState<IVoucher>();
+  const [voucherDiscount, setVoucherDiscount] = useState<number>(0)
 
   const {
     shippingFee,
@@ -44,10 +48,9 @@ export default function CheckoutPage() {
   });
 
   const { handleCheckout, isLoading } = useHandleCheckout();
-  const { data: dataVouchers } = useGetAllVouchersQuery();
+  const { data: dataVouchers } = useGetUserVouchersQuery();
 
   const isFilled = selectedAddress && isRouteHasService;
-
   const { data: cartData } = useGetCartQuery();
   const cart = cartData?.cart;
   const cartItems = cart?.cartItems || [];
@@ -57,40 +60,49 @@ export default function CheckoutPage() {
   return (
     <Core className="p-4 md:p-8 min-h-screen ">
       <Row className="max-w-7xl w-full px-8 py-4">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Cart", href: "/checkout/cart" }, { label: "Checkout" }]} />
         <h2 className="text-3xl tracking-wide font-bold ml-4 text-left">
           Checkout
         </h2>
       </Row>
 
-      <Section className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-7xl mx-auto">
+      <Section className="grid grid-cols-1 md:grid-cols-4 gap-6 mx-10">
         {/* <GHNForm
           shippingInfo={shippingInfo}
           setShippingInfo={setShippingInfo}
           getShippingFeeOnWardChange={handleGetShippingFee}
         /> */}
         <Box className="flex col-span-3 flex-col space-y-4">
-          <CouponAddInput
-            vouchers={dataVouchers?.vouchers}
-            onSelect={setVoucher}
-          />
+  
           <AddressSelector
             selectedAddress={selectedAddress}
             setSelectedAddress={setSelectedAddress}
+          />
+
+          <h2 className="text-xl font-bold">2. Order Summary</h2>
+
+          <CartTable items={cartItems} isSimple={true} voucher = {voucher} />
+
+          <CouponAddInput
+            vouchers={dataVouchers?.vouchers}
+            setVoucherDiscount={setVoucherDiscount}
+            onSelect={setVoucher}
+            cartItems={cartItems}
           />
         </Box>
 
         <Box className="">
           <CartSummary
             shippingLoading={feeLoading}
-            voucherApplied={voucher}
-            shipping={shippingFee?.data?.total}
+            voucherDiscount={voucherDiscount}
+            shipping={roundDownToNearestMultiple(shippingFee?.data?.total ?? 0, 1000)}
             total={total}
             subtotal={subtotal}
             actionButton={
               // <Link href="/checkout">
                 <Button
                   onClick={() => {
-                    handleCheckout(shippingFee.data.total ?? 0, String(selectedAddress?.id), voucher?.stripe_coupon_id ?? "")
+                    handleCheckout(roundDownToNearestMultiple(shippingFee?.data?.total, 1000) ?? 0, String(selectedAddress?.id), voucher?.stripe_coupon_id ?? "")
                   }}
                   disabled={!isFilled || isLoading}
                   label={

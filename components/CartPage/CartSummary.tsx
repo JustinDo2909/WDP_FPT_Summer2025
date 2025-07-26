@@ -7,16 +7,16 @@ export default function CartSummary({
   shipping,
   shippingLoading,
   actionButton,
-  voucherApplied,
+  voucherDiscount,
 }: {
   subtotal: number;
   total: number;
   shipping?: number;
   shippingLoading?: boolean;
   actionButton: React.ReactNode;
-  voucherApplied?: IVoucher;
+  voucherDiscount?: number;
 }) {
-  const finalTotal = total + (shipping ?? 0) - (voucherApplied?.type === "AMOUNT"? voucherApplied.discount_value : (voucherApplied?.discount_value ?? 0)*total/100) 
+  const finalTotal = total + (shipping ?? 0) - (voucherDiscount ?? 0) 
   return (
     <Card className="border rounded-md p-4 space-y-4 relative pt-4 text-sm">
       {/* Pink top border */}
@@ -43,13 +43,13 @@ export default function CartSummary({
           </RText>
         </Row>
 
-       {voucherApplied && 
-       <Row className="flex text-primary justify-between">
-          <RText>Voucher:</RText>
-          <RText>
-            -{formatPrice((voucherApplied?.type === "AMOUNT"? voucherApplied.discount_value : (voucherApplied?.discount_value ?? 0)*total/100 ) ?? 0)}
-          </RText>
-        </Row>
+       {voucherDiscount !== 0 && 
+        <Row className="flex text-primary justify-between">
+            <RText>Voucher:</RText>
+            <RText>
+              -{formatPrice(voucherDiscount)}
+            </RText>
+          </Row>
         }
 
 

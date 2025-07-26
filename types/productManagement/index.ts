@@ -67,6 +67,10 @@ export interface ProductQueryParams {
   category?: string;
   brand?: string;
   skinType?: string;
+  limit?: number;
+  sort?: string;
+  sale?: string;
+
 }
 
 export interface ProductsResponse {
