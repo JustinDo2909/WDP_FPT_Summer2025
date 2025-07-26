@@ -11,13 +11,12 @@ export default function CheckoutFailed() {
             <Section className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-400 via-orange-400 to-pink-400"></Section>
             <Section className="absolute -top-4 -right-4 w-16 h-16 bg-red-200 rounded-full opacity-30"></Section>
             <Section className="absolute -bottom-6 -left-6 w-20 h-20 bg-orange-200 rounded-full opacity-20"></Section>
-            
+
             {/* Failed Icon */}
             <Section className="mb-6 relative">
               <Section className="w-24 h-24 bg-gradient-to-br from-red-400 to-red-500 rounded-full flex items-center justify-center shadow-lg">
                 <RText className="text-5xl text-white font-bold">✕</RText>
               </Section>
-              
             </Section>
 
             {/* Main Heading */}
@@ -32,7 +31,9 @@ export default function CheckoutFailed() {
 
             {/* Failed Message */}
             <RText className="text-gray-700 text-center mb-8 leading-relaxed max-w-md">
-              Don't worry! Your beauty items are still waiting for you. Let's try completing your purchase again - your glow-up is just one click away! ✨
+              Don't worry! Your beauty items are still waiting for you. Let's
+              try completing your purchase again - your glow-up is just one
+              click away! ✨
             </RText>
 
             {/* Possible Issues */}
@@ -73,18 +74,27 @@ export default function CheckoutFailed() {
             {/* Help Section */}
             <Section className="mt-8 pt-6 border-t border-red-100 w-full">
               <RText className="text-sm text-gray-500 text-center mb-3">
-                Need help? We're here for you! 
+                Need help? We're here for you!
               </RText>
               <Row className="flex justify-center gap-6">
-                <Link href="/support" className="flex items-center gap-1 text-red-500 hover:text-red-600 transition-colors">
+                <Link
+                  href="/support"
+                  className="flex items-center gap-1 text-red-500 hover:text-red-600 transition-colors"
+                >
                   <RText className="text-lg">💬</RText>
                   <RText className="text-sm font-medium">Live Chat</RText>
                 </Link>
-                <Link href="/contact" className="flex items-center gap-1 text-orange-500 hover:text-orange-600 transition-colors">
+                <Link
+                  href="/contact"
+                  className="flex items-center gap-1 text-orange-500 hover:text-orange-600 transition-colors"
+                >
                   <RText className="text-lg">📞</RText>
                   <RText className="text-sm font-medium">Contact Us</RText>
                 </Link>
-                <Link href="/faq" className="flex items-center gap-1 text-pink-500 hover:text-pink-600 transition-colors">
+                <Link
+                  href="/faq"
+                  className="flex items-center gap-1 text-pink-500 hover:text-pink-600 transition-colors"
+                >
                   <RText className="text-lg">❓</RText>
                   <RText className="text-sm font-medium">FAQ</RText>
                 </Link>

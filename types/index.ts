@@ -131,11 +131,7 @@ declare global {
     redeemed_at: string | null;
     created_at: string;
     voucherProducts?: IVoucherProduct[];
-  }
-
-
-
-
+  };
 }
 
 export type {
@@ -160,5 +156,19 @@ export type IGame = {
 
 export type ListGame = {
   listGame: IGame[];
-  IVoucher : IVoucher
+  IVoucher: IVoucher;
+};
+
+export type ILink = {
+  title: string;
+  href: string;
+};
+
+export type Footer = {
+  title: string;
+  links: ILink[];
+};
+
+export type FooterProps = {
+  footers: Footer[];
 };

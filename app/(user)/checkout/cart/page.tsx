@@ -27,7 +27,9 @@ export default function CartPage() {
   return (
     <Core className="p-4 md:p-8 min-h-screen ">
       <Row className="max-w-7xl w-full px-8 py-4">
-        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Cart" }]} />
+        <Breadcrumbs
+          items={[{ label: "Home", href: "/" }, { label: "Cart" }]}
+        />
         <h2 className="text-3xl tracking-wide font-bold ml-4 text-left">
           Shopping Cart
         </h2>

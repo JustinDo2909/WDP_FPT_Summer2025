@@ -2,7 +2,6 @@ import { Core, Container, Row, Column, RText, Section } from "@/lib/by/Div";
 import HowToUsePostCard from "@/components/HowToUsePage/HowToUsePostCard";
 import HowToUseSearchBar from "@/components/HowToUsePage/HowToUseSearchBar";
 import Link from "next/link";
-import FloatingGameButton from "@/components/floating_game_button";
 
 // Enhanced dummy data for skincare product guides
 const posts = [
@@ -182,7 +181,6 @@ export default function HowToUsePage() {
           </Row>
         </Section>
       </Container>
-      <FloatingGameButton />
     </Core>
   );
 }
