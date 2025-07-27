@@ -1,4 +1,4 @@
-import { Box, Column, Row} from "@/lib/by/Div";
+import { Box, Column, Row } from "@/lib/by/Div";
 import { Award, Shield, Truck } from "lucide-react";
 
 export const ShopGuarantees = () => {
@@ -8,7 +8,9 @@ export const ShopGuarantees = () => {
         <Row className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-pink-400 to-rose-400 rounded-full flex items-center justify-center mx-auto mb-2">
           <Truck className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
         </Row>
-        <p className="text-xs sm:text-sm font-medium text-center">Free Shipping</p>
+        <p className="text-xs sm:text-sm font-medium text-center">
+          Free Shipping
+        </p>
         <p className="text-xs text-gray-600">On orders over 300K</p>
       </Column>
       <Column className="flex flex-col items-center">

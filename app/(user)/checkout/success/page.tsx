@@ -11,7 +11,7 @@ export default function CheckoutSuccess() {
             <Section className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-400 via-purple-400 to-rose-400"></Section>
             <Section className="absolute -top-4 -right-4 w-16 h-16 bg-pink-200 rounded-full opacity-30"></Section>
             <Section className="absolute -bottom-6 -left-6 w-20 h-20 bg-purple-200 rounded-full opacity-20"></Section>
-            
+
             {/* Success Icon */}
             <Section className="mb-6 relative">
               <Section className="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg">
@@ -34,13 +34,15 @@ export default function CheckoutSuccess() {
 
             {/* Success Message */}
             <RText className="text-gray-700 text-center mb-8 leading-relaxed max-w-md">
-              Thank you for choosing our beauty products! Your order has been confirmed and is now being prepared with care. Get ready to glow! ✨
+              Thank you for choosing our beauty products! Your order has been
+              confirmed and is now being prepared with care. Get ready to glow!
+              ✨
             </RText>
 
             {/* Order Details Preview */}
             <Section className="w-full bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-6 mb-8 border border-pink-100">
               <RText className="text-sm font-semibold text-purple-700 mb-3 text-center">
-                What's Next?
+                Whats Next?
               </RText>
               <Row className="flex flex-col sm:flex-row gap-4 text-sm text-gray-600">
                 <Section className="flex items-center gap-2 flex-1">
@@ -75,13 +77,21 @@ export default function CheckoutSuccess() {
             {/* Social Sharing or Newsletter */}
             <Section className="mt-8 pt-6 border-t border-pink-100 w-full">
               <RText className="text-sm text-gray-500 text-center mb-3">
-                Share your beauty journey with us! 
+                Share your beauty journey with us!
               </RText>
               <Row className="flex justify-center gap-4">
-                <RText className="text-2xl cursor-pointer hover:scale-110 transition-transform">💄</RText>
-                <RText className="text-2xl cursor-pointer hover:scale-110 transition-transform">✨</RText>
-                <RText className="text-2xl cursor-pointer hover:scale-110 transition-transform">🌸</RText>
-                <RText className="text-2xl cursor-pointer hover:scale-110 transition-transform">💅</RText>
+                <RText className="text-2xl cursor-pointer hover:scale-110 transition-transform">
+                  💄
+                </RText>
+                <RText className="text-2xl cursor-pointer hover:scale-110 transition-transform">
+                  ✨
+                </RText>
+                <RText className="text-2xl cursor-pointer hover:scale-110 transition-transform">
+                  🌸
+                </RText>
+                <RText className="text-2xl cursor-pointer hover:scale-110 transition-transform">
+                  💅
+                </RText>
               </Row>
             </Section>
           </Card>

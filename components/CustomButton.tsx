@@ -35,7 +35,7 @@ const Button: React.FC<ButtonProps> = ({
       className={cn(
         "inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
         variantClasses[variant],
-        className
+        className,
       )}
       disabled={disabled || isLoading}
       {...props}

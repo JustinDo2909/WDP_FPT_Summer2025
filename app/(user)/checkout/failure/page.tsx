@@ -31,9 +31,9 @@ export default function CheckoutFailed() {
 
             {/* Failed Message */}
             <RText className="text-gray-700 text-center mb-8 leading-relaxed max-w-md">
-              Don't worry! Your beauty items are still waiting for you. Let's
-              try completing your purchase again - your glow-up is just one
-              click away! ✨
+              Dont worry! Your beauty items are still waiting for you. Lets try
+              completing your purchase again - your glow-up is just one click
+              away! ✨
             </RText>
 
             {/* Possible Issues */}
@@ -74,7 +74,7 @@ export default function CheckoutFailed() {
             {/* Help Section */}
             <Section className="mt-8 pt-6 border-t border-red-100 w-full">
               <RText className="text-sm text-gray-500 text-center mb-3">
-                Need help? We're here for you!
+                Need help? We are here for you!
               </RText>
               <Row className="flex justify-center gap-6">
                 <Link

@@ -1,4 +1,4 @@
-import { Container} from "@/lib/by/Div";
+import { Container } from "@/lib/by/Div";
 import { CartItem } from "./CartItem";
 import { map } from "lodash";
 import { createVoucherMap } from "../CheckoutPage/seg/createVoucherMap";
@@ -6,7 +6,7 @@ import { createVoucherMap } from "../CheckoutPage/seg/createVoucherMap";
 export const CartTable = ({
   items,
   isSimple = false,
-  voucher
+  voucher,
 }: {
   items: ICartLineItem[];
   isSimple?: boolean;
@@ -26,10 +26,9 @@ export const CartTable = ({
           key={item.id}
           item={item}
           isSimple={isSimple}
-          savings={item.savings} 
+          savings={item.savings}
         />
       ))}
     </Container>
   );
 };
-

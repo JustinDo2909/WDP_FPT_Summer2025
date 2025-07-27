@@ -49,7 +49,7 @@ export interface AddProductModalProps {
       | "productCategory"
       | "productBrand"
       | "productSkinType"
-    >
+    >,
   ) => void;
   editProduct?: Product | null;
 }
@@ -70,7 +70,6 @@ export interface ProductQueryParams {
   limit?: number;
   sort?: string;
   sale?: string;
-
 }
 
 export interface ProductsResponse {

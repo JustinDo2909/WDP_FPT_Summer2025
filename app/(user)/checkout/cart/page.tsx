@@ -18,7 +18,7 @@ export default function CartPage() {
   const { data: cartData, isLoading } = useGetCartQuery();
   const cart = cartData?.cart;
   const sortedCartItems = sortBy(get(cart, "cartItems", []), (item) =>
-    new Date(item.createdAt).getTime()
+    new Date(item.createdAt).getTime(),
   );
 
   const total = calculateCartTotal(sortedCartItems);

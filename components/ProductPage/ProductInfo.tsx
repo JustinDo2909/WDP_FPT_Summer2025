@@ -1,13 +1,15 @@
 import { Star } from "lucide-react";
 import { Row, RText, Wrap } from "@/lib/by/Div";
-import { formatPrice } from '../../lib/share/formatPrice';
+import { formatPrice } from "../../lib/share/formatPrice";
 
 export function ProductInfo({ productData }: { productData: IProduct }) {
   const { productCategory, productBrand, productSkinType } = productData;
   return (
     <>
       <RText className="text-pink-500 font-bold">{productBrand.title}</RText>
-        <h1 className="text-3xl font-bold text-gray-900 leading-none">{productData.title}</h1>
+      <h1 className="text-3xl font-bold text-gray-900 leading-none">
+        {productData.title}
+      </h1>
 
       <Row className="flex items-center justify-start gap-0">
         <Wrap className="flex-start flex">
@@ -29,17 +31,22 @@ export function ProductInfo({ productData }: { productData: IProduct }) {
           {formatPrice(productData.sale_price ?? productData.price)}
         </h2>
         {productData.sale_price && (
-        <RText className="text-xl text-muted-foreground line-through">{formatPrice(productData.price)}</RText>
+          <RText className="text-xl text-muted-foreground line-through">
+            {formatPrice(productData.price)}
+          </RText>
         )}
       </Row>
 
       <RText>{productData.description}</RText>
 
-      <Row className="flex items-center gap-2"><RText className="text-right flex items-center gap-1 px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full">{productCategory.title}</RText>
-     <RText className="text-right flex items-center gap-1 px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full">{productSkinType.title}</RText></Row>
-
-
-      
+      <Row className="flex items-center gap-2">
+        <RText className="text-right flex items-center gap-1 px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full">
+          {productCategory.title}
+        </RText>
+        <RText className="text-right flex items-center gap-1 px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full">
+          {productSkinType.title}
+        </RText>
+      </Row>
     </>
   );
 }

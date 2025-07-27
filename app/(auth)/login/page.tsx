@@ -34,6 +34,7 @@ const LoginPage = () => {
       }
     } catch (error) {
       alert("Login failed. Please check your credentials.");
+      console.error("error", error);
     }
   };
 
@@ -50,7 +51,7 @@ const LoginPage = () => {
             Login to CosmePlay
           </h3>
           <p className="text-center text-gray-500 mb-4">
-            Don't have and account?{" "}
+            Dont have and account?{" "}
             <Link href={"/signup"} className="text-blue-500">
               Sign up
             </Link>

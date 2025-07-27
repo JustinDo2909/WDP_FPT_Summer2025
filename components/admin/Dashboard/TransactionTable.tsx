@@ -101,7 +101,7 @@ export function TransactionsTable() {
                 {map(transactions, (transaction) => {
                   const statusConfig = getStatusBadgeConfig(transaction.status);
                   const paymentIcon = getPaymentMethodIcon(
-                    transaction.paymentMethod
+                    transaction.paymentMethod,
                   );
 
                   return (

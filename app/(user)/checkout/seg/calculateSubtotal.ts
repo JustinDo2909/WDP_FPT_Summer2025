@@ -5,13 +5,17 @@ export function calculateCartTotal(cartItems: ICartLineItem[]): number {
   }, 0);
 }
 
-export function calculateCartTotalOriginalPrice(cartItems: ICartLineItem[]): number {
+export function calculateCartTotalOriginalPrice(
+  cartItems: ICartLineItem[],
+): number {
   return cartItems.reduce((total, item) => {
     return total + item.product.price * item.quantity;
   }, 0);
 }
 
-export function calculateOrderTotalOriginalPrice(orderItems: IOrderItem[]): number {
+export function calculateOrderTotalOriginalPrice(
+  orderItems: IOrderItem[],
+): number {
   return orderItems.reduce((total, item) => {
     return total + item.price * item.quantity;
   }, 0);

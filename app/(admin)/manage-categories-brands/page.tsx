@@ -2,8 +2,6 @@
 
 import CustomTable from "@/components/CustomTable";
 import { AddSkinTypeModal } from "@/components/admin/Category-Brand/Add-skin-type-modal";
-import { AddBrandModal } from "@/components/admin/Category-Brand/Add-brand-modal";
-import { AddCategoryModal } from "@/components/admin/Category-Brand/Add-category-modal";
 import {
   calculateStats,
   useCategoriesBrandsLogic,
@@ -24,6 +22,8 @@ import {
   Trash2,
   Users,
 } from "lucide-react";
+import { AddCategoryModal } from "@/components/admin/Category-Brand/add-category-modal";
+import { AddBrandModal } from "@/components/admin/Category-Brand/add-brand-modal";
 
 export default function CategoriesBrandsPage() {
   const {

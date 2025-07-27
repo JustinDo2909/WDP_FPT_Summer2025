@@ -18,7 +18,7 @@ export function useWarehouseLogic() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [selectedBatch, setSelectedBatch] = useState<BatchWithStatus | null>(
-    null
+    null,
   );
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -79,12 +79,12 @@ export function useWarehouseLogic() {
 
       // Add discount for items expiring soon (within 30 days)
       const daysUntilExpiry = Math.ceil(
-        (expireDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+        (expireDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
       );
       if (status === "active" && daysUntilExpiry <= 30 && daysUntilExpiry > 0) {
         discount = Math.min(
           50,
-          Math.max(10, Math.floor((30 - daysUntilExpiry) * 2))
+          Math.max(10, Math.floor((30 - daysUntilExpiry) * 2)),
         );
       }
 
@@ -115,7 +115,7 @@ export function useWarehouseLogic() {
         const [year, month] = monthKey.split("-");
         const date = new Date(
           Number.parseInt(year),
-          Number.parseInt(month) - 1
+          Number.parseInt(month) - 1,
         );
         const displayName = date.toLocaleDateString("en-US", {
           year: "numeric",
@@ -142,10 +142,10 @@ export function useWarehouseLogic() {
 
       // Find current month or use the latest month
       const currentMonthGroup = monthGroups.find(
-        (group) => group.month === currentMonthKey
+        (group) => group.month === currentMonthKey,
       );
       setSelectedMonth(
-        currentMonthGroup ? currentMonthKey : monthGroups[0].month
+        currentMonthGroup ? currentMonthKey : monthGroups[0].month,
       );
     }
   }, [monthGroups, selectedMonth]);
@@ -185,22 +185,22 @@ export function useWarehouseLogic() {
 
     const totalBatches = batchesWithStatus.length;
     const activeBatches = batchesWithStatus.filter(
-      (batch) => batch.status === "active"
+      (batch) => batch.status === "active",
     ).length;
     const expiredBatches = batchesWithStatus.filter(
-      (batch) => batch.status === "expired"
+      (batch) => batch.status === "expired",
     ).length;
     const outOfStockBatches = batchesWithStatus.filter(
-      (batch) => batch.status === "out-of-stock"
+      (batch) => batch.status === "out-of-stock",
     ).length;
 
     const totalQuantity = batchesWithStatus.reduce(
       (sum, batch) => sum + batch.quantity,
-      0
+      0,
     );
     const totalStock = batchesWithStatus.reduce(
       (sum, batch) => sum + batch.current_stock,
-      0
+      0,
     );
     const stockPercentage =
       totalQuantity > 0 ? Math.round((totalStock / totalQuantity) * 100) : 0;

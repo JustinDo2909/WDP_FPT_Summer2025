@@ -1,7 +1,13 @@
 "use client";
 
 import { Truck } from "lucide-react";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { NameModal, RModal } from "@/lib/by/RModal";
 import { useGetAddressQuery } from "@/process/api/apiAddress";
 import { Block, Row, Wrap, RText } from "@/lib/by/Div";
@@ -32,7 +38,11 @@ const AddressSelector = ({
     <Block className=" flex flex-col gap-4 ">
       <Row className="flex space-x-4 items-center">
         <h2 className="text-xl font-bold">1. Shipping Address</h2>
-        <Button label={'+ Add Address'} variant="default" onClick={openAddAddressModal} />
+        <Button
+          label={"+ Add Address"}
+          variant="default"
+          onClick={openAddAddressModal}
+        />
       </Row>
 
       <Select
@@ -54,14 +64,18 @@ const AddressSelector = ({
             addresses.map((address) => (
               <SelectItem key={address.id} value={String(address.id)}>
                 <Wrap className="flex text-sm text-left">
-  <RText className="font-semibold text-black mr-1">{address.phone}</RText>
-  <RText className="mr-1">{address.address},</RText>
-  <RText>{address.city}</RText>
-</Wrap>
+                  <RText className="font-semibold text-black mr-1">
+                    {address.phone}
+                  </RText>
+                  <RText className="mr-1">{address.address},</RText>
+                  <RText>{address.city}</RText>
+                </Wrap>
               </SelectItem>
             ))
           ) : (
-            <Wrap className="p-2 text-gray-500 text-sm">No address saved yet.</Wrap>
+            <Wrap className="p-2 text-gray-500 text-sm">
+              No address saved yet.
+            </Wrap>
           )}
         </SelectContent>
       </Select>

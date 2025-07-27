@@ -1,7 +1,3 @@
-import type { Order, OrderDetail } from "@/types/order";
-import type { User } from "@/types/user";
-import type { Product, CategoryOption } from "@/types/productManagement";
-
 //#region fomatCurrency
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat("vi-VN", {
@@ -119,11 +115,11 @@ const CATEGORY_COLORS = [
 export const calculateDashboardStats = (
   orders: any[],
   users: any[],
-  products: any[]
+  products: any[],
 ) => {
   const totalRevenue = orders.reduce(
     (sum, order) => sum + (order.total_amount || 0),
-    0
+    0,
   );
   const totalOrders = orders.length;
   const totalCustomers = users.filter((user) => user.role === "USER").length;
@@ -305,7 +301,7 @@ export const calculateTopCustomers = (orders: any[], users: any[]) => {
 // Calculate category distribution from products
 export const calculateCategoryDistribution = (
   products: any[],
-  categories: any[]
+  categories: any[],
 ) => {
   const categoryStats: { [key: string]: number } = {};
 
@@ -336,7 +332,7 @@ export const getRecentTransactions = (orders: any[], users: any[]) => {
   return [...orders] // Create a copy to avoid mutating the original read-only array
     .sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     )
     .slice(0, 5)
     .map((order) => {

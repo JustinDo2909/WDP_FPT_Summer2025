@@ -16,7 +16,12 @@ export function ShippingSection({ order }: ShippingSectionProps) {
           <RText className="text-xs text-gray-500">{address?.phone}</RText>
           <RText className="text-xs text-gray-500">{address?.address}</RText>
         </Column>
-        <RText className="text-xs text-gray-400">Payment method: {order.payment_method === "cash_on_delivery" ? "Cash on delivery" : order.payment_method}</RText>
+        <RText className="text-xs text-gray-400">
+          Payment method:{" "}
+          {order.payment_method === "cash_on_delivery"
+            ? "Cash on delivery"
+            : order.payment_method}
+        </RText>
       </Card>
     </Section>
   );

@@ -34,7 +34,7 @@ export default function WarehousePage() {
   } = useWarehouseLogic();
 
   const selectedMonthGroup = monthGroups.find(
-    (group) => group.month === selectedMonth
+    (group) => group.month === selectedMonth,
   );
 
   return (

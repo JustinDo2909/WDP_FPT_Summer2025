@@ -1,10 +1,15 @@
 // utils/fetcher.ts
 const BASE_URL = "https://cosme-play-be.vercel.app/api";
 
-export async function fetcher(endpoint: string, options?: { revalidate?: number }): Promise<any> {
+export async function fetcher(
+  endpoint: string,
+  options?: { revalidate?: number },
+): Promise<any> {
   try {
     const response = await fetch(`${BASE_URL}${endpoint}`, {
-      next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
+      next: options?.revalidate
+        ? { revalidate: options.revalidate }
+        : undefined,
     });
 
     if (!response.ok) {

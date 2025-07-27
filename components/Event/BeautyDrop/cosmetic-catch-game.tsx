@@ -27,7 +27,7 @@ export default function CosmeticCatchGame() {
     gameModes,
     selectedMode,
     gameState,
-    setGameState
+    setGameState,
   );
 
   const [playEvent] = usePlayEventMutation();
@@ -42,7 +42,7 @@ export default function CosmeticCatchGame() {
         .catch(() => {
           setGameState("restricted");
           setPlayError(
-            "You have already played today! Please come back tomorrow!"
+            "You have already played today! Please come back tomorrow!",
           );
         });
       return;

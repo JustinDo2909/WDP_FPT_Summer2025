@@ -1,12 +1,16 @@
-'use client'
+"use client";
 
 // import { useUser } from "@/hooks/useUser";
-import { useLazyGetReviewsByIdQuery, usePostReviewMutation } from "@/process/api/api";
+import {
+  useLazyGetReviewsByIdQuery,
+  usePostReviewMutation,
+} from "@/process/api/api";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
 export function useProductReviews(productId: string) {
-  const [trigger, { data: reviewsData, isLoading: reviewsLoading }] = useLazyGetReviewsByIdQuery();
+  const [trigger, { data: reviewsData, isLoading: reviewsLoading }] =
+    useLazyGetReviewsByIdQuery();
   const [postReview, { isLoading: postingReview }] = usePostReviewMutation();
   const [reviewText, setReviewText] = useState("");
   const [reviewValue, setReviewValue] = useState(5);

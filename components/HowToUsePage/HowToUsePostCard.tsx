@@ -32,13 +32,19 @@ export default function HowToUsePostCard({ post }: { post: IPostData }) {
         {/* <Row className="flex items-center gap-3">
           <Section className="w-8 h-8 rounded-full overflow-hidden bg-pink-100 flex items-center justify-center flex-shrink-0">
             {post.avatar ? (
-              <img src={post.avatar} alt={post.author} className="w-full h-full object-cover" />
+              <img
+                src={post.avatar}
+                alt={post.author}
+                className="w-full h-full object-cover"
+              />
             ) : (
               <User className="w-4 h-4 text-pink-600" />
             )}
           </Section>
           <Column className="flex flex-col flex-1 min-w-0">
-            <RText className="text-sm font-medium text-gray-700 truncate">{post.author}</RText>
+            <RText className="text-sm font-medium text-gray-700 truncate">
+              {post.author}
+            </RText>
             <RText className="text-xs text-gray-500">{post.time}</RText>
           </Column>
         </Row> */}

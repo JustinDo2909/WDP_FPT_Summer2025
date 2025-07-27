@@ -3,7 +3,11 @@ import VoucherCard from "./VoucherCard";
 import { Box } from "@/lib/by/Div";
 import { map } from "lodash";
 
-export default function VoucherList({ vouchers }: { readonly vouchers: IVoucher[] }) {
+export default function VoucherList({
+  vouchers,
+}: {
+  readonly vouchers: IVoucher[];
+}) {
   return (
     <Box className="flex-col flex space-y-4">
       {map(vouchers, (voucher) => (

@@ -5,20 +5,20 @@ import { keyBy, mapValues } from "lodash";
  */
 export function createVoucherMap(
   voucher: IVoucher | undefined,
-  items: ICartLineItem[]
+  items: ICartLineItem[],
 ): Record<string, number> {
   if (!voucher || !voucher.voucherProducts?.length) {
     return {};
   }
 
   // Get applicable product IDs
-  const voucherProductIds = voucher.voucherProducts.map(vp => vp.product.id);
+  const voucherProductIds = voucher.voucherProducts.map((vp) => vp.product.id);
 
   // Key cart items by ID for lookup
-  const itemsById = keyBy(items, item => item.id);
+  const itemsById = keyBy(items, (item) => item.id);
 
   // Calculate total eligible price per cart item
-  const savingsMap = mapValues(itemsById, item => {
+  const savingsMap = mapValues(itemsById, (item) => {
     if (!voucherProductIds.includes(item.product_id)) return 0;
 
     const price = item.product.sale_price ?? item.product.price;
@@ -35,12 +35,14 @@ export function createVoucherMap(
 
   // For FIXED/AMOUNT, distribute evenly across applicable items
   if (voucher.type !== "PERCENT") {
-    const applicableItems = items.filter(item =>
-      voucherProductIds.includes(item.product_id)
+    const applicableItems = items.filter((item) =>
+      voucherProductIds.includes(item.product_id),
     );
     if (applicableItems.length > 0) {
-      const perItem = Math.floor(voucher.discount_value / applicableItems.length);
-      applicableItems.forEach(item => {
+      const perItem = Math.floor(
+        voucher.discount_value / applicableItems.length,
+      );
+      applicableItems.forEach((item) => {
         savingsMap[item.id] = perItem;
       });
     }

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Row } from "@/lib/by/Div";
 
 export default function ReviewSection({ productId }: { productId: string }) {
-  const [hoverValue, setHoverValue] = useState(0)
+  const [hoverValue, setHoverValue] = useState(0);
   const {
     reviewsData,
     reviewsLoading,
@@ -36,22 +36,26 @@ export default function ReviewSection({ productId }: { productId: string }) {
               aria-label={`Rate ${val} star${val > 1 ? "s" : ""}`}
             >
               <Star
-          size={24}
-          fill={
-            (typeof hoverValue !== "undefined"
-              ? val <= hoverValue
-              : val <= reviewValue)
-              ? "#facc15"
-              : "none"
-          }
-          stroke="#facc15"
-          className={`transition ${
-            (typeof hoverValue !== "undefined"
-              ? val <= hoverValue
-              : val <= reviewValue)
-              ? ""
-              : "opacity-60"
-          }`}
+                size={24}
+                fill={
+                  (
+                    typeof hoverValue !== "undefined"
+                      ? val <= hoverValue
+                      : val <= reviewValue
+                  )
+                    ? "#facc15"
+                    : "none"
+                }
+                stroke="#facc15"
+                className={`transition ${
+                  (
+                    typeof hoverValue !== "undefined"
+                      ? val <= hoverValue
+                      : val <= reviewValue
+                  )
+                    ? ""
+                    : "opacity-60"
+                }`}
               />
             </button>
           ))}
@@ -121,7 +125,9 @@ export default function ReviewSection({ productId }: { productId: string }) {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500 italic">No reviews yet. Be the first to leave one!</p>
+          <p className="text-gray-500 italic">
+            No reviews yet. Be the first to leave one!
+          </p>
         )}
       </Row>
     </section>

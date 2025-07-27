@@ -3,7 +3,7 @@ import { fetcher } from "@/process/helper/fetcher";
 // Converts object to query string
 function toQueryString(params: Record<string, string | undefined>) {
   return Object.entries(params)
-    .filter(([_, v]) => v !== undefined && v !== "")
+    .filter(([v]) => v !== undefined && v !== "")
     .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v!)}`)
     .join("&");
 }

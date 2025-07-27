@@ -4,21 +4,30 @@ import { useCreateCheckoutSessionMutation } from "@/process/api/apiOrders";
 import { useCallback } from "react";
 
 export const useHandleCheckout = () => {
-  const [createCheckoutSession, { isLoading, error }] = useCreateCheckoutSessionMutation();
+  const [createCheckoutSession, { isLoading, error }] =
+    useCreateCheckoutSessionMutation();
 
-  const handleCheckout = useCallback(async (shippingCost: number, addressId: string , couponId?: string) => {
-    try {
-      const response = await createCheckoutSession({ shippingCost , addressId, couponId: couponId ?? "", isMobile: false }).unwrap();
+  const handleCheckout = useCallback(
+    async (shippingCost: number, addressId: string, couponId?: string) => {
+      try {
+        const response = await createCheckoutSession({
+          shippingCost,
+          addressId,
+          couponId: couponId ?? "",
+          isMobile: false,
+        }).unwrap();
 
-      if (response.success && response.url) {
-        window.location.href = response.url;
-      } else {
-        console.error("Unexpected response:", response);
+        if (response.success && response.url) {
+          window.location.href = response.url;
+        } else {
+          console.error("Unexpected response:", response);
+        }
+      } catch (err) {
+        console.error("Checkout failed", err);
       }
-    } catch (err) {
-      console.error("Checkout failed", err);
-    }
-  }, [createCheckoutSession]);
+    },
+    [createCheckoutSession],
+  );
 
   return { handleCheckout, isLoading, error };
 };

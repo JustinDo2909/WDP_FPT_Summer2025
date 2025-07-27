@@ -10,20 +10,20 @@ export const filterTableData = <T>(
   data: T[],
   columns: Array<{ key: keyof T; label: string }>,
   searchTerm: string,
-  activeFilters: { [key: string]: string }
+  activeFilters: { [key: string]: string },
 ): T[] => {
   return data.filter((row) => {
     const matchesSearch = columns.some((col) =>
       String(row[col.key] ?? "")
         .toLowerCase()
-        .includes(searchTerm.toLowerCase())
+        .includes(searchTerm.toLowerCase()),
     );
 
     const matchesFilters = Object.entries(activeFilters).every(
       ([key, value]) => {
         if (!value) return true;
         return String(row[key as keyof T]) === value;
-      }
+      },
     );
 
     return matchesSearch && matchesFilters;
@@ -32,7 +32,7 @@ export const filterTableData = <T>(
 
 export const sortTableData = <T>(
   data: T[],
-  sortConfig: { key: keyof T; direction: "asc" | "desc" } | null
+  sortConfig: { key: keyof T; direction: "asc" | "desc" } | null,
 ): T[] => {
   if (!sortConfig) return data;
 
@@ -49,12 +49,12 @@ export const sortTableData = <T>(
 export const paginateData = <T>(
   data: T[],
   currentPage: number,
-  itemsPerPage: number
+  itemsPerPage: number,
 ): { paginatedData: T[]; totalPages: number } => {
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const paginatedData = data.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   return { paginatedData, totalPages };
@@ -62,7 +62,7 @@ export const paginateData = <T>(
 
 export const handleTableSort = <T>(
   currentSortConfig: { key: keyof T; direction: "asc" | "desc" } | null,
-  key: keyof T
+  key: keyof T,
 ): { key: keyof T; direction: "asc" | "desc" } => {
   if (currentSortConfig?.key === key) {
     return {
@@ -76,7 +76,7 @@ export const handleTableSort = <T>(
 export const handleTableFilter = (
   activeFilters: { [key: string]: string },
   key: string,
-  value: string
+  value: string,
 ): { [key: string]: string } => {
   return { ...activeFilters, [key]: value };
 };
@@ -150,7 +150,7 @@ export const createNewEvent = (eventData: Partial<Event>): Event => {
 export const updateEvent = (
   events: Event[],
   eventId: string,
-  eventData: Partial<Event>
+  eventData: Partial<Event>,
 ): Event[] => {
   return events.map((e) => (e.id === eventId ? { ...e, ...eventData } : e));
 };
@@ -172,7 +172,7 @@ export const validateQuestionForm = (formData: {
 
   // Check if all options have content
   const emptyOptions = formData.questionOptions.filter(
-    (opt) => !opt.content.trim()
+    (opt) => !opt.content.trim(),
   );
   if (emptyOptions.length > 0) {
     errors.push("All answer options must have content");
@@ -180,7 +180,7 @@ export const validateQuestionForm = (formData: {
 
   // Check if exactly one answer is correct
   const correctAnswers = formData.questionOptions.filter(
-    (opt) => opt.is_correct
+    (opt) => opt.is_correct,
   );
   if (correctAnswers.length !== 1) {
     errors.push("Exactly one answer must be marked as correct");
@@ -193,7 +193,7 @@ export const validateQuestionForm = (formData: {
 };
 
 export const createNewQuestion = (
-  questionData: Partial<Question>
+  questionData: Partial<Question>,
 ): Question => {
   return {
     ...questionData,
@@ -204,23 +204,23 @@ export const createNewQuestion = (
 export const updateQuestion = (
   questions: Question[],
   questionId: string,
-  questionData: Partial<Question>
+  questionData: Partial<Question>,
 ): Question[] => {
   return questions.map((q) =>
-    q.id === questionId ? { ...q, ...questionData } : q
+    q.id === questionId ? { ...q, ...questionData } : q,
   );
 };
 
 export const deleteQuestion = (
   questions: Question[],
-  questionId: string
+  questionId: string,
 ): Question[] => {
   return questions.filter((q) => q.id !== questionId);
 };
 
 export const getQuestionsByEventId = (
   questions: Question[],
-  eventId: string
+  eventId: string,
 ): Question[] => {
   return questions.filter((q) => q.event_id === eventId);
 };
@@ -235,7 +235,7 @@ export const shuffleQuestions = (questions: Question[]): Question[] => {
 };
 
 export const getCorrectAnswer = (
-  question: Question
+  question: Question,
 ): QuestionOption | undefined => {
   return question.questionOptions.find((opt) => opt.is_correct);
 };
@@ -267,7 +267,7 @@ export const validateRewardForm = (formData: {
 };
 
 export const createNewReward = (
-  rewardData: Partial<EventReward>
+  rewardData: Partial<EventReward>,
 ): EventReward => {
   return {
     ...rewardData,
@@ -278,28 +278,28 @@ export const createNewReward = (
 export const updateReward = (
   rewards: EventReward[],
   rewardId: string,
-  rewardData: Partial<EventReward>
+  rewardData: Partial<EventReward>,
 ): EventReward[] => {
   return rewards.map((r) => (r.id === rewardId ? { ...r, ...rewardData } : r));
 };
 
 export const deleteReward = (
   rewards: EventReward[],
-  rewardId: string
+  rewardId: string,
 ): EventReward[] => {
   return rewards.filter((r) => r.id !== rewardId);
 };
 
 export const getRewardsByEventId = (
   rewards: EventReward[],
-  eventId: string
+  eventId: string,
 ): EventReward[] => {
   return rewards.filter((r) => r.event_id === eventId);
 };
 
 export const calculateEventReward = (
   rewards: EventReward[],
-  correctAnswers: number
+  correctAnswers: number,
 ): EventReward | null => {
   // Sort rewards by min_correct in descending order to get the highest applicable reward
   const sortedRewards = rewards
@@ -331,7 +331,7 @@ export const calculateEventStats = (events: Event[]) => {
 
 export const calculateQuestionStats = (
   questions: Question[],
-  events: Event[]
+  events: Event[],
 ) => {
   const totalQuestions = questions.length;
   const questionsByEvent = events.map((event) => ({
@@ -388,7 +388,7 @@ export const isEventActive = (event: Event): boolean => {
 };
 
 export const getEventStatus = (
-  event: Event
+  event: Event,
 ): "upcoming" | "active" | "ended" | "inactive" => {
   if (!event.is_active) return "inactive";
 
@@ -404,7 +404,7 @@ export const getEventStatus = (
 // Game Logic Functions
 export const playEvent = (
   questions: Question[],
-  answers: { questionId: string; selectedOption: string }[]
+  answers: { questionId: string; selectedOption: string }[],
 ) => {
   let correctCount = 0;
   const results = answers.map((answer) => {
@@ -412,7 +412,7 @@ export const playEvent = (
     if (!question) return { questionId: answer.questionId, isCorrect: false };
 
     const correctOption = question.questionOptions.find(
-      (opt) => opt.is_correct
+      (opt) => opt.is_correct,
     );
     const isCorrect = correctOption?.content === answer.selectedOption;
 

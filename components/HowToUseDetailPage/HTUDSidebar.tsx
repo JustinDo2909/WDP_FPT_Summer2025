@@ -23,7 +23,7 @@ export default function HowToUseDetailSidebar() {
             <Tag className="w-4 h-4 text-gray-400" />
             <RText className="font-bold text-lg text-gray-900">Tags</RText>
           </Row>
-          
+
           <Row className="flex flex-wrap gap-2">
             
           </Row>

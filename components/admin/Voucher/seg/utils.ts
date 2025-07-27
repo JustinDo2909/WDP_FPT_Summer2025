@@ -13,7 +13,7 @@ import type {
 // Hook quản lý vouchers với API
 export const useVouchersApiLogic = () => {
   const [selectedVoucher, setSelectedVoucher] = useState<VoucherDisplay | null>(
-    null
+    null,
   );
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [filterType, setFilterType] = useState<VoucherFilterType>("ALL");
@@ -36,7 +36,7 @@ export const useVouchersApiLogic = () => {
         discountDisplay: getDiscountDisplay(voucher),
         statusText: getStatusText(voucher),
         formattedCreatedAt: formatDate(voucher.created_at),
-      })
+      }),
     );
   }, [vouchersData]);
 
@@ -110,7 +110,7 @@ export const useVouchersApiLogic = () => {
           voucher.redeemed ? "Yes" : "No",
           voucher.redeemed_at || "N/A",
           voucher.formattedCreatedAt,
-        ].join(",")
+        ].join(","),
       ),
     ].join("\n");
 
@@ -183,7 +183,7 @@ export const getStatusColor = (voucher: Voucher): string => {
 };
 
 export const calculateVoucherStats = (
-  vouchers: VoucherDisplay[]
+  vouchers: VoucherDisplay[],
 ): VoucherStats => {
   const total = vouchers.length;
   const redeemed = vouchers.filter((v) => v.redeemed).length;

@@ -41,7 +41,7 @@ interface CustomerDetailModalProps {
     customerId: string,
     amount: number,
     description: string,
-    type: GameScoreTransaction["type"]
+    type: GameScoreTransaction["type"],
   ) => void;
 }
 
@@ -79,7 +79,7 @@ export function CustomerDetailModal({
       customer.id,
       amount,
       gameScoreDescription,
-      gameScoreType
+      gameScoreType,
     );
 
     setGameScoreAmount("");
@@ -313,7 +313,7 @@ export function CustomerDetailModal({
                       <RText className="text-gray-900">
                         {customer.totalOrders > 0
                           ? formatCurrency(
-                              customer.totalSpent / customer.totalOrders
+                              customer.totalSpent / customer.totalOrders,
                             )
                           : "$0.00"}
                       </RText>
@@ -496,7 +496,7 @@ export function CustomerDetailModal({
                     value={gameScoreType}
                     onChange={(e) =>
                       setGameScoreType(
-                        e.target.value as GameScoreTransaction["type"]
+                        e.target.value as GameScoreTransaction["type"],
                       )
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Card, Row, Column, RText, Wrap } from "@/lib/by/Div";
 import Link from "next/link";
@@ -9,21 +9,17 @@ interface VoucherCardProps {
 }
 
 const formatExpiryDate = (voucher: IVoucher) => {
-  const expiry = new Date(new Date(voucher.created_at).getTime() + 2 * 24 * 60 * 60 * 1000);
+  const expiry = new Date(
+    new Date(voucher.created_at).getTime() + 2 * 24 * 60 * 60 * 1000,
+  );
   return expiry.toLocaleDateString("vi-VN");
 };
-
 
 export default function VoucherCard({
   voucher,
 }: VoucherCardProps): JSX.Element {
-  const {
-    discount_value,
-    type,
-    redeemed,
-    redeemed_at,
-    voucherProducts,
-  } = voucher;
+  const { discount_value, type, redeemed, redeemed_at, voucherProducts } =
+    voucher;
 
   const isRedeemed = redeemed;
   const statusText = isRedeemed
@@ -39,7 +35,7 @@ export default function VoucherCard({
     <Card
       className={`
         flex w-full min-w-[450px] overflow-hidden rounded-lg border border-gray-200
-        ${isRedeemed ? 'opacity-50 cursor-not-allowed grayscale' : ''}
+        ${isRedeemed ? "opacity-50 cursor-not-allowed grayscale" : ""}
       `}
     >
       {/* Left Pill */}
@@ -66,21 +62,21 @@ export default function VoucherCard({
 
           {/* Linked product titles */}
           {voucherProducts && voucherProducts.length > 0 && (
-          <Wrap className="mt-2 text-xs text-gray-600">
-            Applicable for:&nbsp;
-            {voucherProducts.map((vp, index) => (
-              <React.Fragment key={vp.product.id}>
-                <Link
-                  href={`/products/${vp.product.id}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  {vp.product.title}
-                </Link>
-                {index < voucherProducts.length - 1 && ", "}
-              </React.Fragment>
-            ))}
-          </Wrap>
-        )}
+            <Wrap className="mt-2 text-xs text-gray-600">
+              Applicable for:&nbsp;
+              {voucherProducts.map((vp, index) => (
+                <React.Fragment key={vp.product.id}>
+                  <Link
+                    href={`/products/${vp.product.id}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    {vp.product.title}
+                  </Link>
+                  {index < voucherProducts.length - 1 && ", "}
+                </React.Fragment>
+              ))}
+            </Wrap>
+          )}
 
           {/* <Wrap className="inline-block mt-2 px-2 py-0.5 bg-pink-500 text-white text-xs rounded w-fit">
             Stripe Coupon: {stripe_coupon_id ?? "N/A"}
