@@ -111,7 +111,7 @@ declare global {
     title: string; // Core
     thumbnail_url: string; // Core
     description: string; // Core
-    steps: IPostStep[]; // Core
+    postSteps: IPostStep[]; // Core
     warnings: string[]; // Core
     benefits: string[]; // Core
   };
