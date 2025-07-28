@@ -19,6 +19,9 @@ declare global {
     id: string;
     email: string;
     name: string;
+    role: "USER" | "ADMIN" | "STAFF";
+    createdAt: string;
+    updatedAt: string;
   }
 
   interface IOrderItem {
