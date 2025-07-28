@@ -4,6 +4,7 @@ export interface Event {
   description: string;
   start_time: string;
   end_time: string;
+  type: string;
   is_active: boolean;
   createdAt: string;
   updatedAt: string;
@@ -35,6 +36,8 @@ export interface EventReward {
   id: string;
   event_id: string;
   min_correct: number;
+  max_correct: number;
+  voucher_quantity: number;
   discount_value: number;
   type: "AMOUNT" | "PERCENT";
   createdAt: string;
@@ -72,6 +75,7 @@ export interface CreateEventRequest {
   description: string;
   start_time: string;
   end_time: string;
+  type: string;
   is_active: boolean;
 }
 
@@ -96,6 +100,8 @@ export interface UpdateQuestionRequest extends Partial<CreateQuestionRequest> {
 export interface CreateRewardRequest {
   event_id: string;
   min_correct: number;
+  max_correct: number;
+  voucher_quantity: number;
   discount_value: number;
   type: "AMOUNT" | "PERCENT";
 }

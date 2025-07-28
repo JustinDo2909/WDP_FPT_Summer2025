@@ -6,8 +6,9 @@ import { Area, RText, Yard } from "@/lib/by/Div";
 import {
   useCreateProductBatchMutation,
   useGetProductsQuery,
+  useGetSuppliersQuery,
 } from "@/process/api/api";
-import type { CreateBatchRequest } from "@/types/warehouse/index";
+import type { CreateBatchRequest, Supplier } from "@/types/warehouse/index";
 import type { Product } from "@/types/productManagement/index";
 
 interface AddBatchModalProps {
@@ -26,6 +27,7 @@ export function AddBatchModal({
   const [selectedProductId, setSelectedProductId] = useState(
     preselectedProductId || "",
   );
+  const [selectedSupplierId, setSelectedSupplierId] = useState("");
   const [quantity, setQuantity] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,6 +41,8 @@ export function AddBatchModal({
       page: 1,
       pageSize: 1000,
     });
+  const { data: suppliers = [], isLoading: suppliersLoading } =
+    useGetSuppliersQuery();
   const [createBatch] = useCreateProductBatchMutation();
 
   const products = productsResponse?.products || [];
@@ -75,7 +79,7 @@ export function AddBatchModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!selectedProductId || !quantity) {
+    if (!selectedProductId || !quantity || !selectedSupplierId) {
       alert("Please fill in all required fields");
       return;
     }
@@ -91,6 +95,7 @@ export function AddBatchModal({
     try {
       const batchData: CreateBatchRequest = {
         quantity: quantityNum,
+        supplier_id: selectedSupplierId,
       };
 
       await createBatch({
@@ -100,6 +105,7 @@ export function AddBatchModal({
 
       // Reset form
       setSelectedProductId(preselectedProductId || "");
+      setSelectedSupplierId("");
       setQuantity("");
       setSearchTerm("");
 
@@ -299,6 +305,48 @@ export function AddBatchModal({
             </RText>
           </Yard>
 
+          {/* Supplier Selection */}
+          <Yard>
+            <RText className="block text-sm font-medium text-gray-700 mb-2">
+              Supplier <span className="text-red-500">*</span>
+            </RText>
+            <select
+              value={selectedSupplierId}
+              onChange={(e) => setSelectedSupplierId(e.target.value)}
+              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm overflow-hidden text-ellipsis whitespace-nowrap"
+              style={{
+                maxWidth: "100%",
+              }}
+              required
+              disabled={suppliersLoading}
+            >
+              <option value="">
+                {suppliersLoading
+                  ? "Loading suppliers..."
+                  : "Select a supplier"}
+              </option>
+              {suppliers.map((supplier: Supplier) => {
+                const fullName = `${supplier.name} - ${supplier.company_name}`;
+                const display =
+                  fullName.length > 50
+                    ? fullName.substring(0, 50) + "..."
+                    : fullName;
+                return (
+                  <option
+                    key={supplier.id}
+                    value={supplier.id}
+                    title={fullName}
+                  >
+                    {display}
+                  </option>
+                );
+              })}
+            </select>
+            <RText className="text-sm text-gray-500 mt-1">
+              Choose the supplier for this batch
+            </RText>
+          </Yard>
+
           {/* Form Actions */}
           <Area className="flex space-x-3 pt-4">
             <button
@@ -310,7 +358,12 @@ export function AddBatchModal({
             </button>
             <button
               type="submit"
-              disabled={isSubmitting || !selectedProductId || !quantity}
+              disabled={
+                isSubmitting ||
+                !selectedProductId ||
+                !quantity ||
+                !selectedSupplierId
+              }
               className="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
             >
               {isSubmitting ? (

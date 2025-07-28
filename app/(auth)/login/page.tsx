@@ -28,10 +28,12 @@ const LoginPage = () => {
       const response = await login(data).unwrap();
       if (response.user?.role === "ADMIN") {
         router.push("/dashboard");
+      } else if (response.user?.role === "STAFF") {
+        router.push("/manage-products");
       } else {
         router.push("/");
       }
-    } catch (error) {
+    } catch (_error) {
       alert("Login failed. Please check your credentials.");
       console.error("error", error);
     }

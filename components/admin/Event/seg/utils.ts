@@ -87,6 +87,7 @@ export const validateEventForm = (formData: {
   description: string;
   start_time: string;
   end_time: string;
+  type: string;
 }): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
 
@@ -130,6 +131,7 @@ export const formatEventData = (formData: {
   description: string;
   start_time: string;
   end_time: string;
+  type: string;
   is_active: boolean;
 }): Partial<Event> => {
   return {

@@ -48,6 +48,7 @@ import type {
   CreateBatchResponse,
   PaginatedBatchesResponse,
   BatchPaginationParams,
+  Supplier,
 } from "@/types/warehouse/index";
 
 const customBaseQuery = async (
@@ -107,6 +108,7 @@ export const api = createApi({
     "Rewards",
     "Reviews",
     "Batches",
+    "Suppliers",
   ],
   endpoints: (build) => ({
     //#region getProducts
@@ -255,7 +257,14 @@ export const api = createApi({
         "Products", // Also invalidate products cache in case batch creation affects inventory
       ],
     }),
+
+    //#region Suppliers
+    getSuppliers: build.query<Supplier[], void>({
+      query: () => "/suppliers",
+      providesTags: ["Suppliers"],
+    }),
     //#endregion
+
     getProductMeta: build.query<ProductMetaResponse, void>({
       query: () => "/products/meta",
       providesTags: ["ProductMeta"],
@@ -644,10 +653,14 @@ export const api = createApi({
     }),
 
     createQuestion: build.mutation<ApiResponse, CreateQuestionRequest>({
-      query: ({ event_id, ...questionData }) => ({
+      query: ({ event_id, content, image_url, questionOptions }) => ({
         url: `/events/${event_id}/questions/add`,
         method: "POST",
-        body: questionData,
+        body: {
+          content,
+          image_url,
+          options: questionOptions,
+        },
       }),
       invalidatesTags: (result, error, { event_id }) => [
         { type: "Question", id: event_id },
@@ -656,10 +669,13 @@ export const api = createApi({
     }),
 
     updateQuestion: build.mutation<ApiResponse, UpdateQuestionRequest>({
-      query: ({ id, event_id, ...questionData }) => ({
+      query: ({ id, event_id, content, questionOptions }) => ({
         url: `/events/${event_id}/questions/update/${id}`,
         method: "PUT",
-        body: questionData,
+        body: {
+          content,
+          options: questionOptions,
+        },
       }),
       invalidatesTags: (result, error, { event_id }) => [
         { type: "Question", id: event_id },
@@ -837,6 +853,9 @@ export const {
   useGetAllBatchesQuery,
   useGetProductBatchesQuery,
   useCreateProductBatchMutation,
+
+  // Suppliers
+  useGetSuppliersQuery,
 } = api;
 
 // import { Api, BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";

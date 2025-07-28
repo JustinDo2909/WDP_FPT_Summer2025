@@ -112,7 +112,7 @@ export const apiAuth = createApi({
         body,
       }),
     }),
-    getUser: build.query<any, void>({
+    getUser: build.query<UserResponse, void>({
       query: () => ({
         url: "/auth/logged-in-user",
         method: "GET",

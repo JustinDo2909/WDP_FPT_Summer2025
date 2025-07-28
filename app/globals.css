@@ -4,9 +4,23 @@
 
 /* Custom utilities for line clamping */
 @layer utilities {
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -73,22 +87,22 @@
 }
 
 @font-face {
-  font-family: 'Raleway';
-  src: url('./fonts/Raleway.woff2') format('woff2');
+  font-family: "Raleway";
+  src: url("./fonts/Raleway.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Modak';
-  src: url('./fonts/Modak-Regular.ttf') format('truetype');
+  font-family: "Modak";
+  src: url("./fonts/Modak-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Raleway-Bold';
-  src: url('./fonts/Raleway-Bold.ttf') format('truetype');
+  font-family: "Raleway-Bold";
+  src: url("./fonts/Raleway-Bold.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -124,7 +138,6 @@ body {
 } */
 
 /* Our font setup */
-
 
 .line-clamp-2 {
   display: -webkit-box;

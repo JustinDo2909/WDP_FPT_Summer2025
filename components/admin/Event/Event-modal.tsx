@@ -30,6 +30,7 @@ export function EventModal({
     description: "",
     start_time: "",
     end_time: "",
+    type: "QUIZ",
     is_active: true,
   });
 
@@ -40,6 +41,7 @@ export function EventModal({
         description: event.description,
         start_time: event.start_time.slice(0, 16),
         end_time: event.end_time.slice(0, 16),
+        type: event.type || "QUIZ",
         is_active: event.is_active,
       });
     } else {
@@ -48,6 +50,7 @@ export function EventModal({
         description: "",
         start_time: "",
         end_time: "",
+        type: "QUIZ",
         is_active: true,
       });
     }
@@ -144,6 +147,24 @@ export function EventModal({
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
+          </Yard>
+
+          <Yard>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Event Type
+            </label>
+            <select
+              value={formData.type}
+              onChange={(e) =>
+                setFormData({ ...formData, type: e.target.value })
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            >
+              <option value="QUIZ">Quiz</option>
+              <option value="DROP">Drop</option>
+              <option value="ARCADE">Arcade</option>
+            </select>
           </Yard>
 
           <Yard className="flex items-center">

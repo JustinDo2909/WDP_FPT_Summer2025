@@ -42,7 +42,14 @@ export function QuestionModal({
       setFormData({
         content: question.content,
         image_url: question.image_url || "",
-        questionOptions: question.questionOptions,
+        questionOptions: question.questionOptions.map((option) => ({
+          id: option.id,
+          content: option.content,
+          is_correct: option.is_correct,
+          question_id: option.question_id,
+          createdAt: option.createdAt,
+          updatedAt: option.updatedAt,
+        })),
       });
     } else {
       setFormData({
@@ -92,15 +99,26 @@ export function QuestionModal({
     value: string | boolean,
   ) => {
     // Deep copy to avoid read-only property errors
-    const newOptions = formData.questionOptions.map((opt) => ({ ...opt }));
+    const newOptions = formData.questionOptions.map((opt) => ({
+      id: opt.id,
+      content: opt.content,
+      is_correct: opt.is_correct,
+      question_id: opt.question_id,
+      createdAt: opt.createdAt,
+      updatedAt: opt.updatedAt,
+    }));
+
     if (field === "is_correct" && value === true) {
-      // Only one correct answer allowed
-      newOptions.forEach((opt, i) => {
-        opt.is_correct = i === index;
+      // Only one correct answer allowed - set all to false first
+      newOptions.forEach((opt) => {
+        opt.is_correct = false;
       });
-    } else {
-      newOptions[index] = { ...newOptions[index], [field]: value };
+      // Then set the selected one to true
+      newOptions[index].is_correct = true;
+    } else if (field === "content") {
+      newOptions[index].content = value as string;
     }
+
     setFormData({ ...formData, questionOptions: newOptions });
   };
 
@@ -181,6 +199,7 @@ export function QuestionModal({
                   <input
                     type="radio"
                     name="correct_answer"
+                    value={index}
                     checked={option.is_correct}
                     onChange={() =>
                       handleOptionChange(index, "is_correct", true)
