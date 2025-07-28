@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, Package, AlertTriangle, Percent } from "lucide-react";
+import { Calendar, Package, AlertTriangle } from "lucide-react";
 import { Area, RText, Yard } from "@/lib/by/Div";
 import type { BatchWithStatus } from "@/types/warehouse/index";
 import type { Product } from "@/types/productManagement/index";
@@ -14,12 +14,7 @@ const statusColors = {
   expired: {
     bg: "bg-red-100",
     text: "text-red-800",
-    label: "Expired",
-  },
-  "out-of-stock": {
-    bg: "bg-gray-100",
-    text: "text-gray-800",
-    label: "Out of Stock",
+    label: "Expired Soon",
   },
 };
 
@@ -41,7 +36,7 @@ export function BatchCard({ batch, product, onClick }: BatchCardProps) {
     const today = new Date();
     const diffTime = expireDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays <= 30 && diffDays > 0;
+    return diffDays <= 270 && diffDays > 0;
   };
 
   const formatDate = (dateString: string) => {
@@ -79,11 +74,6 @@ export function BatchCard({ batch, product, onClick }: BatchCardProps) {
           >
             {statusConfig.label}
           </span>
-          {batch.discount && batch.discount > 0 && (
-            <span className="flex items-center text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
-              <Percent className="w-3 h-3 mr-1" />-{batch.discount}%
-            </span>
-          )}
         </Yard>
       </Area>
 
@@ -133,7 +123,7 @@ export function BatchCard({ batch, product, onClick }: BatchCardProps) {
         >
           <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
           <span className="truncate">
-            Expires: {formatDate(batch.expired_at)}
+            Expires in: {formatDate(batch.expired_at)}
           </span>
           {isExpiringSoon() && (
             <AlertTriangle className="w-4 h-4 ml-2 text-orange-500 flex-shrink-0" />

@@ -191,14 +191,17 @@ export default function EventManagement() {
       {
         key: "questions" as keyof Event,
         label: "Questions",
-        render: (event: Event) => (
-          <button
-            onClick={() => setShowEventQuestions(event.id)}
-            className="text-blue-600 hover:text-blue-800 font-medium"
-          >
-            View questions
-          </button>
-        ),
+        render: (event: Event) =>
+          event.type === "QUIZ" ? (
+            <button
+              onClick={() => setShowEventQuestions(event.id)}
+              className="text-blue-600 hover:text-blue-800 font-medium"
+            >
+              View questions
+            </button>
+          ) : (
+            <span className="text-gray-400 text-sm"></span>
+          ),
       },
     ],
     []

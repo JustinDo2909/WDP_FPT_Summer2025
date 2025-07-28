@@ -313,11 +313,9 @@ export function AddBatchModal({
             <select
               value={selectedSupplierId}
               onChange={(e) => setSelectedSupplierId(e.target.value)}
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm overflow-hidden text-ellipsis whitespace-nowrap"
               style={{
                 maxWidth: "100%",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
               }}
               required
               disabled={suppliersLoading}
@@ -327,18 +325,22 @@ export function AddBatchModal({
                   ? "Loading suppliers..."
                   : "Select a supplier"}
               </option>
-              {suppliers.map((supplier: Supplier) => (
-                <option
-                  key={supplier.id}
-                  value={supplier.id}
-                  className="truncate"
-                >
-                  {supplier.name.length > 30
-                    ? `${supplier.name.substring(0, 30)}...`
-                    : supplier.name}{" "}
-                  - {supplier.company_name}
-                </option>
-              ))}
+              {suppliers.map((supplier: Supplier) => {
+                const fullName = `${supplier.name} - ${supplier.company_name}`;
+                const display =
+                  fullName.length > 50
+                    ? fullName.substring(0, 50) + "..."
+                    : fullName;
+                return (
+                  <option
+                    key={supplier.id}
+                    value={supplier.id}
+                    title={fullName}
+                  >
+                    {display}
+                  </option>
+                );
+              })}
             </select>
             <RText className="text-sm text-gray-500 mt-1">
               Choose the supplier for this batch

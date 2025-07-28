@@ -84,7 +84,7 @@ export interface CreateBatchResponse {
 }
 
 export interface BatchWithStatus extends Batch {
-  status: "active" | "expired" | "out-of-stock";
+  status: "active" | "expired";
   discount?: number;
 }
 
@@ -99,7 +99,6 @@ export interface WarehouseStats {
   totalBatches: number;
   activeBatches: number;
   expiredBatches: number;
-  outOfStockBatches: number;
   totalStock: number;
   totalQuantity: number;
   stockPercentage: number;

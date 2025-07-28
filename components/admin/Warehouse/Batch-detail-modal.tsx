@@ -6,7 +6,7 @@ import {
   Calendar,
   AlertTriangle,
   TrendingDown,
-  Percent,
+  Building,
 } from "lucide-react";
 import { Area, RText, Yard } from "@/lib/by/Div";
 import type { BatchWithStatus } from "@/types/warehouse/index";
@@ -21,12 +21,7 @@ const statusColors = {
   expired: {
     bg: "bg-red-100",
     text: "text-red-800",
-    label: "Expired",
-  },
-  "out-of-stock": {
-    bg: "bg-gray-100",
-    text: "text-gray-800",
-    label: "Out of Stock",
+    label: "Expired Soon",
   },
 };
 
@@ -311,6 +306,82 @@ export function BatchDetailModal({
               </Yard>
             </Yard>
           </Area>
+
+          {/* Supplier Information */}
+          {batch.supplier ? (
+            <Area>
+              <Area className="flex items-center space-x-2 mb-3">
+                <Building className="w-5 h-5 text-gray-600" />
+                <RText className="text-lg font-semibold text-gray-900">
+                  Supplier Information
+                </RText>
+              </Area>
+              <Yard className="bg-gray-50 rounded-lg p-4">
+                <Area className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Yard>
+                    <RText className="text-sm text-gray-500">
+                      Supplier Name
+                    </RText>
+                    <RText className="font-medium">{batch.supplier.name}</RText>
+                  </Yard>
+                  <Yard>
+                    <RText className="text-sm text-gray-500">Company</RText>
+                    <RText className="font-medium">
+                      {batch.supplier.company_name}
+                    </RText>
+                  </Yard>
+                  <Yard>
+                    <RText className="text-sm text-gray-500">
+                      Contact Person
+                    </RText>
+                    <RText className="font-medium">
+                      {batch.supplier.contact_person}
+                    </RText>
+                  </Yard>
+                  <Yard>
+                    <RText className="text-sm text-gray-500">Email</RText>
+                    <RText className="font-medium">
+                      {batch.supplier.email}
+                    </RText>
+                  </Yard>
+                  <Yard>
+                    <RText className="text-sm text-gray-500">Phone</RText>
+                    <RText className="font-medium">
+                      {batch.supplier.phone}
+                    </RText>
+                  </Yard>
+                  <Yard>
+                    <RText className="text-sm text-gray-500">Address</RText>
+                    <RText className="font-medium">
+                      {batch.supplier.address}
+                    </RText>
+                  </Yard>
+                  {batch.supplier.note && (
+                    <Yard className="md:col-span-2">
+                      <RText className="text-sm text-gray-500">Note</RText>
+                      <RText className="font-medium">
+                        {batch.supplier.note}
+                      </RText>
+                    </Yard>
+                  )}
+                </Area>
+              </Yard>
+            </Area>
+          ) : (
+            <Area>
+              <Area className="flex items-center space-x-2 mb-3">
+                <Building className="w-5 h-5 text-gray-400" />
+                <RText className="text-lg font-semibold text-gray-400">
+                  Supplier Information
+                </RText>
+              </Area>
+              <Yard className="bg-gray-50 rounded-lg p-4">
+                <RText className="text-gray-500 text-center">
+                  No supplier information available
+                </RText>
+              </Yard>
+            </Area>
+          )}
         </Yard>
       </Yard>
     </Yard>
