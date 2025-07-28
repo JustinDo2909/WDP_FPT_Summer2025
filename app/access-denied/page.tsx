@@ -37,7 +37,7 @@ export default function AccessDeniedPage() {
           </RText>
 
           <RText className="text-gray-600 mb-6 leading-relaxed">
-            You don't have permission to access this area. This section is
+            You don&apos;t have permission to access this area. This section is
             restricted to administrators and staff members only.
           </RText>
 
