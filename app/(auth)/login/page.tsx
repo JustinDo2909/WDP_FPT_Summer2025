@@ -33,7 +33,7 @@ const LoginPage = () => {
       } else {
         router.push("/");
       }
-    } catch (_error) {
+    } catch (error) {
       alert("Login failed. Please check your credentials.");
       console.error("error", error);
     }

@@ -9,7 +9,7 @@ interface WarehouseStatsProps {
     totalBatches: number;
     activeBatches: number;
     expiredBatches: number;
-    outOfStockBatches: number;
+    outOfStockBatches?: number;
     totalStock: number;
     totalQuantity: number;
     stockPercentage: number;
