@@ -66,8 +66,9 @@ export default function HowToUseDetailContent({ post }: { post: IPostData }) {
                   {/* Step Image */}
                   <Section className="w-full sm:w-40 h-32 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
                     <Image 
-                      fill
-                      src={step?.image_url} 
+                      width={100}
+                      height={80}
+                      src={"https://cdn.chiaki.vn/unsafe/0x480/left/top/smart/filters:quality(75)/https://chiaki.vn/upload/news/content/2024/06/cach-chon-san-pham-skincare-phu-hop-jpg-1718864826-20062024132706.jpg"} 
                       alt={step.title}
                       className="w-full h-full object-cover"
                     />

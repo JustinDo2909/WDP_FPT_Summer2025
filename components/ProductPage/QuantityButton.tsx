@@ -31,7 +31,7 @@ const QuantityButton: React.FC<QuantityButtonProps> = ({
         label={<Minus size={isSmall ? 14 : 18} />}
         onClick={decrement}
         variant="outline"
-        className={`!p-0 justify-center border-r border-l-0 border-y-0 rounded-none ${
+        className={`flex justify-center border-r border-l-0 border-y-0 rounded-none ${
           isSmall ? "w-6 h-5" : "w-12 h-8"
         }`}
       />
@@ -47,7 +47,7 @@ const QuantityButton: React.FC<QuantityButtonProps> = ({
         label={<Plus size={isSmall ? 14 : 18} />}
         onClick={increment}
         variant="outline"
-        className={`!p-0 justify-center border-l border-r-0 border-y-0 rounded-none ${
+        className={`flex justify-center border-l border-r-0 border-y-0 rounded-none ${
           isSmall ? "w-6 h-5" : "w-12 h-8"
         }`}
       />

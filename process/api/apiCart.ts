@@ -41,11 +41,21 @@ export const apiCart = createApi({
       invalidatesTags: ["Carts"],
     }),
     //#endregion
+
+    //#region removeFromCart
+    getCart: build.query<any, void>({
+      query: () => ({
+        url: "cart/get-cart",
+        method: "GET",
+      }),
+      providesTags: ["Carts"],
+    }),
+    //#endRegion
   }),
 });
 
 export const {
-  // useGetCartQuery,
+  useGetCartQuery,
   useAddToCartMutation,
   useUpdateCartMutation,
   useRemoveFromCartMutation,

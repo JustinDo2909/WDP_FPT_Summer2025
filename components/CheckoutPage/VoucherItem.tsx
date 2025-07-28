@@ -38,7 +38,7 @@ export const VoucherItem: React.FC<{
       <Column className="flex flex-col flex-1 justify-between p-3 pr-8 bg-white">
         <Column className="flex flex-col">
           <Wrap className="text-base font-semibold text-gray-800">
-            Get {formatDiscount(voucher)}
+            Get {formatDiscount(voucher)} on 
           </Wrap>
           <Wrap className="inline-block mt-2 px-2 py-0.5 bg-pink-500 text-white text-xs rounded">
             {applicable

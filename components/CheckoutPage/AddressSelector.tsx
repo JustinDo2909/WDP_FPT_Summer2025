@@ -37,7 +37,7 @@ const AddressSelector = ({
   return (
     <Block className=" flex flex-col gap-4 ">
       <Row className="flex space-x-4 items-center">
-        <h2 className="text-xl font-bold">1. Shipping Address</h2>
+        <h2 className="text-xl font-bold">1. Shipping Address <span className="text-red-500 text-2xl">*</span></h2>
         <Button
           label={"+ Add Address"}
           variant="default"

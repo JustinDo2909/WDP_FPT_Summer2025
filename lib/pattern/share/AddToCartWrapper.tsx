@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/process/api/redux";
 import toast from "react-hot-toast";
 import { RText, Wrap } from "@/lib/by/Div";
+import { useUser } from "@/hooks/useUser";
 
 interface AddToCartWrapperProps {
   productId: string;
@@ -22,6 +23,7 @@ const AddToCartWrapper: React.FC<AddToCartWrapperProps> = ({
 }) => {
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const cartItem = cartItems.find((c) => c.product_id === productId);
+  const {user} = useUser()
   const isExceedQuanity =
     quantity + (cartItem?.quantity ?? 0) >
     (cartItem?.product.total_stock ?? 999);
@@ -30,11 +32,15 @@ const AddToCartWrapper: React.FC<AddToCartWrapperProps> = ({
   const handleClick = async (event: React.MouseEvent) => {
     event.preventDefault();
     try {
-      if (isExceedQuanity) {
+      if(!user) {
+        toast.error("You must be logged in to add to cart");
+      }
+      else if (isExceedQuanity) {
         toast.error("Already added maximum stock limit for this product");
         return;
+      } else {
+        await addToCart({ productId, quantity }).unwrap();
       }
-      await addToCart({ productId, quantity }).unwrap();
     } catch (err) {
       console.error("Add to cart failed", err);
     }

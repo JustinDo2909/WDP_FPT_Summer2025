@@ -13,6 +13,6 @@ export async function fetchPost(category: string) {
   try {
     return await fetcher(`/posts/${category}`, { revalidate: 60 });
   } catch {
-    return { post: [], total: 0, page: 1, totalPages: 0 };
+    return { post: {}};
   }
 }

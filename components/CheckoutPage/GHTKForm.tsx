@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { SquareUser } from "lucide-react";
 import { validateVietnamesePhoneNumber } from "@/lib/share/validateVNNumber";
 import Button from "../CustomButton";
+import { useUser } from "@/hooks/useUser";
 
 // Zod schema for IAddress
 const AddressSchema = z.object({
@@ -56,6 +57,7 @@ const GHNForm: React.FC<GHNFormProps> = ({
   onSave,
   onClose,
 }) => {
+  const { user } = useUser()
   // Initialize state with initialShippingInfo or defaults
   const [shippingInfo, setShippingInfo] = useState<Partial<IAddress>>(
     initialShippingInfo || {
@@ -74,6 +76,12 @@ const GHNForm: React.FC<GHNFormProps> = ({
     },
   );
   const [errors, setErrors] = useState<z.ZodIssue[]>([]);
+
+  useEffect(() => {
+    if (user) {
+       setShippingInfo({ ...shippingInfo, fullname: user.name })
+    }
+  },[user])
 
   // API queries
   const { data: provinces = [], isLoading: provincesLoading } =
@@ -146,8 +154,8 @@ const GHNForm: React.FC<GHNFormProps> = ({
           <Input
             id="fullName"
             className={cn(inputClass, getError("fullname") && "border-red-500")}
-            placeholder="Enter full name (required)"
-            value={shippingInfo.fullname || ""}
+            placeholder="Loading..."
+            value={shippingInfo.fullname ?? ""}
             onChange={(e) =>
               setShippingInfo({ ...shippingInfo, fullname: e.target.value })
             }

@@ -4,9 +4,10 @@ import { useProductReviews } from "./seg/review";
 import { Star } from "lucide-react";
 import { useState } from "react";
 import { Row } from "@/lib/by/Div";
+import { useUser } from "@/hooks/useUser";
 
 export default function ReviewSection({ productId }: { productId: string }) {
-  const [hoverValue, setHoverValue] = useState(0);
+  const [hoverValue, setHoverValue] = useState(5);
   const {
     reviewsData,
     reviewsLoading,
@@ -19,11 +20,17 @@ export default function ReviewSection({ productId }: { productId: string }) {
     handleSubmit,
   } = useProductReviews(productId);
 
+  const { user } = useUser();
+
+  // Check if the user has already reviewed the product
+  const hasReviewed = reviewsData?.reviews.some(
+    (review: IReview) => review.user_id === user?.id
+  );
+
   return (
     <section className="w-full p-4 mx-auto">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full">
         <h3 className="font-semibold text-lg">Leave a Review</h3>
-        {/* <label className="text-sm font-medium">Rating:</label> */}
         <Row className="flex items-center gap-2">
           {[1, 2, 3, 4, 5].map((val) => (
             <button
@@ -34,6 +41,7 @@ export default function ReviewSection({ productId }: { productId: string }) {
               onMouseLeave={() => setHoverValue(reviewValue)}
               className="p-0 bg-transparent border-none outline-none"
               aria-label={`Rate ${val} star${val > 1 ? "s" : ""}`}
+              disabled={hasReviewed || reviewsLoading} // Disable star buttons if user has reviewed
             >
               <Star
                 size={24}
@@ -60,25 +68,37 @@ export default function ReviewSection({ productId }: { productId: string }) {
             </button>
           ))}
         </Row>
-        <textarea
-          value={reviewText}
-          onChange={(e) => setReviewText(e.target.value)}
-          className="border rounded px-3 py-2 min-h-[100px] resize-y focus:outline-none focus:ring focus:ring-pink-300 transition w-full"
-          placeholder="Write your review..."
-          required
-        />
+        <div className="relative">
+          <textarea
+            value={reviewText}
+            onChange={(e) => setReviewText(e.target.value)}
+            className={`border rounded px-3 py-2 min-h-[100px] resize-y focus:outline-none focus:ring focus:ring-pink-300 transition w-full ${
+              hasReviewed ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            placeholder="Write your review..."
+            required
+            disabled={hasReviewed || reviewsLoading} // Disable textarea if user has reviewed
+          />
+          {hasReviewed && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-80 rounded">
+              <span className="bg-pink-500 text-white px-4 py-2 rounded-full font-medium">
+                You already reviewed this product
+              </span>
+            </div>
+          )}
+        </div>
         <button
           type="submit"
-          disabled={postingReview}
+          disabled={postingReview || hasReviewed} // Disable submit button if user has reviewed
           className={`px-4 py-2 rounded font-medium transition w-fit ${
-            postingReview
+            postingReview || hasReviewed
               ? "bg-pink-300 text-white cursor-not-allowed"
               : "bg-pink-500 hover:bg-pink-600 text-white"
           }`}
         >
           {postingReview ? "Submitting..." : "Submit Review"}
         </button>
-        {submitted && (
+        {submitted && !hasReviewed && (
           <span className="text-green-600 text-sm">
             Thank you! Your review has been submitted.
           </span>

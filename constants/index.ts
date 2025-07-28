@@ -71,7 +71,7 @@ export const mproduct = {
   tabs: [
     { id: "description", label: "Description" },
     { id: "ingredients", label: "Ingredients" },
-    { id: "usage", label: "How to Use" },
+    { id: "how-to-use", label: "How to Use" },
     { id: "reviews", label: "Reviews" },
   ],
 };

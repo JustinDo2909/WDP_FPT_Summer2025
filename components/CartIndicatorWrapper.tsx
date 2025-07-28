@@ -2,7 +2,7 @@
 
 import { useUser } from "@/hooks/useUser";
 import { Begin } from "@/lib/by/Div";
-import { useGetCartQuery } from "@/process/api/apiAuth";
+import { useGetCartQuery } from "@/process/api/apiCart";
 import { setCartItems } from "@/process/store/cartSlice";
 import { ReactNode, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -14,8 +14,10 @@ interface CartIndicatorProps {
 export const CartIndicatorWrapper: React.FC<CartIndicatorProps> = ({
   children,
 }) => {
-  const { data: cartData, isLoading } = useGetCartQuery();
   const { isLogged } = useUser();
+  const { data: cartData, isLoading } = useGetCartQuery(undefined, {
+    skip: !isLogged, 
+  });
   const [cartItemCount, setCartItemCount] = useState<number>(0);
   const dispatch = useDispatch();
 

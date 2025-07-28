@@ -1,13 +1,23 @@
+import { useUser } from "@/hooks/useUser";
 import { Box, Column, RText } from "@/lib/by/Div";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export const CardGame = ({ game }: { game: IEvent }) => {
+  const {isLogged} = useUser()
+  const router = useRouter()
   const fallbackImage =
     "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWF3EMjVHyeOBfC0Di9EszHlqMXr4T7G1ovPbY";
 
   return (
     <Link
+      onClick={(e) => {
+        if (!isLogged) {
+          e.preventDefault();
+          router.push("/login");
+        }
+      }}
       href={
         game.is_active
           ? game.type === "DROP"

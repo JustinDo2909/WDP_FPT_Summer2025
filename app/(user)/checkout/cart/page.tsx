@@ -12,7 +12,7 @@ import {
 } from "../seg/calculateSubtotal";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import EmptyCart from "@/components/CartPage/EmptyCart";
-import { useGetCartQuery } from "@/process/api/apiAuth";
+import { useGetCartQuery } from "@/process/api/apiCart";
 
 export default function CartPage() {
   const { data: cartData, isLoading } = useGetCartQuery();

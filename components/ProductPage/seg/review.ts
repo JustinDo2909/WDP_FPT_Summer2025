@@ -26,11 +26,15 @@ export function useProductReviews(productId: string) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await postReview({
+      const res = await postReview({
         productId: productId,
         reviewValue: reviewValue,
         reviewMessage: reviewText,
       });
+      if (res.error) {
+        toast.error("You need to purcahse this product before reviewing");
+      }
+
       setReviewText("");
       setReviewValue(5);
       setSubmitted(true);

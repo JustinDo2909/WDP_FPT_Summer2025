@@ -186,7 +186,7 @@ export const api = createApi({
     //#endregion
 
     //#region getReviewsById
-    getReviewsById: build.query<IResponse<IReview, "reviews">, string>({
+    getReviewsById: build.query<IResponse<IReview[], "reviews">, string>({
       query: (id) => ({
         url: `reviews/${id}`,
         method: "GET",

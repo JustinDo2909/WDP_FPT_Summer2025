@@ -16,7 +16,7 @@ import { useShippingFeeHandler } from "./seg/useShippingFee";
 import { roundDownToNearestMultiple } from "@/lib/share/roundTo";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { CartTable } from "@/components/CartPage/CartTable";
-import { useGetCartQuery } from "@/process/api/apiAuth";
+import { useGetCartQuery } from "@/process/api/apiCart";
 
 export default function CheckoutPage() {
   // const [shippingInfo, setShippingInfo] = useState<IAddress>({

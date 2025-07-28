@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
       "i5.walmartimages.com",
       "picsum.photos",
       "hzjfxfzm26.ufs.sh", "example.com",
+      "cdn.chiaki.vn"
     ],
   },
 };
