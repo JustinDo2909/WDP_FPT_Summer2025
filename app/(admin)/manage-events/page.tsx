@@ -15,6 +15,7 @@ import CustomTable from "@/components/CustomTable";
 import { EventModal } from "@/components/admin/Event/Event-modal";
 import { QuestionModal } from "@/components/admin/Event/Question-modal";
 import { RewardModal } from "@/components/admin/Event/Reward-modal";
+import { EventRewardModal } from "@/components/admin/Event/EventReward-modal";
 import type { Event, Question, EventReward } from "@/types/event";
 import { RText, Yard, Core, Container, Area } from "@/lib/by/Div";
 
@@ -60,6 +61,9 @@ export default function EventManagement() {
     isOpen: false,
     mode: "create" as "create" | "edit",
     reward: null as EventReward | null,
+  });
+  const [eventRewardModal, setEventRewardModal] = useState({
+    isOpen: false,
   });
 
   // API hooks with optimized skipping logic
@@ -160,6 +164,16 @@ export default function EventManagement() {
         sortable: true,
       },
       {
+        key: "type" as keyof Event,
+        label: "Type",
+        render: (event: Event) => (
+          <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            {event.type}
+          </span>
+        ),
+        sortable: true,
+      },
+      {
         key: "is_active" as keyof Event,
         label: "Status",
         render: (event: Event) => (
@@ -242,6 +256,16 @@ export default function EventManagement() {
         sortable: true,
       },
       {
+        key: "max_correct" as keyof EventReward,
+        label: "Max Correct",
+        sortable: true,
+      },
+      {
+        key: "voucher_quantity" as keyof EventReward,
+        label: "Voucher Qty",
+        sortable: true,
+      },
+      {
         key: "discount_value" as keyof EventReward,
         label: "Reward Value",
         render: (reward: EventReward) => (
@@ -282,6 +306,7 @@ export default function EventManagement() {
             description: eventData.description || "",
             start_time: eventData.start_time || "",
             end_time: eventData.end_time || "",
+            type: eventData.type || "QUIZ",
             is_active: eventData.is_active ?? true,
           }).unwrap();
         } else if (eventModal.event) {
@@ -291,6 +316,7 @@ export default function EventManagement() {
             description: eventData.description,
             start_time: eventData.start_time,
             end_time: eventData.end_time,
+            type: eventData.type,
             is_active: eventData.is_active,
           }).unwrap();
         }
@@ -338,6 +364,8 @@ export default function EventManagement() {
           await createReward({
             event_id: rewardData.event_id || "",
             min_correct: rewardData.min_correct || 0,
+            max_correct: rewardData.max_correct || rewardData.min_correct || 0,
+            voucher_quantity: rewardData.voucher_quantity || 100,
             discount_value: rewardData.discount_value || 0,
             type: rewardData.type || "AMOUNT",
           }).unwrap();
@@ -359,7 +387,34 @@ export default function EventManagement() {
     [rewardModal.mode, rewardModal.reward, createReward, updateReward]
   );
 
-  // Memoized tab configuration
+  const handleEventRewardSave = useCallback(
+    async (rewardData: {
+      event_id: string;
+      min_correct: number;
+      max_correct: number;
+      voucher_quantity: number;
+      discount_value: number;
+      type: "AMOUNT" | "PERCENT";
+    }) => {
+      try {
+        await createReward({
+          event_id: rewardData.event_id,
+          min_correct: rewardData.min_correct,
+          max_correct: rewardData.max_correct,
+          voucher_quantity: rewardData.voucher_quantity,
+          discount_value: rewardData.discount_value,
+          type: rewardData.type,
+        }).unwrap();
+        setEventRewardModal({ isOpen: false });
+        alert("Event reward created successfully!");
+      } catch (error) {
+        console.error("Error creating event reward:", error);
+        alert("Error creating event reward. Please try again.");
+      }
+    },
+    [createReward]
+  );
+
   const tabConfig = useMemo(
     () => [
       { key: "events", label: "Events", icon: Calendar },
@@ -616,21 +671,56 @@ export default function EventManagement() {
 
         {/* Content based on active tab */}
         {!showEventQuestions && activeTab === "events" && (
-          <CustomTable
-            data={events}
-            columns={eventColumns}
-            headerTitle="All Events"
-            description="Click on 'View questions' to manage event questions"
-            onAddItem={() =>
-              setEventModal({ isOpen: true, mode: "create", event: null })
-            }
-            onUpdate={(event) =>
-              setEventModal({ isOpen: true, mode: "edit", event })
-            }
-            onDelete={handleDeleteEvent}
-            showExport={true}
-            onExport={handleExport}
-          />
+          <Yard className="space-y-4">
+            {/* Custom Header with Two Buttons */}
+            <Yard className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <Yard className="flex justify-between items-start mb-4">
+                <Yard>
+                  <h2 className="text-lg font-semibold text-gray-800">
+                    All Events
+                  </h2>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Click on &apos;View questions&apos; to manage event
+                    questions
+                  </p>
+                </Yard>
+                <Yard className="flex items-center gap-3">
+                  <button
+                    onClick={() =>
+                      setEventModal({
+                        isOpen: true,
+                        mode: "create",
+                        event: null,
+                      })
+                    }
+                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-lg shadow-sm transition-colors"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Event
+                  </button>
+                  <button
+                    onClick={() => setEventRewardModal({ isOpen: true })}
+                    className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-sm font-medium rounded-lg shadow-sm transition-colors"
+                  >
+                    <Gift className="w-4 h-4" />
+                    Add Event Reward
+                  </button>
+                </Yard>
+              </Yard>
+            </Yard>
+
+            <CustomTable
+              data={events}
+              columns={eventColumns}
+              onUpdate={(event) =>
+                setEventModal({ isOpen: true, mode: "edit", event })
+              }
+              onDelete={handleDeleteEvent}
+              showExport={true}
+              onExport={handleExport}
+              showSearch={true}
+            />
+          </Yard>
         )}
 
         {!showEventQuestions && activeTab === "rewards" && selectedEventId && (
@@ -682,6 +772,13 @@ export default function EventManagement() {
         reward={rewardModal.reward}
         mode={rewardModal.mode}
         eventId={selectedEventId}
+      />
+
+      <EventRewardModal
+        isOpen={eventRewardModal.isOpen}
+        onClose={() => setEventRewardModal({ isOpen: false })}
+        onSave={handleEventRewardSave}
+        events={events}
       />
     </Core>
   );

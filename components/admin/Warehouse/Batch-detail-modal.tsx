@@ -311,29 +311,6 @@ export function BatchDetailModal({
               </Yard>
             </Yard>
           </Area>
-
-          {/* Discount Information */}
-          {batch.discount && batch.discount > 0 && (
-            <Area>
-              <RText className="text-lg font-semibold text-gray-900 mb-3">
-                Discount Information
-              </RText>
-              <Yard className="bg-orange-50 rounded-lg p-4">
-                <Area className="flex items-center space-x-3 mb-2">
-                  <Percent className="w-5 h-5 text-orange-600" />
-                  <RText className="text-sm font-medium text-orange-900">
-                    Special Discount Applied
-                  </RText>
-                </Area>
-                <RText className="text-2xl font-bold text-orange-800">
-                  {batch.discount}% OFF
-                </RText>
-                <RText className="text-sm text-orange-600">
-                  Due to approaching expiry date
-                </RText>
-              </Yard>
-            </Area>
-          )}
         </Yard>
       </Yard>
     </Yard>

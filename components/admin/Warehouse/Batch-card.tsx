@@ -50,7 +50,7 @@ export function BatchCard({ batch, product, onClick }: BatchCardProps) {
 
   return (
     <Yard
-      className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer h-[280px] flex flex-col"
+      className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer h-[320px] flex flex-col"
       onClick={onClick}
     >
       {/* Header */}
@@ -67,7 +67,7 @@ export function BatchCard({ batch, product, onClick }: BatchCardProps) {
             <RText className="font-semibold text-gray-900 truncate">
               #{batch.id}
             </RText>
-            <RText className="text-sm text-gray-500 line-clamp-2 leading-tight">
+            <RText className="text-sm text-gray-500 line-clamp-2 leading-tight break-words">
               {product?.title || `Product ${batch.product_id}`}
             </RText>
           </Yard>
@@ -141,9 +141,19 @@ export function BatchCard({ batch, product, onClick }: BatchCardProps) {
         </Area>
       </Area>
 
+      {/* Supplier Info */}
+      {batch.supplier && (
+        <Area className="mt-3 pt-3 border-t border-gray-100 flex-shrink-0">
+          <Area className="flex items-center text-xs text-gray-500">
+            <span className="font-medium text-gray-700">Supplier:</span>
+            <span className="ml-1 truncate">{batch.supplier.name}</span>
+          </Area>
+        </Area>
+      )}
+
       {/* Product Info */}
       {product && (
-        <Area className="mt-3 pt-3 border-t border-gray-100 flex-shrink-0">
+        <Area className="mt-2 pt-2 border-t border-gray-100 flex-shrink-0">
           <Area className="flex items-center justify-between text-xs text-gray-500">
             <span className="truncate max-w-[45%]">
               {product.productBrand?.title}
