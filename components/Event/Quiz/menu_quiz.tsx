@@ -100,7 +100,7 @@ export default function MenuQuiz({
           />
 
           <Button
-            className="bg-white text-red-500 border-2 border-red-500 py-3 rounded-full text-base font-semibold hover:bg-red-50 transition-colors"
+            className="bg-black border-2 border-red-500 py-3 rounded-full text-base font-semibold hover:bg-red-50 transition-colors"
             onClick={() => router.push("/event")}
             label="Exit"
           />
