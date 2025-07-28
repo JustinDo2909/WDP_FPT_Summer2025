@@ -577,6 +577,17 @@ export const api = createApi({
         { type: "OrderDetail", id: orderId },
       ],
     }),
+
+     //#region getOrders
+    getOrders: build.query<any, void>({
+      query: () => ({
+        url: "orders",
+        method: "GET",
+        credentials: "include", 
+      }),
+      providesTags: ["Orders"],
+    }),
+    //#endregion
     //#endregion
 
     //#region Events
@@ -750,6 +761,16 @@ export const api = createApi({
     }),
 
     //#endregion
+
+    //#region cancelOrder
+    cancelOrder: build.mutation<IResponse<IOrder, "order">, string>({
+      query: (id) => ({
+      url: `orders/cancel/${id}`,
+      method: "POST",
+      }),
+      invalidatesTags: ["Orders"],
+    }),
+    //#endregion
   }),
 });
 
@@ -785,6 +806,8 @@ export const {
   useGetAllOrdersQuery,
   useGetOrderDetailQuery,
   useUpdateOrderStatusMutation,
+  useCancelOrderMutation,
+  useGetOrdersQuery,
 
   // Events
   useGetAllEventsQuery,
