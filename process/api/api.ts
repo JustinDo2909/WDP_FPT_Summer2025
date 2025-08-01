@@ -164,6 +164,17 @@ export const api = createApi({
       providesTags: ["Rewards"],
     }),
     //#endregion
+
+     //#region getEventLeaderboard
+    getEventLeaderboard: build.query<IResponse<ILeaderBoardData, "data">, string >({
+      query: (event_id) => ({
+        url: `events/${event_id}/leaderboard`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Event"],
+    }),
+    //#endregion
     //#region getRandomQuestion
     postAnswer: build.mutation<IReward, { correct_answers: number }>({
       query: (body) => ({
@@ -831,6 +842,7 @@ export const {
   useCreateEventMutation,
   useUpdateEventMutation,
   useDeleteEventMutation,
+  useGetEventLeaderboardQuery,
 
   // Questions
   useGetQuestionsByEventIdQuery,

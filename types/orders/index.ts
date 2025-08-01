@@ -10,6 +10,11 @@ declare global {
     payment_method: "card" | "paypal" | "bank_transfer" | "cash_on_delivery";
     createdAt: string;
     updatedAt: string;
+    subtotal: number;
+    shipping_fee: number;
+    payment_status: string;
+    receipt_url: string;
+    discount_amount: number;
     orderItems: IOrderItem[];
     address: IAddress;
     user: IUser;

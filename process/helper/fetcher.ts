@@ -7,6 +7,7 @@ export async function fetcher(
 ): Promise<any> {
   try {
     const response = await fetch(`${BASE_URL}${endpoint}`, {
+      credentials: 'include',
       next: options?.revalidate
         ? { revalidate: options.revalidate }
         : undefined,
