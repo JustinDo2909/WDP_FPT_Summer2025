@@ -35,7 +35,7 @@ export default function CosmeticCatchGame() {
 
   const startGame = async (mode: string) => {
     setSelectedMode(mode);
-    if (mode === "official") {
+    if (mode === "officiall") {
       await playEvent()
         .unwrap()
         .then(() => setGameState("playing"))

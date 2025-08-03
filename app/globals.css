@@ -10,6 +10,36 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  .animate-fade-up-and-out {
+    animation: fade-up-and-out 0.5s ease-out forwards;
+  }
+
+  @keyframes fade-up-and-out {
+    0% {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50px);
+    }
+  }
+
+  .animate-flash {
+    animation: flash 0.2s ease-out forwards;
+  }
+
+  @keyframes flash {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
 }
 @layer base {
   :root {
@@ -73,22 +103,22 @@
 }
 
 @font-face {
-  font-family: 'Raleway';
-  src: url('./fonts/Raleway.woff2') format('woff2');
+  font-family: "Raleway";
+  src: url("./fonts/Raleway.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Modak';
-  src: url('./fonts/Modak-Regular.ttf') format('truetype');
+  font-family: "Modak";
+  src: url("./fonts/Modak-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Raleway-Bold';
-  src: url('./fonts/Raleway-Bold.ttf') format('truetype');
+  font-family: "Raleway-Bold";
+  src: url("./fonts/Raleway-Bold.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -124,7 +154,6 @@ body {
 } */
 
 /* Our font setup */
-
 
 .line-clamp-2 {
   display: -webkit-box;
