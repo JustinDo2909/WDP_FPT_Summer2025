@@ -16,7 +16,7 @@ export default function CartSummary({
   actionButton: React.ReactNode;
   voucherDiscount?: number;
 }) {
-  const finalTotal = total + (shipping ?? 0) - (voucherDiscount ?? 0) 
+  const finalTotal = total + (shipping ?? 0) - (voucherDiscount ?? 0);
   return (
     <Card className="border rounded-md p-4 space-y-4 relative pt-4 text-sm">
       {/* Pink top border */}
@@ -43,16 +43,12 @@ export default function CartSummary({
           </RText>
         </Row>
 
-       {voucherDiscount !== 0 && 
-        <Row className="flex text-primary justify-between">
+        {voucherDiscount !== 0 && (
+          <Row className="flex text-primary justify-between">
             <RText>Voucher:</RText>
-            <RText>
-              -{formatPrice(voucherDiscount)}
-            </RText>
+            <RText>-{formatPrice(voucherDiscount)}</RText>
           </Row>
-        }
-
-
+        )}
       </Column>
 
       <hr className="border-t border-gray-200" />

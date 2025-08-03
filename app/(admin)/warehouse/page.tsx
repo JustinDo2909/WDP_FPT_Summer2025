@@ -34,7 +34,7 @@ export default function WarehousePage() {
   } = useWarehouseLogic();
 
   const selectedMonthGroup = monthGroups.find(
-    (group) => group.month === selectedMonth
+    (group) => group.month === selectedMonth,
   );
 
   return (
@@ -131,8 +131,7 @@ export default function WarehousePage() {
                     >
                       <option value="">All Status</option>
                       <option value="active">Active</option>
-                      <option value="expired">Expired</option>
-                      <option value="out-of-stock">Out of Stock</option>
+                      <option value="expired">Expired Soon</option>
                     </select>
                   </Area>
                 </Yard>

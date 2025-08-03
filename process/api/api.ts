@@ -48,12 +48,13 @@ import type {
   CreateBatchResponse,
   PaginatedBatchesResponse,
   BatchPaginationParams,
+  Supplier,
 } from "@/types/warehouse/index";
 
 const customBaseQuery = async (
   args: string | FetchArgs,
   api: BaseQueryApi,
-  extraOptions: any
+  extraOptions: any,
 ) => {
   const baseQuery = fetchBaseQuery({
     baseUrl: "https://cosme-play-be.vercel.app/api/",
@@ -107,6 +108,7 @@ export const api = createApi({
     "Rewards",
     "Reviews",
     "Batches",
+    "Suppliers",
   ],
   endpoints: (build) => ({
     //#region getProducts
@@ -162,6 +164,17 @@ export const api = createApi({
       providesTags: ["Rewards"],
     }),
     //#endregion
+
+     //#region getEventLeaderboard
+    getEventLeaderboard: build.query<IResponse<ILeaderBoardData, "data">, string >({
+      query: (event_id) => ({
+        url: `events/${event_id}/leaderboard`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Event"],
+    }),
+    //#endregion
     //#region getRandomQuestion
     postAnswer: build.mutation<IReward, { correct_answers: number }>({
       query: (body) => ({
@@ -186,7 +199,7 @@ export const api = createApi({
     //#endregion
 
     //#region getReviewsById
-    getReviewsById: build.query<IResponse<IReview, "reviews">, string>({
+    getReviewsById: build.query<IResponse<IReview[], "reviews">, string>({
       query: (id) => ({
         url: `reviews/${id}`,
         method: "GET",
@@ -198,7 +211,8 @@ export const api = createApi({
 
     //#region postReview
     postReview: build.mutation<
-      IReview, { productId: string; reviewValue: number; reviewMessage: string }
+      IReview,
+      { productId: string; reviewValue: number; reviewMessage: string }
     >({
       query: (payload) => ({
         url: `reviews/add`,
@@ -227,7 +241,7 @@ export const api = createApi({
         },
         providesTags: ["Batches"],
         keepUnusedDataFor: 60, // 1 minute cache for paginated data
-      }
+      },
     ),
 
     getProductBatches: build.query<Batch[], string>({
@@ -254,7 +268,14 @@ export const api = createApi({
         "Products", // Also invalidate products cache in case batch creation affects inventory
       ],
     }),
+
+    //#region Suppliers
+    getSuppliers: build.query<Supplier[], void>({
+      query: () => "/suppliers",
+      providesTags: ["Suppliers"],
+    }),
     //#endregion
+
     getProductMeta: build.query<ProductMetaResponse, void>({
       query: () => "/products/meta",
       providesTags: ["ProductMeta"],
@@ -332,7 +353,7 @@ export const api = createApi({
       {
         query: (id) => `/products/${id}`,
         providesTags: ["Products"],
-      }
+      },
     ),
     //#endregion
 
@@ -369,19 +390,19 @@ export const api = createApi({
       }),
       async onQueryStarted(
         { id, ...categoryData },
-        { dispatch, queryFulfilled }
+        { dispatch, queryFulfilled },
       ) {
         const patchResult = dispatch(
           api.util.updateQueryData("getMetaData", undefined, (draft) => {
             if (draft?.data?.categories) {
               const categoryIndex = draft.data.categories.findIndex(
-                (cat) => cat.id === id
+                (cat) => cat.id === id,
               );
               if (categoryIndex !== -1) {
                 draft.data.categories[categoryIndex] = { id, ...categoryData };
               }
             }
-          })
+          }),
         );
         try {
           await queryFulfilled;
@@ -430,13 +451,13 @@ export const api = createApi({
           api.util.updateQueryData("getMetaData", undefined, (draft) => {
             if (draft?.data?.brands) {
               const brandIndex = draft.data.brands.findIndex(
-                (brand) => brand.id === id
+                (brand) => brand.id === id,
               );
               if (brandIndex !== -1) {
                 draft.data.brands[brandIndex] = { id, ...brandData };
               }
             }
-          })
+          }),
         );
         try {
           await queryFulfilled;
@@ -485,19 +506,19 @@ export const api = createApi({
       }),
       async onQueryStarted(
         { id, ...skinTypeData },
-        { dispatch, queryFulfilled }
+        { dispatch, queryFulfilled },
       ) {
         const patchResult = dispatch(
           api.util.updateQueryData("getMetaData", undefined, (draft) => {
             if (draft?.data?.skinTypes) {
               const skinTypeIndex = draft.data.skinTypes.findIndex(
-                (st) => st.id === id
+                (st) => st.id === id,
               );
               if (skinTypeIndex !== -1) {
                 draft.data.skinTypes[skinTypeIndex] = { id, ...skinTypeData };
               }
             }
-          })
+          }),
         );
         try {
           await queryFulfilled;
@@ -551,7 +572,7 @@ export const api = createApi({
           api.util.updateQueryData("getAllOrders", undefined, (draft) => {
             if (draft?.orders) {
               const orderIndex = draft.orders.findIndex(
-                (order) => order.id === orderId
+                (order) => order.id === orderId,
               );
               if (orderIndex !== -1) {
                 draft.orders[orderIndex].status = status as
@@ -562,7 +583,7 @@ export const api = createApi({
                 draft.orders[orderIndex].updatedAt = new Date().toISOString();
               }
             }
-          })
+          }),
         );
 
         try {
@@ -576,6 +597,17 @@ export const api = createApi({
         { type: "OrderDetail", id: orderId },
       ],
     }),
+
+     //#region getOrders
+    getOrders: build.query<any, void>({
+      query: () => ({
+        url: "orders",
+        method: "GET",
+        credentials: "include", 
+      }),
+      providesTags: ["Orders"],
+    }),
+    //#endregion
     //#endregion
 
     //#region Events
@@ -632,10 +664,14 @@ export const api = createApi({
     }),
 
     createQuestion: build.mutation<ApiResponse, CreateQuestionRequest>({
-      query: ({ event_id, ...questionData }) => ({
+      query: ({ event_id, content, image_url, questionOptions }) => ({
         url: `/events/${event_id}/questions/add`,
         method: "POST",
-        body: questionData,
+        body: {
+          content,
+          image_url,
+          options: questionOptions,
+        },
       }),
       invalidatesTags: (result, error, { event_id }) => [
         { type: "Question", id: event_id },
@@ -644,10 +680,13 @@ export const api = createApi({
     }),
 
     updateQuestion: build.mutation<ApiResponse, UpdateQuestionRequest>({
-      query: ({ id, event_id, ...questionData }) => ({
+      query: ({ id, event_id, content, questionOptions }) => ({
         url: `/events/${event_id}/questions/update/${id}`,
         method: "PUT",
-        body: questionData,
+        body: {
+          content,
+          options: questionOptions,
+        },
       }),
       invalidatesTags: (result, error, { event_id }) => [
         { type: "Question", id: event_id },
@@ -714,7 +753,7 @@ export const api = createApi({
           { type: "Reward", id: event_id },
           "Reward",
         ],
-      }
+      },
     ),
     //#endregion
 
@@ -724,30 +763,40 @@ export const api = createApi({
       transformResponse: (response: VouchersResponse) => response.vouchers,
       providesTags: ["Vouchers"],
       keepUnusedDataFor: 300, // 5 minutes cache
-  }),
+    }),
 
     //#endregion
 
     //#region UserVouchers
-    getUserVouchers: build.query<IResponse<IVoucher[], 'vouchers'>, void>({
+    getUserVouchers: build.query<IResponse<IVoucher[], "vouchers">, void>({
       query: () => ({
         url: "vouchers",
         method: "GET",
       }),
       providesTags: ["Vouchers"],
-  }),
+    }),
 
     //#endregion
 
     //#region getOrderById
-    getOrderById: build.query<IResponse<IOrder, 'order'>, string>({
-    query: (id) => ({
-      url: `orders/details/${id}`,
-      method: "GET",
+    getOrderById: build.query<IResponse<IOrder, "order">, string>({
+      query: (id) => ({
+        url: `orders/details/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Orders"],
     }),
-    providesTags: ["Orders"],
-  }),
 
+    //#endregion
+
+    //#region cancelOrder
+    cancelOrder: build.mutation<IResponse<IOrder, "order">, string>({
+      query: (id) => ({
+      url: `orders/cancel/${id}`,
+      method: "POST",
+      }),
+      invalidatesTags: ["Orders"],
+    }),
     //#endregion
   }),
 });
@@ -784,6 +833,8 @@ export const {
   useGetAllOrdersQuery,
   useGetOrderDetailQuery,
   useUpdateOrderStatusMutation,
+  useCancelOrderMutation,
+  useGetOrdersQuery,
 
   // Events
   useGetAllEventsQuery,
@@ -791,6 +842,7 @@ export const {
   useCreateEventMutation,
   useUpdateEventMutation,
   useDeleteEventMutation,
+  useGetEventLeaderboardQuery,
 
   // Questions
   useGetQuestionsByEventIdQuery,
@@ -813,6 +865,9 @@ export const {
   useGetAllBatchesQuery,
   useGetProductBatchesQuery,
   useCreateProductBatchMutation,
+
+  // Suppliers
+  useGetSuppliersQuery,
 } = api;
 
 // import { Api, BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";

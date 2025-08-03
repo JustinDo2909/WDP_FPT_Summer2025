@@ -1,9 +1,14 @@
 import { Column, Row, Wrap } from "@/lib/by/Div";
-import { calculateVoucherSavings, formatDiscount } from "./seg/calculateVoucherDiscount";
+import {
+  calculateVoucherSavings,
+  formatDiscount,
+} from "./seg/calculateVoucherDiscount";
 import { formatPrice } from "@/lib/share/formatPrice";
 
 const formatExpiryDate = (voucher: IVoucher) => {
-  const expiry = new Date(new Date(voucher.created_at).getTime() + 2 * 24 * 60 * 60 * 1000);
+  const expiry = new Date(
+    new Date(voucher.created_at).getTime() + 2 * 24 * 60 * 60 * 1000,
+  );
   return expiry.toLocaleDateString("vi-VN");
 };
 
@@ -20,7 +25,7 @@ export const VoucherItem: React.FC<{
     <Row
       className={`
         flex w-full min-w-[450px] overflow-hidden rounded-lg border border-gray-200
-        ${isRedeemed || !applicable ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer'}
+        ${isRedeemed || !applicable ? "opacity-50 cursor-not-allowed grayscale" : "cursor-pointer"}
       `}
     >
       {/* Left Pill */}
@@ -33,7 +38,7 @@ export const VoucherItem: React.FC<{
       <Column className="flex flex-col flex-1 justify-between p-3 pr-8 bg-white">
         <Column className="flex flex-col">
           <Wrap className="text-base font-semibold text-gray-800">
-            Get {formatDiscount(voucher)}
+            Get {formatDiscount(voucher)} on 
           </Wrap>
           <Wrap className="inline-block mt-2 px-2 py-0.5 bg-pink-500 text-white text-xs rounded">
             {applicable

@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, Package, AlertTriangle, Percent } from "lucide-react";
+import { Calendar, Package, AlertTriangle } from "lucide-react";
 import { Area, RText, Yard } from "@/lib/by/Div";
 import type { BatchWithStatus } from "@/types/warehouse/index";
 import type { Product } from "@/types/productManagement/index";
@@ -14,12 +14,7 @@ const statusColors = {
   expired: {
     bg: "bg-red-100",
     text: "text-red-800",
-    label: "Expired",
-  },
-  "out-of-stock": {
-    bg: "bg-gray-100",
-    text: "text-gray-800",
-    label: "Out of Stock",
+    label: "Expired Soon",
   },
 };
 
@@ -41,7 +36,7 @@ export function BatchCard({ batch, product, onClick }: BatchCardProps) {
     const today = new Date();
     const diffTime = expireDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays <= 30 && diffDays > 0;
+    return diffDays <= 270 && diffDays > 0;
   };
 
   const formatDate = (dateString: string) => {
@@ -50,7 +45,7 @@ export function BatchCard({ batch, product, onClick }: BatchCardProps) {
 
   return (
     <Yard
-      className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer h-[280px] flex flex-col"
+      className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer h-[320px] flex flex-col"
       onClick={onClick}
     >
       {/* Header */}
@@ -67,7 +62,7 @@ export function BatchCard({ batch, product, onClick }: BatchCardProps) {
             <RText className="font-semibold text-gray-900 truncate">
               #{batch.id}
             </RText>
-            <RText className="text-sm text-gray-500 line-clamp-2 leading-tight">
+            <RText className="text-sm text-gray-500 line-clamp-2 leading-tight break-words">
               {product?.title || `Product ${batch.product_id}`}
             </RText>
           </Yard>
@@ -79,11 +74,6 @@ export function BatchCard({ batch, product, onClick }: BatchCardProps) {
           >
             {statusConfig.label}
           </span>
-          {batch.discount && batch.discount > 0 && (
-            <span className="flex items-center text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
-              <Percent className="w-3 h-3 mr-1" />-{batch.discount}%
-            </span>
-          )}
         </Yard>
       </Area>
 
@@ -133,7 +123,7 @@ export function BatchCard({ batch, product, onClick }: BatchCardProps) {
         >
           <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
           <span className="truncate">
-            Expires: {formatDate(batch.expired_at)}
+            Expires in: {formatDate(batch.expired_at)}
           </span>
           {isExpiringSoon() && (
             <AlertTriangle className="w-4 h-4 ml-2 text-orange-500 flex-shrink-0" />
@@ -141,9 +131,19 @@ export function BatchCard({ batch, product, onClick }: BatchCardProps) {
         </Area>
       </Area>
 
+      {/* Supplier Info */}
+      {batch.supplier && (
+        <Area className="mt-3 pt-3 border-t border-gray-100 flex-shrink-0">
+          <Area className="flex items-center text-xs text-gray-500">
+            <span className="font-medium text-gray-700">Supplier:</span>
+            <span className="ml-1 truncate">{batch.supplier.name}</span>
+          </Area>
+        </Area>
+      )}
+
       {/* Product Info */}
       {product && (
-        <Area className="mt-3 pt-3 border-t border-gray-100 flex-shrink-0">
+        <Area className="mt-2 pt-2 border-t border-gray-100 flex-shrink-0">
           <Area className="flex items-center justify-between text-xs text-gray-500">
             <span className="truncate max-w-[45%]">
               {product.productBrand?.title}

@@ -40,6 +40,7 @@ export default function CustomersPage() {
     id?: string;
     name: string;
     email: string;
+    password?: string;
     role?: string;
   }) => {
     try {
@@ -56,10 +57,14 @@ export default function CustomersPage() {
 
         await updateUser(updateData).unwrap();
       } else {
+        if (!userData.password) {
+          alert("Password is required for new users");
+          return;
+        }
         await createUser({
           name: userData.name,
           email: userData.email,
-          password: "defaultPassword123", // Temporary default password for new users
+          password: userData.password,
           role: userData.role as "USER" | "ADMIN" | "STAFF",
         }).unwrap();
       }
@@ -82,7 +87,7 @@ export default function CustomersPage() {
           user.email,
           user.role,
           new Date(user.createdAt).toLocaleDateString(),
-        ].join(",")
+        ].join(","),
       ),
     ].join("\n");
 
@@ -98,12 +103,12 @@ export default function CustomersPage() {
   const totalUsers = users.length;
   const recentSignups = users.filter(
     (u) =>
-      new Date(u.createdAt) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      new Date(u.createdAt) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
   ).length;
 
   const columns = [
     {
-      key: "id",
+      key: "id" as keyof User,
       label: "User ID",
       sortable: true,
       render: (user: User) => (
@@ -113,7 +118,7 @@ export default function CustomersPage() {
       ),
     },
     {
-      key: "name",
+      key: "name" as keyof User,
       label: "User",
       sortable: true,
       render: (user: User) => (
@@ -134,7 +139,7 @@ export default function CustomersPage() {
     },
 
     {
-      key: "createdAt",
+      key: "createdAt" as keyof User,
       label: "Created",
       sortable: true,
       render: (user: User) => (
@@ -144,7 +149,7 @@ export default function CustomersPage() {
       ),
     },
     {
-      key: "updatedAt",
+      key: "updatedAt" as keyof User,
       label: "Updated",
       sortable: true,
       render: (user: User) => (
@@ -154,7 +159,7 @@ export default function CustomersPage() {
       ),
     },
     {
-      key: "actions",
+      key: "actions" as keyof User,
       label: "Actions",
       render: (user: User) => (
         <Area className="flex items-center space-x-1">
@@ -257,6 +262,7 @@ export default function CustomersPage() {
                   id: editingUser?.id,
                   name: formData.get("name") as string,
                   email: formData.get("email") as string,
+                  password: formData.get("password") as string,
                   role: formData.get("role") as string,
                 });
               }}
@@ -299,6 +305,19 @@ export default function CustomersPage() {
                       <option value="ADMIN">Admin</option>
                       <option value="STAFF">Staff</option>
                     </select>
+                  </Yard>
+                )}
+                {!editingUser && (
+                  <Yard>
+                    <label className="block text-sm font-medium mb-1">
+                      Password
+                    </label>
+                    <input
+                      name="password"
+                      type="password"
+                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                      required
+                    />
                   </Yard>
                 )}
               </Area>

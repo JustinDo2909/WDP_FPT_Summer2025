@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 const customBaseQuery = async (
   args: string | FetchArgs,
   api: BaseQueryApi,
-  extraOptions: any
+  extraOptions: any,
 ) => {
   const baseQuery = fetchBaseQuery({
     baseUrl: "https://cosme-play-be.vercel.app/api",
@@ -32,13 +32,12 @@ const customBaseQuery = async (
           method: "POST",
         },
         api,
-        extraOptions
+        extraOptions,
       );
 
       if (refreshResult.data) {
         result = await baseQuery(args, api, extraOptions);
-      } 
-      else {
+      } else {
         toast.error("Session expired. Please log in again.");
       }
     }

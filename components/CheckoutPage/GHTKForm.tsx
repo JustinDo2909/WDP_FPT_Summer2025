@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { SquareUser } from "lucide-react";
 import { validateVietnamesePhoneNumber } from "@/lib/share/validateVNNumber";
 import Button from "../CustomButton";
+import { useUser } from "@/hooks/useUser";
 
 // Zod schema for IAddress
 const AddressSchema = z.object({
@@ -56,6 +57,7 @@ const GHNForm: React.FC<GHNFormProps> = ({
   onSave,
   onClose,
 }) => {
+  const { user } = useUser()
   // Initialize state with initialShippingInfo or defaults
   const [shippingInfo, setShippingInfo] = useState<Partial<IAddress>>(
     initialShippingInfo || {
@@ -71,9 +73,15 @@ const GHNForm: React.FC<GHNFormProps> = ({
       fullname: "",
       district: "",
       ward: "",
-    }
+    },
   );
   const [errors, setErrors] = useState<z.ZodIssue[]>([]);
+
+  useEffect(() => {
+    if (user) {
+       setShippingInfo({ ...shippingInfo, fullname: user.name })
+    }
+  },[user])
 
   // API queries
   const { data: provinces = [], isLoading: provincesLoading } =
@@ -81,11 +89,11 @@ const GHNForm: React.FC<GHNFormProps> = ({
   const { data: districts = [], isLoading: districtsLoading } =
     useGetDistrictsQuery(
       { provinceId: parseInt(shippingInfo.to_city_id || "0") },
-      { skip: !shippingInfo.to_city_id }
+      { skip: !shippingInfo.to_city_id },
     );
   const { data: wards = [], isLoading: wardsLoading } = useGetWardsQuery(
     { districtId: parseInt(shippingInfo.to_district_id || "0") },
-    { skip: !shippingInfo.to_district_id }
+    { skip: !shippingInfo.to_district_id },
   );
 
   // Reset district and ward when city changes
@@ -146,8 +154,8 @@ const GHNForm: React.FC<GHNFormProps> = ({
           <Input
             id="fullName"
             className={cn(inputClass, getError("fullname") && "border-red-500")}
-            placeholder="Enter full name (required)"
-            value={shippingInfo.fullname || ""}
+            placeholder="Loading..."
+            value={shippingInfo.fullname ?? ""}
             onChange={(e) =>
               setShippingInfo({ ...shippingInfo, fullname: e.target.value })
             }
@@ -184,7 +192,7 @@ const GHNForm: React.FC<GHNFormProps> = ({
           <Select
             onValueChange={(val) => {
               const selectedProvince = provinces.find(
-                (province) => province.codeId.toString() === val
+                (province) => province.codeId.toString() === val,
               );
               setShippingInfo({
                 ...shippingInfo,
@@ -199,7 +207,7 @@ const GHNForm: React.FC<GHNFormProps> = ({
               className={cn(
                 inputClass,
                 "text-sm",
-                getError("city") && "border-red-500"
+                getError("city") && "border-red-500",
               )}
             >
               <SelectValue
@@ -247,7 +255,7 @@ const GHNForm: React.FC<GHNFormProps> = ({
         <Select
           onValueChange={(val) => {
             const selectedDistrict = districts.find(
-              (district) => district.codeId.toString() === val
+              (district) => district.codeId.toString() === val,
             );
             setShippingInfo({
               ...shippingInfo,
@@ -262,7 +270,7 @@ const GHNForm: React.FC<GHNFormProps> = ({
             className={cn(
               inputClass,
               "text-sm",
-              getError("district") && "border-red-500"
+              getError("district") && "border-red-500",
             )}
           >
             <SelectValue
@@ -292,7 +300,7 @@ const GHNForm: React.FC<GHNFormProps> = ({
         <Select
           onValueChange={(val) => {
             const selectedWard = wards.find(
-              (ward) => ward.codeId.toString() === val
+              (ward) => ward.codeId.toString() === val,
             );
             setShippingInfo({
               ...shippingInfo,
@@ -307,11 +315,13 @@ const GHNForm: React.FC<GHNFormProps> = ({
             className={cn(
               inputClass,
               "text-sm",
-              getError("ward") && "border-red-500"
+              getError("ward") && "border-red-500",
             )}
           >
             <SelectValue
-              placeholder={wardsLoading ? "Loading..." : "Select ward (required)"}
+              placeholder={
+                wardsLoading ? "Loading..." : "Select ward (required)"
+              }
             />
           </SelectTrigger>
           <SelectContent className="rounded-xl max-h-[280px]">

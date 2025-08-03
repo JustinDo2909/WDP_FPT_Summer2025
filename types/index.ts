@@ -9,6 +9,8 @@ declare global {
     title: string;
     description: string;
     price: number;
+    volume: number;
+    volume_type: string;
     sale_price: number;
     image_url: string;
     product_category_id: number;
@@ -111,7 +113,7 @@ declare global {
     title: string; // Core
     thumbnail_url: string; // Core
     description: string; // Core
-    steps: IPostStep[]; // Core
+    postSteps: IPostStep[]; // Core
     warnings: string[]; // Core
     benefits: string[]; // Core
   };
@@ -123,15 +125,35 @@ declare global {
   type IVoucher = {
     id: string;
     user_id: string;
+    voucher_template_id: string;
     event_reward_id: string;
     stripe_coupon_id: string;
     discount_value: number;
     type: "PERCENT" | "AMOUNT";
     redeemed: boolean;
     redeemed_at: string | null;
+    expired_at: string | null;
+    updated_at: string;
     created_at: string;
     voucherProducts?: IVoucherProduct[];
+    voucherTemplate?: IVoucherTemplate;
   };
+
+  type IVoucherTemplate = {
+    id: string;
+    discount_value: number;
+    event_id: string;
+    type: "Percent" | "Amount";
+    user_limit: string;
+    user_count: string;
+    is_active: string;
+    leaderboard_reward_id:string;
+    updated_at: string;
+    created_at: string;
+    voucherProducts?: IVoucherProduct[];
+  }
+
+
 }
 
 export type {
@@ -145,6 +167,7 @@ export type {
   IProductPageData,
   IProductCategory,
   IProductBrand,
+  IVoucherTemplate
 };
 
 export type IGame = {

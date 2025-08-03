@@ -7,7 +7,7 @@ import { useAutoRefetch } from "@/components/ProductsPage/seg/utils";
 import ListProductDisplay from "@/components/ListProductDisplay";
 import { Gamepad2, ShoppingCart } from "lucide-react";
 import Link from "next/link";
-
+import pic from "@/public/images/facecare.png"
 export default function Page() {
   const productDisplaySearchParams = {
     category: "",
@@ -191,7 +191,7 @@ export default function Page() {
             <Group className="order-2 lg:order-1">
               <Group className="relative">
                 <Image
-                  src="/images/faceCare.png"
+                  src={pic}
                   alt="Premium Face Care"
                   width={500}
                   height={400}

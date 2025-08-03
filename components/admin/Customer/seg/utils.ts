@@ -12,7 +12,8 @@ import {
   sampleCustomers,
   sampleGameScoreTransactions,
 } from "@/constants/manage-customers/index";
-// import { sampleOrders } from "@/constants/manage-orders/index";
+// Temporary: define empty sampleOrders until constants file is created
+const sampleOrders: any[] = [];
 
 export interface CustomerFormData {
   name: string;
@@ -29,7 +30,7 @@ export interface CustomerFormData {
 export const useCustomersLogic = () => {
   const [customers, setCustomers] = useState<Customer[]>(sampleCustomers);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
-    null
+    null,
   );
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -68,8 +69,8 @@ export const useCustomersLogic = () => {
       // Update existing customer
       setCustomers((prev) =>
         prev.map((customer) =>
-          customer.id === customerData.id ? customerData : customer
-        )
+          customer.id === customerData.id ? customerData : customer,
+        ),
       );
       // Update selectedCustomer if viewing details
       if (selectedCustomer && selectedCustomer.id === customerData.id) {
@@ -86,11 +87,11 @@ export const useCustomersLogic = () => {
   const handleDeleteCustomer = (customerId: string) => {
     if (
       confirm(
-        "Are you sure you want to delete this customer? This action cannot be undone."
+        "Are you sure you want to delete this customer? This action cannot be undone.",
       )
     ) {
       setCustomers((prev) =>
-        prev.filter((customer) => customer.id !== customerId)
+        prev.filter((customer) => customer.id !== customerId),
       );
       if (selectedCustomer && selectedCustomer.id === customerId) {
         handleCloseDetailModal();
@@ -106,8 +107,8 @@ export const useCustomersLogic = () => {
               ...customer,
               status: customer.status === "active" ? "inactive" : "active",
             }
-          : customer
-      )
+          : customer,
+      ),
     );
     // Update selectedCustomer if viewing details
     if (selectedCustomer && selectedCustomer.id === customerId) {
@@ -117,7 +118,7 @@ export const useCustomersLogic = () => {
               ...prev,
               status: prev.status === "active" ? "inactive" : "active",
             }
-          : null
+          : null,
       );
     }
   };
@@ -126,15 +127,15 @@ export const useCustomersLogic = () => {
     customerId: string,
     amount: number,
     description: string,
-    type: GameScoreTransaction["type"]
+    type: GameScoreTransaction["type"],
   ) => {
     // Update customer game score
     setCustomers((prev) =>
       prev.map((customer) =>
         customer.id === customerId
           ? { ...customer, gameScore: Math.max(0, customer.gameScore + amount) }
-          : customer
-      )
+          : customer,
+      ),
     );
 
     // Add transaction record
@@ -156,7 +157,7 @@ export const useCustomersLogic = () => {
               ...prev,
               gameScore: Math.max(0, prev.gameScore + amount),
             }
-          : null
+          : null,
       );
     }
   };
@@ -188,7 +189,7 @@ export const useCustomersLogic = () => {
           customer.gameScore,
           customer.loyaltyTier,
           new Date(customer.dateJoined).toLocaleDateString(),
-        ].join(",")
+        ].join(","),
       ),
     ].join("\n");
 
@@ -274,7 +275,7 @@ export const useCustomerForm = (editCustomer?: Customer | null) => {
 
   const handleSubmit = async (
     e: React.FormEvent,
-    onSubmit: (data: Customer) => void
+    onSubmit: (data: Customer) => void,
   ) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -368,11 +369,11 @@ export const getLoyaltyTierColor = (tier: Customer["loyaltyTier"]) => {
 export const getCustomerOrders = (customerId: string): CustomerOrder[] => {
   return sampleOrders
     .filter(
-      (order) =>
+      (order: any) =>
         order.customerEmail ===
-        sampleCustomers.find((c) => c.id === customerId)?.email
+        sampleCustomers.find((c) => c.id === customerId)?.email,
     )
-    .map((order) => ({
+    .map((order: any) => ({
       id: order.id,
       date: order.orderDate,
       status: order.status,
@@ -382,10 +383,10 @@ export const getCustomerOrders = (customerId: string): CustomerOrder[] => {
 };
 
 export const getGameScoreTransactions = (
-  customerId: string
+  customerId: string,
 ): GameScoreTransaction[] => {
   return sampleGameScoreTransactions.filter(
-    (transaction) => transaction.customerId === customerId
+    (transaction) => transaction.customerId === customerId,
   );
 };
 
@@ -393,21 +394,21 @@ export const calculateCustomerStats = (customers: Customer[]) => {
   const totalCustomers = customers.length;
   const activeCustomers = customers.filter((c) => c.status === "active").length;
   const inactiveCustomers = customers.filter(
-    (c) => c.status === "inactive"
+    (c) => c.status === "inactive",
   ).length;
   const blockedCustomers = customers.filter(
-    (c) => c.status === "blocked"
+    (c) => c.status === "blocked",
   ).length;
 
   const totalRevenue = customers.reduce(
     (sum, customer) => sum + customer.totalSpent,
-    0
+    0,
   );
   const averageSpent = totalCustomers > 0 ? totalRevenue / totalCustomers : 0;
 
   const totalGameScore = customers.reduce(
     (sum, customer) => sum + customer.gameScore,
-    0
+    0,
   );
 
   const loyaltyTierCounts = customers.reduce(
@@ -415,7 +416,7 @@ export const calculateCustomerStats = (customers: Customer[]) => {
       acc[customer.loyaltyTier] = (acc[customer.loyaltyTier] || 0) + 1;
       return acc;
     },
-    {} as Record<string, number>
+    {} as Record<string, number>,
   );
 
   return {

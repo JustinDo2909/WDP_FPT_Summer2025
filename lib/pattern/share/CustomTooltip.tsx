@@ -1,14 +1,23 @@
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-type TooltipPosition = "top" | "bottom" | "left" | "right"
+type TooltipPosition = "top" | "bottom" | "left" | "right";
 
 interface CustomTooltipProps {
-  position: TooltipPosition
-  text: string
-  children: React.ReactNode
+  position: TooltipPosition;
+  text: string;
+  children: React.ReactNode;
 }
 
-const CustomTooltip: React.FC<CustomTooltipProps> = ({ position, text, children }) => {
+const CustomTooltip: React.FC<CustomTooltipProps> = ({
+  position,
+  text,
+  children,
+}) => {
   return (
     <TooltipProvider>
       <Tooltip delayDuration={300}>
@@ -18,8 +27,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ position, text, children 
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  )
-}
+  );
+};
 
-export default CustomTooltip
-
+export default CustomTooltip;

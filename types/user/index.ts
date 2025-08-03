@@ -1,4 +1,3 @@
-// User Entity Types
 export interface User {
   id: string;
   name: string;
@@ -8,7 +7,6 @@ export interface User {
   updatedAt: string;
 }
 
-// API Response Types
 export interface UsersResponse {
   success: boolean;
   users: User[];
@@ -30,7 +28,6 @@ export interface ApiResponse {
   message?: string;
 }
 
-// Request Types
 export interface CreateUserRequest {
   name: string;
   email: string;

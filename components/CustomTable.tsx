@@ -1,7 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Plus, Filter, Download, ChevronDown } from "lucide-react";
+import {
+  Search,
+  Plus,
+  Filter,
+  Download,
+  ChevronDown,
+  Edit,
+  Trash2,
+} from "lucide-react";
 
 interface ColumnDef<T> {
   key: keyof T;
@@ -59,7 +67,7 @@ const CustomTable = <T extends { id?: number | string }>({
     direction: "asc" | "desc";
   } | null>(null);
   const [activeFilters, setActiveFilters] = useState<{ [key: string]: string }>(
-    {}
+    {},
   );
   const [showFilters, setShowFilters] = useState(false);
 
@@ -68,14 +76,14 @@ const CustomTable = <T extends { id?: number | string }>({
     const matchesSearch = columns.some((col) =>
       String(row[col.key] ?? "")
         .toLowerCase()
-        .includes(searchTerm.toLowerCase())
+        .includes(searchTerm.toLowerCase()),
     );
 
     const matchesFilters = Object.entries(activeFilters).every(
       ([key, value]) => {
         if (!value) return true;
         return String(row[key as keyof T]) === value;
-      }
+      },
     );
 
     return matchesSearch && matchesFilters;
@@ -99,7 +107,7 @@ const CustomTable = <T extends { id?: number | string }>({
   const totalPages = Math.ceil(sortedData.length / itemsPerPage);
   const paginatedData = sortedData.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handleSort = (key: keyof T) => {
@@ -117,7 +125,7 @@ const CustomTable = <T extends { id?: number | string }>({
 
   const handleSelectItem = (item: T, checked: boolean) => {
     setSelectedItems((prev) =>
-      checked ? [...prev, item] : prev.filter((i) => i.id !== item.id)
+      checked ? [...prev, item] : prev.filter((i) => i.id !== item.id),
     );
   };
 
@@ -295,7 +303,7 @@ const CustomTable = <T extends { id?: number | string }>({
                       <input
                         type="checkbox"
                         checked={selectedItems.some(
-                          (selected) => selected.id === item.id
+                          (selected) => selected.id === item.id,
                         )}
                         onChange={(e) =>
                           handleSelectItem(item, e.target.checked)
@@ -316,16 +324,18 @@ const CustomTable = <T extends { id?: number | string }>({
                           <button
                             onClick={() => onUpdate(item)}
                             className="text-blue-600 hover:text-blue-800 p-1 hover:bg-blue-50 rounded transition-colors"
+                            title="Edit"
                           >
-                            Edit
+                            <Edit className="w-4 h-4" />
                           </button>
                         )}
                         {onDelete && (
                           <button
                             onClick={() => onDelete(item)}
                             className="text-red-600 hover:text-red-800 p-1 hover:bg-red-50 rounded transition-colors"
+                            title="Delete"
                           >
-                            Delete
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         )}
                       </div>

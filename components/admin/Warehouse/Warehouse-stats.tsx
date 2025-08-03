@@ -1,6 +1,6 @@
 "use client";
 
-import { Package, TrendingUp, AlertTriangle, Archive } from "lucide-react";
+import { Package, TrendingUp, AlertTriangle } from "lucide-react";
 import { Area, RText, Yard } from "@/lib/by/Div";
 import { StatsCard } from "@/components/admin/StatsCard";
 
@@ -9,7 +9,7 @@ interface WarehouseStatsProps {
     totalBatches: number;
     activeBatches: number;
     expiredBatches: number;
-    outOfStockBatches: number;
+    outOfStockBatches?: number;
     totalStock: number;
     totalQuantity: number;
     stockPercentage: number;
@@ -72,14 +72,6 @@ export function WarehouseStats({ stats, monthName }: WarehouseStatsProps) {
           iconColor="text-red-600"
           iconBgColor="bg-red-50"
           valueColor="text-red-700"
-        />
-        <StatsCard
-          title="Out of Stock"
-          value={stats.outOfStockBatches}
-          icon={Archive}
-          iconColor="text-gray-600"
-          iconBgColor="bg-gray-50"
-          valueColor="text-gray-700"
         />
       </Yard>
 

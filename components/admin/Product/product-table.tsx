@@ -153,7 +153,7 @@ export function ProductTable({
         <Area className="flex flex-col">
           <RText className="text-sm font-medium text-gray-900">
             {formatPrice(
-              calculateDiscountedPrice(product.price, product.sale_price)
+              calculateDiscountedPrice(product.price, product.sale_price),
             )}
           </RText>
           {product.sale_price > 0 && product.sale_price < product.price && (
@@ -189,8 +189,9 @@ export function ProductTable({
   ];
 
   const lowStockCount = useMemo(() => {
-    return (data?.products || []).filter((product) => product.total_stock < 50)
-      .length;
+    return (data?.products || []).filter(
+      (product: Product) => product.total_stock < 50,
+    ).length;
   }, [data?.products]);
 
   return (
@@ -260,7 +261,7 @@ export function ProductTable({
               </button>
               {Array.from(
                 { length: data.pagination.totalPages },
-                (_, i) => i + 1
+                (_, i) => i + 1,
               ).map((pageNum) => (
                 <button
                   key={pageNum}

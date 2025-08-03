@@ -1,13 +1,7 @@
 "use client";
-import {
-  Environment,
-  Float,
-  OrbitControls,
-  Text
-} from "@react-three/drei";
+import { Environment, OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import React, { Suspense, useEffect, useRef, useState } from "react";
-import * as THREE from "three";
+import React, { Suspense, useEffect, useRef } from "react";
 
 // Thêm Error Boundary cho component
 class ErrorBoundary extends React.Component {
@@ -17,6 +11,7 @@ class ErrorBoundary extends React.Component {
   }
 
   static getDerivedStateFromError(error) {
+    console.error()("error ", error);
     return { hasError: true };
   }
 
@@ -34,155 +29,11 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-function ProductBottle(props) {
-  const meshRef = useRef(null);
-  const [hovered, setHover] = useState(false);
-
-  // Giảm độ phức tạp của hình dạng
-  const shape = new THREE.Shape()
-    .moveTo(0, -1)
-    .lineTo(0.3, -1)
-    .lineTo(0.4, -0.5)
-    .lineTo(0.5, 0.5)
-    .lineTo(0.3, 1)
-    .lineTo(-0.3, 1)
-    .lineTo(-0.5, 0.5)
-    .lineTo(-0.4, -0.5)
-    .lineTo(-0.3, -1)
-    .lineTo(0, -1);
-
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.1; // Giảm tốc độ xoay
-    }
-  });
-
-  return (
-    <group {...props}>
-      <mesh
-        ref={meshRef}
-        onPointerOver={() => setHover(true)}
-        onPointerOut={() => setHover(false)}
-        scale={hovered ? [1.05, 1.05, 1.05] : [1, 1, 1]} // Giảm scale khi hover
-      >
-        <extrudeGeometry
-          args={[
-            shape,
-            {
-              steps: 1,
-              depth: 0.3,
-              bevelEnabled: true,
-              bevelThickness: 0.03, // Giảm bevel
-              bevelSize: 0.03,
-              bevelSegments: 5, // Giảm số segment
-            },
-          ]}
-        />
-        <meshPhysicalMaterial
-          color={props.color || "#ffc0cb"}
-          transmission={0.6} // Giảm độ trong suốt
-          roughness={0.2}
-          thickness={0.2}
-          clearcoat={0.8}
-        />
-      </mesh>
-      {hovered && (
-        <Text
-          position={[0, -1.5, 0]}
-          fontSize={0.15} // Giảm kích thước text
-          color="white"
-          anchorX="center"
-          anchorY="middle"
-        >
-          {props.name || "Sản phẩm mới"}
-        </Text>
-      )}
-    </group>
-  );
-}
-
-function Lipstick(props) {
-  const meshRef = useRef(null);
-
-  // Đơn giản hóa hình dạng son
-  const shape = new THREE.Shape()
-    .moveTo(0, -1)
-    .lineTo(0.15, -1)
-    .lineTo(0.15, 0.8)
-    .lineTo(0.1, 1)
-    .lineTo(-0.1, 1)
-    .lineTo(-0.15, 0.8)
-    .lineTo(-0.15, -1)
-    .lineTo(0, -1);
-
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.2; // Giảm tốc độ
-    }
-  });
-
-  return (
-    <group {...props}>
-      <mesh ref={meshRef}>
-        <extrudeGeometry
-          args={[
-            shape,
-            {
-              steps: 1,
-              depth: 0.15, // Giảm độ sâu
-              bevelEnabled: false, // Tắt bevel
-            },
-          ]}
-        />
-        <meshStandardMaterial // Thay Physical bằng Standard
-          color={props.color || "#d63031"}
-          roughness={0.3}
-        />
-      </mesh>
-      <mesh position={[0, -1.2, 0]}>
-        <cylinderGeometry args={[0.12, 0.12, 0.6, 16]} /> {/* Giảm segments */}
-        <meshStandardMaterial color="#f5f5f5" roughness={0.3} />
-      </mesh>
-    </group>
-  );
-}
-
-// function BannerText() {
-//   return (
-//     <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.1}>
-//       {" "}
-//       {/* Giảm hiệu ứng */}
-//       <Text
-//         position={[0, 1.2, 0]} // Điều chỉnh vị trí
-//         fontSize={0.5} // Giảm kích thước
-//         maxWidth={2} // Giới hạn chiều rộng
-//         lineHeight={1}
-//         letterSpacing={0.02}
-//         color="#ffffff"
-//         anchorX="center"
-//         anchorY="middle"
-//         font="https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtY.ttf"
-//       >
-//         Glow Beauty
-//       </Text>
-//       <Text
-//         position={[0, 0.5, 0]}
-//         fontSize={0.2}
-//         color="#f8a5c2"
-//         anchorX="center"
-//         anchorY="middle"
-//       >
-//         Bộ sưu tập mùa hè 2024
-//       </Text>
-//     </Float>
-//   );
-// }
-
 function Sparkles() {
   const particles = useRef();
   const count = 1000; // Giảm đáng kể số lượng particles
 
-  useFrame((state) => {
+  useFrame(() => {
     if (particles.current) {
       particles.current.rotation.y += 0.005; // Giảm tốc độ
     }
@@ -196,7 +47,10 @@ function Sparkles() {
           count={count}
           array={
             new Float32Array(
-              Array.from({ length: count * 3 }, () => (Math.random() - 0.5) * 10) // Giảm phạm vi
+              Array.from(
+                { length: count * 3 },
+                () => (Math.random() - 0.5) * 10,
+              ), // Giảm phạm vi
             )
           }
           itemSize={3}
@@ -258,7 +112,6 @@ export default function CosmeticBanner() {
             />
             <Environment preset="night" /> {/* Sử dụng preset nhẹ hơn */}
             <Sparkles />
-
             {/* <BannerText /> */}
             <OrbitControls
               enableZoom={false}

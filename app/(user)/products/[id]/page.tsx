@@ -13,7 +13,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 
 export async function generateStaticParams() {
   const products: PaginatedResponse<IProduct, "products"> = await fetchProducts(
-    {}
+    {},
   );
   return products.products.map((p) => ({
     id: p.id,

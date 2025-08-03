@@ -2,8 +2,6 @@
 
 import CustomTable from "@/components/CustomTable";
 import { AddSkinTypeModal } from "@/components/admin/Category-Brand/Add-skin-type-modal";
-import { AddBrandModal } from "@/components/admin/Category-Brand/Add-brand-modal";
-import { AddCategoryModal } from "@/components/admin/Category-Brand/Add-category-modal";
 import {
   calculateStats,
   useCategoriesBrandsLogic,
@@ -24,6 +22,8 @@ import {
   Trash2,
   Users,
 } from "lucide-react";
+import { AddCategoryModal } from "@/components/admin/Category-Brand/add-category-modal";
+import { AddBrandModal } from "@/components/admin/Category-Brand/add-brand-modal";
 
 export default function CategoriesBrandsPage() {
   const {
@@ -65,7 +65,7 @@ export default function CategoriesBrandsPage() {
   // Category columns
   const categoryColumns = [
     {
-      key: "id" as const,
+      key: "id" as keyof CategoryOption,
       label: "ID",
       sortable: true,
       render: (category: CategoryOption) => (
@@ -75,7 +75,7 @@ export default function CategoriesBrandsPage() {
       ),
     },
     {
-      key: "title" as const,
+      key: "title" as keyof CategoryOption,
       label: "Title",
       sortable: true,
       render: (category: CategoryOption) => (
@@ -88,7 +88,7 @@ export default function CategoriesBrandsPage() {
       ),
     },
     {
-      key: "actions" as const,
+      key: "actions" as keyof CategoryOption,
       label: "Actions",
       render: (category: CategoryOption) => (
         <Area className="flex items-center space-x-1">
@@ -114,7 +114,7 @@ export default function CategoriesBrandsPage() {
   // Brand columns
   const brandColumns = [
     {
-      key: "id" as const,
+      key: "id" as keyof BrandOption,
       label: "ID",
       sortable: true,
       render: (brand: BrandOption) => (
@@ -124,7 +124,7 @@ export default function CategoriesBrandsPage() {
       ),
     },
     {
-      key: "title" as const,
+      key: "title" as keyof BrandOption,
       label: "Title",
       sortable: true,
       render: (brand: BrandOption) => (
@@ -137,7 +137,7 @@ export default function CategoriesBrandsPage() {
       ),
     },
     {
-      key: "actions" as const,
+      key: "actions" as keyof BrandOption,
       label: "Actions",
       render: (brand: BrandOption) => (
         <Area className="flex items-center space-x-1">
@@ -163,7 +163,7 @@ export default function CategoriesBrandsPage() {
   // Skin Type columns
   const skinTypeColumns = [
     {
-      key: "id" as const,
+      key: "id" as keyof SkinTypeOption,
       label: "ID",
       sortable: true,
       render: (skinType: SkinTypeOption) => (
@@ -173,7 +173,7 @@ export default function CategoriesBrandsPage() {
       ),
     },
     {
-      key: "title" as const,
+      key: "title" as keyof SkinTypeOption,
       label: "Title",
       sortable: true,
       render: (skinType: SkinTypeOption) => (
@@ -186,7 +186,7 @@ export default function CategoriesBrandsPage() {
       ),
     },
     {
-      key: "actions" as const,
+      key: "actions" as keyof SkinTypeOption,
       label: "Actions",
       render: (skinType: SkinTypeOption) => (
         <Area className="flex items-center space-x-1">
