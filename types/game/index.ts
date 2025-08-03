@@ -2,9 +2,13 @@ export {};
 declare global {
   //region Event
 
-  type EventResponse = {
+  type EventsResponse = {
     success: boolean;
     events: IEvent[];
+  };
+  type EventResponse = {
+    success: boolean;
+    event: IEvent;
   };
   interface IEvent {
     id?: string;
@@ -126,7 +130,7 @@ declare global {
     event_id: string;
     completion_time: string;
     completed_at: string;
-  }
+  };
 
   type ILeaderBoardReward = {
     id: string;
@@ -138,12 +142,12 @@ declare global {
     is_active: string;
     created_at: Date;
     voucherTemplates: IVoucherTemplate[];
-  }
+  };
 
   type ILeaderBoardData = {
     event: IEvent;
     total_participants: number;
-    rewards: ILeaderBoardReward[]
-    leaderboard: IEventScore[]
-  }
+    rewards: ILeaderBoardReward[];
+    leaderboard: IEventScore[];
+  };
 }

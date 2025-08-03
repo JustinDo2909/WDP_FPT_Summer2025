@@ -12,7 +12,16 @@ export const apiEvent = createApi({
         url: `events/get`,
         method: "GET",
       }),
-      transformResponse: (response: EventResponse) => response.events || {},
+      transformResponse: (response: EventsResponse) => response.events || {},
+      providesTags: ["Events"],
+    }),
+    //region getEventByID
+    getEventByID: build.query<IEvent, { eventId: string }>({
+      query: (eventId) => ({
+        url: `/events/get/${eventId}`,
+        method: "GET",
+      }),
+      transformResponse: (response: EventResponse) => response.event || {},
       providesTags: ["Events"],
     }),
     // endregion
@@ -68,6 +77,7 @@ export const apiEvent = createApi({
 
 export const {
   useGetEventsQuery,
+  useGetEventByIDQuery,
   useGetQuestionsQuery,
   useGetRewardHooksQuery,
   useCalculateRewardMutation,

@@ -30,7 +30,7 @@ export const CardGame = ({ game }: { game: IEvent }) => {
       href={
         game.is_active
           ? game.type === "DROP"
-            ? `/event/BeautyDrop/home?event_id=${game.id}`
+            ? `/event/GameMenu?event_id=${game.id}`
             : game.type === "QUIZ"
               ? "/event/Quiz"
               : "/event/coming-soon"
@@ -52,7 +52,8 @@ export const CardGame = ({ game }: { game: IEvent }) => {
       <Column className="flex-1 gap-1">
         <RText className="text-lg font-bold text-white">{game.title}</RText>
         <RText className="text-sm text-purple-200">
-          {formatDate(String(game.start_time))} — {formatDate(String(game.end_time))}
+          {formatDate(String(game.start_time))} —{" "}
+          {formatDate(String(game.end_time))}
         </RText>
         <RText className="text-sm text-zinc-300 line-clamp-3">
           {game.description}

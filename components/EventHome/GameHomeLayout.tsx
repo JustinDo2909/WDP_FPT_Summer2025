@@ -6,6 +6,7 @@ import InventoryModal from "./InventoryModal";
 import RulesModal from "./RulesModal";
 import { ArrowLeft, Play } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Area, Block, RText, Section } from "@/lib/by/Div";
 
 const DEFAULTS = {
   title: "Game",
@@ -20,23 +21,22 @@ export default function GameHomeLayout({
   playButtonText = DEFAULTS.playButton,
   inventoryButtonText = DEFAULTS.inventoryButton,
   rulesButtonText = DEFAULTS.rulesButton,
-  eventData
+  eventData,
 }: {
   children?: React.ReactNode;
   title?: string;
   playButtonText?: string;
   inventoryButtonText?: string;
   rulesButtonText?: string;
-  eventData?: ILeaderBoardData
-  
+  eventData?: ILeaderBoardData;
 }) {
   const [showInventory, setShowInventory] = useState(false);
   const [showRules, setShowRules] = useState(false);
-  const router = useRouter()
-  console.log(eventData)
+  const router = useRouter();
+  console.log(eventData);
 
   return (
-    <div
+    <Area
       className="relative min-h-screen flex flex-col justify-between items-stretch"
       style={{
         backgroundImage: "url('/internshift-bg-placeholder.jpg')",
@@ -45,43 +45,44 @@ export default function GameHomeLayout({
         backgroundColor: "pink",
       }}
     >
-
       <button
-          className="game-button absolute top-8 left-12 z-10 w-12 p-0"
-          onClick={() => router.back()}
-
-        >    
-        <div className="p-0">
-          <span className="!px-0"> <ArrowLeft size={20} strokeWidth={3}/></span>
-        </div>
+        className="game-button absolute top-8 left-12 z-10 w-12 p-0"
+        onClick={() => router.back()}
+      >
+        <Block className="p-0">
+          <span className="!px-0">
+            {" "}
+            <ArrowLeft size={20} strokeWidth={3} />
+          </span>
+        </Block>
       </button>
       {/* Left: Leaderboard */}
-      <div className="absolute top-24 left-8 z-10">
-        <Leaderboard leaders={eventData?.leaderboard || []}  />
-      </div>
+      <Section className="absolute top-24 left-8 z-10">
+        <Leaderboard leaders={eventData?.leaderboard || []} />
+      </Section>
 
       {/* Right: Voucher Rewards */}
-      <div className="absolute top-24 right-8 z-10">
-        <VoucherRewards rewards={eventData?.rewards ?? []}/>
-      </div>
+      <Section className="absolute top-24 right-8 z-10">
+        <VoucherRewards rewards={eventData?.rewards ?? []} />
+      </Section>
 
       {/* Center: Game Title */}
-      <div className="flex flex-1 items-center justify-center">
-        <h1 className="text-5xl font-extrabold text-white text-center drop-shadow-lg">
+      <Section className="flex flex-1 items-center justify-center">
+        <RText className="text-5xl font-extrabold text-white text-center drop-shadow-lg">
           {title}
-        </h1>
-      </div>
+        </RText>
+      </Section>
 
       {/* Footer: Buttons */}
-      <footer className="w-full absolute bottom-0 left-0 flex items-center justify-center space-x-10 px-8 py-6 z-20">
+      <Section className="w-full absolute bottom-0 left-0 flex items-center justify-center space-x-10 px-8 py-6 z-20">
         {/* Rules Button */}
         <button
           className="game-button px-6 py-3 text-lg font-semibold"
           onClick={() => setShowRules(true)}
-        >    
-          <div>
+        >
+          <Block>
             <span> {rulesButtonText}</span>
-          </div>
+          </Block>
         </button>
 
         {/* Play Button */}
@@ -89,9 +90,12 @@ export default function GameHomeLayout({
           className="game-button"
           // style={{ marginLeft: "auto", marginRight: "auto" }}
         >
-          <div>
-            <span className="text-xl mx-4 flex items-center"> {playButtonText} <Play fill="black" size={20} className="mb-1"/></span>
-          </div>
+          <Block>
+            <span className="text-xl mx-4 flex items-center">
+              {" "}
+              {playButtonText} <Play fill="black" size={20} className="mb-1" />
+            </span>
+          </Block>
         </button>
 
         {/* Inventory Button */}
@@ -99,11 +103,11 @@ export default function GameHomeLayout({
           className="game-button px-6 py-3 text-lg font-semibold"
           onClick={() => setShowInventory(true)}
         >
-          <div>
+          <Block>
             <span> {inventoryButtonText}</span>
-          </div>
+          </Block>
         </button>
-      </footer>
+      </Section>
 
       {/* Modals */}
       <InventoryModal
@@ -113,7 +117,9 @@ export default function GameHomeLayout({
       <RulesModal open={showRules} onClose={() => setShowRules(false)} />
 
       {/* Children (if any) */}
-      {children}
-    </div>
+      <Section className="flex flex-1 items-center justify-center">
+        {children}
+      </Section>
+    </Area>
   );
 }
