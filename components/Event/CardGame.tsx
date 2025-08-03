@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export const CardGame = ({ game }: { game: IEvent }) => {
+export const CardGame = ({ game, isList = false }: { game: IEvent, isList?: boolean }) => {
   const { isLogged } = useUser();
   const router = useRouter();
 
@@ -33,13 +33,13 @@ export const CardGame = ({ game }: { game: IEvent }) => {
             ? `/event/BeautyDrop/home?event_id=${game.id}`
             : game.type === "QUIZ"
               ? "/event/Quiz"
-              : "/event/coming-soon"
-          : "/event/coming-soon"
+              : `/event/${game.title?.toLowerCase()}?event_id=${game.id}`
+          : `/event/coming-soon`
       }
       className="flex w-full items-start gap-6 p-4 rounded-xl bg-[#1e1033] border border-white/10 hover:shadow-2xl transition-all duration-300 group cursor-pointer"
     >
       {/* Image */}
-      <Box className="relative min-w-[140px] h-32 rounded-lg overflow-hidden shadow-md">
+      <Box className={`relative ${ isList ?  "min-w-[240%]" :"min-w-[140px]"} h-32 rounded-lg overflow-hidden shadow-md`}>
         <Image
           src={game.image_url || fallbackImage}
           alt={game.title || "Game Image"}
