@@ -1,6 +1,7 @@
 "use client";
 
 import CosmeticCatchGame from "@/components/Event/BeautyDrop/cosmetic-catch-game";
+import Defender from "@/components/Event/Defender/gameplay";
 import GameHomeLayout from "@/components/EventHome/GameHomeLayout";
 import { Block, Container, RText } from "@/lib/by/Div";
 import {
@@ -25,16 +26,18 @@ export default function BeautyDropHomePage() {
   }
 
   return (
-    <GameHomeLayout title="BeautyDrop" eventData={eventData?.data}>
-      {event?.type === "DROP" ? (
-        <Container className="">
+    <GameHomeLayout title={event?.title} eventData={eventData?.data}>
+      <Container className="w-full ">
+        {event?.type === "DROP" ? (
           <CosmeticCatchGame />
-        </Container>
-      ) : (
-        <Block>
-          <RText>Event not found</RText>
-        </Block>
-      )}
+        ) : event?.type === "DEFENDER" ? (
+          <Defender />
+        ) : (
+          <Block>
+            <RText>Event not found</RText>
+          </Block>
+        )}
+      </Container>
     </GameHomeLayout>
   );
 }

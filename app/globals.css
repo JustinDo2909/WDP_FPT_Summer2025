@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  font-family: sans-serif;
+}
+
 /* Custom utilities for line clamping */
 @layer utilities {
   .line-clamp-1 {

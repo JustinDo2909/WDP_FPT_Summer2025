@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  Clock,
-  Heart,
-  Shield,
-  Skull,
-  Sparkles,
-  Trophy,
-  Zap,
-} from "lucide-react";
+import { Clock, Trophy, Zap } from "lucide-react";
 import { Block, Box, RText } from "@/lib/by/Div";
 import Button from "@/components/CustomButton";
 
@@ -30,7 +22,7 @@ export default function GameUI({
   onEndGame,
 }: GameUIProps) {
   return (
-    <Block className="w-full md:w-80 bg-white rounded-2xl shadow-xl p-5 space-y-5 border border-slate-200">
+    <Block className="w-full max-w-56 bg-white rounded-2xl shadow-xl p-3 space-y-5 border border-slate-200">
       <Box
         className={`text-center text-sm font-semibold px-3 py-1 rounded-full shadow-inner uppercase tracking-wide ${
           selectedMode === "official"
@@ -41,23 +33,17 @@ export default function GameUI({
         <RText>{currentMode.name}</RText>
       </Box>
 
-      <Box className="bg-gradient-to-r from-yellow-100 to-orange-100 p-4 rounded-xl shadow-md flex items-center justify-between">
-        <Box className="flex items-center gap-2">
-          <Trophy className="text-yellow-600 w-5 h-5" />
-          <RText className="font-bold text-gray-700">Score</RText>
-        </Box>
-        <RText className="text-xl font-extrabold text-orange-600">
-          {score}
+      <Box className="bg-gradient-to-r from-blue-100 to-sky-200 p-4 rounded-xl shadow-md flex items-center justify-center gap-2">
+        <Clock className="text-blue-600 w-5 h-5" />
+        <RText className="text-xl font-bold font-sans text-blue-700">
+          {timeLeft}s
         </RText>
       </Box>
 
-      <Box className="bg-gradient-to-r from-blue-100 to-sky-200 p-4 rounded-xl shadow-md flex items-center justify-between">
-        <Box className="flex items-center gap-2">
-          <Clock className="text-blue-600 w-5 h-5" />
-          <RText className="font-bold text-gray-700">Time Left</RText>
-        </Box>
-        <RText className="text-xl font-extrabold text-blue-700">
-          {timeLeft}s
+      <Box className="bg-gradient-to-r from-yellow-100 to-orange-100 p-4 rounded-xl shadow-md flex items-center justify-center gap-2 ">
+        <Trophy className="text-yellow-600 w-5 h-5" />
+        <RText className="text-xl font-bold font-sans text-orange-600">
+          {score}
         </RText>
       </Box>
 
@@ -69,7 +55,7 @@ export default function GameUI({
         </Box>
       )}
 
-      <Block className="space-y-2">
+      {/* <Block className="space-y-2">
         <Box className="flex items-center gap-2 text-green-700">
           <Heart className="w-4 h-4" />
           <RText className="text-sm">Vitamin: +points</RText>
@@ -86,7 +72,7 @@ export default function GameUI({
           <Shield className="w-4 h-4" />
           <RText className="text-sm">A/D to move</RText>
         </Box>
-      </Block>
+      </Block> */}
 
       <Button
         onClick={onEndGame}

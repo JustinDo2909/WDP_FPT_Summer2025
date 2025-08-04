@@ -200,7 +200,7 @@ const UPGRADE_LEVELS = [
   { level: 20, boxesNeeded: 10, bullets: 5, damage: 16, ammoCost: 5 }, // Max level
 ];
 
-export default function Component() {
+export default function Defender() {
   const [gameState, setGameState] = useState<GameState>({
     health: 10,
     maxHealth: 10,
@@ -257,7 +257,7 @@ export default function Component() {
 
   if (gameState.gameOver) {
     return (
-      <Area className="w-full h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-black text-white">
+      <Area className="w-full max-w-7xl h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-black text-white">
         <Section className="text-center space-y-6 bg-black/50 p-8 rounded-lg backdrop-blur-sm">
           <RText className="text-6xl font-bold text-red-500 mb-4">
             GAME OVER

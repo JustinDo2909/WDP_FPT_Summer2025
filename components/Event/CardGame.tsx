@@ -29,11 +29,7 @@ export const CardGame = ({ game }: { game: IEvent }) => {
       }}
       href={
         game.is_active
-          ? game.type === "DROP"
-            ? `/event/GameMenu?event_id=${game.id}`
-            : game.type === "QUIZ"
-              ? "/event/Quiz"
-              : "/event/coming-soon"
+          ? `/event/GameMenu?event_id=${game.id}`
           : "/event/coming-soon"
       }
       className="flex w-full items-start gap-6 p-4 rounded-xl bg-[#1e1033] border border-white/10 hover:shadow-2xl transition-all duration-300 group cursor-pointer"

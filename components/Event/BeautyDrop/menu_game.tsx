@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, Play, Sparkles, Skull, Zap, ArrowLeft } from "lucide-react";
+import { Heart, Play, Skull, Zap } from "lucide-react";
 import {
   Area,
   Block,
@@ -15,7 +15,7 @@ import Button from "@/components/CustomButton";
 import Image from "next/image";
 import { VITAMINS, HARMFUL_ITEMS, MULTIPLIERS } from "@/constants";
 import { Separator } from "@radix-ui/react-select";
-import Link from "next/link";
+// import Link from "next/link";
 
 interface GameMenuProps {
   onModeSelect: () => void;
@@ -23,9 +23,9 @@ interface GameMenuProps {
 
 export default function GameMenu({ onModeSelect }: GameMenuProps) {
   return (
-    <Yard className="w-full max-w-7xl mx-auto">
+    <Yard className="w-full max-w-7xl h-[82vh] mx-auto">
       <Area className="backdrop-blur-sm border border-purple-100 shadow-lg p-5">
-        <Link
+        {/* <Link
           href={"/event"}
           className="absolute top-6 left-6 flex justify-center items-center group"
         >
@@ -49,7 +49,7 @@ export default function GameMenu({ onModeSelect }: GameMenuProps) {
               <Heart className="w-8 h-8 text-pink-600" />
             </Box>
           </Block>
-        </Section>
+        </Section> */}
 
         <Section className="space-y-4">
           <Block className="text-center">
