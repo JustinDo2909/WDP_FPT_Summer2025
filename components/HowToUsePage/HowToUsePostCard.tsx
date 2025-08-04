@@ -7,8 +7,8 @@ export default function HowToUsePostCard({ post }: { post: IPostData }) {
       {/* Thumbnail Image */}
       <Section className="relative h-48 sm:h-44 md:h-40 lg:h-48 overflow-hidden">
         <Image
-          fill 
-          src={post.thumbnail_url} 
+          fill
+          src={post.thumbnail_url}
           alt={post.title}
           className="w-full h-full object-cover"
         />
@@ -55,7 +55,9 @@ export default function HowToUsePostCard({ post }: { post: IPostData }) {
             {post.postSteps.slice(0, 3).map((step: IPostStep, idx: number) => (
               <Row key={idx} className="flex items-start gap-2">
                 <Section className="w-1.5 h-1.5 bg-pink-400 rounded-full mt-2 flex-shrink-0"></Section>
-                <RText className="text-sm text-gray-700 flex-1">{step.title}</RText>
+                <RText className="text-sm text-gray-700 flex-1">
+                  {step.title}
+                </RText>
               </Row>
             ))}
             {post.postSteps.length > 3 && (
@@ -70,7 +72,6 @@ export default function HowToUsePostCard({ post }: { post: IPostData }) {
         <Section className="h-px bg-gray-200"></Section>
 
         {/* Interaction Bar */}
-        
       </Column>
     </Card>
   );

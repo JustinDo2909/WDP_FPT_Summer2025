@@ -15,7 +15,10 @@ const nextConfig: NextConfig = {
       "picsum.photos",
       "hzjfxfzm26.ufs.sh", "example.com",
       "cdn.chiaki.vn",
-      "i.ibb.co"
+      "i.ibb.co",
+      "hzjfxfzm26.ufs.sh",
+      "example.com",
+      "cdn.chiaki.vn",
     ],
   },
 };

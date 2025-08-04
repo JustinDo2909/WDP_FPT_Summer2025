@@ -10,7 +10,9 @@ export default function HowToUseDetailHeader({ post }: { post: IPostData }) {
       <Row className="flex items-center gap-3 text-gray-600">
         <Row className="flex items-center gap-2 cursor-pointer hover:text-pink-600 transition-colors">
           <ArrowLeft className="w-4 h-4" />
-          <Link className="text-sm font-medium" href={"/how-to-use"}>Back to Guides</Link>
+          <Link className="text-sm font-medium" href={"/how-to-use"}>
+            Back to Guides
+          </Link>
         </Row>
         <RText className="text-gray-400">•</RText>
         <RText className="text-sm">{post?.title?.split(" ")[0]}</RText>
@@ -18,9 +20,9 @@ export default function HowToUseDetailHeader({ post }: { post: IPostData }) {
 
       {/* Hero Image */}
       <Section className="relative h-64 sm:h-80 lg:h-96 rounded-2xl overflow-hidden bg-gray-200">
-        <Image 
+        <Image
           fill
-          src={post?.thumbnail_url} 
+          src={post?.thumbnail_url}
           alt={post.title}
           className="w-full h-full object-cover"
         />
@@ -34,7 +36,7 @@ export default function HowToUseDetailHeader({ post }: { post: IPostData }) {
             </Column>
           </Row>
         </Section>
-      </Section>      
+      </Section>
     </Column>
   );
 }

@@ -24,7 +24,7 @@ export default function ReviewSection({ productId }: { productId: string }) {
 
   // Check if the user has already reviewed the product
   const hasReviewed = reviewsData?.reviews.some(
-    (review: IReview) => review.user_id === user?.id
+    (review: IReview) => review.user_id === user?.id,
   );
 
   return (

@@ -8,7 +8,6 @@ import { useGetEventsQuery } from "@/process/api/apiEvent";
 
 export default function Event() {
   const { data: fetchEvent = [], isLoading } = useGetEventsQuery();
-
   if (isLoading) return <Loader />;
 
   return (

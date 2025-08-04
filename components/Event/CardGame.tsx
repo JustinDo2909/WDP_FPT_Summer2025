@@ -1,16 +1,42 @@
 import { useUser } from "@/hooks/useUser";
 import { Box, Column, RText } from "@/lib/by/Div";
+import { find, isEqual } from "lodash";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export const CardGame = ({ game, isList = false }: { game: IEvent, isList?: boolean }) => {
-  const { isLogged } = useUser();
+  const {  isLogged  } = useUser();;
   const router = useRouter();
-
+;
   const fallbackImage =
     "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWF3EMjVHyeOBfC0Di9EszHlqMXr4T7G1ovPbY";
+  enum EGame {
+    DROP = "DROP",
+    QUIZ = "QUIZ",
+    PUZZLE = "PUZZLE",
+    REFLEX = "REFLEX",
+  }
 
+  const ListGameType = [
+    { type: EGame.DROP, link: "/event/BeautyDrop" },
+    { type: EGame.QUIZ, link: "/event/Quiz" },
+    { type: EGame.PUZZLE, link: "/event/FlipCard" },
+    { type: EGame.REFLEX, link: "/event/Racing" },
+  ];
+  const renderGame = (game: IEvent) => {
+    console.log("game", game.type);
+    let found = "";
+    Object.keys(EGame).forEach((key) => {
+      if (game.type === EGame[key as keyof typeof EGame]) {
+        found =
+          find(ListGameType, (item) =>
+            isEqual(item.type, EGame[key as keyof typeof EGame])
+          )?.link || "/event/coming-soon";
+      }
+    });
+    return found || "/event/coming-soon";
+  };
   const formatDate = (dateStr: string) =>
     new Date(dateStr).toLocaleString("en-US", {
       month: "short",
@@ -27,16 +53,9 @@ export const CardGame = ({ game, isList = false }: { game: IEvent, isList?: bool
           router.push("/login");
         }
       }}
-      href={
-        game.is_active
-          ? game.type === "DROP"
-            ? `/event/BeautyDrop/home?event_id=${game.id}`
-            : game.type === "QUIZ"
-              ? "/event/Quiz"
-              : `/event/${game.title?.toLowerCase()}?event_id=${game.id}`
-          : `/event/coming-soon`
-      }
-      className="flex w-full items-start gap-6 p-4 rounded-xl bg-[#1e1033] border border-white/10 hover:shadow-2xl transition-all duration-300 group cursor-pointer"
+      href={renderGame(game)}
+      className="shadow-xl h-56 w-72 flex flex-col justify-between items-center rounded-lg bg-[url('https://90sj56vdp0.ufs.sh/f/rSQkHC8t0FOUCNH4GXgNEZRdGL4mshnW0g53kYyDOSeQlIc2')] bg-no-repeat bg-cover
+      hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out cursor-pointer group relative overflow-hidden"
     >
       {/* Image */}
       <Box className={`relative ${ isList ?  "min-w-[240%]" :"min-w-[140px]"} h-32 rounded-lg overflow-hidden shadow-md`}>

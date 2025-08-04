@@ -150,19 +150,19 @@ export function useWarehouseLogic() {
 
     const totalBatches = batchesWithStatus.length;
     const activeBatches = batchesWithStatus.filter(
-      (b) => b.status === "active"
+      (b) => b.status === "active",
     ).length;
     const expiredBatches = batchesWithStatus.filter(
-      (b) => b.status === "expired"
+      (b) => b.status === "expired",
     ).length;
 
     const totalQuantity = batchesWithStatus.reduce(
       (sum, b) => sum + b.quantity,
-      0
+      0,
     );
     const totalStock = batchesWithStatus.reduce(
       (sum, b) => sum + b.current_stock,
-      0
+      0,
     );
     const stockPercentage =
       totalQuantity > 0 ? Math.round((totalStock / totalQuantity) * 100) : 0;
