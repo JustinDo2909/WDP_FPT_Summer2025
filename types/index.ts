@@ -132,7 +132,7 @@ declare global {
     type: "PERCENT" | "AMOUNT";
     redeemed: boolean;
     redeemed_at: string | null;
-    expired_at: string | null;
+    expired_at: string;
     updated_at: string;
     created_at: string;
     voucherProducts?: IVoucherProduct[];

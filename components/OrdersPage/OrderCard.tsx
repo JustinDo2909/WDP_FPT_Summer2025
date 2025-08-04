@@ -1,4 +1,3 @@
-import { calculateOrderTotalOriginalPrice } from "@/app/(user)/checkout/seg/calculateSubtotal";
 import { Begin, Card, Column, Row, RText, Wrap } from "@/lib/by/Div";
 import { useCancelOrderMutation } from "@/process/api/api";
 import { useState } from "react";
@@ -19,9 +18,6 @@ export default function OrderCard({
   onContactSeller,
 }: OrderCardProps): JSX.Element {
   const { orderItems, status, total_amount, createdAt, updatedAt, id } = order;
-  const shippingFee =
-    total_amount - calculateOrderTotalOriginalPrice(orderItems);
-  const originalPrice = calculateOrderTotalOriginalPrice(orderItems);
 
   // Add cancel mutation
   const [cancelOrder, { isLoading: isCancelling }] = useCancelOrderMutation();
@@ -87,12 +83,12 @@ export default function OrderCard({
               <Begin className="flex-1">
                 <RText className="text-xs text-gray-900">Price</RText>
                 <RText className="text-gray-500">
-                  ₫{item.price.toLocaleString()}
+                  {formatPrice(item.final_price)}
                 </RText>
               </Begin>
               <RText className="text-right">
                 <span className="text-pink-600 font-semibold">
-                  ₫{(item.price * item.quantity).toLocaleString()}
+                  {formatPrice(item.total_price)}
                 </span>
               </RText>
             </Link>
@@ -113,17 +109,23 @@ export default function OrderCard({
           <RText className="text-sm text-muted-foreground">
             Price:{" "}
             <span className="font-medium text-primary">
-              ₫{originalPrice.toLocaleString()}
+              {formatPrice(order.subtotal)}
             </span>
           </RText>
           <RText className="text-sm text-muted-foreground">
             Shipping:{" "}
             <span className="font-medium text-primary">
-              ₫{shippingFee.toLocaleString()}
+              {formatPrice(order.shipping_fee)}
+            </span>
+          </RText>
+          <RText className="text-sm text-muted-foreground">
+            Discount:{" "}
+            <span className="font-medium text-primary">
+              {formatPrice(order.discount_amount)}
             </span>
           </RText>
           <RText className="text-base font-semibold text-primary">
-            Total: ₫{total_amount.toLocaleString()}
+            Total: {formatPrice(total_amount)}
           </RText>
         </Begin>
         <Wrap className="space-x-2">
@@ -145,7 +147,7 @@ export default function OrderCard({
               onClick={() => setShowModal(true)}
               disabled={isCancelling}
             >
-              Cancel
+              Refund
             </button>
           )}
         </Wrap>
@@ -155,8 +157,8 @@ export default function OrderCard({
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
           <div className="bg-white rounded-lg shadow-lg p-6 min-w-[320px] max-w-sm">
-            <h3 className="text-lg font-semibold mb-4">Cancel Order</h3>
-            <p className="mb-6">Are you sure you want to cancel this order?</p>
+            <h3 className="text-lg font-semibold mb-4">Refund Order</h3>
+            <p className="mb-6">Are you sure you want to refund this order?</p>
             <Row className="flex justify-end gap-2">
               <button
                 className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"

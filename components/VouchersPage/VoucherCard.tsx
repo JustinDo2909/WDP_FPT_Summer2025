@@ -10,7 +10,7 @@ interface VoucherCardProps {
 
 const formatExpiryDate = (voucher: IVoucher) => {
   const expiry = new Date(
-    new Date(voucher.created_at).getTime() + 2 * 24 * 60 * 60 * 1000,
+    new Date(voucher.expired_at).getTime() + 2 * 24 * 60 * 60 * 1000,
   );
   return expiry.toLocaleDateString("vi-VN");
 };
@@ -18,25 +18,32 @@ const formatExpiryDate = (voucher: IVoucher) => {
 export default function VoucherCard({
   voucher,
 }: VoucherCardProps): JSX.Element {
-  const { discount_value, type, redeemed, redeemed_at, voucherProducts } =
-    voucher;
+  const { voucherTemplate, type, redeemed, redeemed_at, voucherProducts } = voucher;
   const [showAll, setShowAll] = React.useState(false);
 
+  const now = new Date();
+  const expiryDate = new Date(
+    new Date(voucher.expired_at).getTime() + 2 * 24 * 60 * 60 * 1000,
+  );
+  const isExpired = now > expiryDate;
   const isRedeemed = redeemed;
-  const statusText = isRedeemed
+
+  const statusText = isExpired
+    ? "Expired"
+    : isRedeemed
     ? `Redeemed${redeemed_at ? ` at ${new Date(redeemed_at).toLocaleDateString()}` : ""}`
     : "Available";
 
   const formattedDiscount =
     type === "PERCENT"
-      ? `${discount_value}% OFF`
-      : `₫${discount_value.toLocaleString()} OFF`;
+      ? `${voucherTemplate?.discount_value}% OFF`
+      : `₫${voucherTemplate?.discount_value.toLocaleString()} OFF`;
 
   return (
     <Card
       className={`
         flex w-full min-w-[450px] overflow-hidden rounded-lg border border-gray-200
-        ${isRedeemed ? "opacity-50 cursor-not-allowed grayscale" : ""}
+        ${(isRedeemed || isExpired) ? "opacity-50 cursor-not-allowed grayscale" : ""}
       `}
     >
       {/* Left Pill */}
@@ -54,7 +61,11 @@ export default function VoucherCard({
             </RText>
             <RText
               className={`text-xs font-medium ${
-                isRedeemed ? "text-gray-400" : "text-green-600"
+                isExpired
+                  ? "text-red-500"
+                  : isRedeemed
+                  ? "text-gray-400"
+                  : "text-green-600"
               }`}
             >
               {statusText}
@@ -94,10 +105,6 @@ export default function VoucherCard({
               )}
             </Wrap>
           )}
-
-          {/* <Wrap className="inline-block mt-2 px-2 py-0.5 bg-pink-500 text-white text-xs rounded w-fit">
-            Stripe Coupon: {stripe_coupon_id ?? "N/A"}
-          </Wrap> */}
         </Column>
 
         <Wrap className="text-xs text-gray-400 mt-2">
