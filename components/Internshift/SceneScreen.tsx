@@ -37,7 +37,7 @@ export const SceneScreen = ({ eventId }: { eventId: string }) => {
     submitRoutine,
     submitProducts,
     nextCustomer,
-    onMixComplete
+    onMixComplete,
   } = gameStateApi;
 
   // Call startNewCustomer when the component mounts
@@ -88,25 +88,26 @@ export const SceneScreen = ({ eventId }: { eventId: string }) => {
       gameState.gameScene === SceneName.MASK_MIXING &&
       gameState.currentCustomer
     ) {
-    if (
-      gameState.gameScene === SceneName.MASK_MIXING &&
-      gameState.currentCustomer
-    ) {
-      return (
-        <MaskMixing
-          customerSkinType={
-            gameState.currentCustomer.case.skinType ||
-            gameState.currentCustomer.case.caseName
-          }
-          onMixComplete={(success: boolean, bonus: number) => {
-            onMixComplete(success, bonus);
-          }}
-        />
-      );
+      if (
+        gameState.gameScene === SceneName.MASK_MIXING &&
+        gameState.currentCustomer
+      ) {
+        return (
+          <MaskMixing
+            customerSkinType={
+              gameState.currentCustomer.case.skinType ||
+              gameState.currentCustomer.case.caseName
+            }
+            onMixComplete={(success: boolean, bonus: number) => {
+              onMixComplete(success, bonus);
+            }}
+          />
+        );
+      }
+      // case SceneName.PIMPLE_POPPING:
+      //   return <PimplePopping ... />;
+      return <div className="text-white p-6">Scene not found</div>;
     }
-    // case SceneName.PIMPLE_POPPING:
-    //   return <PimplePopping ... />;
-    return <div className="text-white p-6">Scene not found</div>;
   };
 
   const handleEndGame = async () => {
@@ -185,7 +186,8 @@ export const SceneScreen = ({ eventId }: { eventId: string }) => {
               <>
                 <div className="text-lg mb-2">You have won a voucher:</div>
                 <div className="bg-yellow-100 border-2 border-yellow-400 rounded-xl px-6 py-4 text-center text-yellow-800 text-xl font-bold mb-4">
-                {voucher.reward?.discountValue} {voucher.reward?.discountType === "PERCENT" ? " %" : " đ"}  off
+                  {voucher.reward?.discountValue}{" "}
+                  {voucher.reward?.discountType === "PERCENT" ? " %" : " đ"} off
                 </div>
               </>
             ) : (
