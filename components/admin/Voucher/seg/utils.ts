@@ -33,6 +33,8 @@ export const useVouchersApiLogic = () => {
     return vouchersData.map(
       (voucher): VoucherDisplay => ({
         ...voucher,
+        // Add type from voucherTemplate if available
+        type: voucher.voucherTemplate?.type || voucher.type,
         discountDisplay: getDiscountDisplay(voucher),
         statusText: getStatusText(voucher),
         formattedCreatedAt: formatDate(voucher.created_at),
@@ -61,6 +63,7 @@ export const useVouchersApiLogic = () => {
         return (
           voucher.stripe_coupon_id.toLowerCase().includes(searchLower) ||
           voucher.user_id.toLowerCase().includes(searchLower) ||
+          voucher.user?.name.toLowerCase().includes(searchLower) ||
           voucher.id.toLowerCase().includes(searchLower)
         );
       }
@@ -146,6 +149,16 @@ export const useVouchersApiLogic = () => {
 
 // Utility functions
 export const getDiscountDisplay = (voucher: Voucher): string => {
+  // Check if voucher has voucherTemplate with discount info
+  if (voucher.voucherTemplate) {
+    if (voucher.voucherTemplate.type === "PERCENT") {
+      return `${voucher.voucherTemplate.discount_value}%`;
+    } else {
+      return `${formatCurrency(voucher.voucherTemplate.discount_value)}`;
+    }
+  }
+
+  // Fallback to direct properties if voucherTemplate doesn't exist
   if (voucher.type === "PERCENT") {
     return `${voucher.discount_value}%`;
   } else {

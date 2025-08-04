@@ -121,10 +121,9 @@ export const calculateDashboardStats = (
   users: any[],
   products: any[]
 ) => {
-  const totalRevenue = orders.reduce(
-    (sum, order) => sum + (order.total_amount || 0),
-    0
-  );
+  const totalRevenue = orders
+    .filter((order) => order.status === "DELIVERED")
+    .reduce((sum, order) => sum + (order.total_amount || 0), 0);
   const totalOrders = orders.length;
   const totalCustomers = users.filter((user) => user.role === "USER").length;
   const totalProducts = products.length;
@@ -164,16 +163,18 @@ export const calculateMonthlyRevenue = (orders: any[]) => {
     hasData: index <= currentMonth,
   }));
 
-  // Calculate revenue for each month
-  orders.forEach((order) => {
-    const orderDate = new Date(order.createdAt);
-    if (orderDate.getFullYear() === currentYear) {
-      const monthIndex = orderDate.getMonth();
-      if (monthIndex <= currentMonth) {
-        monthlyData[monthIndex].revenue += order.total_amount || 0;
+  // Calculate revenue for each month (only from delivered orders)
+  orders
+    .filter((order) => order.status === "DELIVERED")
+    .forEach((order) => {
+      const orderDate = new Date(order.createdAt);
+      if (orderDate.getFullYear() === currentYear) {
+        const monthIndex = orderDate.getMonth();
+        if (monthIndex <= currentMonth) {
+          monthlyData[monthIndex].revenue += order.total_amount || 0;
+        }
       }
-    }
-  });
+    });
 
   return monthlyData;
 };
@@ -197,62 +198,66 @@ export const calculateTopProducts = (orders: any[]) => {
   console.log("calculateTopProducts - Orders have orderItems:", hasOrderItems);
 
   if (!hasOrderItems) {
-    // MOCK DATA: Create fake top products from order data
+    // MOCK DATA: Create fake top products from order data (only from delivered orders)
     // This is temporary until we properly fetch order details
+    const deliveredOrders = orders.filter(
+      (order) => order.status === "DELIVERED"
+    );
+    const totalDeliveredRevenue = deliveredOrders.reduce(
+      (sum, order) => sum + (order.total_amount || 0),
+      0
+    );
+
     return [
       {
         id: "mock-product-1",
         name: "Product A (Mock - Need orderItems)",
-        revenue:
-          orders.reduce((sum, order) => sum + (order.total_amount || 0), 0) *
-          0.3,
-        quantity: Math.floor(orders.length * 1.5),
+        revenue: totalDeliveredRevenue * 0.3,
+        quantity: Math.floor(deliveredOrders.length * 1.5),
       },
       {
         id: "mock-product-2",
         name: "Product B (Mock - Need orderItems)",
-        revenue:
-          orders.reduce((sum, order) => sum + (order.total_amount || 0), 0) *
-          0.25,
-        quantity: Math.floor(orders.length * 1.2),
+        revenue: totalDeliveredRevenue * 0.25,
+        quantity: Math.floor(deliveredOrders.length * 1.2),
       },
       {
         id: "mock-product-3",
         name: "Product C (Mock - Need orderItems)",
-        revenue:
-          orders.reduce((sum, order) => sum + (order.total_amount || 0), 0) *
-          0.2,
-        quantity: Math.floor(orders.length * 1.0),
+        revenue: totalDeliveredRevenue * 0.2,
+        quantity: Math.floor(deliveredOrders.length * 1.0),
       },
     ];
   }
 
-  // Original logic for when we have orderItems
+  // Original logic for when we have orderItems (only from delivered orders)
   const productStats: {
     [key: string]: { name: string; revenue: number; quantity: number };
   } = {};
 
-  orders.forEach((order) => {
-    if (order.orderItems) {
-      order.orderItems.forEach((item: any) => {
-        const productId = item.product_id;
-        const productName = item.title;
-        const revenue = (item.price || 0) * (item.quantity || 0);
-        const quantity = item.quantity || 0;
+  orders
+    .filter((order) => order.status === "DELIVERED")
+    .forEach((order) => {
+      if (order.orderItems) {
+        order.orderItems.forEach((item: any) => {
+          const productId = item.product_id;
+          const productName = item.title;
+          const revenue = (item.price || 0) * (item.quantity || 0);
+          const quantity = item.quantity || 0;
 
-        if (productStats[productId]) {
-          productStats[productId].revenue += revenue;
-          productStats[productId].quantity += quantity;
-        } else {
-          productStats[productId] = {
-            name: productName,
-            revenue,
-            quantity,
-          };
-        }
-      });
-    }
-  });
+          if (productStats[productId]) {
+            productStats[productId].revenue += revenue;
+            productStats[productId].quantity += quantity;
+          } else {
+            productStats[productId] = {
+              name: productName,
+              revenue,
+              quantity,
+            };
+          }
+        });
+      }
+    });
 
   const result = Object.entries(productStats)
     .map(([id, stats]) => ({ id, ...stats }))
@@ -265,26 +270,28 @@ export const calculateTopProducts = (orders: any[]) => {
   return result;
 };
 
-// Calculate top customers from orders
+// Calculate top customers from orders (only from delivered orders)
 export const calculateTopCustomers = (orders: any[], users: any[]) => {
   const customerStats: {
     [key: string]: { totalSpent: number; totalOrders: number };
   } = {};
 
-  orders.forEach((order) => {
-    const userId = order.user_id;
-    const amount = order.total_amount || 0;
+  orders
+    .filter((order) => order.status === "DELIVERED")
+    .forEach((order) => {
+      const userId = order.user_id;
+      const amount = order.total_amount || 0;
 
-    if (customerStats[userId]) {
-      customerStats[userId].totalSpent += amount;
-      customerStats[userId].totalOrders += 1;
-    } else {
-      customerStats[userId] = {
-        totalSpent: amount,
-        totalOrders: 1,
-      };
-    }
-  });
+      if (customerStats[userId]) {
+        customerStats[userId].totalSpent += amount;
+        customerStats[userId].totalOrders += 1;
+      } else {
+        customerStats[userId] = {
+          totalSpent: amount,
+          totalOrders: 1,
+        };
+      }
+    });
 
   const topCustomers = Object.entries(customerStats)
     .map(([userId, stats]) => {

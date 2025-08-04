@@ -6,12 +6,14 @@ import {
   useGetAllOrdersQuery,
   useGetOrderDetailQuery,
   useUpdateOrderStatusMutation,
+  useCancelOrderMutation,
 } from "@/process/api/api";
 
 // Hook quản lý orders với real API
 export const useOrdersLogic = () => {
   const { data: ordersData, isLoading, error } = useGetAllOrdersQuery();
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
+  const [cancelOrder] = useCancelOrderMutation();
 
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
@@ -86,6 +88,22 @@ export const useOrdersLogic = () => {
     window.URL.revokeObjectURL(url);
   }, [orders]);
 
+  const handleCancelOrder = useCallback(
+    async (orderId: string, reason: string, images: string[]) => {
+      try {
+        await cancelOrder({
+          orderId,
+          reason,
+          images,
+        }).unwrap();
+      } catch (error) {
+        console.error("Failed to cancel order:", error);
+        throw error;
+      }
+    },
+    [cancelOrder]
+  );
+
   return {
     orders,
     selectedOrder,
@@ -96,6 +114,7 @@ export const useOrdersLogic = () => {
     handleCloseDetailModal,
     handleUpdateOrderStatus,
     handleExportOrders,
+    handleCancelOrder,
   };
 };
 
@@ -140,7 +159,7 @@ export const getPaymentMethodColor = (method: Order["payment_method"]) => {
 export const calculateOrderStats = (orders: Order[]) => {
   const totalOrders = orders.length;
   const totalRevenue = orders
-    .filter((order) => order.status !== "CANCELLED")
+    .filter((order) => order.status === "DELIVERED")
     .reduce((sum, order) => sum + order.total_amount, 0);
 
   const processingOrders = orders.filter(

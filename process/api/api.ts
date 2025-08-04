@@ -39,8 +39,23 @@ import type {
   UpdateQuestionRequest,
   CreateRewardRequest,
   UpdateRewardRequest,
+  LeaderboardReward,
+  LeaderboardRewardsResponse,
+  LeaderboardRewardResponse,
+  CreateLeaderboardRewardRequest,
+  UpdateLeaderboardRewardRequest,
+  AddVoucherTemplateToRewardRequest,
 } from "@/types/event";
-import type { Voucher, VouchersResponse } from "@/types/voucher/index";
+import type {
+  Voucher,
+  VouchersResponse,
+  VoucherTemplate,
+  VoucherTemplatesResponse,
+  VoucherTemplateResponse,
+  CreateVoucherTemplateRequest,
+  UpdateVoucherTemplateRequest,
+  VoucherTemplateFilterParams,
+} from "@/types/voucher/index";
 import type {
   Batch,
   BatchesResponse,
@@ -104,8 +119,10 @@ export const api = createApi({
     "Question",
     "Reward",
     "Vouchers",
+    "VoucherTemplates",
     "Questions",
     "Rewards",
+    "LeaderboardRewards",
     "Reviews",
     "Batches",
     "Suppliers",
@@ -162,6 +179,91 @@ export const api = createApi({
       transformResponse: (response: IResponseEventRewards) =>
         response.eventRewards || [],
       providesTags: ["Rewards"],
+    }),
+    //#endregion
+
+    //#region Leaderboard Rewards
+    getLeaderboardRewards: build.query<
+      LeaderboardReward[],
+      { eventId: string }
+    >({
+      query: ({ eventId }) => `/events/${eventId}/rewards`,
+      transformResponse: (response: LeaderboardRewardsResponse) =>
+        response.rewards,
+      providesTags: ["LeaderboardRewards"],
+      keepUnusedDataFor: 300, // 5 minutes cache
+    }),
+
+    getLeaderboardRewardById: build.query<
+      LeaderboardReward,
+      { eventId: string; rewardId: string }
+    >({
+      query: ({ eventId, rewardId }) =>
+        `/events/${eventId}/rewards/${rewardId}`,
+      transformResponse: (response: LeaderboardRewardResponse) =>
+        response.reward,
+      providesTags: ["LeaderboardRewards"],
+    }),
+
+    createLeaderboardReward: build.mutation<
+      LeaderboardReward,
+      { eventId: string; data: CreateLeaderboardRewardRequest }
+    >({
+      query: ({ eventId, data }) => ({
+        url: `/events/${eventId}/rewards`,
+        method: "POST",
+        body: data,
+      }),
+      transformResponse: (response: LeaderboardRewardResponse) =>
+        response.reward,
+      invalidatesTags: ["LeaderboardRewards"],
+    }),
+
+    updateLeaderboardReward: build.mutation<
+      LeaderboardReward,
+      {
+        eventId: string;
+        rewardId: string;
+        data: UpdateLeaderboardRewardRequest;
+      }
+    >({
+      query: ({ eventId, rewardId, data }) => ({
+        url: `/events/${eventId}/rewards/${rewardId}`,
+        method: "PUT",
+        body: data,
+      }),
+      transformResponse: (response: LeaderboardRewardResponse) =>
+        response.reward,
+      invalidatesTags: ["LeaderboardRewards"],
+    }),
+
+    deleteLeaderboardReward: build.mutation<
+      void,
+      { eventId: string; rewardId: string }
+    >({
+      query: ({ eventId, rewardId }) => ({
+        url: `/events/${eventId}/rewards/${rewardId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["LeaderboardRewards"],
+    }),
+
+    addVoucherTemplateToReward: build.mutation<
+      LeaderboardReward,
+      {
+        eventId: string;
+        rewardId: string;
+        data: AddVoucherTemplateToRewardRequest;
+      }
+    >({
+      query: ({ eventId, rewardId, data }) => ({
+        url: `/events/${eventId}/rewards/${rewardId}/vouchers`,
+        method: "POST",
+        body: data,
+      }),
+      transformResponse: (response: LeaderboardRewardResponse) =>
+        response.reward,
+      invalidatesTags: ["LeaderboardRewards"],
     }),
     //#endregion
     //#region getRandomQuestion
@@ -586,6 +688,21 @@ export const api = createApi({
         { type: "OrderDetail", id: orderId },
       ],
     }),
+
+    cancelOrder: build.mutation<
+      { success: boolean; message?: string },
+      { orderId: string; reason: string; images: string[] }
+    >({
+      query: ({ orderId, reason, images }) => ({
+        url: `/orders/cancel/${orderId}`,
+        method: "POST",
+        body: { reason, images },
+      }),
+      invalidatesTags: (result, error, { orderId }) => [
+        "Orders",
+        { type: "OrderDetail", id: orderId },
+      ],
+    }),
     //#endregion
 
     //#region Events
@@ -628,6 +745,18 @@ export const api = createApi({
         method: "DELETE",
       }),
       invalidatesTags: ["Event", "Question", "Reward"],
+    }),
+
+    finalizeEvent: build.mutation<
+      ApiResponse,
+      { eventId: string; force_finalize: string }
+    >({
+      query: ({ eventId, force_finalize }) => ({
+        url: `/events/${eventId}/finalize`,
+        method: "POST",
+        body: { force_finalize },
+      }),
+      invalidatesTags: ["Event"],
     }),
     //#endregion
 
@@ -745,6 +874,83 @@ export const api = createApi({
 
     //#endregion
 
+    //#region Voucher Templates
+    getVoucherTemplates: build.query<
+      VoucherTemplate[],
+      { eventId: string; params?: VoucherTemplateFilterParams }
+    >({
+      query: ({ eventId, params }) => {
+        const searchParams = new URLSearchParams();
+        if (params?.is_active !== undefined) {
+          searchParams.append("is_active", params.is_active.toString());
+        }
+        if (params?.include_leaderboard !== undefined) {
+          searchParams.append(
+            "include_leaderboard",
+            params.include_leaderboard.toString()
+          );
+        }
+        const queryString = searchParams.toString();
+        return `/events/${eventId}/voucher-templates${queryString ? `?${queryString}` : ""}`;
+      },
+      transformResponse: (response: VoucherTemplatesResponse) =>
+        response.voucher_templates,
+      providesTags: ["VoucherTemplates"],
+      keepUnusedDataFor: 300, // 5 minutes cache
+    }),
+
+    getVoucherTemplateById: build.query<
+      VoucherTemplate,
+      { eventId: string; voucherId: string }
+    >({
+      query: ({ eventId, voucherId }) =>
+        `/events/${eventId}/voucher-templates/${voucherId}`,
+      transformResponse: (response: VoucherTemplateResponse) =>
+        response.voucher_template,
+      providesTags: ["VoucherTemplates"],
+    }),
+
+    createVoucherTemplate: build.mutation<
+      VoucherTemplate,
+      { eventId: string; data: CreateVoucherTemplateRequest }
+    >({
+      query: ({ eventId, data }) => ({
+        url: `/events/${eventId}/voucher-templates`,
+        method: "POST",
+        body: data,
+      }),
+      transformResponse: (response: VoucherTemplateResponse) =>
+        response.voucher_template,
+      invalidatesTags: ["VoucherTemplates"],
+    }),
+
+    updateVoucherTemplate: build.mutation<
+      VoucherTemplate,
+      { eventId: string; voucherId: string; data: UpdateVoucherTemplateRequest }
+    >({
+      query: ({ eventId, voucherId, data }) => ({
+        url: `/events/${eventId}/voucher-templates/${voucherId}`,
+        method: "PUT",
+        body: data,
+      }),
+      transformResponse: (response: VoucherTemplateResponse) =>
+        response.voucher_template,
+      invalidatesTags: ["VoucherTemplates"],
+    }),
+
+    deleteVoucherTemplate: build.mutation<
+      void,
+      { eventId: string; voucherId: string }
+    >({
+      query: ({ eventId, voucherId }) => ({
+        url: `/events/${eventId}/voucher-templates/${voucherId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["VoucherTemplates"],
+    }),
+
+    //#endregion
+
     //#region UserVouchers
     getUserVouchers: build.query<IResponse<IVoucher[], "vouchers">, void>({
       query: () => ({
@@ -801,6 +1007,7 @@ export const {
   useGetAllOrdersQuery,
   useGetOrderDetailQuery,
   useUpdateOrderStatusMutation,
+  useCancelOrderMutation,
 
   // Events
   useGetAllEventsQuery,
@@ -808,6 +1015,7 @@ export const {
   useCreateEventMutation,
   useUpdateEventMutation,
   useDeleteEventMutation,
+  useFinalizeEventMutation,
 
   // Questions
   useGetQuestionsByEventIdQuery,
@@ -821,10 +1029,25 @@ export const {
   useUpdateRewardMutation,
   useDeleteRewardMutation,
 
+  // Leaderboard Rewards
+  useGetLeaderboardRewardsQuery,
+  useGetLeaderboardRewardByIdQuery,
+  useCreateLeaderboardRewardMutation,
+  useUpdateLeaderboardRewardMutation,
+  useDeleteLeaderboardRewardMutation,
+  useAddVoucherTemplateToRewardMutation,
+
   // Vouchers
   useGetAllVouchersQuery, //qdao
   useGetUserVouchersQuery,
   useGetAllVoucherssQuery, //khoa
+
+  // Voucher Templates
+  useGetVoucherTemplatesQuery,
+  useGetVoucherTemplateByIdQuery,
+  useCreateVoucherTemplateMutation,
+  useUpdateVoucherTemplateMutation,
+  useDeleteVoucherTemplateMutation,
 
   // Warehouse - Batches
   useGetAllBatchesQuery,

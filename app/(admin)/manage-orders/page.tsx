@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import CustomTable from "@/components/CustomTable";
 import { OrderDetailModal } from "@/components/admin/Order/Order-detail-modal";
+import { CancelOrderModal } from "@/components/admin/Order/CancelOrder-modal";
 import {
   calculateOrderStats,
   formatCurrency,
@@ -15,9 +17,17 @@ import { Area, Container, Core, RText, Yard } from "@/lib/by/Div";
 import {
   orderStatusOptions,
   paymentMethodOptions,
+  paymentStatusOptions,
   type Order,
 } from "@/types/order/index";
-import { Clock, CreditCard, Eye, Package, TrendingUp } from "lucide-react";
+import {
+  Clock,
+  CreditCard,
+  Eye,
+  Package,
+  TrendingUp,
+  XCircle,
+} from "lucide-react";
 
 export default function OrdersPage() {
   const {
@@ -30,7 +40,13 @@ export default function OrdersPage() {
     handleCloseDetailModal,
     handleUpdateOrderStatus,
     handleExportOrders,
+    handleCancelOrder,
   } = useOrdersLogic();
+
+  const [cancelModal, setCancelModal] = useState({
+    isOpen: false,
+    orderId: "",
+  });
 
   const stats = calculateOrderStats(orders);
 
@@ -70,21 +86,23 @@ export default function OrdersPage() {
 
   const columns = [
     {
-      key: "id" as const,
-      label: "Order ID",
+      key: "order_number" as const,
+      label: "Order Number",
       sortable: true,
       render: (order: Order) => (
         <RText className="font-mono text-sm font-medium text-blue-600">
-          {order.id.substring(0, 8)}...
+          {order.order_number}
         </RText>
       ),
     },
     {
       key: "user_id" as const,
-      label: "User ID",
+      label: "User",
       sortable: true,
       render: (order: Order) => (
-        <RText className="text-sm text-gray-900">{order.user_id}</RText>
+        <RText className="text-sm text-gray-900">
+          {order.user?.name || order.user_id}
+        </RText>
       ),
     },
     {
@@ -92,14 +110,9 @@ export default function OrdersPage() {
       label: "Date",
       sortable: true,
       render: (order: Order) => (
-        <Yard>
-          <RText className="text-sm text-gray-900">
-            {formatDate(order.createdAt)}
-          </RText>
-          <RText className="text-xs text-gray-500">
-            ID: {order.address_id}
-          </RText>
-        </Yard>
+        <RText className="text-sm text-gray-900">
+          {formatDate(order.createdAt)}
+        </RText>
       ),
     },
     {
@@ -115,8 +128,26 @@ export default function OrdersPage() {
       ),
     },
     {
+      key: "payment_status" as const,
+      label: "Payment Status",
+      filterable: true,
+      render: (order: Order) => (
+        <span
+          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+            order.payment_status === "PAID"
+              ? "bg-green-100 text-green-800"
+              : order.payment_status === "PENDING"
+                ? "bg-yellow-100 text-yellow-800"
+                : "bg-red-100 text-red-800"
+          }`}
+        >
+          {order.payment_status}
+        </span>
+      ),
+    },
+    {
       key: "payment_method" as const,
-      label: "Payment",
+      label: "Payment Method",
       filterable: true,
       render: (order: Order) => (
         <span
@@ -137,16 +168,39 @@ export default function OrdersPage() {
       ),
     },
     {
-      key: "actions" as any,
+      key: "voucher_id" as const,
+      label: "Voucher",
+      render: (order: Order) => (
+        <RText className="text-sm text-gray-900">
+          {order.voucher_id ? "Applied" : "None"}
+        </RText>
+      ),
+    },
+
+    {
+      key: "actions" as const,
       label: "Actions",
       render: (order: Order) => (
-        <button
-          onClick={() => handleViewOrder(order)}
-          className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors"
-          title="View Details"
-        >
-          <Eye className="w-4 h-4" />
-        </button>
+        <Yard className="flex items-center gap-2">
+          <button
+            onClick={() => handleViewOrder(order)}
+            className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors"
+            title="View Details"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+          {order.status !== "CANCELLED" && (
+            <button
+              onClick={() =>
+                setCancelModal({ isOpen: true, orderId: order.id })
+              }
+              className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-colors"
+              title="Cancel Order"
+            >
+              <XCircle className="w-4 h-4" />
+            </button>
+          )}
+        </Yard>
       ),
     },
   ];
@@ -154,6 +208,7 @@ export default function OrdersPage() {
   const filters = {
     status: [...orderStatusOptions],
     payment_method: [...paymentMethodOptions],
+    payment_status: [...paymentStatusOptions],
   };
 
   return (
@@ -247,6 +302,14 @@ export default function OrdersPage() {
         onClose={handleCloseDetailModal}
         order={selectedOrder}
         onUpdateStatus={handleUpdateOrderStatus}
+      />
+
+      {/* Cancel Order Modal */}
+      <CancelOrderModal
+        isOpen={cancelModal.isOpen}
+        onClose={() => setCancelModal({ isOpen: false, orderId: "" })}
+        orderId={cancelModal.orderId}
+        onCancel={handleCancelOrder}
       />
     </Core>
   );

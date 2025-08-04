@@ -17,7 +17,7 @@ import {
   getPaymentMethodColor,
 } from "@/components/admin/Order/seg/utils";
 import { orderStatusOptions, type OrderDetail } from "@/types/order/index";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 import clsx from "clsx";
 
 interface OrderDetailModalProps {
@@ -33,9 +33,11 @@ export function OrderDetailModal({
   order,
   onUpdateStatus,
 }: OrderDetailModalProps) {
-  if (!isOpen || !order) return null;
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const statusIcon = useMemo(() => {
+    if (!order) return <Package className="w-5 h-5" />;
+
     const iconProps = { className: "w-5 h-5" };
     switch (order.status) {
       case "PROCESSING":
@@ -49,14 +51,17 @@ export function OrderDetailModal({
       default:
         return <Package {...iconProps} />;
     }
-  }, [order.status]);
+  }, [order?.status]);
 
   const handleStatusChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
+      if (!order) return;
       onUpdateStatus?.(order.id, e.target.value as OrderDetail["status"]);
     },
-    [onUpdateStatus, order.id]
+    [onUpdateStatus, order?.id]
   );
+
+  if (!isOpen || !order) return null;
 
   return (
     <>
@@ -82,8 +87,9 @@ export function OrderDetailModal({
                 Order Details
               </RText>
               <RText className="text-sm text-gray-500">
-                Order ID: {order.id}
+                Order Number: {order.order_number}
               </RText>
+              <RText className="text-xs text-gray-400">ID: {order.id}</RText>
             </Yard>
             <button
               onClick={onClose}
@@ -163,6 +169,100 @@ export function OrderDetailModal({
                     </Yard>
                   </Area>
                 </Yard>
+
+                {/* Payment Status */}
+                <Yard>
+                  <RText className="text-sm font-medium text-gray-700 mb-2">
+                    Payment Status
+                  </RText>
+                  <Area className="flex items-center gap-3 mb-3">
+                    <Yard
+                      className={clsx(
+                        "p-2 rounded-full",
+                        order.payment_status === "PAID"
+                          ? "bg-green-100 text-green-600"
+                          : order.payment_status === "PENDING"
+                            ? "bg-yellow-100 text-yellow-600"
+                            : "bg-red-100 text-red-600"
+                      )}
+                    >
+                      <CreditCard className="w-5 h-5" />
+                    </Yard>
+                    <Yard>
+                      <RText className="font-medium">
+                        {order.payment_status}
+                      </RText>
+                      <RText className="text-sm text-gray-500">
+                        {order.receipt_url && (
+                          <a
+                            href={order.receipt_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 underline"
+                          >
+                            View Receipt
+                          </a>
+                        )}
+                      </RText>
+                    </Yard>
+                  </Area>
+                </Yard>
+
+                {/* Voucher */}
+                <Yard>
+                  <RText className="text-sm font-medium text-gray-700 mb-2">
+                    Voucher Applied
+                  </RText>
+                  <RText className="text-gray-900">
+                    {order.voucher_id ? "Yes" : "No"}
+                  </RText>
+                  {order.voucher_id && (
+                    <RText className="text-sm text-gray-500">
+                      Voucher ID: {order.voucher_id}
+                    </RText>
+                  )}
+                </Yard>
+
+                {/* Cancel Info - Only show for cancelled orders */}
+                {order.status === "CANCELLED" && (
+                  <Yard>
+                    <RText className="text-sm font-medium text-gray-700 mb-2">
+                      Cancellation Details
+                    </RText>
+                    {order.reason && (
+                      <Yard className="mb-3">
+                        <RText className="text-sm font-medium text-gray-600 mb-1">
+                          Reason:
+                        </RText>
+                        <RText className="text-gray-900 bg-red-50 p-3 rounded-lg border border-red-200">
+                          {order.reason}
+                        </RText>
+                      </Yard>
+                    )}
+                    {order.images && order.images.length > 0 && (
+                      <Yard>
+                        <RText className="text-sm font-medium text-gray-600 mb-2">
+                          Supporting Images ({order.images.length}):
+                        </RText>
+                        <Area className="grid grid-cols-2 gap-2">
+                          {order.images.map((image, index) => (
+                            <Yard
+                              key={index}
+                              className="border rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
+                              onClick={() => setSelectedImage(image)}
+                            >
+                              <img
+                                src={image}
+                                alt={`Cancel evidence ${index + 1}`}
+                                className="w-full h-24 object-cover"
+                              />
+                            </Yard>
+                          ))}
+                        </Area>
+                      </Yard>
+                    )}
+                  </Yard>
+                )}
               </Area>
             </Yard>
 
@@ -214,11 +314,6 @@ export function OrderDetailModal({
                   {order.address.address}, {order.address.city} -{" "}
                   {order.address.pincode}
                 </RText>
-                {order.address.notes && (
-                  <RText className="text-sm text-gray-500 mt-1">
-                    Note: {order.address.notes}
-                  </RText>
-                )}
               </Yard>
             </Yard>
 
@@ -238,7 +333,13 @@ export function OrderDetailModal({
                         Quantity
                       </th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                        Price
+                        Unit Price
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        Discount
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        Final Price
                       </th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                         Total
@@ -246,8 +347,8 @@ export function OrderDetailModal({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {order.orderItems.map((item) => (
-                      <tr key={item.id}>
+                    {order.orderItems.map((item, index) => (
+                      <tr key={index}>
                         <td className="px-4 py-3">
                           <Area className="flex items-center">
                             <img
@@ -264,10 +365,16 @@ export function OrderDetailModal({
                           {item.quantity}
                         </td>
                         <td className="px-4 py-3 text-gray-900">
-                          {formatCurrency(item.price)}
+                          {formatCurrency(item.unit_price)}
+                        </td>
+                        <td className="px-4 py-3 text-red-600">
+                          -{formatCurrency(item.discount_per_item)}
+                        </td>
+                        <td className="px-4 py-3 text-gray-900">
+                          {formatCurrency(item.final_price)}
                         </td>
                         <td className="px-4 py-3 font-medium text-gray-900">
-                          {formatCurrency(item.price * item.quantity)}
+                          {formatCurrency(item.total_price)}
                         </td>
                       </tr>
                     ))}
@@ -279,7 +386,34 @@ export function OrderDetailModal({
               <Area className="mt-4 border-t border-gray-200 pt-4">
                 <Yard className="flex justify-end">
                   <RText className="text-xl font-semibold text-gray-900">
-                    Total: {formatCurrency(order.total_amount)}
+                    <Yard className="space-y-2">
+                      <Yard className="flex justify-between">
+                        <RText className="text-gray-600">Subtotal:</RText>
+                        <RText className="text-gray-900">
+                          {formatCurrency(order.subtotal)}
+                        </RText>
+                      </Yard>
+                      <Yard className="flex justify-between">
+                        <RText className="text-gray-600">Discount:</RText>
+                        <RText className="text-red-600">
+                          -{formatCurrency(order.discount_amount)}
+                        </RText>
+                      </Yard>
+                      <Yard className="flex justify-between">
+                        <RText className="text-gray-600">Shipping Fee:</RText>
+                        <RText className="text-gray-900">
+                          {formatCurrency(order.shipping_fee)}
+                        </RText>
+                      </Yard>
+                      <Yard className="flex justify-between border-t pt-2">
+                        <RText className="font-semibold text-gray-900">
+                          Total:
+                        </RText>
+                        <RText className="font-semibold text-gray-900">
+                          {formatCurrency(order.total_amount)}
+                        </RText>
+                      </Yard>
+                    </Yard>
                   </RText>
                 </Yard>
               </Area>
@@ -287,6 +421,31 @@ export function OrderDetailModal({
           </Container>
         </Container>
       </Core>
+
+      {/* Image Zoom Modal */}
+      {selectedImage && (
+        <>
+          <Core
+            className="fixed inset-0 bg-black bg-opacity-90 z-[9999] flex items-center justify-center"
+            onClick={() => setSelectedImage(null)}
+          >
+            <Yard className="relative max-w-4xl max-h-full p-4">
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 text-white hover:text-gray-300 p-2 hover:bg-black bg-opacity-50 rounded-full transition-colors z-10"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <img
+                src={selectedImage}
+                alt="Zoomed image"
+                className="max-w-full max-h-full object-contain rounded-lg"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </Yard>
+          </Core>
+        </>
+      )}
     </>
   );
 }
