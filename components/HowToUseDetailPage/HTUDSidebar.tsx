@@ -1,5 +1,5 @@
 import { Section, Column, Row, RText } from "@/lib/by/Div";
-import { Tag, } from "lucide-react";
+import { Tag } from "lucide-react";
 
 export default function HowToUseDetailSidebar() {
   return (
@@ -8,11 +8,9 @@ export default function HowToUseDetailSidebar() {
       <Section className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 top-6">
         <Column className="flex-col flex gap-4">
           <RText className="font-bold text-lg text-gray-900">Engagement</RText>
-          
-  
+
           {/* Action Buttons */}
           <Section className="h-px bg-gray-200 my-2"></Section>
-        
         </Column>
       </Section>
 
@@ -24,9 +22,7 @@ export default function HowToUseDetailSidebar() {
             <RText className="font-bold text-lg text-gray-900">Tags</RText>
           </Row>
 
-          <Row className="flex flex-wrap gap-2">
-            
-          </Row>
+          <Row className="flex flex-wrap gap-2"></Row>
         </Column>
       </Section>
 

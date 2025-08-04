@@ -20,7 +20,7 @@ export default function VoucherCard({
 }: VoucherCardProps): JSX.Element {
   const { discount_value, type, redeemed, redeemed_at, voucherProducts } =
     voucher;
-    const [showAll, setShowAll] = React.useState(false);
+  const [showAll, setShowAll] = React.useState(false);
 
   const isRedeemed = redeemed;
   const statusText = isRedeemed
@@ -63,32 +63,37 @@ export default function VoucherCard({
 
           {/* Linked product titles */}
           {voucherProducts && voucherProducts.length > 0 && (
-  <Wrap className="mt-2 text-xs text-gray-600">
-    Applicable for:&nbsp;
-    {(showAll ? voucherProducts : voucherProducts.slice(0, 3)).map(
-      (vp, index) => (
-        <React.Fragment key={vp.product.id}>
-          <Link
-            href={`/products/${vp.product.id}`}
-            className="text-blue-600 hover:underline"
-          >
-            {vp.product.title}
-          </Link>
-          {index <
-            (showAll ? voucherProducts.length : Math.min(voucherProducts.length, 3)) - 1 && ", "}
-        </React.Fragment>
-      )
-    )}
-    {voucherProducts.length > 3 && (
-      <button
-        onClick={() => setShowAll((prev) => !prev)}
-        className="ml-1 text-blue-500 underline"
-      >
-        {showAll ? "Show less" : `+${voucherProducts.length - 3} more`}
-      </button>
-    )}
-  </Wrap>
-)}
+            <Wrap className="mt-2 text-xs text-gray-600">
+              Applicable for:&nbsp;
+              {(showAll ? voucherProducts : voucherProducts.slice(0, 3)).map(
+                (vp, index) => (
+                  <React.Fragment key={vp.product.id}>
+                    <Link
+                      href={`/products/${vp.product.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {vp.product.title}
+                    </Link>
+                    {index <
+                      (showAll
+                        ? voucherProducts.length
+                        : Math.min(voucherProducts.length, 3)) -
+                        1 && ", "}
+                  </React.Fragment>
+                ),
+              )}
+              {voucherProducts.length > 3 && (
+                <button
+                  onClick={() => setShowAll((prev) => !prev)}
+                  className="ml-1 text-blue-500 underline"
+                >
+                  {showAll
+                    ? "Show less"
+                    : `+${voucherProducts.length - 3} more`}
+                </button>
+              )}
+            </Wrap>
+          )}
 
           {/* <Wrap className="inline-block mt-2 px-2 py-0.5 bg-pink-500 text-white text-xs rounded w-fit">
             Stripe Coupon: {stripe_coupon_id ?? "N/A"}

@@ -6,9 +6,8 @@ import { fetchPosts } from "./seg";
 
 // Enhanced dummy data for skincare product guides
 
-
 export default async function HowToUsePage() {
-  const postData: PaginatedResponse<IPostData, "posts"> = await fetchPosts()
+  const postData: PaginatedResponse<IPostData, "posts"> = await fetchPosts();
 
   return (
     <Core className="min-h-screen bg-gray-50 py-6 sm:py-8 lg:py-12">

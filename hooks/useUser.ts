@@ -15,15 +15,13 @@ export const useUser = () => {
   const router = useRouter();
 
   useEffect(() => {
-
     const fetchUser = async () => {
       if (pathname === "/logout") {
         setLoading(false);
         setUser(undefined);
-        console.log("calling logout")
-
+        console.log("calling logout");
       } else {
-        console.log("refreshing user")
+        console.log("refreshing user");
 
         await triggerGetMe()
           .unwrap()
@@ -41,7 +39,6 @@ export const useUser = () => {
     };
 
     fetchUser();
-
   }, [triggerGetMe, pathname]);
 
   const logout = async () => {

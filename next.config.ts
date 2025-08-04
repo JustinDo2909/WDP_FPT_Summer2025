@@ -17,6 +17,9 @@ const nextConfig: NextConfig = {
       "example.com",
       "cdn.chiaki.vn",
       "i.ibb.co",
+      "hzjfxfzm26.ufs.sh",
+      "example.com",
+      "cdn.chiaki.vn",
     ],
   },
 };

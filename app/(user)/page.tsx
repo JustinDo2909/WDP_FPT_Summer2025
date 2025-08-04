@@ -7,7 +7,7 @@ import { useAutoRefetch } from "@/components/ProductsPage/seg/utils";
 import ListProductDisplay from "@/components/ListProductDisplay";
 import { Gamepad2, ShoppingCart } from "lucide-react";
 import Link from "next/link";
-import pic from "@/public/images/facecare.png"
+import pic from "@/public/images/facecare.png";
 export default function Page() {
   const productDisplaySearchParams = {
     category: "",

@@ -598,12 +598,12 @@ export const api = createApi({
       ],
     }),
 
-     //#region getOrders
+    //#region getOrders
     getOrders: build.query<any, void>({
       query: () => ({
         url: "orders",
         method: "GET",
-        credentials: "include", 
+        credentials: "include",
       }),
       providesTags: ["Orders"],
     }),
@@ -792,8 +792,8 @@ export const api = createApi({
     //#region cancelOrder
     cancelOrder: build.mutation<IResponse<IOrder, "order">, string>({
       query: (id) => ({
-      url: `orders/cancel/${id}`,
-      method: "POST",
+        url: `orders/cancel/${id}`,
+        method: "POST",
       }),
       invalidatesTags: ["Orders"],
     }),

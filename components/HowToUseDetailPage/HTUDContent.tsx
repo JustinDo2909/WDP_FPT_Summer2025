@@ -25,7 +25,10 @@ export default function HowToUseDetailContent({ post }: { post: IPostData }) {
           </RText>
           <Row className="flex flex-wrap gap-3">
             {post.benefits?.map((benefit: string, index: number) => (
-              <Row key={index} className="flex items-center gap-2 bg-green-50 px-3 py-2 rounded-lg">
+              <Row
+                key={index}
+                className="flex items-center gap-2 bg-green-50 px-3 py-2 rounded-lg"
+              >
                 <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
                 <RText className="text-sm text-green-800 font-medium">
                   {benefit}
@@ -65,10 +68,12 @@ export default function HowToUseDetailContent({ post }: { post: IPostData }) {
                 <Row className="flex gap-6 flex-col sm:flex-row">
                   {/* Step Image */}
                   <Section className="w-full sm:w-40 h-32 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
-                    <Image 
+                    <Image
                       width={100}
                       height={80}
-                      src={"https://cdn.chiaki.vn/unsafe/0x480/left/top/smart/filters:quality(75)/https://chiaki.vn/upload/news/content/2024/06/cach-chon-san-pham-skincare-phu-hop-jpg-1718864826-20062024132706.jpg"} 
+                      src={
+                        "https://cdn.chiaki.vn/unsafe/0x480/left/top/smart/filters:quality(75)/https://chiaki.vn/upload/news/content/2024/06/cach-chon-san-pham-skincare-phu-hop-jpg-1718864826-20062024132706.jpg"
+                      }
                       alt={step.title}
                       className="w-full h-full object-cover"
                     />
@@ -128,7 +133,10 @@ export default function HowToUseDetailContent({ post }: { post: IPostData }) {
           </Row>
           <Column className="flex-col flex gap-2">
             {post.warnings?.map((warning: string, index: number) => (
-              <Row key={index} className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg">
+              <Row
+                key={index}
+                className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg"
+              >
                 <Section className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-2 flex-shrink-0"></Section>
                 <RText className="text-amber-800 text-sm font-medium">
                   {warning}

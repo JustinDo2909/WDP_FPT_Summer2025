@@ -31,7 +31,10 @@ export default function OrderCard({
     try {
       await cancelOrder(id).unwrap();
       setShowModal(false);
-      toast.success("Order cancelled successfully. You have been refunded " + formatPrice(total_amount) )
+      toast.success(
+        "Order cancelled successfully. You have been refunded " +
+          formatPrice(total_amount),
+      );
     } catch (err) {
       // Optionally, handle error
       console.error("Cancel order failed:", err);
@@ -108,13 +111,13 @@ export default function OrderCard({
       <Row className="flex justify-between items-center mt-4">
         <Begin className="space-y-1">
           <RText className="text-sm text-muted-foreground">
-            Price: {" "}
+            Price:{" "}
             <span className="font-medium text-primary">
               ₫{originalPrice.toLocaleString()}
             </span>
           </RText>
           <RText className="text-sm text-muted-foreground">
-            Shipping: {" "}
+            Shipping:{" "}
             <span className="font-medium text-primary">
               ₫{shippingFee.toLocaleString()}
             </span>
