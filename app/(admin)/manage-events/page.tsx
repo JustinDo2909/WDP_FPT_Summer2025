@@ -420,7 +420,7 @@ export default function EventManagement() {
         alert("Error creating event reward. Please try again.");
       }
     },
-    [createReward]
+    [createReward],
   );
 
   const tabConfig = useMemo(

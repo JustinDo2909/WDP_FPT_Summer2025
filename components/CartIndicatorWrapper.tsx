@@ -16,7 +16,7 @@ export const CartIndicatorWrapper: React.FC<CartIndicatorProps> = ({
 }) => {
   const { isLogged } = useUser();
   const { data: cartData, isLoading } = useGetCartQuery(undefined, {
-    skip: !isLogged, 
+    skip: !isLogged,
   });
   const [cartItemCount, setCartItemCount] = useState<number>(0);
   const dispatch = useDispatch();
@@ -42,10 +42,11 @@ export const CartIndicatorWrapper: React.FC<CartIndicatorProps> = ({
   return (
     <Begin className="relative inline-block">
       {children}
-       {isLogged && <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center z-10">
-         {cartItemCount ?? 0}
+      {isLogged && (
+        <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center z-10">
+          {cartItemCount ?? 0}
         </span>
-        }
+      )}
     </Begin>
   );
 };

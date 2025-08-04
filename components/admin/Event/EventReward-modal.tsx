@@ -54,7 +54,7 @@ export function EventRewardModal({
   const filteredEvents = events.filter(
     (event) =>
       event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      event.description.toLowerCase().includes(searchTerm.toLowerCase())
+      event.description.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -347,4 +347,3 @@ export function EventRewardModal({
     </Yard>
   );
 }
- 

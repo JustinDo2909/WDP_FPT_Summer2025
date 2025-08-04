@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export const CardGame = ({ game }: { game: IEvent }) => {
-  const {isLogged} = useUser()
-  const router = useRouter()
+  const { isLogged } = useUser();
+  const router = useRouter();
   const fallbackImage =
     "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWF3EMjVHyeOBfC0Di9EszHlqMXr4T7G1ovPbY";
 

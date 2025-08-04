@@ -57,7 +57,7 @@ const GHNForm: React.FC<GHNFormProps> = ({
   onSave,
   onClose,
 }) => {
-  const { user } = useUser()
+  const { user } = useUser();
   // Initialize state with initialShippingInfo or defaults
   const [shippingInfo, setShippingInfo] = useState<Partial<IAddress>>(
     initialShippingInfo || {
@@ -79,9 +79,9 @@ const GHNForm: React.FC<GHNFormProps> = ({
 
   useEffect(() => {
     if (user) {
-       setShippingInfo({ ...shippingInfo, fullname: user.name })
+      setShippingInfo({ ...shippingInfo, fullname: user.name });
     }
-  },[user])
+  }, [user]);
 
   // API queries
   const { data: provinces = [], isLoading: provincesLoading } =

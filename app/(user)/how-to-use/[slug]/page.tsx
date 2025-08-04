@@ -3,16 +3,13 @@ import HowToUseDetailHeader from "@/components/HowToUseDetailPage/HTUDHeader";
 import { Core, Container, Row, Column } from "@/lib/by/Div";
 import { fetchPost } from "../seg";
 
-
-
 export default async function HowToUseDetailPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const {slug} = await params;
+  const { slug } = await params;
   const postData = await fetchPost(slug);
-
 
   return (
     <Core className="min-h-screen bg-gray-50 py-6 sm:py-8 lg:py-12">

@@ -12,8 +12,12 @@ import { fetchPost } from "@/app/(user)/how-to-use/seg";
 import HowToUsePostCard from "../HowToUsePage/HowToUsePostCard";
 import Link from "next/link";
 
-export async function ProductDetailsTabs({ productData }: { productData: IProduct }) {
-  const res = await fetchPost(productData.productCategory.title)
+export async function ProductDetailsTabs({
+  productData,
+}: {
+  productData: IProduct;
+}) {
+  const res = await fetchPost(productData.productCategory.title);
   return (
     <Card className="flex flex-col gap-2 shadow-md bg-white rounded-lg p-4 min-h-[400px] flex-1">
       <Tabs defaultValue="description">
@@ -38,7 +42,7 @@ export async function ProductDetailsTabs({ productData }: { productData: IProduc
           </TabsContent>
           <TabsContent value="how-to-use">
             <Link href={`/how-to-use/${res.post.title.split(" ")[0]}`}>
-            <HowToUsePostCard post={res.post}/>
+              <HowToUsePostCard post={res.post} />
             </Link>
           </TabsContent>
           <TabsContent value="reviews">
