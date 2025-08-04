@@ -61,7 +61,7 @@ export const CardGame = ({
         }
       }}
       href={
-        game.is_active
+        game.is_active && game.type != "ARCADE"
           ? `/event/GameMenu?event_id=${game.id}`
           : renderGame(game)
       }

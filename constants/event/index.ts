@@ -12,7 +12,7 @@ export const fallbackRewards: ILeaderBoardReward[] = [
             {
                 id: "voucher-1",
                 event_id: "event-001",
-                type: "Amount",
+                type: "AMOUNT",
                 user_limit: "1",
                 user_count: "0",
                 is_active: "true",
@@ -51,7 +51,7 @@ export const fallbackRewards: ILeaderBoardReward[] = [
             {
                 id: "voucher-2",
                 event_id: "event-001",
-                type: "Amount",
+                type: "AMOUNT",
                 user_limit: "1",
                 user_count: "0",
                 is_active: "true",
@@ -91,7 +91,7 @@ export const fallbackRewards: ILeaderBoardReward[] = [
                 discount_value: 200000,
                 id: "voucher-3",
                 event_id: "event-001",
-                type: "Amount",
+                type: "AMOUNT",
                 user_limit: "1",
                 user_count: "0",
                 is_active: "true",
@@ -115,7 +115,7 @@ export const fallbackRewards: ILeaderBoardReward[] = [
             {
                 id: "voucher-4",
                 event_id: "event-001",
-                type: "Amount",
+                type: "AMOUNT",
                 user_limit: "2",
                 user_count: "0",
                 is_active: "true",
@@ -154,7 +154,7 @@ export const fallbackRewards: ILeaderBoardReward[] = [
             {
                 id: "voucher-5",
                 event_id: "event-001",
-                type: "Amount",
+                type: "AMOUNT",
                 user_limit: "20",
                 user_count: "0",
                 is_active: "true",

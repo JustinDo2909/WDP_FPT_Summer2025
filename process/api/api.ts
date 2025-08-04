@@ -765,6 +765,11 @@ export const api = createApi({
       keepUnusedDataFor: 300, // 5 minutes cache
     }),
 
+    getVoucherByEventId: build.query<IResponse<IVoucher[], "vouchers">, string>({
+      query: (id) => `voucher/event/${id}`,
+      providesTags: ["Vouchers"],      
+    }),
+
     //#endregion
 
     //#region UserVouchers
@@ -790,10 +795,11 @@ export const api = createApi({
     //#endregion
 
     //#region cancelOrder
-    cancelOrder: build.mutation<IResponse<IOrder, "order">, string>({
-      query: (id) => ({
-        url: `orders/cancel/${id}`,
-        method: "POST",
+    cancelOrder: build.mutation<IResponse<IOrder, "order">, { id: string; reason: string; }>({
+      query: ({ id, reason }) => ({
+      url: `orders/cancel/${id}`,
+      method: "POST",
+      body: { reason, images: [] },
       }),
       invalidatesTags: ["Orders"],
     }),
@@ -858,6 +864,7 @@ export const {
 
   // Vouchers
   useGetAllVouchersQuery, //qdao
+  useGetVoucherByEventIdQuery,
   useGetUserVouchersQuery,
   useGetAllVoucherssQuery, //khoa
 

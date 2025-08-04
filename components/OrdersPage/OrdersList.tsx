@@ -9,7 +9,7 @@ export default function OrdersList({ orders }: { orders: IOrder[] }) {
   return (
     <Box>
       {sortedOrders.map((order) => (
-        <OrderCard key={order.id} order={order} />
+        <OrderCard key={order.id} order={order} onViewReciept={() => window.open(order.receipt_url, "_blank", "noopener,noreferrer")}/>
       ))}
     </Box>
   );

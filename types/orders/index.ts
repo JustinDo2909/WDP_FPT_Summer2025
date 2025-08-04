@@ -25,6 +25,7 @@ declare global {
     email: string;
     name: string;
     role: "USER" | "ADMIN" | "STAFF";
+    phone: number
     createdAt: string;
     updatedAt: string;
   }

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Area, Block, Section } from "@/lib/by/Div";
+import { useGetVoucherByEventIdQuery } from "@/process/api/api";
 
 const DEFAULTS = {
   title: "Game",
@@ -28,7 +29,7 @@ export default function GameHomeLayout({
   inventoryButtonText = DEFAULTS.inventoryButton,
   rulesButtonText = DEFAULTS.rulesButton,
   backgroundImage,
-  eventData
+  eventData,
 }: {
   children?: React.ReactNode;
   title?: string;
@@ -42,6 +43,7 @@ export default function GameHomeLayout({
   const [showRules, setShowRules] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showRewards, setShowRewards] = useState(false);
+  const {data} = useGetVoucherByEventIdQuery(eventData?.event.id ?? "");
   const router = useRouter();
 
   return (
@@ -211,6 +213,7 @@ export default function GameHomeLayout({
       <InventoryModal
         open={showInventory}
         onClose={() => setShowInventory(false)}
+        vouchers={data?.vouchers}
       />
       <RulesModal open={showRules} onClose={() => setShowRules(false)} />
     </Area>

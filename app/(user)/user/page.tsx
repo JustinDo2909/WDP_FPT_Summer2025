@@ -31,6 +31,7 @@ export default function UserProfilePage() {
   const { user } = useUser();
   const [name, setName] = useState(user?.name ?? "");
   const [email, setEmail] = useState(user?.email ?? "");
+  const [phone, setPhone] = useState(user?.phone ?? "");
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +44,7 @@ export default function UserProfilePage() {
     if (user) {
       setName(user.name)
       setEmail(user.email)
+      setPhone(user.phone)
     }
   },[user])
 
@@ -81,6 +83,18 @@ export default function UserProfilePage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
+            className="w-full max-w-sm border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-primary focus:border-primary"
+          />
+        </FormField>
+
+
+
+        <FormField label="Phone">
+          <input
+            type="text"
+            value={phone}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your phone number"
             className="w-full max-w-sm border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-primary focus:border-primary"
           />
         </FormField>

@@ -150,7 +150,7 @@ declare global {
     leaderboard_reward_id:string;
     updated_at: string;
     created_at: string;
-    voucherProducts?: IVoucherProduct[];
+    voucherProducts: IVoucherProduct[];
   }
 
 

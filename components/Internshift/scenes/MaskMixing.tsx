@@ -113,117 +113,108 @@ export default function MaskMixing({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] p-4">
-      <h2 className="text-xl font-semibold mb-4 text-center text-yellow-800">
-        Mix Your Mask
-      </h2>
-      <div className="relative w-full max-w-[360px] aspect-square flex items-center justify-center">
-        {/* Radial ingredient icons */}
-        {ingredients.map((ing, idx) => {
-          const angle = (idx / ingredients.length) * 2 * Math.PI;
-          const radius = 150;
-          const x = Math.cos(angle) * radius + 180 - 30;
-          const y = Math.sin(angle) * radius + 180 - 30;
-          return (
-            <div
-              key={ing.tag}
-              className="absolute z-10 cursor-grab select-none"
-              style={{ left: x, top: y }}
-              draggable={spoonsLeft > 0}
-              onDragStart={() => handleDragStart(idx)}
-              onDragEnd={handleDragEnd}
-              onClick={() => handleDrop()}
-              title={ing.name}
-            >
-              <div className="w-14 h-14 flex flex-col items-center">
-                <div
-                  className={`w-12 h-12 rounded-full border-2 border-yellow-400 bg-white flex items-center justify-center shadow-md transition-all ${
-                    draggedIdx === idx ? "border-4" : ""
-                  } ${spoonsLeft > 0 ? "opacity-100" : "opacity-50"}`}
-                >
-                  <span className="text-yellow-700 font-medium text-sm truncate max-w-[40px]">
-                    {ing.name.split(" ")[0]}
-                  </span>
-                </div>
-                <span className="text-xs mt-1 text-yellow-900">{ing.count}x</span>
-              </div>
-            </div>
-          );
-        })}
+  <div className="flex flex-col gap-6 items-center justify-center min-h-[75vh] p-6 bg-yellow-50 rounded-xl shadow-inner border border-yellow-100 max-w-4xl mx-auto">
+    <h2 className="text-2xl font-bold text-yellow-800">Mix Your Mask</h2>
 
-        {/* Center mixing area */}
-        <div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full border-4 border-yellow-600 bg-yellow-50 flex flex-col items-center justify-center shadow-lg transition-all"
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={handleDrop}
-        >
-          {spoonsLeft > 0 && (
-            <>
-              <span className="text-yellow-900 text-base font-medium mb-1">
-                Mixing Bowl
-              </span>
-              <span className="text-yellow-800 text-sm mb-2">
-                Spoons left: {spoonsLeft}
-              </span>
-              <div className="flex flex-wrap gap-1.5 justify-center max-w-[120px] overflow-auto">
-                {ingredients
-                  .filter((ing) => ing.count > 0)
-                  .map((ing) => (
-                    <div
-                      key={ing.tag}
-                      className="bg-yellow-200 border border-yellow-400 rounded-full px-2 py-0.5 text-yellow-900 text-xs font-medium flex items-center gap-1 cursor-pointer hover:bg-yellow-300"
-                      onClick={() =>
-                        handleRemove(
-                          ingredients.findIndex((i) => i.tag === ing.tag)
-                        )
-                      }
-                      title="Remove one"
-                    >
-                      <span className="truncate max-w-[60px]">{ing.name}</span>
-                      <span>x{ing.count}</span>
-                    </div>
-                  ))}
-              </div>
-            </>
-          )}
-          {spoonsLeft === 0 && (
-            <div className="flex flex-col items-center justify-center h-full">
-              <span className="text-yellow-900 text-lg font-semibold animate-bounce">
-                Mixing<span className="animate-pulse">...</span>
-              </span>
-            </div>
-          )}
-        </div>
+    {/* Bento Layout */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+
+      {/* Ingredients box */}
+      <div className="col-span-1 bg-white border border-yellow-300 rounded-lg p-4 shadow-md flex flex-wrap justify-center gap-3 min-h-[220px]">
+        {ingredients.map((ing, idx) => (
+          <div
+            key={ing.tag}
+            draggable={spoonsLeft > 0}
+            onDragStart={() => handleDragStart(idx)}
+            onDragEnd={handleDragEnd}
+            onClick={() => handleDrop()}
+            className={`cursor-grab select-none rounded-md bg-yellow-100 hover:bg-yellow-200 border border-yellow-300 p-2 w-[80px] h-[80px] flex flex-col items-center justify-center text-center text-sm font-medium text-yellow-900 shadow-sm transition ${
+              draggedIdx === idx ? "ring-2 ring-yellow-500" : ""
+            }`}
+            title={ing.name}
+          >
+            <span className="truncate">{ing.name.split(" ")[0]}</span>
+            <span className="text-xs mt-1">{ing.count}x</span>
+          </div>
+        ))}
       </div>
 
-      {/* Result overlay */}
-      {result && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-20 rounded-lg">
-          <div className="bg-white rounded-xl p-6 shadow-lg flex flex-col items-center max-w-[90%]">
+      {/* Mixing bowl center */}
+      <div
+        className="col-span-1 bg-yellow-100 border-2 border-yellow-400 rounded-xl p-4 shadow-lg flex flex-col items-center justify-center min-h-[220px]"
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={handleDrop}
+      >
+        {spoonsLeft > 0 ? (
+          <>
+            <span className="text-yellow-900 text-base font-semibold mb-2">
+              Mixing Bowl
+            </span>
+            <span className="text-yellow-800 text-sm mb-4">
+              Spoons left: {spoonsLeft}
+            </span>
+            <div className="flex flex-wrap gap-2 justify-center max-w-[150px]">
+              {ingredients
+                .filter((ing) => ing.count > 0)
+                .map((ing) => (
+                  <div
+                    key={ing.tag}
+                    onClick={() =>
+                      handleRemove(
+                        ingredients.findIndex((i) => i.tag === ing.tag)
+                      )
+                    }
+                    className="bg-white border border-yellow-400 px-2 py-1 rounded-full text-xs text-yellow-800 font-medium cursor-pointer hover:bg-yellow-200"
+                    title="Remove one"
+                  >
+                    {ing.name} x{ing.count}
+                  </div>
+                ))}
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center">
+            <span className="text-yellow-900 text-lg font-semibold animate-bounce">
+              Mixing<span className="animate-pulse">...</span>
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Result box */}
+      <div className="col-span-1 bg-white border border-yellow-300 rounded-lg p-4 shadow-md flex flex-col items-center justify-center min-h-[220px]">
+        {result ? (
+          <>
             <span
-              className={`text-xl font-semibold mb-2 ${
+              className={`text-lg font-semibold mb-2 ${
                 result.success ? "text-green-600" : "text-yellow-700"
               }`}
             >
               {result.success ? "Perfect Mask!" : "Nice Try!"}
             </span>
-            <span className="text-sm mb-2 text-center">
+            <p className="text-sm mb-1 text-center">
               {result.success
                 ? "You matched the recipe and skin type!"
                 : "You created a mask, but it wasn't a perfect match."}
-            </span>
-            <span className="text-base font-medium mb-4">
-              Bonus: <span className="text-yellow-700">+₫{result.bonus}</span>
+            </p>
+            <span className="text-base font-medium mb-4 text-yellow-700">
+              Bonus: ₫{result.bonus}
             </span>
             <button
-              className="bg-yellow-500 text-white px-4 py-1.5 rounded-lg hover:bg-yellow-600 transition"
               onClick={handleReset}
+              className="bg-yellow-500 text-white px-4 py-1.5 rounded-lg hover:bg-yellow-600 transition"
             >
               Mix Again
             </button>
-          </div>
-        </div>
-      )}
+          </>
+        ) : (
+          <span className="text-sm text-yellow-600 text-center">
+            Drop ingredients into the bowl to mix!
+          </span>
+        )}
+      </div>
     </div>
-  );
+  </div>
+);
+
 }
