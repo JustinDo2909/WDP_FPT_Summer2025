@@ -4,87 +4,34 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Text } from "@react-three/drei";
 import * as THREE from "three";
 import { ArrowUp, Heart, Star, TestTubeDiagonal } from "lucide-react";
-import { Area, Box, Group, Row, RText, Section, Yard } from "@/lib/by/Div";
+import {
+  Area,
+  Box,
+  Card,
+  Group,
+  Row,
+  RText,
+  Section,
+  Yard,
+} from "@/lib/by/Div";
+import type {
+  GameState,
+  Enemy,
+  Bullet,
+  AmmoBox,
+  UpgradeBox,
+  PowerUp,
+  ActivePowerUp,
+} from "@/types/defender";
 import Button from "@/components/CustomButton";
-
-// Game types
-interface Enemy {
-  id: string;
-  position: THREE.Vector3;
-  velocity: THREE.Vector3;
-  health: number;
-  maxHealth: number;
-  type:
-    | "basic"
-    | "strong"
-    | "fast"
-    | "hard3"
-    | "hard5"
-    | "hard7"
-    | "hard10"
-    | "invulnerable";
-  color: string;
-  size: number;
-  points: number;
-  isInvulnerable?: boolean; // For invulnerable enemy type
-  invulnerableTimer?: number; // For invulnerable enemy type
-}
-
-interface Bullet {
-  id: string;
-  position: THREE.Vector3;
-  velocity: THREE.Vector3;
-  damage: number; // Bullet now has damage property
-}
-
-interface AmmoBox {
-  id: string;
-  position: THREE.Vector3;
-  velocity: THREE.Vector3;
-  rotation: number;
-}
-
-// New interface for UpgradeBox
-interface UpgradeBox {
-  id: string;
-  position: THREE.Vector3;
-  velocity: THREE.Vector3;
-  rotation: number;
-  color: string;
-}
-
-interface PowerUp {
-  id: string;
-  position: THREE.Vector3;
-  velocity: THREE.Vector3;
-  rotation: number;
-  type: "infiniteAmmo" | "multiShot3" | "multiShot5";
-  color: string;
-}
-
-interface ActivePowerUp {
-  type: "infiniteAmmo" | "multiShot3" | "multiShot5";
-  endTime: number;
-  value?: number; // For multiShot, e.g., 3 or 5 bullets
-}
-
-interface GameState {
-  health: number;
-  maxHealth: number;
-  score: number;
-  ammo: number;
-  enemies: Enemy[];
-  bullets: Bullet[];
-  ammoBoxes: AmmoBox[];
-  upgradeBoxes: UpgradeBox[]; // New state for upgrade boxes
-  powerUps: PowerUp[];
-  gameOver: boolean;
-  paused: boolean;
-  activePowerUps: ActivePowerUp[];
-  bulletLevel: number;
-  upgradeBoxesCollected: number;
-  bulletDamage: number;
-}
+import {
+  ENEMY_TYPES,
+  POWER_UP_CONFIG,
+  UPGRADE_BOX_CONFIG,
+  UPGRADE_LEVELS,
+} from "@/constants";
+import { useSearchParams } from "next/navigation";
+import { useCalculateRewardMutation } from "@/process/api/apiEvent";
 
 // Game Constants
 const DEFAULT_AMMO = 50;
@@ -96,114 +43,10 @@ const MAX_ENEMIES_ON_SCREEN = 50; // New limit
 const MAX_POWERUPS_ON_SCREEN = 5; // New limit
 const MAX_UPGRADE_BOXES_ON_SCREEN = 3; // New limit for upgrade boxes
 
-// Enemy types configuration - increased sizes and speed
-const ENEMY_TYPES = {
-  basic: {
-    health: 1,
-    color: "#ff4444",
-    size: 0.8,
-    speed: 0.025,
-    points: 10,
-    type: "basic",
-  },
-  strong: {
-    health: 3,
-    color: "#ff8844",
-    size: 1.0,
-    speed: 0.02,
-    points: 30,
-    type: "strong",
-  },
-  fast: {
-    health: 1,
-    color: "#44ff44",
-    size: 0.7,
-    speed: 0.04,
-    points: 20,
-    type: "fast",
-  },
-  hard3: {
-    health: 3,
-    color: "#888888",
-    size: 0.6,
-    speed: 0.03,
-    points: 15,
-    type: "hard3",
-  },
-  hard5: {
-    health: 5,
-    color: "#8844ff",
-    size: 1.1,
-    speed: 0.01,
-    points: 50,
-    type: "hard5",
-  },
-  hard7: {
-    health: 7,
-    color: "#44ff88",
-    size: 1.2,
-    speed: 0.008,
-    points: 70,
-    type: "hard7",
-  },
-  hard10: {
-    health: 10,
-    color: "#ff0088",
-    size: 1.3,
-    speed: 0.007,
-    points: 100,
-    type: "hard10",
-  },
-  invulnerable: {
-    health: 1,
-    color: "#ffff00",
-    size: 0.7,
-    speed: 0.03,
-    points: 40,
-    isInvulnerable: false, // Initial state
-    invulnerableTimer: 0,
-    type: "invulnerable",
-  },
-} as const;
-
-// Power-up types configuration (removed upgradeBox)
-const POWER_UP_CONFIG = {
-  infiniteAmmo: { color: "#00ffff", type: "infiniteAmmo" },
-  multiShot3: { color: "#ff00ff", type: "multiShot3", value: 3 }, // Shoots 3 bullets
-  multiShot5: { color: "#ff00ff", type: "multiShot5", value: 5 }, // Shoots 5 bullets
-} as const;
-
-// New config for UpgradeBox
-const UPGRADE_BOX_CONFIG = { color: "#ffa500" }; // Orange for upgrade boxes
-
-// Bullet Upgrade Levels
-const UPGRADE_LEVELS = [
-  { level: 1, boxesNeeded: 0, bullets: 1, damage: 1, ammoCost: 1 }, // Default
-  { level: 2, boxesNeeded: 3, bullets: 2, damage: 1, ammoCost: 2 }, // x2 bullets, 2 ammo cost
-  { level: 3, boxesNeeded: 5, bullets: 3, damage: 1, ammoCost: 3 }, // x3 bullets, 3 ammo cost
-  { level: 4, boxesNeeded: 7, bullets: 4, damage: 1, ammoCost: 4 }, // x4 bullets, 4 ammo cost
-  { level: 5, boxesNeeded: 10, bullets: 5, damage: 1, ammoCost: 5 }, // x5 bullets, 5 ammo cost
-  { level: 6, boxesNeeded: 10, bullets: 5, damage: 2, ammoCost: 5 }, // +1 damage
-  { level: 7, boxesNeeded: 10, bullets: 5, damage: 3, ammoCost: 5 },
-  { level: 8, boxesNeeded: 10, bullets: 5, damage: 4, ammoCost: 5 },
-  { level: 9, boxesNeeded: 10, bullets: 5, damage: 5, ammoCost: 5 },
-  { level: 10, boxesNeeded: 10, bullets: 5, damage: 6, ammoCost: 5 },
-  { level: 11, boxesNeeded: 10, bullets: 5, damage: 7, ammoCost: 5 },
-  { level: 12, boxesNeeded: 10, bullets: 5, damage: 8, ammoCost: 5 },
-  { level: 13, boxesNeeded: 10, bullets: 5, damage: 9, ammoCost: 5 },
-  { level: 14, boxesNeeded: 10, bullets: 5, damage: 10, ammoCost: 5 },
-  { level: 15, boxesNeeded: 10, bullets: 5, damage: 11, ammoCost: 5 },
-  { level: 16, boxesNeeded: 10, bullets: 5, damage: 12, ammoCost: 5 },
-  { level: 17, boxesNeeded: 10, bullets: 5, damage: 13, ammoCost: 5 },
-  { level: 18, boxesNeeded: 10, bullets: 5, damage: 14, ammoCost: 5 },
-  { level: 19, boxesNeeded: 10, bullets: 5, damage: 15, ammoCost: 5 },
-  { level: 20, boxesNeeded: 10, bullets: 5, damage: 16, ammoCost: 5 }, // Max level
-];
-
 export default function Defender() {
   const [gameState, setGameState] = useState<GameState>({
-    health: 10,
-    maxHealth: 10,
+    health: 1,
+    maxHealth: 5,
     score: 0,
     ammo: DEFAULT_AMMO,
     enemies: [],
@@ -223,11 +66,29 @@ export default function Defender() {
   const [ammoGainEffect, setAmmoGainEffect] = useState(false);
   const [screenFlashEffect, setScreenFlashEffect] = useState(false); // For player hit
   const [showInstructions, setShowInstructions] = useState(false); // State for instructions panel visibility
+  const [rewardData, setRewardData] = useState<EventReward>();
+
+  const searchParams = useSearchParams();
+  const event_id = searchParams.get("event_id");
+  const [calculateReward] = useCalculateRewardMutation();
+
+  const handleEndGame = async () => {
+    try {
+      const response = await calculateReward({
+        eventId: event_id || "",
+        correct_answers: gameState.score,
+      }).unwrap();
+      console.log("Reward data:", response);
+      setRewardData(response); // Save the reward data
+    } catch (err) {
+      console.error("Mutation error:", err);
+    }
+  };
 
   const resetGame = () => {
     setGameState({
-      health: 10,
-      maxHealth: 10,
+      health: 1,
+      maxHealth: 5,
       score: 0,
       ammo: DEFAULT_AMMO,
       enemies: [],
@@ -257,14 +118,79 @@ export default function Defender() {
 
   if (gameState.gameOver) {
     return (
-      <Area className="w-full max-w-7xl h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-black text-white">
-        <Section className="text-center space-y-6 bg-black/50 p-8 rounded-lg backdrop-blur-sm">
+      <Area className="w-full max-w-6xl h-[82vh] mx-auto  flex items-center justify-center bg-gradient-to-b from-gray-900 to-black text-white">
+        <Section className="text-center space-y-6 p-8 rounded-lg backdrop-blur-2xl">
           <RText className="text-6xl font-bold text-red-500 mb-4">
             GAME OVER
           </RText>
           <RText className="text-3xl text-yellow-400">
             Final Score: {gameState.score}
           </RText>
+          {rewardData?.is_new_high_score && (
+            <Box className="mt-2 text-center">
+              <RText className="text-sm text-green-600 font-semibold">
+                New High Score!
+              </RText>
+            </Box>
+          )}
+
+          {rewardData && rewardData.success && (
+            <Card className="relative max-w-md overflow-hidden bg-gradient-to-br from-yellow-50 to-amber-100 border border-yellow-400 shadow-xl rounded-2xl px-5 py-4 mt-6 flex items-center justify-between gap-4">
+              <Box className="absolute top-1/2 -left-3 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full border border-yellow-300 shadow-md" />
+              <Box className="absolute top-1/2 -right-3 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full border border-yellow-300 shadow-md" />
+
+              {rewardData.reward ? (
+                <>
+                  <Box className="flex-1 text-left">
+                    <RText className="text-base font-bold text-yellow-800">
+                      🎉 Congratulations!
+                    </RText>
+
+                    <RText className="text-sm text-gray-600 mt-1">
+                      {rewardData.reward?.discountType === "AMOUNT"
+                        ? `₫${rewardData.reward.discountValue?.toLocaleString()}`
+                        : "%"}
+                    </RText>
+
+                    <RText className="text-xs italic text-gray-500 mt-1">
+                      Reward will be saved to your profile.
+                    </RText>
+                  </Box>
+
+                  <Box className="text-right min-w-[90px]">
+                    <RText className="text-3xl font-black text-orange-600">
+                      {rewardData.reward?.discountType === "AMOUNT"
+                        ? `₫${rewardData.reward.discountValue?.toLocaleString()}`
+                        : "%"}
+                    </RText>
+                    <RText className="text-sm text-yellow-700 font-semibold">
+                      OFF
+                    </RText>
+                  </Box>
+                </>
+              ) : rewardData.voucher_already_received ? (
+                <Box className="flex-1 text-left">
+                  <RText className="text-base font-bold text-yellow-800">
+                    Notification
+                  </RText>
+
+                  <RText className="text-sm text-gray-600 mt-1">
+                    {rewardData.message}
+                  </RText>
+                </Box>
+              ) : (
+                <Box className="flex-1 text-left">
+                  <RText className="text-base font-bold text-yellow-800">
+                    Notification
+                  </RText>
+
+                  <RText className="text-sm text-gray-600 mt-1">
+                    {rewardData.message}
+                  </RText>
+                </Box>
+              )}
+            </Card>
+          )}
           <Button
             onClick={resetGame}
             className="bg-blue-600 hover:bg-blue-700 text-xl px-8 py-3"
@@ -296,7 +222,7 @@ export default function Defender() {
 
   return (
     <Area
-      className={`w-full h-screen relative bg-gradient-to-b from-purple-900 via-blue-900 to-black overflow-hidden ${
+      className={`w-full max-w-6xl h-[82vh] mx-auto relative bg-gradient-to-b from-purple-900 via-blue-900 to-black overflow-hidden ${
         gameState.paused ? "cursor-default" : "cursor-none"
       }`}
     >
@@ -495,6 +421,7 @@ export default function Defender() {
           setAmmoGainEffect={setAmmoGainEffect}
           setScreenFlashEffect={setScreenFlashEffect}
           playerHitEffect={playerHitEffect}
+          handleEndGame={handleEndGame}
         />
       </Canvas>
     </Area>
@@ -508,6 +435,7 @@ function Game({
   setAmmoGainEffect,
   setScreenFlashEffect,
   playerHitEffect,
+  handleEndGame,
 }: {
   gameState: GameState;
   setGameState: React.Dispatch<React.SetStateAction<GameState>>;
@@ -515,6 +443,7 @@ function Game({
   setAmmoGainEffect: React.Dispatch<React.SetStateAction<boolean>>;
   setScreenFlashEffect: React.Dispatch<React.SetStateAction<boolean>>;
   playerHitEffect: boolean;
+  handleEndGame: () => Promise<void>;
 }) {
   const { camera, gl } = useThree();
   const enemySpawnTimer = useRef(0);
@@ -1249,6 +1178,7 @@ function Game({
 
         if (newState.health <= 0) {
           newState.gameOver = true;
+          handleEndGame();
         }
       }
 

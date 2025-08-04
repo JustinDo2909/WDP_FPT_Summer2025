@@ -54,7 +54,7 @@ import type {
 const customBaseQuery = async (
   args: string | FetchArgs,
   api: BaseQueryApi,
-  extraOptions: any,
+  extraOptions: any
 ) => {
   const baseQuery = fetchBaseQuery({
     baseUrl: "https://cosme-play-be.vercel.app/api/",
@@ -165,8 +165,11 @@ export const api = createApi({
     }),
     //#endregion
 
-     //#region getEventLeaderboard
-    getEventLeaderboard: build.query<IResponse<ILeaderBoardData, "data">, string >({
+    //#region getEventLeaderboard
+    getEventLeaderboard: build.query<
+      IResponse<ILeaderBoardData, "data">,
+      string
+    >({
       query: (event_id) => ({
         url: `events/${event_id}/leaderboard`,
         method: "GET",
@@ -175,6 +178,23 @@ export const api = createApi({
       providesTags: ["Event"],
     }),
     //#endregion
+
+    //#region calculateReward
+    calculateReward: build.mutation<
+      EventReward,
+      { eventId: string; correct_answers: number }
+    >({
+      query: ({ eventId, correct_answers }) => ({
+        url: `events/${eventId}/calculate-reward`,
+        method: "POST",
+        body: { correct_answers },
+      }),
+      // transformResponse: (response: IResponseCalculate) =>
+      //   response.reward || {},
+      invalidatesTags: ["Event"],
+    }),
+    //#endregion
+
     //#region getRandomQuestion
     postAnswer: build.mutation<IReward, { correct_answers: number }>({
       query: (body) => ({
@@ -241,7 +261,7 @@ export const api = createApi({
         },
         providesTags: ["Batches"],
         keepUnusedDataFor: 60, // 1 minute cache for paginated data
-      },
+      }
     ),
 
     getProductBatches: build.query<Batch[], string>({
@@ -353,7 +373,7 @@ export const api = createApi({
       {
         query: (id) => `/products/${id}`,
         providesTags: ["Products"],
-      },
+      }
     ),
     //#endregion
 
@@ -390,19 +410,19 @@ export const api = createApi({
       }),
       async onQueryStarted(
         { id, ...categoryData },
-        { dispatch, queryFulfilled },
+        { dispatch, queryFulfilled }
       ) {
         const patchResult = dispatch(
           api.util.updateQueryData("getMetaData", undefined, (draft) => {
             if (draft?.data?.categories) {
               const categoryIndex = draft.data.categories.findIndex(
-                (cat) => cat.id === id,
+                (cat) => cat.id === id
               );
               if (categoryIndex !== -1) {
                 draft.data.categories[categoryIndex] = { id, ...categoryData };
               }
             }
-          }),
+          })
         );
         try {
           await queryFulfilled;
@@ -451,13 +471,13 @@ export const api = createApi({
           api.util.updateQueryData("getMetaData", undefined, (draft) => {
             if (draft?.data?.brands) {
               const brandIndex = draft.data.brands.findIndex(
-                (brand) => brand.id === id,
+                (brand) => brand.id === id
               );
               if (brandIndex !== -1) {
                 draft.data.brands[brandIndex] = { id, ...brandData };
               }
             }
-          }),
+          })
         );
         try {
           await queryFulfilled;
@@ -506,19 +526,19 @@ export const api = createApi({
       }),
       async onQueryStarted(
         { id, ...skinTypeData },
-        { dispatch, queryFulfilled },
+        { dispatch, queryFulfilled }
       ) {
         const patchResult = dispatch(
           api.util.updateQueryData("getMetaData", undefined, (draft) => {
             if (draft?.data?.skinTypes) {
               const skinTypeIndex = draft.data.skinTypes.findIndex(
-                (st) => st.id === id,
+                (st) => st.id === id
               );
               if (skinTypeIndex !== -1) {
                 draft.data.skinTypes[skinTypeIndex] = { id, ...skinTypeData };
               }
             }
-          }),
+          })
         );
         try {
           await queryFulfilled;
@@ -572,7 +592,7 @@ export const api = createApi({
           api.util.updateQueryData("getAllOrders", undefined, (draft) => {
             if (draft?.orders) {
               const orderIndex = draft.orders.findIndex(
-                (order) => order.id === orderId,
+                (order) => order.id === orderId
               );
               if (orderIndex !== -1) {
                 draft.orders[orderIndex].status = status as
@@ -583,7 +603,7 @@ export const api = createApi({
                 draft.orders[orderIndex].updatedAt = new Date().toISOString();
               }
             }
-          }),
+          })
         );
 
         try {
@@ -753,7 +773,7 @@ export const api = createApi({
           { type: "Reward", id: event_id },
           "Reward",
         ],
-      },
+      }
     ),
     //#endregion
 
@@ -843,6 +863,7 @@ export const {
   useUpdateEventMutation,
   useDeleteEventMutation,
   useGetEventLeaderboardQuery,
+  useCalculateRewardMutation,
 
   // Questions
   useGetQuestionsByEventIdQuery,
