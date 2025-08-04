@@ -13,6 +13,7 @@ type FormData = {
   name: string;
   email: string;
   password: string;
+  phone: string;
 };
 
 const SignUpPage = () => {
@@ -74,7 +75,7 @@ const SignUpPage = () => {
 
   const handleOtpKeyDown = (
     index: number,
-    e: React.KeyboardEvent<HTMLInputElement>,
+    e: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
@@ -152,6 +153,18 @@ const SignUpPage = () => {
                   {String(errors.email.message)}
                 </p>
               )}
+              <label className="block text-gray-700 mb-1">Phone</label>
+              <input
+                placeholder="Enter your phone"
+                className="w-full p-2 border border-gray-300 outline-0 rounded mb-1"
+                {...register("phone", {
+                  required: "Phone is required",
+                  minLength: {
+                    value: 10,
+                    message: "phone must be at least 6 number",
+                  },
+                })}
+              />
 
               <label className="block text-gray-700 mb-1">Password</label>
               <div className="relative">
