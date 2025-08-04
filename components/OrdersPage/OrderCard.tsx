@@ -29,11 +29,15 @@ export default function OrderCard({
 
   const handleCancelOrder = async () => {
     try {
-      await cancelOrder(id).unwrap();
+      await cancelOrder({
+        orderId: id,
+        reason: "Cancelled by user",
+        images: [],
+      }).unwrap();
       setShowModal(false);
       toast.success(
         "Order cancelled successfully. You have been refunded " +
-          formatPrice(total_amount),
+          formatPrice(total_amount)
       );
     } catch (err) {
       // Optionally, handle error

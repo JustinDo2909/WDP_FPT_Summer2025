@@ -178,7 +178,7 @@ export default function OrdersPage() {
     },
 
     {
-      key: "actions" as const,
+      key: "id" as const,
       label: "Actions",
       render: (order: Order) => (
         <Yard className="flex items-center gap-2">

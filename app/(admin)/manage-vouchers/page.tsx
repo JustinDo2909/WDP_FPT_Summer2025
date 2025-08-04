@@ -89,7 +89,7 @@ export default function VoucherPage() {
     });
   };
 
-  if (error && activeTab === "vouchers") {
+  if (error) {
     return (
       <Container className="p-6">
         <Area className="bg-red-50 border border-red-200 rounded-lg p-4">

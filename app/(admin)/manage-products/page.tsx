@@ -29,10 +29,10 @@ import { WarehouseStats } from "@/components/admin/Warehouse/Warehouse-stats";
 import { BatchPagination } from "@/components/admin/Warehouse/Batch-pagination";
 
 export default function ProductsPage() {
-  const [activeTab, setActiveTab] = useState<"products" | "stockManagement">(
-    "products"
-  );
+  const [activeTab, setActiveTab] = useState<string>("products");
   const [showAddBatchModal, setShowAddBatchModal] = useState(false);
+
+  const isActiveTab = (tab: string) => activeTab === tab;
 
   const {
     isModalOpen,
@@ -78,7 +78,7 @@ export default function ProductsPage() {
       // Cache for 5 minutes to improve performance
       pollingInterval: 300000,
       refetchOnMountOrArgChange: 30,
-    },
+    }
   );
   const products = productsData?.products || [];
 
@@ -94,7 +94,7 @@ export default function ProductsPage() {
     lowStockProducts: products.filter((p: Product) => p.total_stock < 50)
       .length,
     totalCategories: new Set(
-      products.map((p: Product) => p.productCategory.title),
+      products.map((p: Product) => p.productCategory.title)
     ).size,
     totalBrands: new Set(products.map((p: Product) => p.productBrand.title))
       .size,
@@ -112,7 +112,7 @@ export default function ProductsPage() {
       {/* Main Content */}
       <Container className="flex-1 overflow-auto p-6 space-y-6">
         {/* Content based on active tab */}
-        {activeTab === "products" ? (
+        {isActiveTab("products") ? (
           <Area className="space-y-6">
             {/* Page Title */}
             <Area>
