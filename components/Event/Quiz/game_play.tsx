@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import QuizRender from "./quiz_render";
 import ResultRender from "./result";
-import { useCalculateRewardMutation } from "@/process/api/apiEvent";
 import { Block } from "@/lib/by/Div";
 
 interface QuizAnswer {
@@ -13,29 +12,14 @@ interface QuizAnswer {
 
 interface GamePlayProps {
   questions: QuizQuestion[];
-  rewardTiers: EventReward[];
 }
 
-export default function GamePlay({ questions, rewardTiers }: GamePlayProps) {
+export default function GamePlay({ questions }: GamePlayProps) {
   const [quizState, setQuizState] = useState<"playing" | "finished">("playing");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [finalScore, setFinalScore] = useState({ correct: 0, total: 0 });
-  const [reward, setReward] = useState<EventReward | null>(null);
-
-  const [calculateReward, { isLoading: isCalculatingReward }] =
-    useCalculateRewardMutation();
-
-  const mappedRewardTiers = useMemo(() => {
-    return rewardTiers.map((r) => ({
-      correct: r.min_correct ?? 0,
-      reward:
-        r.type === "PERCENT"
-          ? `${r.discount_value}% voucher`
-          : `${r.discount_value} VND discount`,
-    }));
-  }, [rewardTiers]);
 
   // --- Selection logic ---
   const handleOptionSelect = (optionIndex: number) => {
@@ -74,17 +58,8 @@ export default function GamePlay({ questions, rewardTiers }: GamePlayProps) {
       if (q?.questionOptions[a.selectedOption]?.is_correct) correct++;
     });
     setFinalScore({ correct, total: questions.length });
-    try {
-      const result = await calculateReward({
-        correct_answers: correct,
-        eventId: "1",
-      }).unwrap();
-      setReward(result);
-      setQuizState("finished");
-    } catch {
-      setReward(null);
-      setQuizState("finished");
-    }
+
+    setQuizState("finished");
   };
 
   // Update selected option on question switch
@@ -114,11 +89,6 @@ export default function GamePlay({ questions, rewardTiers }: GamePlayProps) {
       answers={answers}
     />
   ) : (
-    <ResultRender
-      finalScore={finalScore}
-      rewardTiers={mappedRewardTiers}
-      reward={reward}
-      isCalculatingReward={isCalculatingReward}
-    />
+    <ResultRender finalScore={finalScore} />
   );
 }

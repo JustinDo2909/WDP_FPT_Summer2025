@@ -80,7 +80,7 @@ export default function Leaderboard({
               <RText className="text-sm text-primary font-semibold font-sans">
                 {user_rank.score.toLocaleString()}
               </RText>
-              <RText className="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white font-sans font-bold text-xs">
+              <RText className="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white  font-bold text-xs">
                 {user_rank.rank || "?"}
               </RText>
             </Block>
