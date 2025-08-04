@@ -31,6 +31,12 @@ export function CancelOrderModal({
       return;
     }
 
+    console.log("CancelOrderModal handleSubmit - orderId:", orderId);
+    console.log(
+      "CancelOrderModal handleSubmit - orderId type:",
+      typeof orderId
+    );
+
     setIsSubmitting(true);
     try {
       await onCancel(orderId, reason.trim(), images);

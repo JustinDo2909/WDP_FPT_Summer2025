@@ -972,16 +972,6 @@ export const api = createApi({
     }),
 
     //#endregion
-
-    //#region cancelOrder
-    cancelOrder: build.mutation<IResponse<IOrder, "order">, string>({
-      query: (id) => ({
-        url: `orders/cancel/${id}`,
-        method: "POST",
-      }),
-      invalidatesTags: ["Orders"],
-    }),
-    //#endregion
   }),
 });
 

@@ -40,9 +40,8 @@ export function OrderDetailModal({
     if (!order) return <Package className="w-5 h-5" />;
 
     const iconProps = { className: "w-5 h-5" };
-    if (!orderStatus) return null;
 
-    switch (orderStatus) {
+    switch (order.status) {
       case "PROCESSING":
         return <Package {...iconProps} />;
       case "SHIPPED":
