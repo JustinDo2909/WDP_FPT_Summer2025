@@ -20,11 +20,13 @@ export default function GameHomeLayout({
   playButtonText = DEFAULTS.playButton,
   inventoryButtonText = DEFAULTS.inventoryButton,
   rulesButtonText = DEFAULTS.rulesButton,
+  backgroundImage,
   eventData
 }: {
   children?: React.ReactNode;
   title?: string;
   playButtonText?: string;
+  backgroundImage?: string;
   inventoryButtonText?: string;
   rulesButtonText?: string;
   eventData?: ILeaderBoardData
@@ -39,7 +41,7 @@ export default function GameHomeLayout({
     <div
       className="relative min-h-screen flex flex-col justify-between items-stretch"
       style={{
-        backgroundImage: "url('/internshift-bg-placeholder.jpg')",
+        backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundColor: "pink",

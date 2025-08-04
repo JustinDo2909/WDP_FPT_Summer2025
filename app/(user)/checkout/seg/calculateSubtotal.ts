@@ -9,7 +9,7 @@ export function calculateCartTotalOriginalPrice(
   cartItems: ICartLineItem[],
 ): number {
   return cartItems.reduce((total, item) => {
-    return total + item.product.price * item.quantity;
+    return total + (item.product.sale_price ?? item.product.price) * item.quantity;
   }, 0);
 }
 

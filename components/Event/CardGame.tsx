@@ -16,6 +16,7 @@ export const CardGame = ({ game, isList = false }: { game: IEvent, isList?: bool
     QUIZ = "QUIZ",
     PUZZLE = "PUZZLE",
     REFLEX = "REFLEX",
+    ARCADE = "ARCADE"
   }
 
   const ListGameType = [
@@ -23,6 +24,7 @@ export const CardGame = ({ game, isList = false }: { game: IEvent, isList?: bool
     { type: EGame.QUIZ, link: "/event/Quiz" },
     { type: EGame.PUZZLE, link: "/event/FlipCard" },
     { type: EGame.REFLEX, link: "/event/Racing" },
+    { type: EGame.ARCADE, link: `/event/internshift?event_id=${game.id}`}
   ];
   const renderGame = (game: IEvent) => {
     console.log("game", game.type);

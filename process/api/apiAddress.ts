@@ -21,6 +21,9 @@ export const apiAddress = createApi({
     addToAddress: build.mutation<
       any,
       {
+        fullName: string;
+        ward: string
+        district: string
         address: string;
         city: string;
         pincode: string;

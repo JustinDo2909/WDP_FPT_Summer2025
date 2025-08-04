@@ -19,9 +19,11 @@ export const useGameState = () => {
     selectedProducts: [],
     profit: 0,
     meter: 0,
+    currentDialogue: "",
     customersServed: 0,
     waitingForFeedback: [],
     showMaskCrafting: false,
+    showNextCustomer: false,
     gameScene: SceneName.CUSTOMER_INTERFACE,
   });
   //#endregion
@@ -46,7 +48,6 @@ export const useGameState = () => {
     setGameStateWithLogging((prev) => {
       if (
         prev.selectedProductTypes.includes(type) ||
-        !["cleanser", "moisturizer", "toner", "serum", "exfoliator"].includes(type) ||
         prev.selectedProductTypes.length >= (prev.currentCustomer?.steps || 5)
       ) {
         return prev;
@@ -83,6 +84,10 @@ export const useGameState = () => {
       ...prev,
       currentCustomer: newCustomer,
       selectedProducts: [],
+      selectedProductTypes: [],
+      showNextCustomer: false,
+      meter: 0,
+      currentDialogue: newCustomer.concern_line,
       gameScene: SceneName.CUSTOMER_INTERFACE,
       showMaskCrafting: false,
     }));
@@ -169,29 +174,26 @@ export const useGameState = () => {
     if (!customer || gameState.selectedProducts.length < 3) return;
 
     const success = evaluateProducts(customer, gameState.selectedProducts);
+    const routineCost = gameState.selectedProducts.reduce((sum) => sum + 50, 0); // Add price to GameProduct type if needed
+    const feedbackMessage = customer.thanks_line
 
     setGameStateWithLogging((prev) => ({
       ...prev,
+      meter: success ? prev.meter + 1 : prev.meter,
       waitingForFeedback: [...prev.waitingForFeedback, customer],
-      gameScene: SceneName.CUSTOMER_INTERFACE,
+      profit: success
+          ? prev.profit + Math.floor(routineCost * 1.2)
+          : prev.profit + Math.floor(routineCost),
       customersServed: prev.customersServed + 1,
+      showNextCustomer: (!success || prev.meter < 1) ? true : false ,
+      showMaskCrafting: success && prev.meter === 1,
+      currentDialogue: feedbackMessage,
     }));
 
     setTimeout(() => {
-      const routineCost = gameState.selectedProducts.reduce((sum, p) => sum + (p as any).price, 0); // Add price to GameProduct type if needed
-
-      const feedbackMessage = success
-        ? customer.happy_line
-        : customer.unhappy_line;
-
       setGameStateWithLogging((prev) => ({
         ...prev,
-        profit: success
-          ? prev.profit + Math.floor(routineCost * 1.5)
-          : prev.profit - routineCost - 50,
-        waitingForFeedback: prev.waitingForFeedback.filter((c) => c.id !== customer.id),
-        showMaskCrafting: success,
-        currentDialogue: feedbackMessage,
+        gameScene: SceneName.CUSTOMER_INTERFACE,
       }));
     }, 500);
   }, [gameState.currentCustomer, gameState.selectedProducts, evaluateProducts]);
