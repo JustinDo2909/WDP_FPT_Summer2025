@@ -85,6 +85,54 @@ export default function UserProfilePage() {
           />
         </FormField>
 
+
+       
+
+        <FormField label="Gender">
+          <div className="flex items-center gap-6 text-sm">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="gender"
+                value="Male"
+                className="w-4 h-4 text-primary focus:ring-primary"
+              />
+              Male
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="gender"
+                value="Female"
+                className="w-4 h-4 text-primary focus:ring-primary"
+              />
+              Female
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="gender"
+                value="Other"
+                className="w-4 h-4 text-primary focus:ring-primary"
+              />
+              Other
+            </label>
+          </div>
+        </FormField>
+
+        <FormField label="Date of Birth">
+          <div className="flex items-center justify-start sm:justify-between max-w-sm">
+            <span className="text-sm text-gray-800">**/**/2002</span>
+            <a
+              href="#"
+              className="text-primary font-medium hover:underline text-sm ml-4"
+            >
+              Change
+            </a>
+          </div>
+                  </FormField>
+
+
         <div className="mt-8 flex justify-start space-x-4">
           {/* You can use your custom Button or a standard button */}
           <button

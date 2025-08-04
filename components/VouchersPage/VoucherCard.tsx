@@ -18,7 +18,7 @@ const formatExpiryDate = (voucher: IVoucher) => {
 export default function VoucherCard({
   voucher,
 }: VoucherCardProps): JSX.Element {
-  const { voucherTemplate, type, redeemed, redeemed_at, voucherProducts } = voucher;
+  const { voucherTemplate, type, redeemed, redeemed_at } = voucher;
   const [showAll, setShowAll] = React.useState(false);
 
   const now = new Date();
@@ -73,10 +73,10 @@ export default function VoucherCard({
           </Row>
 
           {/* Linked product titles */}
-          {voucherProducts && voucherProducts.length > 0 && (
+          {voucherTemplate?.voucherProducts && voucherTemplate?.voucherProducts.length > 0 && (
             <Wrap className="mt-2 text-xs text-gray-600">
               Applicable for:&nbsp;
-              {(showAll ? voucherProducts : voucherProducts.slice(0, 3)).map(
+              {(showAll ? (voucherTemplate?.voucherProducts ?? []) : (voucherTemplate?.voucherProducts ?? []).slice(0, 3)).map(
                 (vp, index) => (
                   <React.Fragment key={vp.product.id}>
                     <Link
@@ -87,20 +87,20 @@ export default function VoucherCard({
                     </Link>
                     {index <
                       (showAll
-                        ? voucherProducts.length
-                        : Math.min(voucherProducts.length, 3)) -
+                        ? (voucherTemplate?.voucherProducts?.length ?? 0)
+                        : Math.min(voucherTemplate?.voucherProducts?.length ?? 0, 3)) -
                         1 && ", "}
                   </React.Fragment>
                 ),
               )}
-              {voucherProducts.length > 3 && (
+              {voucherTemplate?.voucherProducts.length > 3 && (
                 <button
                   onClick={() => setShowAll((prev) => !prev)}
                   className="ml-1 text-blue-500 underline"
                 >
                   {showAll
                     ? "Show less"
-                    : `+${voucherProducts.length - 3} more`}
+                    : `+${voucherTemplate?.voucherProducts.length - 3} more`}
                 </button>
               )}
             </Wrap>

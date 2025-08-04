@@ -136,14 +136,14 @@ declare global {
     updated_at: string;
     created_at: string;
     voucherProducts?: IVoucherProduct[];
-    voucherTemplate?: IVoucherTemplate;
+    voucherTemplate: IVoucherTemplate;
   };
 
   type IVoucherTemplate = {
     id: string;
     discount_value: number;
     event_id: string;
-    type: "Percent" | "Amount";
+    type: "PERCENT" | "AMOUNT";
     user_limit: string;
     user_count: string;
     is_active: string;
