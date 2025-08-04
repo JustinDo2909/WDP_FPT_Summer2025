@@ -26,6 +26,7 @@ const AddressModal = () => {
             onSave={async (formData) => {
               try {
                 await addAddress({
+                  full_name: formData.fullname ?? "",
                   address: formData.address ?? "",
                   city: formData.city ?? "",
                   pincode: formData.pincode ?? "",

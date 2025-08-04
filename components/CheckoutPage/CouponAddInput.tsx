@@ -41,10 +41,11 @@ export const CouponAddInput: React.FC<CouponAddInputProps> = ({
     return vouchers
       .map((voucher) => {
         const applicable =
-          Array.isArray(voucher.voucherProducts) &&
-          voucher.voucherProducts.some((vp) =>
-            cartProductIds.includes(vp.product.id),
-          );
+          Array.isArray(voucher.voucherTemplate.voucherProducts) &&
+          ( voucher.voucherTemplate.voucherProducts.some((vp) =>
+            cartProductIds.includes(vp.product.id) ,
+          ) || voucher.voucherTemplate.voucherProducts?.length === 0 );
+
         const savings = applicable
           ? calculateVoucherSavings(voucher, cartItems)
           : 0;
@@ -53,7 +54,8 @@ export const CouponAddInput: React.FC<CouponAddInputProps> = ({
       .sort((a, b) => {
         if (a.applicable !== b.applicable) return a.applicable ? -1 : 1;
         return b.savings - a.savings; // Sort by savings in descending order
-      });
+      })
+      .filter(p => new Date(p.voucher.expired_at) > new Date())
   }, [vouchers, cartProductIds, cartItems]);
 
   const selected = sortedVouchers.find((v) => v.voucher.id === selectedId);

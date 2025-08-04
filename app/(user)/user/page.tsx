@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@/components/CustomButton"; // Assuming you have a custom Button component
 import { useUser } from "@/hooks/useUser";
 
@@ -30,7 +30,8 @@ const FormField = ({
 export default function UserProfilePage() {
   const { user } = useUser();
   const [name, setName] = useState(user?.name ?? "");
-  const [gender, setGender] = useState("Male");
+  const [email, setEmail] = useState(user?.email ?? "");
+  const [phone, setPhone] = useState(user?.phone ?? "");
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +39,14 @@ export default function UserProfilePage() {
     // console.log("Saving data...", { name, gender });
     alert("Profile Saved!");
   };
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name)
+      setEmail(user.email)
+      setPhone(user.phone)
+    }
+  },[user])
 
   return (
     <div className="w-full mx-auto bg-white p-6 sm:p-8 rounded-lg shadow-sm">
@@ -69,25 +78,29 @@ export default function UserProfilePage() {
         </FormField>
 
         <FormField label="Email">
-          <a
-            href="#"
-            className="text-primary font-medium hover:underline text-sm"
-          >
-            Add
-          </a>
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            className="w-full max-w-sm border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-primary focus:border-primary"
+          />
         </FormField>
 
-        <FormField label="Phone Number">
-          <div className="flex items-center justify-start sm:justify-between max-w-sm">
-            <span className="text-sm text-gray-800">********45</span>
-            <a
-              href="#"
-              className="text-primary font-medium hover:underline text-sm ml-4"
-            >
-              Change
-            </a>
-          </div>
+
+
+        <FormField label="Phone">
+          <input
+            type="text"
+            value={phone}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your phone number"
+            className="w-full max-w-sm border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-primary focus:border-primary"
+          />
         </FormField>
+
+
+       
 
         <FormField label="Gender">
           <div className="flex items-center gap-6 text-sm">
@@ -96,8 +109,6 @@ export default function UserProfilePage() {
                 type="radio"
                 name="gender"
                 value="Male"
-                checked={gender === "Male"}
-                onChange={(e) => setGender(e.target.value)}
                 className="w-4 h-4 text-primary focus:ring-primary"
               />
               Male
@@ -107,8 +118,6 @@ export default function UserProfilePage() {
                 type="radio"
                 name="gender"
                 value="Female"
-                checked={gender === "Female"}
-                onChange={(e) => setGender(e.target.value)}
                 className="w-4 h-4 text-primary focus:ring-primary"
               />
               Female
@@ -118,8 +127,6 @@ export default function UserProfilePage() {
                 type="radio"
                 name="gender"
                 value="Other"
-                checked={gender === "Other"}
-                onChange={(e) => setGender(e.target.value)}
                 className="w-4 h-4 text-primary focus:ring-primary"
               />
               Other
@@ -137,7 +144,8 @@ export default function UserProfilePage() {
               Change
             </a>
           </div>
-        </FormField>
+                  </FormField>
+
 
         <div className="mt-8 flex justify-start space-x-4">
           {/* You can use your custom Button or a standard button */}

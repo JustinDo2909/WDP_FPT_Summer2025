@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Area, Block, Section } from "@/lib/by/Div";
+import { useGetVoucherByEventIdQuery } from "@/process/api/api";
 
 const DEFAULTS = {
   title: "Game",
@@ -28,12 +29,14 @@ export default function GameHomeLayout({
   playButtonText = DEFAULTS.playButton,
   inventoryButtonText = DEFAULTS.inventoryButton,
   rulesButtonText = DEFAULTS.rulesButton,
+  backgroundImage,
   eventData,
 }: {
   children?: React.ReactNode;
   title?: string;
   type?: string;
   playButtonText?: string;
+  backgroundImage?: string;
   inventoryButtonText?: string;
   rulesButtonText?: string;
   eventData?: ILeaderBoardData;
@@ -42,6 +45,7 @@ export default function GameHomeLayout({
   const [showRules, setShowRules] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showRewards, setShowRewards] = useState(false);
+  const {data} = useGetVoucherByEventIdQuery(eventData?.event.id ?? "");
   const router = useRouter();
 
   const toggleLeaderboard = () => {
@@ -59,7 +63,7 @@ export default function GameHomeLayout({
     <Area
       className="min-h-screen flex p-4 gap-5"
       style={{
-        backgroundImage: "url('/internshift-bg-placeholder.jpg')",
+        backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundColor: "pink",
@@ -224,6 +228,7 @@ export default function GameHomeLayout({
       <InventoryModal
         open={showInventory}
         onClose={() => setShowInventory(false)}
+        vouchers={data?.vouchers}
       />
       <RulesModal open={showRules} onClose={() => setShowRules(false)} />
     </Area>

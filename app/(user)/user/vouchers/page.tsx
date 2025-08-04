@@ -22,11 +22,11 @@ export default function VouchersPage() {
     const now = new Date();
     return vouchers.filter((v) => {
       const expiry = new Date(
-        new Date(v.created_at).getTime() + 2 * 24 * 60 * 60 * 1000,
+        new Date(v.expired_at).getTime() + 2 * 24 * 60 * 60 * 1000,
       );
       if (type === "redeemed") return v.redeemed === true;
       if (type === "expired") return expiry < now && !v.redeemed;
-      if (type === "usable") return v.redeemed === false;
+      if (type === "usable") return v.redeemed === false && !(expiry < now && !v.redeemed);
       return true; // all
     });
   };

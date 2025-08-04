@@ -132,25 +132,25 @@ declare global {
     type: "PERCENT" | "AMOUNT";
     redeemed: boolean;
     redeemed_at: string | null;
-    expired_at: string | null;
+    expired_at: string;
     updated_at: string;
     created_at: string;
     voucherProducts?: IVoucherProduct[];
-    voucherTemplate?: IVoucherTemplate;
+    voucherTemplate: IVoucherTemplate;
   };
 
   type IVoucherTemplate = {
     id: string;
     discount_value: number;
     event_id: string;
-    type: "Percent" | "Amount";
+    type: "PERCENT" | "AMOUNT";
     user_limit: string;
     user_count: string;
     is_active: string;
     leaderboard_reward_id:string;
     updated_at: string;
     created_at: string;
-    voucherProducts?: IVoucherProduct[];
+    voucherProducts: IVoucherProduct[];
   }
 
 

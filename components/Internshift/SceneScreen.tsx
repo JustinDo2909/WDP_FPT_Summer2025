@@ -5,6 +5,7 @@ import { useGameState } from "./seg/useGameState";
 import CustomerInteraction from "./scenes/CustomerInteraction";
 import ChoosingProducts from "./scenes/ChoosingProducts";
 import { useEffect } from "react";
+import MaskMixing from "./scenes/MaskMixing";
 import { SceneName } from "@/types/intershift";
 import { Coins, Star } from "lucide-react";
 import { range } from "lodash";
@@ -13,7 +14,7 @@ import { range } from "lodash";
 // import MaskMixing from "./scenes/MaskMixing";
 // import PimplePopping from "./scenes/PimplePopping";
 
-const img = "https://i.ibb.co/LDBrKZsh/cosmetics-shop.jpg";
+const img = "https://i.ibb.co/35vtsM31/cosmetics-shop.jpg";
 
 export const SceneScreen = () => {
   const gameStateApi = useGameState();
@@ -26,6 +27,8 @@ export const SceneScreen = () => {
     selectProductType,
     removeProductType,
     submitRoutine,
+    submitProducts,
+    nextCustomer
   } = gameStateApi;
 
   // Call startNewCustomer when the component mounts
@@ -54,6 +57,8 @@ export const SceneScreen = () => {
           selectProductType={selectProductType}
           removeProductType={removeProductType}
           submitRoutine={submitRoutine}
+          setGameScene={setGameScene}
+          nextCustomer={nextCustomer}
         />
       );
     }
@@ -66,11 +71,20 @@ export const SceneScreen = () => {
           removeProduct={removeProduct}
           currentCustomer={gameState.currentCustomer}
           setGameScene={setGameScene}
+          submitProducts={submitProducts}
         />
       );
     }
-    // case SceneName.MASK_MIXING:
-    //   return <MaskMixing ... />;
+    if (gameState.gameScene === SceneName.MASK_MIXING && gameState.currentCustomer) {
+      return (
+        <MaskMixing
+          customerSkinType={gameState.currentCustomer.case.skinType || gameState.currentCustomer.case.caseName}
+          onMixComplete={() => {
+            setGameScene(SceneName.CUSTOMER_INTERFACE);
+          }}
+        />
+      );
+    }
     // case SceneName.PIMPLE_POPPING:
     //   return <PimplePopping ... />;
     return <div className="text-white p-6">Scene not found</div>;

@@ -18,6 +18,7 @@ declare global {
     type SkinCase = {
         caseName: string
         tooltip: string
+        skinType?: "oily" | "dry" | "combination" | "acne-prone"
         requiredIngredients: string[]
         avoidIngredients: string[]
         requiredProducts: string[]
@@ -27,22 +28,29 @@ declare global {
     type Mask = {
         id: number
         name: string
-        ingredients: string[]
-        case: SkinCase
+        ingredients: IngredientEntry[]
+        case: string
         tooltip: string
     };
 
+    type IngredientEntry = {
+        tag: string
+        quantity: number
+    }
+
     type MaskIngredient = {
-        id: string
+        tag: string
         name: string
+        benefits: string[]
         image_url?: string
-        tooltip: string
+        tooltip?: string
+        is_allergen: boolean
     }
 
     type GameProduct = {
         id: number
         price?: number
-        type: "cleanser" | "moisturizer" | "toner" | "serum" | "exfoliator"
+        type: "oil-based-cleanser" | "gel/foam-cleanser" | "exfoliator" | "toner" | "serum"  | "moisturizer" 
         name: string
         image_url: string
         ingredients: string[]
@@ -60,6 +68,7 @@ declare global {
         customersServed: number
         waitingForFeedback: NPCProfile[]
         showMaskCrafting: boolean
+        showNextCustomer: boolean
         gameScene: SceneName
     }
 }

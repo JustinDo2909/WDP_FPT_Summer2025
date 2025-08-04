@@ -11,7 +11,7 @@ function groupEvents(events: IEvent[]) {
     const start = new Date(event.start_time);
     const end = new Date(event.end_time);
 
-    if (event.is_active && start <= now && now <= end) {
+    if (event.is_active &&  now <= end) {
       running.push(event);
     } else if (start > now) {
       upcoming.push(event);

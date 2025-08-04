@@ -29,7 +29,7 @@ export default function VoucherRewards({
     from === to ? `Rank ${from}` : `Rank ${from}-${to}`;
 
   const getVoucherText = (voucher: IVoucherTemplate) => {
-    if (voucher.type === "Percent") {
+    if (voucher.type === "PERCENT") {
       return `${voucher.discount_value}% off your order!`;
     }
     return `${formatPrice(voucher.discount_value)} off your order!`;
