@@ -155,6 +155,9 @@ export function useWarehouseLogic() {
     const expiredBatches = batchesWithStatus.filter(
       (b) => b.status === "expired",
     ).length;
+    const outOfStockBatches = batchesWithStatus.filter(
+      (b) => b.current_stock === 0
+    ).length;
 
     const totalQuantity = batchesWithStatus.reduce(
       (sum, b) => sum + b.quantity,
@@ -171,6 +174,7 @@ export function useWarehouseLogic() {
       totalBatches,
       activeBatches,
       expiredBatches,
+      outOfStockBatches,
       totalQuantity,
       totalStock,
       stockPercentage,

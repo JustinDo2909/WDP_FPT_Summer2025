@@ -14,5 +14,4 @@ export const menuItems = [
   { title: "Customers", icon: "Users", url: "/manage-customers" },
   { title: "Voucher", icon: "Ticket", url: "/manage-vouchers" },
   { title: "Event", icon: "Warehouse", url: "/manage-events" },
-  { title: "Warehouse", icon: "Warehouse", url: "/warehouse" },
 ];

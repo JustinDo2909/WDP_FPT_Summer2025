@@ -13,7 +13,7 @@ import type {
 // Hook quản lý vouchers với API
 export const useVouchersApiLogic = () => {
   const [selectedVoucher, setSelectedVoucher] = useState<VoucherDisplay | null>(
-    null,
+    null
   );
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [filterType, setFilterType] = useState<VoucherFilterType>("ALL");
@@ -33,10 +33,12 @@ export const useVouchersApiLogic = () => {
     return vouchersData.map(
       (voucher): VoucherDisplay => ({
         ...voucher,
+        // Add type from voucherTemplate if available
+        type: voucher.voucherTemplate?.type || "PERCENT",
         discountDisplay: getDiscountDisplay(voucher),
         statusText: getStatusText(voucher),
         formattedCreatedAt: formatDate(voucher.created_at),
-      }),
+      })
     );
   }, [vouchersData]);
 
@@ -61,6 +63,7 @@ export const useVouchersApiLogic = () => {
         return (
           voucher.stripe_coupon_id.toLowerCase().includes(searchLower) ||
           voucher.user_id.toLowerCase().includes(searchLower) ||
+          voucher.user?.name.toLowerCase().includes(searchLower) ||
           voucher.id.toLowerCase().includes(searchLower)
         );
       }
@@ -103,14 +106,14 @@ export const useVouchersApiLogic = () => {
         [
           voucher.id,
           voucher.user_id,
-          voucher.event_reward_id,
+          voucher.voucherTemplate?.leaderboard_reward_id || "N/A",
           voucher.stripe_coupon_id,
-          voucher.discount_value,
+          voucher.voucherTemplate?.discount_value || 0,
           voucher.type,
           voucher.redeemed ? "Yes" : "No",
           voucher.redeemed_at || "N/A",
           voucher.formattedCreatedAt,
-        ].join(","),
+        ].join(",")
       ),
     ].join("\n");
 
@@ -146,11 +149,17 @@ export const useVouchersApiLogic = () => {
 
 // Utility functions
 export const getDiscountDisplay = (voucher: Voucher): string => {
-  if (voucher.type === "PERCENT") {
-    return `${voucher.discount_value}%`;
-  } else {
-    return `${formatCurrency(voucher.discount_value)}`;
+  // Check if voucher has voucherTemplate with discount info
+  if (voucher.voucherTemplate) {
+    if (voucher.voucherTemplate.type === "PERCENT") {
+      return `${voucher.voucherTemplate.discount_value}%`;
+    } else {
+      return `${formatCurrency(voucher.voucherTemplate.discount_value)}`;
+    }
   }
+
+  // Fallback to default values if voucherTemplate doesn't exist
+  return "0%";
 };
 
 export const getStatusText = (voucher: Voucher): string => {
@@ -183,7 +192,7 @@ export const getStatusColor = (voucher: Voucher): string => {
 };
 
 export const calculateVoucherStats = (
-  vouchers: VoucherDisplay[],
+  vouchers: VoucherDisplay[]
 ): VoucherStats => {
   const total = vouchers.length;
   const redeemed = vouchers.filter((v) => v.redeemed).length;

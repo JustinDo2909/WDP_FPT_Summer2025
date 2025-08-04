@@ -67,7 +67,7 @@ const CustomTable = <T extends { id?: number | string }>({
     direction: "asc" | "desc";
   } | null>(null);
   const [activeFilters, setActiveFilters] = useState<{ [key: string]: string }>(
-    {},
+    {}
   );
   const [showFilters, setShowFilters] = useState(false);
 
@@ -76,14 +76,14 @@ const CustomTable = <T extends { id?: number | string }>({
     const matchesSearch = columns.some((col) =>
       String(row[col.key] ?? "")
         .toLowerCase()
-        .includes(searchTerm.toLowerCase()),
+        .includes(searchTerm.toLowerCase())
     );
 
     const matchesFilters = Object.entries(activeFilters).every(
       ([key, value]) => {
         if (!value) return true;
         return String(row[key as keyof T]) === value;
-      },
+      }
     );
 
     return matchesSearch && matchesFilters;
@@ -107,7 +107,7 @@ const CustomTable = <T extends { id?: number | string }>({
   const totalPages = Math.ceil(sortedData.length / itemsPerPage);
   const paginatedData = sortedData.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handleSort = (key: keyof T) => {
@@ -125,7 +125,7 @@ const CustomTable = <T extends { id?: number | string }>({
 
   const handleSelectItem = (item: T, checked: boolean) => {
     setSelectedItems((prev) =>
-      checked ? [...prev, item] : prev.filter((i) => i.id !== item.id),
+      checked ? [...prev, item] : prev.filter((i) => i.id !== item.id)
     );
   };
 
@@ -303,7 +303,7 @@ const CustomTable = <T extends { id?: number | string }>({
                       <input
                         type="checkbox"
                         checked={selectedItems.some(
-                          (selected) => selected.id === item.id,
+                          (selected) => selected.id === item.id
                         )}
                         onChange={(e) =>
                           handleSelectItem(item, e.target.checked)

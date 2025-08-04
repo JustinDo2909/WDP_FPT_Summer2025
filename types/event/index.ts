@@ -46,6 +46,34 @@ export interface EventReward {
   event?: Event;
 }
 
+// New Leaderboard Reward Types
+export interface LeaderboardRewardVoucherTemplate {
+  id: string;
+  discount_value: number;
+  type: "PERCENT" | "AMOUNT";
+  user_limit: number;
+  user_count: number;
+  voucherProducts: Array<{
+    product: {
+      id: string;
+      title: string;
+      image_url: string;
+    };
+  }>;
+}
+
+export interface LeaderboardReward {
+  id: string;
+  event_id: string;
+  rank_from: number;
+  rank_to: number;
+  title: string;
+  description: string;
+  is_active: boolean;
+  created_at: string;
+  voucherTemplates: LeaderboardRewardVoucherTemplate[];
+}
+
 // Form Data Types for Components
 export interface EventFormData {
   title: string;
@@ -68,6 +96,28 @@ export interface RewardFormData {
   min_correct: number;
   discount_value: number;
   type: "AMOUNT" | "PERCENT";
+}
+
+// New Leaderboard Reward Form Data
+export interface LeaderboardRewardFormData {
+  title: string;
+  rank_from: number;
+  rank_to: number;
+  description: string;
+}
+
+export interface UpdateLeaderboardRewardFormData {
+  rank_from?: number;
+  rank_to?: number;
+  title?: string;
+  description?: string;
+  is_active?: boolean;
+}
+
+export interface AddVoucherTemplateToRewardRequest {
+  discount_value: number;
+  type: "PERCENT" | "AMOUNT";
+  productIds: string[];
 }
 
 // API Request Types
@@ -111,6 +161,22 @@ export interface UpdateRewardRequest extends Partial<CreateRewardRequest> {
   id: string;
 }
 
+// New Leaderboard Reward API Request Types
+export interface CreateLeaderboardRewardRequest {
+  title: string;
+  rank_from: number;
+  rank_to: number;
+  description: string;
+}
+
+export interface UpdateLeaderboardRewardRequest {
+  rank_from?: number;
+  rank_to?: number;
+  title?: string;
+  description?: string;
+  is_active?: boolean;
+}
+
 // Response Types
 export interface EventsResponse {
   success: boolean;
@@ -130,6 +196,17 @@ export interface QuestionsResponse {
 export interface RewardsResponse {
   success: boolean;
   eventRewards: EventReward[];
+}
+
+// New Leaderboard Reward Response Types
+export interface LeaderboardRewardsResponse {
+  success: boolean;
+  rewards: LeaderboardReward[];
+}
+
+export interface LeaderboardRewardResponse {
+  success: boolean;
+  reward: LeaderboardReward;
 }
 
 export interface ApiResponse {

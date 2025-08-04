@@ -84,7 +84,7 @@ export function VoucherDetailModal({
                     Event Reward ID
                   </RText>
                   <RText className="font-mono text-sm text-gray-900">
-                    {voucher.event_reward_id}
+                    {voucher.voucherTemplate?.leaderboard_reward_id || "N/A"}
                   </RText>
                 </Yard>
               </Area>

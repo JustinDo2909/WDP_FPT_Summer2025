@@ -1,11 +1,13 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
 import {
   useVouchersApiLogic,
   getStatusColor,
   getDiscountDisplay,
 } from "@/components/admin/Voucher/seg/utils";
+
 import type {
   VoucherFilterType,
   VoucherStatusType,
@@ -20,8 +22,11 @@ import {
   RefreshCw,
   Search,
   Filter,
+  ChevronDown,
+  ChevronRight,
+  User,
 } from "lucide-react";
-import { VoucherDetailModal } from "@/components/admin/Voucher/voucher-detail-modal";
+import { VoucherDetailModal } from "@/components/admin/Voucher/Voucher-detail-modal";
 
 export default function VoucherPage() {
   const {
@@ -42,6 +47,47 @@ export default function VoucherPage() {
     // handleExportVouchers,
     refetch,
   } = useVouchersApiLogic();
+
+  const [expandedUsers, setExpandedUsers] = useState<Set<string>>(new Set());
+
+  // Group vouchers by user and sort by voucher count
+  const groupedVouchers = useMemo(() => {
+    const groups: { [key: string]: typeof vouchers } = {};
+
+    vouchers.forEach((voucher) => {
+      const userId = voucher.user?.id || voucher.user_id;
+      const userName = voucher.user?.name || voucher.user_id;
+      const key = `${userId}-${userName}`;
+
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+      groups[key].push(voucher);
+    });
+
+    // Convert to array and sort by voucher count (descending)
+    return Object.entries(groups)
+      .map(([key, userVouchers]) => ({
+        key,
+        userId: userVouchers[0].user?.id || userVouchers[0].user_id,
+        userName: userVouchers[0].user?.name || userVouchers[0].user_id,
+        vouchers: userVouchers,
+        voucherCount: userVouchers.length,
+      }))
+      .sort((a, b) => b.voucherCount - a.voucherCount);
+  }, [vouchers]);
+
+  const toggleUserExpansion = (userKey: string) => {
+    setExpandedUsers((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(userKey)) {
+        newSet.delete(userKey);
+      } else {
+        newSet.add(userKey);
+      }
+      return newSet;
+    });
+  };
 
   if (error) {
     return (
@@ -131,7 +177,7 @@ export default function VoucherPage() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search by ID, User ID, or Coupon Code..."
+                  placeholder="Search by ID, User Name, or Coupon Code..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -186,12 +232,12 @@ export default function VoucherPage() {
           </Area>
         </Area>
 
-        {/* Table */}
+        {/* User Groups */}
         <Area className="bg-white rounded-lg shadow-sm border border-gray-200">
           <Area className="p-6">
             <Area className="flex items-center justify-between mb-4">
               <RText className="text-lg font-semibold text-gray-900">
-                Vouchers ({vouchers.length})
+                Users with Vouchers ({groupedVouchers.length})
               </RText>
             </Area>
 
@@ -202,109 +248,166 @@ export default function VoucherPage() {
                   Loading vouchers...
                 </RText>
               </Area>
-            ) : vouchers.length === 0 ? (
+            ) : groupedVouchers.length === 0 ? (
               <Area className="text-center py-8">
                 <Ticket className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                 <RText className="text-gray-500">No vouchers found</RText>
               </Area>
             ) : (
-              <Area className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-200">
-                      <th className="text-left py-3 px-4 font-medium text-gray-700">
-                        Coupon Code
-                      </th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-700">
-                        User
-                      </th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-700">
-                        Discount
-                      </th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-700">
-                        Status
-                      </th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-700">
-                        Created
-                      </th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-700">
-                        Redeemed
-                      </th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-700">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {vouchers.map((voucher) => (
-                      <tr
-                        key={voucher.id}
-                        className="border-b border-gray-100 hover:bg-gray-50"
+              <Area className="space-y-4">
+                {groupedVouchers.map((userGroup) => {
+                  const isExpanded = expandedUsers.has(userGroup.key);
+                  const availableVouchers = userGroup.vouchers.filter(
+                    (v) => !v.redeemed
+                  ).length;
+                  const redeemedVouchers = userGroup.vouchers.filter(
+                    (v) => v.redeemed
+                  ).length;
+
+                  return (
+                    <Yard
+                      key={userGroup.key}
+                      className="border border-gray-200 rounded-lg overflow-hidden"
+                    >
+                      {/* User Header */}
+                      <Area
+                        className="flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors"
+                        onClick={() => toggleUserExpansion(userGroup.key)}
                       >
-                        <td className="py-3 px-4">
-                          <RText className="font-mono text-sm font-medium text-purple-600">
-                            {voucher.stripe_coupon_id}
-                          </RText>
-                        </td>
-                        <td className="py-3 px-4">
+                        <Area className="flex items-center gap-3">
+                          <User className="w-5 h-5 text-gray-600" />
                           <Yard>
                             <RText className="font-medium text-gray-900">
-                              User ID: {voucher.user_id}
+                              {userGroup.userName}
                             </RText>
-                            <RText className="text-sm text-gray-500 font-mono">
-                              Event: {voucher.event_reward_id}
-                            </RText>
-                          </Yard>
-                        </td>
-                        <td className="py-3 px-4">
-                          <Yard>
-                            <RText className="text-lg font-bold text-green-600">
-                              {getDiscountDisplay(voucher)}
-                            </RText>
-                            <RText className="text-xs text-gray-500 capitalize">
-                              {voucher.type === "PERCENT"
-                                ? "Percentage"
-                                : "Fixed Amount"}
+                            <RText className="text-sm text-gray-500">
+                              {userGroup.voucherCount} voucher
+                              {userGroup.voucherCount !== 1 ? "s" : ""}
                             </RText>
                           </Yard>
-                        </td>
-                        <td className="py-3 px-4">
-                          <span
-                            className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(voucher)}`}
-                          >
-                            {voucher.redeemed ? (
-                              <CheckCircle className="w-3 h-3" />
-                            ) : (
-                              <Clock className="w-3 h-3" />
-                            )}
-                            {voucher.statusText}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4">
-                          <RText className="text-sm text-gray-900">
-                            {voucher.formattedCreatedAt}
-                          </RText>
-                        </td>
-                        <td className="py-3 px-4">
-                          <RText className="text-sm text-gray-900">
-                            {voucher.redeemed_at
-                              ? voucher.formattedCreatedAt
-                              : "N/A"}
-                          </RText>
-                        </td>
-                        <td className="py-3 px-4">
-                          <button
-                            onClick={() => handleViewVoucher(voucher)}
-                            className="text-blue-600 hover:text-blue-800 p-1 hover:bg-blue-50 rounded transition-colors"
-                            title="View Details"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </Area>
+
+                        <Area className="flex items-center gap-4">
+                          {/* Voucher Stats */}
+                          <Area className="flex items-center gap-3 text-sm">
+                            <Yard className="flex items-center gap-1">
+                              <Clock className="w-4 h-4 text-green-600" />
+                              <RText className="text-green-600 font-medium">
+                                {availableVouchers}
+                              </RText>
+                            </Yard>
+                            <Yard className="flex items-center gap-1">
+                              <CheckCircle className="w-4 h-4 text-purple-600" />
+                              <RText className="text-purple-600 font-medium">
+                                {redeemedVouchers}
+                              </RText>
+                            </Yard>
+                          </Area>
+
+                          {/* Expand/Collapse Icon */}
+                          {isExpanded ? (
+                            <ChevronDown className="w-5 h-5 text-gray-600" />
+                          ) : (
+                            <ChevronRight className="w-5 h-5 text-gray-600" />
+                          )}
+                        </Area>
+                      </Area>
+
+                      {/* Vouchers List */}
+                      {isExpanded && (
+                        <Area className="border-t border-gray-200">
+                          <Area className="overflow-x-auto">
+                            <table className="w-full">
+                              <thead className="bg-gray-50">
+                                <tr>
+                                  <th className="text-left py-3 px-4 font-medium text-gray-700 text-sm">
+                                    Coupon Code
+                                  </th>
+                                  <th className="text-left py-3 px-4 font-medium text-gray-700 text-sm">
+                                    Discount
+                                  </th>
+                                  <th className="text-left py-3 px-4 font-medium text-gray-700 text-sm">
+                                    Status
+                                  </th>
+                                  <th className="text-left py-3 px-4 font-medium text-gray-700 text-sm">
+                                    Created
+                                  </th>
+                                  <th className="text-left py-3 px-4 font-medium text-gray-700 text-sm">
+                                    Redeemed
+                                  </th>
+                                  <th className="text-left py-3 px-4 font-medium text-gray-700 text-sm">
+                                    Actions
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {userGroup.vouchers.map((voucher) => (
+                                  <tr
+                                    key={voucher.id}
+                                    className="border-b border-gray-100 hover:bg-gray-50"
+                                  >
+                                    <td className="py-3 px-4">
+                                      <RText className="font-mono text-sm font-medium text-purple-600">
+                                        {voucher.stripe_coupon_id}
+                                      </RText>
+                                    </td>
+                                    <td className="py-3 px-4">
+                                      <Yard>
+                                        <RText className="text-lg font-bold text-green-600">
+                                          {getDiscountDisplay(voucher)}
+                                        </RText>
+                                        <RText className="text-xs text-gray-500 capitalize">
+                                          {voucher.type === "PERCENT"
+                                            ? "Percentage"
+                                            : "Fixed Amount"}
+                                        </RText>
+                                      </Yard>
+                                    </td>
+                                    <td className="py-3 px-4">
+                                      <span
+                                        className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(voucher)}`}
+                                      >
+                                        {voucher.redeemed ? (
+                                          <CheckCircle className="w-3 h-3" />
+                                        ) : (
+                                          <Clock className="w-3 h-3" />
+                                        )}
+                                        {voucher.statusText}
+                                      </span>
+                                    </td>
+                                    <td className="py-3 px-4">
+                                      <RText className="text-sm text-gray-900">
+                                        {voucher.formattedCreatedAt}
+                                      </RText>
+                                    </td>
+                                    <td className="py-3 px-4">
+                                      <RText className="text-sm text-gray-900">
+                                        {voucher.redeemed_at
+                                          ? voucher.formattedCreatedAt
+                                          : "N/A"}
+                                      </RText>
+                                    </td>
+                                    <td className="py-3 px-4">
+                                      <button
+                                        onClick={() =>
+                                          handleViewVoucher(voucher)
+                                        }
+                                        className="text-blue-600 hover:text-blue-800 p-1 hover:bg-blue-50 rounded transition-colors"
+                                        title="View Details"
+                                      >
+                                        <Eye className="w-4 h-4" />
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </Area>
+                        </Area>
+                      )}
+                    </Yard>
+                  );
+                })}
               </Area>
             )}
           </Area>

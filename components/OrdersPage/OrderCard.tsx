@@ -30,7 +30,7 @@ export default function OrderCard({
       setShowModal(false);
       toast.success(
         "Order cancelled successfully. You have been refunded " +
-          formatPrice(total_amount),
+          formatPrice(total_amount)
       );
     } catch (err) {
       // Optionally, handle error
