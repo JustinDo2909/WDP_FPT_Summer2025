@@ -58,9 +58,12 @@ export const CardGame = ({
           router.push("/login");
         }
       }}
-      href={renderGame(game)}
-      className="shadow-xl h-56 w-72 flex flex-col justify-between items-center rounded-lg bg-[url('https://90sj56vdp0.ufs.sh/f/rSQkHC8t0FOUCNH4GXgNEZRdGL4mshnW0g53kYyDOSeQlIc2')] bg-no-repeat bg-cover
-      hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out cursor-pointer group relative overflow-hidden"
+      href={
+        game.is_active
+          ? `/event/GameMenu?event_id=${game.id}`
+          : renderGame(game)
+      }
+      className="flex w-full items-start gap-6 p-4 rounded-xl bg-[#1e1033] border border-white/10 hover:shadow-2xl transition-all duration-300 group cursor-pointer"
     >
       {/* Image */}
       <Box
