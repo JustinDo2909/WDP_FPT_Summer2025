@@ -21,9 +21,13 @@ export function TrackingSection({ order }: TrackingSectionProps) {
             <Card className="rounded-full w-10 h-10 flex items-center justify-center bg-red-100 mb-2">
               <RText className="text-red-600 text-xl font-bold">✗</RText>
             </Card>
-            <RText className="text-xs text-center font-medium text-red-700 mb-1">Order Cancelled</RText>
+            <RText className="text-xs text-center font-medium text-red-700 mb-1">
+              Order Cancelled
+            </RText>
             <RText className="text-[10px] text-gray-400 text-center">
-              {order.updatedAt ? new Date(order.updatedAt).toLocaleString() : "-"}
+              {order.updatedAt
+                ? new Date(order.updatedAt).toLocaleString()
+                : "-"}
             </RText>
           </Column>
         </Row>
@@ -32,7 +36,7 @@ export function TrackingSection({ order }: TrackingSectionProps) {
   }
 
   // Find the current status index
-  const currentIdx = STATUS_FLOW.findIndex(s => s.key === order.status);
+  const currentIdx = STATUS_FLOW.findIndex((s) => s.key === order.status);
   // If status is not found, treat as none completed
   const completedIdx = currentIdx === -1 ? -1 : currentIdx;
 
@@ -42,7 +46,10 @@ export function TrackingSection({ order }: TrackingSectionProps) {
         {STATUS_FLOW.map((step, idx) => {
           const isCompleted = idx <= completedIdx;
           return (
-            <Column key={step.key} className="flex flex-col items-center flex-1">
+            <Column
+              key={step.key}
+              className="flex flex-col items-center flex-1"
+            >
               <Card
                 className={`rounded-full w-10 h-10 flex items-center justify-center mb-2 ${
                   isCompleted ? "bg-green-100" : "bg-gray-200"
@@ -66,7 +73,7 @@ export function TrackingSection({ order }: TrackingSectionProps) {
               <RText className="text-[10px] text-gray-400 text-center">
                 {isCompleted
                   ? new Date(
-                      idx === 0 ? order.createdAt : order.updatedAt
+                      idx === 0 ? order.createdAt : order.updatedAt,
                     ).toLocaleString()
                   : "-"}
               </RText>

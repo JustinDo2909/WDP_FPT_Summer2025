@@ -7,13 +7,7 @@ export const apiCart = createApi({
   tagTypes: ["Carts"],
   endpoints: (build) => ({
     //#region getCart
-    getCart: build.query<any, void>({
-      query: () => ({
-        url: "cart/get-cart",
-        method: "GET",
-      }),
-      providesTags: ["Carts"],
-    }),
+
     //#endregion
 
     //#region addToCart
@@ -47,6 +41,16 @@ export const apiCart = createApi({
       invalidatesTags: ["Carts"],
     }),
     //#endregion
+
+    //#region removeFromCart
+    getCart: build.query<any, void>({
+      query: () => ({
+        url: "cart/get-cart",
+        method: "GET",
+      }),
+      providesTags: ["Carts"],
+    }),
+    //#endRegion
   }),
 });
 

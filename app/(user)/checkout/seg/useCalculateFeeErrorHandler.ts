@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 
@@ -11,7 +11,6 @@ export function useCalculateFeeErrorHandler() {
       setIsRouteHasService(true); // reset if success
       return result;
     } catch (error: any) {
-
       const message = error?.data?.message || error?.message || "";
 
       const isRouteError = message.includes("route not found service");

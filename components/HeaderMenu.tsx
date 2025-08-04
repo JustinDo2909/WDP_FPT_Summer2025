@@ -29,19 +29,18 @@ interface HeaderMenuProps {
 
 const HeaderMenu = ({ headers }: HeaderMenuProps) => {
   const { user, isLogged } = useUser();
-  const router = useRouter()
+  const router = useRouter();
   return (
     <Container className="w-full px-8 md:px-36 bg-white inline-flex justify-between items-center sticky top-0 z-50">
-         
-          <Image
-            src="/images/icon.png"
-            alt="Logo"
-            width={100}
-            height={100}
-            priority
-            className="hover:scale-105 transition-transform"
-            onClick={() => router.push('/')}
-          />
+      <Image
+        src="/images/icon.png"
+        alt="Logo"
+        width={100}
+        height={100}
+        priority
+        className="hover:scale-105 transition-transform"
+        onClick={() => router.push("/")}
+      />
 
       <Section className="py-4 flex justify-start items-center gap-1">
         {map(headers, (header: Header, index: number) => (
@@ -60,14 +59,6 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
             )}
           </Group>
         ))}
-
-        <Block className="ml-4">
-          <button className="px-4 py-2.5 bg-gradient-to-r from-[#aa4444] to-[#ee4444] hover:from-[#ee4444] hover:to-[#aa4444] rounded-full flex justify-center items-center gap-2.5 overflow-hidden transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105">
-            <span className="justify-start text-white text-sm font-semibold drop-shadow-sm">
-              AI Chatbot
-            </span>
-          </button>
-        </Block>
       </Section>
 
       <Section className="flex justify-start items-center gap-4 overflow-hidden px-2">
@@ -85,13 +76,21 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
         <Row className="flex justify-center items-center gap-3 overflow-hidden hover:cursor-pointer">
           <Wrap className="flex justify-center items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#ffc6c6]/10 transition-all duration-300">
             <Block className="p-2 rounded-full flex justify-center items-center gap-2.5 overflow-hidden text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-[#aa4444] hover:to-[#ee4444] transition-all duration-300">
-              <Link href="/user">
+              <Link href={user ? `/user` : `/login`}>
                 <User size={20} />
               </Link>
             </Block>
 
             <Block className="justify-start text-slate-700 text-sm font-medium hover:text-[#aa4444] transition-colors">
-              {isLogged ? <Link href={'/logout'}><RText>Logout</RText></Link> : <Link href='/login'><RText>Login</RText></Link>}
+              {isLogged ? (
+                <Link href={"/logout"}>
+                  <RText>Logout</RText>
+                </Link>
+              ) : (
+                <Link href="/login">
+                  <RText>Login</RText>
+                </Link>
+              )}
             </Block>
           </Wrap>
         </Row>

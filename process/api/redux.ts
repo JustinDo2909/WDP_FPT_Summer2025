@@ -41,7 +41,7 @@ export const store = configureStore({
       apiOrders.middleware,
       userApi.middleware,
       apiCart.middleware,
-      apiEvent.middleware
+      apiEvent.middleware,
     ),
 });
 

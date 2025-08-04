@@ -1,7 +1,3 @@
-import type { Order, OrderDetail } from "@/types/order";
-import type { User } from "@/types/user";
-import type { Product, CategoryOption } from "@/types/productManagement";
-
 //#region fomatCurrency
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat("vi-VN", {

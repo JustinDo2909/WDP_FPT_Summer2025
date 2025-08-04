@@ -20,7 +20,7 @@ export default function QuizGame() {
       .then(() => setHasStarted(true))
       .catch(() => {
         setPlayError(
-          "You have already played today! Please come back tomorrow!"
+          "You have already played today! Please come back tomorrow!",
         );
       });
   };

@@ -18,7 +18,7 @@ export default function UserDashboardLayout({
     <Providers>
       <Core className="min-h-screen bg-gray-50">
         <UserLayout>
-        <main className="flex-1 flex  overflow-hidden">{children}</main>
+          <main className="flex-1 flex  overflow-hidden">{children}</main>
         </UserLayout>
       </Core>
     </Providers>

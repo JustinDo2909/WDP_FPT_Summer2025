@@ -3,9 +3,9 @@
 import { Home, RotateCcw, Target, Trophy } from "lucide-react";
 import { Block, Box, Card, RText, Section } from "@/lib/by/Div";
 import Button from "@/components/CustomButton";
-import { VOUCHER_REWARDS } from "@/constants";
 
 interface GameOverProps {
+  rewardInfo?: EventReward;
   score: number;
   selectedMode: string;
   currentMode: GameMode;
@@ -15,6 +15,7 @@ interface GameOverProps {
 }
 
 export default function GameOver({
+  rewardInfo,
   score,
   selectedMode,
   currentMode,
@@ -22,33 +23,6 @@ export default function GameOver({
   onModeSelect,
   onBackToMenu,
 }: GameOverProps) {
-  const getVoucherReward = (score: number) =>
-    VOUCHER_REWARDS.find((v) => score >= v.min && score <= v.max);
-
-  const getScoreMessage = () => {
-    if (selectedMode === "official") {
-      if (score >= 1200)
-        return { text: "Unstoppable!", color: "text-purple-700" };
-      if (score >= 900)
-        return { text: "Elite Player!", color: "text-purple-600" };
-      if (score >= 700)
-        return { text: "Skilled Performance!", color: "text-green-600" };
-      if (score >= 500)
-        return { text: "Solid Effort!", color: "text-blue-600" };
-      return { text: "Keep Practicing!", color: "text-orange-600" };
-    } else {
-      if (score >= 1500)
-        return { text: "Ready for the challenge!", color: "text-green-600" };
-      if (score >= 1200) return { text: "Very Good!", color: "text-green-600" };
-      if (score >= 800) return { text: "Well Done!", color: "text-blue-600" };
-      if (score >= 500) return { text: "Good Try!", color: "text-blue-500" };
-      return { text: "Keep Training!", color: "text-orange-600" };
-    }
-  };
-
-  const scoreMessage = getScoreMessage();
-  const voucher = selectedMode === "official" ? getVoucherReward(score) : null;
-
   return (
     <Section className="w-full max-w-md mx-auto bg-white/95 backdrop-blur-sm border border-purple-100 shadow-xl rounded-2xl p-6">
       <Block className="text-center mb-6">
@@ -70,7 +44,7 @@ export default function GameOver({
       </Block>
 
       <Block className="text-center mb-4">
-        <RText className="text-6xl font-extrabold text-purple-700 drop-shadow-md">
+        <RText className="text-6xl font-bold font-sans text-purple-700 drop-shadow-md">
           {score}
         </RText>
         <RText className="text-sm text-gray-600 font-medium tracking-wider uppercase mt-1">
@@ -78,49 +52,75 @@ export default function GameOver({
         </RText>
       </Block>
 
-      <RText
-        className={`text-lg font-semibold text-center ${scoreMessage.color} bg-gray-50 px-4 py-2 rounded-lg mb-3`}
-      >
-        {scoreMessage.text}
-      </RText>
-
-      {voucher && (
+      {rewardInfo && rewardInfo.success && (
         <Card className="relative overflow-hidden bg-gradient-to-br from-yellow-50 to-amber-100 border border-yellow-400 shadow-xl rounded-2xl px-5 py-4 mt-6 flex items-center justify-between gap-4">
           <Box className="absolute top-1/2 -left-3 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full border border-yellow-300 shadow-md" />
           <Box className="absolute top-1/2 -right-3 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full border border-yellow-300 shadow-md" />
 
-          <Box className="flex-1 text-left">
-            <RText className="text-base font-bold text-yellow-800">
-              🎉 Congratulations!
-            </RText>
-            <RText className="text-sm text-gray-600 mt-1">
-              {voucher.type === "AMOUNT"
-                ? `₫${voucher.value.toLocaleString()}`
-                : `${voucher.value}%`}
-            </RText>
-            <RText className="text-xs italic text-gray-500 mt-1">
-              Voucher will be save to your profile.
-            </RText>
-          </Box>
+          {rewardInfo.reward && selectedMode === "official" ? (
+            <>
+              <Box className="flex-1 text-left">
+                <RText className="text-base font-bold text-yellow-800">
+                  🎉 Congratulations!
+                </RText>
 
-          <Box className="text-right min-w-[90px]">
-            <RText className="text-3xl font-black text-orange-600">
-              {voucher.type === "AMOUNT"
-                ? `₫${voucher.value.toLocaleString()}`
-                : `${voucher.value}%`}
-            </RText>
-            <RText className="text-sm text-yellow-700 font-semibold">OFF</RText>
-          </Box>
+                <RText className="text-sm text-gray-600 mt-1">
+                  {rewardInfo.reward.discountValue}
+                </RText>
+
+                <RText className="text-xs italic text-gray-500 mt-1">
+                  Reward will be saved to your profile.
+                </RText>
+              </Box>
+
+              <Box className="text-right min-w-[90px]">
+                <RText className="text-3xl font-black text-orange-600">
+                  {rewardInfo.reward?.discountType === "AMOUNT"
+                    ? `₫${rewardInfo.reward.discountValue?.toLocaleString()}`
+                    : "%"}
+                </RText>
+                <RText className="text-sm text-yellow-700 font-semibold">
+                  OFF
+                </RText>
+              </Box>
+            </>
+          ) : rewardInfo.voucher_already_received ? (
+            <Box className="flex-1 text-left">
+              <RText className="text-base font-bold text-yellow-800">
+                Notification
+              </RText>
+
+              <RText className="text-sm text-gray-600 mt-1">
+                {rewardInfo.message}
+              </RText>
+            </Box>
+          ) : (
+            <Box className="flex-1 text-left">
+              <RText className="text-base font-bold text-yellow-800">
+                Notification
+              </RText>
+
+              <RText className="text-sm text-gray-600 mt-1">
+                {rewardInfo.message}
+              </RText>
+            </Box>
+          )}
         </Card>
       )}
 
-      {selectedMode === "official" && (
-        <Box className="text-center mt-4">
-          <RText className="text-sm text-red-500 font-semibold">
-            You can only play Official Mode once per day. Come back tomorrow!
+      {rewardInfo && rewardInfo.is_new_high_score && (
+        <Box className="mt-2 text-center">
+          <RText className="text-sm text-green-600 font-semibold">
+            New High Score!
           </RText>
         </Box>
       )}
+
+      <Box className="mt-4 text-center">
+        <RText className="text-sm text-red-500 font-semibold">
+          {rewardInfo?.message}
+        </RText>
+      </Box>
 
       <Block className="space-y-3 mt-6">
         {selectedMode !== "official" && (

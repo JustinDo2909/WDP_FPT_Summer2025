@@ -18,7 +18,7 @@ export function useWarehouseLogic() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [selectedBatch, setSelectedBatch] = useState<BatchWithStatus | null>(
-    null
+    null,
   );
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -114,10 +114,10 @@ export function useWarehouseLogic() {
       const currentDate = new Date();
       const currentMonthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, "0")}`;
       const currentMonthGroup = monthGroups.find(
-        (group) => group.month === currentMonthKey
+        (group) => group.month === currentMonthKey,
       );
       setSelectedMonth(
-        currentMonthGroup ? currentMonthKey : monthGroups[0].month
+        currentMonthGroup ? currentMonthKey : monthGroups[0].month,
       );
     }
   }, [monthGroups, selectedMonth]);
@@ -150,10 +150,10 @@ export function useWarehouseLogic() {
 
     const totalBatches = batchesWithStatus.length;
     const activeBatches = batchesWithStatus.filter(
-      (b) => b.status === "active"
+      (b) => b.status === "active",
     ).length;
     const expiredBatches = batchesWithStatus.filter(
-      (b) => b.status === "expired"
+      (b) => b.status === "expired",
     ).length;
     const outOfStockBatches = batchesWithStatus.filter(
       (b) => b.current_stock === 0
@@ -161,11 +161,11 @@ export function useWarehouseLogic() {
 
     const totalQuantity = batchesWithStatus.reduce(
       (sum, b) => sum + b.quantity,
-      0
+      0,
     );
     const totalStock = batchesWithStatus.reduce(
       (sum, b) => sum + b.current_stock,
-      0
+      0,
     );
     const stockPercentage =
       totalQuantity > 0 ? Math.round((totalStock / totalQuantity) * 100) : 0;

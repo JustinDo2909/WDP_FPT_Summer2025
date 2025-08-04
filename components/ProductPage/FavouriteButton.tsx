@@ -6,7 +6,7 @@ interface FavouriteButtonProps {
   isWishlisted: boolean;
 }
 
-const FavouriteButton: React.FC<FavouriteButtonProps> = ({isWishlisted}) => {
+const FavouriteButton: React.FC<FavouriteButtonProps> = ({ isWishlisted }) => {
   return (
     <Button
       label={

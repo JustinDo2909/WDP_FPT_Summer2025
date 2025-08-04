@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
-import { VoucherDetailModal } from "@/components/admin/Voucher/Voucher-detail-modal";
 import {
   useVouchersApiLogic,
   getStatusColor,
@@ -27,6 +26,7 @@ import {
   ChevronRight,
   User,
 } from "lucide-react";
+import { VoucherDetailModal } from "@/components/admin/Voucher/voucher-detail-modal";
 
 export default function VoucherPage() {
   const {

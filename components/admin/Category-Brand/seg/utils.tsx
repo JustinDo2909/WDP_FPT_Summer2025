@@ -46,7 +46,7 @@ export const useCategoriesBrandsLogic = () => {
   // Category states
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<CategoryOption | null>(
-    null
+    null,
   );
 
   // Brand states
@@ -56,7 +56,7 @@ export const useCategoriesBrandsLogic = () => {
   // Skin Type states
   const [isSkinTypeModalOpen, setIsSkinTypeModalOpen] = useState(false);
   const [editingSkinType, setEditingSkinType] = useState<SkinTypeOption | null>(
-    null
+    null,
   );
 
   // Data from API
@@ -117,7 +117,7 @@ export const useCategoriesBrandsLogic = () => {
         throw new Error(errorMessage);
       }
     },
-    [editingCategory, createCategory, updateCategory]
+    [editingCategory, createCategory, updateCategory],
   );
 
   const handleDeleteCategory = useCallback(
@@ -127,7 +127,7 @@ export const useCategoriesBrandsLogic = () => {
 
       if (
         confirm(
-          `Are you sure you want to delete category "${category.title}"? This action cannot be undone.`
+          `Are you sure you want to delete category "${category.title}"? This action cannot be undone.`,
         )
       ) {
         try {
@@ -138,7 +138,7 @@ export const useCategoriesBrandsLogic = () => {
         }
       }
     },
-    [categories, deleteCategory]
+    [categories, deleteCategory],
   );
 
   // Brand handlers
@@ -173,7 +173,7 @@ export const useCategoriesBrandsLogic = () => {
         throw new Error(errorMessage);
       }
     },
-    [editingBrand, createBrand, updateBrand]
+    [editingBrand, createBrand, updateBrand],
   );
 
   const handleDeleteBrand = useCallback(
@@ -183,7 +183,7 @@ export const useCategoriesBrandsLogic = () => {
 
       if (
         confirm(
-          `Are you sure you want to delete brand "${brand.title}"? This action cannot be undone.`
+          `Are you sure you want to delete brand "${brand.title}"? This action cannot be undone.`,
         )
       ) {
         try {
@@ -194,7 +194,7 @@ export const useCategoriesBrandsLogic = () => {
         }
       }
     },
-    [brands, deleteBrand]
+    [brands, deleteBrand],
   );
 
   // Skin Type handlers
@@ -232,7 +232,7 @@ export const useCategoriesBrandsLogic = () => {
         throw new Error(errorMessage);
       }
     },
-    [editingSkinType, createSkinType, updateSkinType]
+    [editingSkinType, createSkinType, updateSkinType],
   );
 
   const handleDeleteSkinType = useCallback(
@@ -242,7 +242,7 @@ export const useCategoriesBrandsLogic = () => {
 
       if (
         confirm(
-          `Are you sure you want to delete skin type "${skinType.title}"? This action cannot be undone.`
+          `Are you sure you want to delete skin type "${skinType.title}"? This action cannot be undone.`,
         )
       ) {
         try {
@@ -253,7 +253,7 @@ export const useCategoriesBrandsLogic = () => {
         }
       }
     },
-    [skinTypes, deleteSkinType]
+    [skinTypes, deleteSkinType],
   );
 
   // Export handlers
@@ -266,7 +266,7 @@ export const useCategoriesBrandsLogic = () => {
           category.id,
           `"${category.title}"`,
           `"${category.description || ""}"`,
-        ].join(",")
+        ].join(","),
       ),
     ].join("\n");
 
@@ -284,7 +284,9 @@ export const useCategoriesBrandsLogic = () => {
     const csvContent = [
       headers.join(","),
       ...brands.map((brand) =>
-        [brand.id, `"${brand.title}"`, `"${brand.description || ""}"`].join(",")
+        [brand.id, `"${brand.title}"`, `"${brand.description || ""}"`].join(
+          ",",
+        ),
       ),
     ].join("\n");
 
@@ -306,7 +308,7 @@ export const useCategoriesBrandsLogic = () => {
           skinType.id,
           `"${skinType.title}"`,
           `"${skinType.description || ""}"`,
-        ].join(",")
+        ].join(","),
       ),
     ].join("\n");
 
@@ -386,7 +388,7 @@ export const useCategoryForm = (editCategory?: CategoryOption | null) => {
         setErrors((prev) => ({ ...prev, [field]: "" }));
       }
     },
-    [errors]
+    [errors],
   );
 
   const validateForm = (data: CategoryFormData) => {
@@ -405,7 +407,7 @@ export const useCategoryForm = (editCategory?: CategoryOption | null) => {
 
   const handleSubmit = async (
     e: React.FormEvent,
-    onSubmit: (data: Omit<CategoryOption, "id">) => void
+    onSubmit: (data: Omit<CategoryOption, "id">) => void,
   ) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -456,7 +458,7 @@ export const useBrandForm = (editBrand?: BrandOption | null) => {
         setErrors((prev) => ({ ...prev, [field]: "" }));
       }
     },
-    [errors]
+    [errors],
   );
 
   const validateForm = (data: BrandFormData) => {
@@ -475,7 +477,7 @@ export const useBrandForm = (editBrand?: BrandOption | null) => {
 
   const handleSubmit = async (
     e: React.FormEvent,
-    onSubmit: (data: Omit<BrandOption, "id">) => void
+    onSubmit: (data: Omit<BrandOption, "id">) => void,
   ) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -526,7 +528,7 @@ export const useSkinTypeForm = (editSkinType?: SkinTypeOption | null) => {
         setErrors((prev) => ({ ...prev, [field]: "" }));
       }
     },
-    [errors]
+    [errors],
   );
 
   const validateForm = (data: SkinTypeFormData) => {
@@ -545,7 +547,7 @@ export const useSkinTypeForm = (editSkinType?: SkinTypeOption | null) => {
 
   const handleSubmit = async (
     e: React.FormEvent,
-    onSubmit: (data: Omit<SkinTypeOption, "id">) => void
+    onSubmit: (data: Omit<SkinTypeOption, "id">) => void,
   ) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -591,7 +593,7 @@ export const formatDate = (dateString: string) => {
 export const calculateStats = (
   categories: CategoryOption[],
   brands: BrandOption[],
-  skinTypes: SkinTypeOption[]
+  skinTypes: SkinTypeOption[],
 ) => {
   return {
     totalCategories: categories.length,

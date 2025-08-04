@@ -4,8 +4,9 @@ import Link from "next/link";
 import { InstagramIcon, FacebookIcon, YoutubeIcon } from "lucide-react";
 import { map } from "lodash";
 import { Block, Container, Group, Row, RText, Section } from "@/lib/by/Div";
-import { Footer, FooterProps, ILink } from "@/type/homepage";
+
 import Image from "next/image";
+import { Footer, FooterProps, ILink } from "@/types";
 
 const FooterMenu = ({ footers }: FooterProps) => {
   return (
@@ -24,9 +25,15 @@ const FooterMenu = ({ footers }: FooterProps) => {
           />
 
           <Group className="flex flex-col gap-1">
-            <RText className="text-base font-semibold text-neutral-700">Contact Us</RText>
-            <RText className="text-sm text-neutral-600">Phone: 077 961 456</RText>
-            <RText className="text-sm text-neutral-600">Email: takeskincare@gmail.com</RText>
+            <RText className="text-base font-semibold text-neutral-700">
+              Contact Us
+            </RText>
+            <RText className="text-sm text-neutral-600">
+              Phone: 077 961 456
+            </RText>
+            <RText className="text-sm text-neutral-600">
+              Email: takeskincare@gmail.com
+            </RText>
           </Group>
 
           <Row className="flex gap-4 mt-2">

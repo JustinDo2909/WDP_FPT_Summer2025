@@ -180,7 +180,7 @@ export default function GameCanvas({
         ref={canvasRef}
         width={gameLogic.CANVAS_WIDTH}
         height={gameLogic.CANVAS_HEIGHT}
-        className="border-[3px] border-purple-300 shadow-[0_4px_12px_rgba(128,0,255,0.2)] rounded-2xl"
+        className="w-full max-h-[82vh] border-[3px] border-purple-300 shadow-[0_4px_12px_rgba(128,0,255,0.2)] rounded-2xl"
         tabIndex={0}
       />
 

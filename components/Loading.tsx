@@ -1,40 +1,25 @@
 "use client";
 
-import { Area, Box, Container } from "@/lib/by/Div";
+import { Container, RText, Section } from "@/lib/by/Div";
+import Image from "next/image";
 import React from "react";
 
 export default function Loader() {
   return (
     <Container className="flex items-center justify-center min-h-screen bg-gray-100">
-      <Area className="flex space-x-2">
-        {Array.from({ length: 10 }).map((_, i) => (
-          <Box
-            key={i}
-            className={`w-3 h-32 bg-pink-500 rounded-md animate-wave`}
-            style={{ animationDelay: `${i * 0.1}s` }}
-          ></Box>
-        ))}
-      </Area>
-      <style jsx>{`
-        @keyframes wave {
-          0% {
-            transform: scaleY(0.3);
-            filter: hue-rotate(90deg) blur(30px);
-          }
-          50% {
-            transform: scaleY(1);
-            filter: hue-rotate(180deg) blur(10px);
-          }
-          100% {
-            transform: scaleY(0.3);
-            filter: hue-rotate(360deg) blur(0px);
-          }
-        }
-        .animate-wave {
-          animation: wave 1.5s linear infinite;
-          transform-origin: bottom center;
-        }
-      `}</style>
+      <Section className="flex flex-col items-center justify-center">
+        <Image
+          src="/images/footer-icon.png"
+          alt="Logo"
+          width={540}
+          height={180}
+          priority
+          className="hover:scale-105 transition-transform"
+        />
+        <RText className="text-4xl md:text-2xl font-light text-slate-900 leading-tight">
+          Loading data ...
+        </RText>
+      </Section>
     </Container>
   );
 }

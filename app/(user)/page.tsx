@@ -2,13 +2,12 @@
 import { Area, Group, RText, Section, Wrap } from "@/lib/by/Div";
 import React from "react";
 import Image from "next/image";
-import FloatingGameButton from "@/components/floating_game_button";
 import { useGetProductsQuery } from "@/process/api/api";
 import { useAutoRefetch } from "@/components/ProductsPage/seg/utils";
 import ListProductDisplay from "@/components/ListProductDisplay";
 import { Gamepad2, ShoppingCart } from "lucide-react";
 import Link from "next/link";
-
+import pic from "@/public/images/facecare.png";
 export default function Page() {
   const productDisplaySearchParams = {
     category: "",
@@ -192,7 +191,7 @@ export default function Page() {
             <Group className="order-2 lg:order-1">
               <Group className="relative">
                 <Image
-                  src="/images/faceCare.png"
+                  src={pic}
                   alt="Premium Face Care"
                   width={500}
                   height={400}
@@ -219,8 +218,8 @@ export default function Page() {
               <RText className="text-lg text-slate-600 leading-relaxed">
                 Our approach transcends traditional skincare. We combine
                 cutting-edge science with time-honored botanical wisdom to
-                create products that don't just treat your skin—they transform
-                it.
+                create products that don&apos;t just treat your skin—they
+                transform it.
               </RText>
 
               <Group className="space-y-4">
@@ -354,8 +353,6 @@ export default function Page() {
           </Group>
         </Group>
       </Section>
-
-      <FloatingGameButton />
     </Area>
   );
 }

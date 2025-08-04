@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
 import { Block, Box, Column, Row, RText, Wrap } from "@/lib/by/Div";
-import { formatPrice } from '../../lib/share/formatPrice';
+import { formatPrice } from "../../lib/share/formatPrice";
 import Image from "next/image";
 import QuantityButton from "../ProductPage/QuantityButton";
 import { useCartItemActions } from "./seg/useCartItemActions";
@@ -16,12 +16,8 @@ export const CartItem = ({
   savings: number;
 }) => {
   const { product, quantity } = item;
-  const {
-    handleRemove,
-    handleUpdateQuantity,
-    isRemoving,
-    isUpdating,
-  } = useCartItemActions();
+  const { handleRemove, handleUpdateQuantity, isRemoving, isUpdating } =
+    useCartItemActions();
 
   const effectivePrice = product.sale_price ?? product.price;
   const totalPrice = effectivePrice * quantity - savings;
@@ -42,10 +38,17 @@ export const CartItem = ({
 
       <Box className="flex gap-4 items-start flex-shrink-0">
         <Wrap className="w-16 h-16 relative">
-          <Image src={product.image_url} alt={product.title} fill className="rounded object-cover" />
+          <Image
+            src={product.image_url}
+            alt={product.title}
+            fill
+            className="rounded object-cover"
+          />
         </Wrap>
         <Wrap className="w-[300px] max-w-[300px]">
-          <RText className="text-sm text-gray-600 line-clamp-2">{product.title}</RText>
+          <RText className="text-sm text-gray-600 line-clamp-2">
+            {product.title}
+          </RText>
           {!isSimple && (
             <Row className="flex gap-4 text-sm mt-2 text-gray-500">
               <button

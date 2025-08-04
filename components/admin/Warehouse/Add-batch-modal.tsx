@@ -25,7 +25,7 @@ export function AddBatchModal({
   preselectedProductId,
 }: AddBatchModalProps) {
   const [selectedProductId, setSelectedProductId] = useState(
-    preselectedProductId || ""
+    preselectedProductId || "",
   );
   const [selectedSupplierId, setSelectedSupplierId] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -56,7 +56,7 @@ export function AddBatchModal({
         .includes(searchTerm.toLowerCase()) ||
       product.productCategory?.title
         .toLowerCase()
-        .includes(searchTerm.toLowerCase())
+        .includes(searchTerm.toLowerCase()),
   );
 
   // Close dropdown when clicking outside
@@ -134,7 +134,7 @@ export function AddBatchModal({
     setSearchTerm(
       selectedProduct
         ? `${selectedProduct.title} - ${selectedProduct.productBrand?.title}`
-        : ""
+        : "",
     );
     setIsDropdownOpen(false);
   };
@@ -142,7 +142,7 @@ export function AddBatchModal({
   if (!isOpen) return null;
 
   const selectedProduct = products.find(
-    (p: Product) => p.id === selectedProductId
+    (p: Product) => p.id === selectedProductId,
   );
 
   return (

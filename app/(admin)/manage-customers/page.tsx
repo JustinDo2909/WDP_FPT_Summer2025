@@ -87,7 +87,7 @@ export default function CustomersPage() {
           user.email,
           user.role,
           new Date(user.createdAt).toLocaleDateString(),
-        ].join(",")
+        ].join(","),
       ),
     ].join("\n");
 
@@ -103,7 +103,7 @@ export default function CustomersPage() {
   const totalUsers = users.length;
   const recentSignups = users.filter(
     (u) =>
-      new Date(u.createdAt) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      new Date(u.createdAt) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
   ).length;
 
   const columns = [

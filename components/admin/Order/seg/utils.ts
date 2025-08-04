@@ -48,7 +48,7 @@ export const useOrdersLogic = () => {
         alert("Failed to update order status. Please try again.");
       }
     },
-    [updateOrderStatus]
+    [updateOrderStatus],
   );
 
   const handleExportOrders = useCallback(() => {
@@ -75,7 +75,7 @@ export const useOrdersLogic = () => {
           order.total_amount.toString(),
           order.payment_method,
           new Date(order.createdAt).toLocaleDateString(),
-        ].join(",")
+        ].join(","),
       ),
     ].join("\n");
 
@@ -163,16 +163,16 @@ export const calculateOrderStats = (orders: Order[]) => {
     .reduce((sum, order) => sum + order.total_amount, 0);
 
   const processingOrders = orders.filter(
-    (order) => order.status === "PROCESSING"
+    (order) => order.status === "PROCESSING",
   ).length;
   const shippedOrders = orders.filter(
-    (order) => order.status === "SHIPPED"
+    (order) => order.status === "SHIPPED",
   ).length;
   const completedOrders = orders.filter(
-    (order) => order.status === "DELIVERED"
+    (order) => order.status === "DELIVERED",
   ).length;
   const cancelledOrders = orders.filter(
-    (order) => order.status === "CANCELLED"
+    (order) => order.status === "CANCELLED",
   ).length;
 
   const averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;

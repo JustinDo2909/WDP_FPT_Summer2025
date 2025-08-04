@@ -1,6 +1,5 @@
 "use client";
 
-import GoogleButton from "@/components/Auth/GoogleButton";
 import {
   useRegisterMutation,
   useVerifyOtpMutation,
@@ -75,7 +74,7 @@ const SignUpPage = () => {
 
   const handleOtpKeyDown = (
     index: number,
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
@@ -118,13 +117,6 @@ const SignUpPage = () => {
               Login
             </Link>
           </p>
-
-          <GoogleButton />
-          <div className="flex items-center my-5 text-gray-400 text-sm gap-3">
-            <div className="flex-1 border-t border-gray-300" />
-            <span className="">or Sign up with Email</span>
-            <div className="flex-1 border-t border-gray-300" />
-          </div>
 
           {!showOtp ? (
             <form onSubmit={handleSubmit(onSubmit)}>

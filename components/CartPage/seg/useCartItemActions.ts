@@ -1,6 +1,9 @@
 // utils/useCartItemActions.ts
 
-import { useRemoveFromCartMutation, useUpdateCartMutation } from "@/process/api/apiCart";
+import {
+  useRemoveFromCartMutation,
+  useUpdateCartMutation,
+} from "@/process/api/apiCart";
 
 export function useCartItemActions() {
   const [removeFromCart, { isLoading: removing }] = useRemoveFromCartMutation();
@@ -14,7 +17,10 @@ export function useCartItemActions() {
     }
   };
 
-  const handleUpdateQuantity = async (productId: string, newQuantity: number) => {
+  const handleUpdateQuantity = async (
+    productId: string,
+    newQuantity: number,
+  ) => {
     if (newQuantity < 1) return;
     try {
       await updateCart({ productId, quantity: newQuantity }).unwrap();

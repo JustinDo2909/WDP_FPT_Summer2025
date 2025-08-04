@@ -96,7 +96,7 @@ export function QuestionModal({
   const handleOptionChange = (
     index: number,
     field: keyof QuestionOption,
-    value: string | boolean
+    value: string | boolean,
   ) => {
     // Deep copy to avoid read-only property errors
     const newOptions = formData.questionOptions.map((opt) => ({

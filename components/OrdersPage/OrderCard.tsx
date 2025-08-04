@@ -1,7 +1,11 @@
 import { calculateOrderTotalOriginalPrice } from "@/app/(user)/checkout/seg/calculateSubtotal";
 import { Begin, Card, Column, Row, RText, Wrap } from "@/lib/by/Div";
+import { useCancelOrderMutation } from "@/process/api/api";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import toast from "react-hot-toast";
+import { formatPrice } from "@/lib/share/formatPrice";
 
 interface OrderCardProps {
   order: IOrder;
@@ -14,10 +18,28 @@ export default function OrderCard({
   onBuyAgain,
   onContactSeller,
 }: OrderCardProps): JSX.Element {
-  const { orderItems, status, total_amount, createdAt, updatedAt } = order;
+  const { orderItems, status, total_amount, createdAt, updatedAt, id } = order;
   const shippingFee =
     total_amount - calculateOrderTotalOriginalPrice(orderItems);
   const originalPrice = calculateOrderTotalOriginalPrice(orderItems);
+
+  // Add cancel mutation
+  const [cancelOrder, { isLoading: isCancelling }] = useCancelOrderMutation();
+  const [showModal, setShowModal] = useState(false);
+
+  const handleCancelOrder = async () => {
+    try {
+      await cancelOrder(id).unwrap();
+      setShowModal(false);
+      toast.success(
+        "Order cancelled successfully. You have been refunded " +
+          formatPrice(total_amount),
+      );
+    } catch (err) {
+      // Optionally, handle error
+      console.error("Cancel order failed:", err);
+    }
+  };
 
   return (
     <Card className="bg-white rounded shadow p-6 mb-6">
@@ -117,8 +139,43 @@ export default function OrderCard({
           >
             Contact
           </button>
+          {status === "PROCESSING" && (
+            <button
+              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              onClick={() => setShowModal(true)}
+              disabled={isCancelling}
+            >
+              Cancel
+            </button>
+          )}
         </Wrap>
       </Row>
+
+      {/* Confirmation Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+          <div className="bg-white rounded-lg shadow-lg p-6 min-w-[320px] max-w-sm">
+            <h3 className="text-lg font-semibold mb-4">Cancel Order</h3>
+            <p className="mb-6">Are you sure you want to cancel this order?</p>
+            <Row className="flex justify-end gap-2">
+              <button
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                onClick={() => setShowModal(false)}
+                disabled={isCancelling}
+              >
+                No
+              </button>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                onClick={handleCancelOrder}
+                disabled={isCancelling}
+              >
+                {isCancelling ? "Cancelling..." : "Yes, Cancel"}
+              </button>
+            </Row>
+          </div>
+        </div>
+      )}
     </Card>
   );
 }

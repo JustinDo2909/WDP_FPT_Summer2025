@@ -1,11 +1,8 @@
-'use client'
+"use client";
 
 import { useEffect } from "react";
 import { useGetShippingFeeMutation } from "@/process/api/apiGHN";
-import { mockCartItems } from "@/components/CartPage/seg/useCart";
 import { useCalculateFeeErrorHandler } from "./useCalculateFeeErrorHandler";
-
-const items = mockCartItems;
 
 export function useShippingFeeHandler(shippingInfo: {
   to_district_id: string;
@@ -21,8 +18,7 @@ export function useShippingFeeHandler(shippingInfo: {
   } = useCalculateFeeErrorHandler();
 
   useEffect(() => {
-    const isReady =
-      shippingInfo.to_district_id && shippingInfo.to_ward_code;
+    const isReady = shippingInfo.to_district_id && shippingInfo.to_ward_code;
 
     if (!isReady) return;
 
@@ -31,10 +27,10 @@ export function useShippingFeeHandler(shippingInfo: {
       to_district_id: Number(shippingInfo.to_district_id),
       to_ward_code: shippingInfo.to_ward_code,
       weight: 100,
-      items: items.cartItems.map((item) => ({
-        name: item.product.title,
-        quantity: item.quantity,
-      })),
+      items: [
+        { name: "Sample Product A", quantity: 2 },
+        { name: "Sample Product B", quantity: 1 },
+      ],
     };
 
     catchFeeCalculationError(() => getShippingFee(payload).unwrap());

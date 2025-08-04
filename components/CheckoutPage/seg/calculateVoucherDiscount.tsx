@@ -4,10 +4,9 @@ export function calculateVoucherSavings(
   voucher: IVoucher,
   cartItems: ICartLineItem[],
 ): number {
-
-  const voucherProductIds = voucher.voucherProducts?.map(vp => vp.product.id);
-  const matchingCartItems = cartItems.filter(item =>
-    voucherProductIds?.includes(item.product_id)
+  const voucherProductIds = voucher.voucherProducts?.map((vp) => vp.product.id);
+  const matchingCartItems = cartItems.filter((item) =>
+    voucherProductIds?.includes(item.product_id),
   );
 
   const totalPrice = matchingCartItems.reduce((sum, item) => {

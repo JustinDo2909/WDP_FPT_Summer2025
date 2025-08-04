@@ -71,7 +71,7 @@ export const mproduct = {
   tabs: [
     { id: "description", label: "Description" },
     { id: "ingredients", label: "Ingredients" },
-    { id: "usage", label: "How to Use" },
+    { id: "how-to-use", label: "How to Use" },
     { id: "reviews", label: "Reviews" },
   ],
 };
@@ -934,18 +934,18 @@ export const games = [
     description: "Find the Hidden Gems, Win Big!",
   },
   {
-    game_url: "/event/coming-soon",
+    game_url: "/event/FlipCard",
     image_url:
       "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyW6xVW8OZixv3NHYOfM4SRpTI2B9ak1Ed8CAsl",
-    title: "Pixel Puzzle",
-    description: "Solve colorful pixel puzzles!",
+    title: "Memory Game",
+    description: "Check your memory!",
   },
   {
-    game_url: "/event/coming-soon",
+    game_url: "/event/Racing",
     image_url:
       "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWvC7iO7NGpV1B4nfFHYlORQ8udj5PmDSh6A0o",
-    title: "Controller Clash",
-    description: "Test your lightning reflexes!",
+    title: "Highway Thunder",
+    description: "Run or died!",
   },
   {
     game_url: "/event/coming-soon",

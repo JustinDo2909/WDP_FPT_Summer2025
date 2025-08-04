@@ -27,6 +27,7 @@ interface OrderDetailModalProps {
   onUpdateStatus?: (orderId: string, newStatus: OrderDetail["status"]) => void;
 }
 
+// Hooks must always run, so we move them outside any conditional return
 export function OrderDetailModal({
   isOpen,
   onClose,
@@ -39,7 +40,9 @@ export function OrderDetailModal({
     if (!order) return <Package className="w-5 h-5" />;
 
     const iconProps = { className: "w-5 h-5" };
-    switch (order.status) {
+    if (!orderStatus) return null;
+
+    switch (orderStatus) {
       case "PROCESSING":
         return <Package {...iconProps} />;
       case "SHIPPED":
@@ -382,7 +385,6 @@ export function OrderDetailModal({
                 </table>
               </Area>
 
-              {/* Total */}
               <Area className="mt-4 border-t border-gray-200 pt-4">
                 <Yard className="flex justify-end">
                   <RText className="text-xl font-semibold text-gray-900">

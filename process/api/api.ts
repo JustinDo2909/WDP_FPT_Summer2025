@@ -290,7 +290,7 @@ export const api = createApi({
     //#endregion
 
     //#region getReviewsById
-    getReviewsById: build.query<IResponse<IReview, "reviews">, string>({
+    getReviewsById: build.query<IResponse<IReview[], "reviews">, string>({
       query: (id) => ({
         url: `reviews/${id}`,
         method: "GET",
@@ -971,6 +971,16 @@ export const api = createApi({
       providesTags: ["Orders"],
     }),
 
+    //#endregion
+
+    //#region cancelOrder
+    cancelOrder: build.mutation<IResponse<IOrder, "order">, string>({
+      query: (id) => ({
+        url: `orders/cancel/${id}`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Orders"],
+    }),
     //#endregion
   }),
 });

@@ -1,5 +1,6 @@
 "use client";
 
+import { useGetOrdersQuery } from "@/process/api/api";
 import OrdersList from "../../../../components/OrdersPage/OrdersList";
 import {
   Tabs,
@@ -9,7 +10,6 @@ import {
 } from "../../../../lib/pattern/share/Tabs";
 import { OrdersSearch } from "@/components/OrdersPage/OrdersSearch";
 import { Box } from "@/lib/by/Div";
-import { useGetOrdersQuery } from "@/process/api/apiOrders";
 
 export default function OrdersPage() {
   const { data, isLoading } = useGetOrdersQuery();

@@ -8,7 +8,9 @@ export async function fetchProductById(id: string) {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch product with id ${id}: ${response.status}`);
+      throw new Error(
+        `Failed to fetch product with id ${id}: ${response.status}`,
+      );
     }
 
     const data = await response.json();
