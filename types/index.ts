@@ -147,13 +147,11 @@ declare global {
     user_limit: string;
     user_count: string;
     is_active: string;
-    leaderboard_reward_id:string;
+    leaderboard_reward_id: string;
     updated_at: string;
     created_at: string;
     voucherProducts: IVoucherProduct[];
-  }
-
-
+  };
 }
 
 export type {
@@ -167,7 +165,7 @@ export type {
   IProductPageData,
   IProductCategory,
   IProductBrand,
-  IVoucherTemplate
+  IVoucherTemplate,
 };
 
 export type IGame = {

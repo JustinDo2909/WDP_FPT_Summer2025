@@ -25,6 +25,7 @@ export default function BeautyDropHomePage() {
 
   return (
     <GameHomeLayout
+      backgroundImage={event?.image_url}
       title={event?.title}
       type={event?.type}
       eventData={eventData?.data}

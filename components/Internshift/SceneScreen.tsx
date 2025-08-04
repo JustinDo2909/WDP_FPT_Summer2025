@@ -28,7 +28,7 @@ export const SceneScreen = () => {
     removeProductType,
     submitRoutine,
     submitProducts,
-    nextCustomer
+    nextCustomer,
   } = gameStateApi;
 
   // Call startNewCustomer when the component mounts
@@ -75,10 +75,16 @@ export const SceneScreen = () => {
         />
       );
     }
-    if (gameState.gameScene === SceneName.MASK_MIXING && gameState.currentCustomer) {
+    if (
+      gameState.gameScene === SceneName.MASK_MIXING &&
+      gameState.currentCustomer
+    ) {
       return (
         <MaskMixing
-          customerSkinType={gameState.currentCustomer.case.skinType || gameState.currentCustomer.case.caseName}
+          customerSkinType={
+            gameState.currentCustomer.case.skinType ||
+            gameState.currentCustomer.case.caseName
+          }
           onMixComplete={() => {
             setGameScene(SceneName.CUSTOMER_INTERFACE);
           }}

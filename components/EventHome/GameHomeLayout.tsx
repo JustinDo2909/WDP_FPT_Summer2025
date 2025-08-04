@@ -45,7 +45,7 @@ export default function GameHomeLayout({
   const [showRules, setShowRules] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showRewards, setShowRewards] = useState(false);
-  const {data} = useGetVoucherByEventIdQuery(eventData?.event.id ?? "");
+  const { data } = useGetVoucherByEventIdQuery(eventData?.event.id ?? "");
   const router = useRouter();
 
   const toggleLeaderboard = () => {

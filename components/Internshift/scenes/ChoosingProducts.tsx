@@ -40,7 +40,7 @@ export default function ChoosingProducts({
   const [productPage, setProductPage] = useState(0);
   const paginatedProducts = products.slice(
     productPage * productsPerPage,
-    (productPage + 1) * productsPerPage
+    (productPage + 1) * productsPerPage,
   );
   const totalProductPages = Math.ceil(products.length / productsPerPage);
 
@@ -52,7 +52,7 @@ export default function ChoosingProducts({
 
   // Only allow one product per type
   const selectedForCurrentType = selectedProducts.find(
-    (p) => p.type === currentType
+    (p) => p.type === currentType,
   );
 
   // Handlers
@@ -225,7 +225,7 @@ export default function ChoosingProducts({
           className="game-button px-6 py-2 text-lg font-bold ml-auto"
           onClick={submitProducts}
           disabled={selectedProductTypes.some(
-            (type) => !selectedProducts.find((p) => p.type === type)
+            (type) => !selectedProducts.find((p) => p.type === type),
           )}
         >
           <div>

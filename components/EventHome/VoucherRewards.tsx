@@ -1,4 +1,3 @@
-import { fallbackRewards } from "@/constants/event";
 import { Block, Column, Group, Row, RText, Section, Yard } from "@/lib/by/Div";
 import { formatPrice } from "@/lib/share/formatPrice";
 import { map } from "lodash";
@@ -11,7 +10,7 @@ interface VoucherRewardsProps {
 }
 
 export default function VoucherRewards({
-  rewards = fallbackRewards,
+  rewards,
   hideToggleButton = false,
 }: VoucherRewardsProps) {
   const [selectedVoucher, setSelectedVoucher] =

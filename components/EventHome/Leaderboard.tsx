@@ -49,7 +49,7 @@ export default function Leaderboard({
           <Row
             key={entry.rank}
             className={`flex items-center justify-between rounded-full border px-3 ${getPillSize(
-              Number(entry.rank)
+              Number(entry.rank),
             )} shadow-sm ${getRankColor(Number(entry.rank))}`}
           >
             {/* Left: Name */}

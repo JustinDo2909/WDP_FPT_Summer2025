@@ -12,7 +12,9 @@ export function createVoucherMap(
   }
 
   // Get applicable product IDs
-  const voucherProductIds = voucher.voucherTemplate.voucherProducts.map((vp) => vp.product.id);
+  const voucherProductIds = voucher.voucherTemplate.voucherProducts.map(
+    (vp) => vp.product.id,
+  );
 
   // Key cart items by ID for lookup
   const itemsById = keyBy(items, (item) => item.id);

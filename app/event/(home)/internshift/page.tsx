@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import GameHomeLayout from "@/components/EventHome/GameHomeLayout";
 import { useGetEventLeaderboardQuery } from "@/process/api/api";
@@ -6,16 +6,19 @@ import { useSearchParams } from "next/navigation";
 
 export default function InternshiftGamePage() {
   const searchParams = useSearchParams();
-    const event_id = searchParams.get("event_id");
-  
-    const { data: eventData } = useGetEventLeaderboardQuery(String(event_id));
+  const event_id = searchParams.get("event_id");
+
+  const { data: eventData } = useGetEventLeaderboardQuery(String(event_id));
 
   return (
-    <GameHomeLayout title="" backgroundImage="https://i.ibb.co/TqBxrqYw/intershift-cover.png" eventData={eventData?.data}>
-        <div className="flex flex-col items-center justify-center min-h-[60vh]">
-       
+    <GameHomeLayout
+      title=""
+      backgroundImage="https://i.ibb.co/TqBxrqYw/intershift-cover.png"
+      eventData={eventData?.data}
+    >
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
         {/* You can add more game instructions, status, or a preview here if needed */}
-        </div>
+      </div>
     </GameHomeLayout>
   );
 }
