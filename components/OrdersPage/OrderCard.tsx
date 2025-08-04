@@ -38,7 +38,6 @@ export default function OrderCard({
     }
   };
 
-
   return (
     <Card className="bg-white rounded shadow p-6 mb-6">
       <Row className="flex items-center justify-between mb-4">
@@ -83,23 +82,18 @@ export default function OrderCard({
                 </RText>
               </Begin>
               <Begin className="flex-1">
-  <RText className="text-xs text-gray-900">Price</RText>
-  {item.unit_price !== item.final_price ? (
-    <>
-    <RText className="">
-        {formatPrice(item.final_price)}
-      </RText>
-      <RText className="text-sm text-gray-500 line-through">
-        {formatPrice(item.unit_price)}
-      </RText>
-  
-    </>
-  ) : (
-    <RText className="">
-      {formatPrice(item.unit_price)}
-    </RText>
-  )}
-</Begin>
+                <RText className="text-xs text-gray-900">Price</RText>
+                {item.unit_price !== item.final_price ? (
+                  <>
+                    <RText className="">{formatPrice(item.final_price)}</RText>
+                    <RText className="text-sm text-gray-500 line-through">
+                      {formatPrice(item.unit_price)}
+                    </RText>
+                  </>
+                ) : (
+                  <RText className="">{formatPrice(item.unit_price)}</RText>
+                )}
+              </Begin>
               <RText className="text-right">
                 <span className="text-pink-600 font-semibold">
                   {formatPrice(item.total_price)}
@@ -180,7 +174,9 @@ export default function OrderCard({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
           <div className="bg-white rounded-lg shadow-lg p-6 min-w-[320px] max-w-sm">
             <h3 className="text-lg font-semibold mb-4">
-              {status === "PROCESSING" ? "Refund Order" : "Upload Delivery Proof"}
+              {status === "PROCESSING"
+                ? "Refund Order"
+                : "Upload Delivery Proof"}
             </h3>
             <p className="mb-6">
               {status === "PROCESSING"

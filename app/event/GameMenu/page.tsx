@@ -27,7 +27,12 @@ export default function BeautyDropHomePage() {
 
 
   return (
-    <GameHomeLayout event={event} title={event?.title} eventData={eventData?.data}>
+    <GameHomeLayout event={event}
+      backgroundImage={event?.image_url}
+      title={event?.title}
+      type={event?.type}
+      eventData={eventData?.data}
+    >
       <Container className="w-full ">
         {event?.type === "DROP" ? (
           <CosmeticCatchGame />

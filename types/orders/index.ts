@@ -25,7 +25,7 @@ declare global {
     email: string;
     name: string;
     role: "USER" | "ADMIN" | "STAFF";
-    phone: number
+    phone: string;
     createdAt: string;
     updatedAt: string;
   }
@@ -40,8 +40,8 @@ declare global {
     quantity: number;
     unit_price: number;
     discount_per_item: number;
-    total_price:number;
-    final_price:number;
+    total_price: number;
+    final_price: number;
   }
 }
 

@@ -165,8 +165,11 @@ export const api = createApi({
     }),
     //#endregion
 
-     //#region getEventLeaderboard
-    getEventLeaderboard: build.query<IResponse<ILeaderBoardData, "data">, string >({
+    //#region getEventLeaderboard
+    getEventLeaderboard: build.query<
+      IResponse<ILeaderBoardData, "data">,
+      string
+    >({
       query: (event_id) => ({
         url: `events/${event_id}/leaderboard`,
         method: "GET",
@@ -175,6 +178,23 @@ export const api = createApi({
       providesTags: ["Event"],
     }),
     //#endregion
+
+    //#region calculateReward
+    calculateReward: build.mutation<
+      EventReward,
+      { eventId: string; correct_answers: number }
+    >({
+      query: ({ eventId, correct_answers }) => ({
+        url: `events/${eventId}/calculate-reward`,
+        method: "POST",
+        body: { correct_answers },
+      }),
+      // transformResponse: (response: IResponseCalculate) =>
+      //   response.reward || {},
+      invalidatesTags: ["Event"],
+    }),
+    //#endregion
+
     //#region getRandomQuestion
     postAnswer: build.mutation<IReward, { correct_answers: number }>({
       query: (body) => ({
@@ -801,11 +821,14 @@ export const api = createApi({
     //#endregion
 
     //#region cancelOrder
-    cancelOrder: build.mutation<IResponse<IOrder, "order">, { id: string; reason: string; }>({
+    cancelOrder: build.mutation<
+      IResponse<IOrder, "order">,
+      { id: string; reason: string }
+    >({
       query: ({ id, reason }) => ({
-      url: `orders/cancel/${id}`,
-      method: "POST",
-      body: { reason, images: [] },
+        url: `orders/cancel/${id}`,
+        method: "POST",
+        body: { reason, images: [] },
       }),
       invalidatesTags: ["Orders"],
     }),
@@ -856,6 +879,7 @@ export const {
   useDeleteEventMutation,
   useGetEventLeaderboardQuery,
   useGetNewEventByIdQuery,
+  useCalculateRewardMutation,
 
   // Questions
   useGetQuestionsByEventIdQuery,

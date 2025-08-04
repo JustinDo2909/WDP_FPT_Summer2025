@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import GameHomeLayout from "@/components/EventHome/GameHomeLayout";
 import { useGetEventLeaderboardQuery, useGetNewEventByIdQuery } from "@/process/api/api";
@@ -17,7 +17,7 @@ export default function InternshiftGamePage() {
         <div className="flex flex-col items-center justify-center min-h-[60vh]">
        
         {/* You can add more game instructions, status, or a preview here if needed */}
-        </div>
+      </div>
     </GameHomeLayout>
   );
 }

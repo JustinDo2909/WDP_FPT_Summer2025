@@ -5,7 +5,8 @@ export const npcProfiles: NPCProfile[] = [
     avatar_url_default: "https://i.ibb.co/Z6v2B3dQ/lana.png",
     avatar_url_happy: "/avatars/lana_happy.png",
     avatar_url_sad: "/avatars/lana_sad.png",
-    concern_line: "Hi, I’ve been breaking out lately, especially around my chin.",
+    concern_line:
+      "Hi, I’ve been breaking out lately, especially around my chin.",
     happy_line: "Wow, my skin feels so much clearer! Thank you!",
     unhappy_line: "Ugh, I think the products made it worse...",
     thanks_line: "Thanks for your help! I'll come back if it works well.",
@@ -17,9 +18,14 @@ export const npcProfiles: NPCProfile[] = [
       tooltip: "Breakouts, inflammation, and clogged pores",
       requiredIngredients: ["Salicylic acid", "Niacinamide", "Tea Tree"],
       avoidIngredients: ["Coconut oil", "Fragrance"],
-      requiredProducts: ["oil-based-cleanser","gel/foam cleanser", "toner", "serum"],
-      avoidProducts: ["exfoliator", "heavy moisturizer"]
-    }
+      requiredProducts: [
+        "oil-based-cleanser",
+        "gel/foam cleanser",
+        "toner",
+        "serum",
+      ],
+      avoidProducts: ["exfoliator", "heavy moisturizer"],
+    },
   },
   {
     id: 2,
@@ -39,9 +45,15 @@ export const npcProfiles: NPCProfile[] = [
       tooltip: "Shiny skin due to excess sebum",
       requiredIngredients: ["Clay", "Niacinamide", "Salicylic acid"],
       avoidIngredients: ["Mineral oil", "Petrolatum"],
-      requiredProducts: ["oil-based-cleanser","gel/foam cleanser", "toner", "moisturizer", "serum"],
-      avoidProducts: ["heavy moisturizer", "occlusive balm"]
-    }
+      requiredProducts: [
+        "oil-based-cleanser",
+        "gel/foam cleanser",
+        "toner",
+        "moisturizer",
+        "serum",
+      ],
+      avoidProducts: ["heavy moisturizer", "occlusive balm"],
+    },
   },
   {
     id: 3,
@@ -54,18 +66,18 @@ export const npcProfiles: NPCProfile[] = [
     unhappy_line: "Still dry. Maybe I need something more moisturizing?",
     thanks_line: "I appreciate the effort. Let’s see how it goes.",
     steps: 5,
-    description: "A kindergarten teacher with dry skin from long days in air conditioning.",
+    description:
+      "A kindergarten teacher with dry skin from long days in air conditioning.",
     case: {
       skinType: "dry",
       caseName: "Dry skin",
       tooltip: "Flaky, tight skin lacking moisture",
       requiredIngredients: ["Hyaluronic acid", "Ceramides", "Glycerin"],
       avoidIngredients: ["Alcohol", "Benzoyl peroxide"],
-      requiredProducts: [ "moisturizer", "serum"]
-    }
-  }
+      requiredProducts: ["moisturizer", "serum"],
+    },
+  },
 ];
-
 
 export const gameProducts: GameProduct[] = [
   // --- CLEANSERS ---
@@ -99,7 +111,8 @@ export const gameProducts: GameProduct[] = [
     name: "Milky Barrier Cleanser",
     image_url: "/products/milky_cleanser.png",
     ingredients: ["Ceramides", "Coconut oil", "Shea Butter"],
-    tooltip: "Nourishing formula for extreme dryness (not for acne-prone skin).",
+    tooltip:
+      "Nourishing formula for extreme dryness (not for acne-prone skin).",
   },
   {
     id: 5,
@@ -116,7 +129,8 @@ export const gameProducts: GameProduct[] = [
     name: "Calm & Clean Cleansing Oil",
     image_url: "/products/calm_clean_oil.png",
     ingredients: ["Jojoba Oil", "Chamomile", "Vitamin E"],
-    tooltip: "Gentle cleansing oil that melts away makeup while calming sensitive skin.",
+    tooltip:
+      "Gentle cleansing oil that melts away makeup while calming sensitive skin.",
   },
   {
     id: 27,
@@ -124,7 +138,8 @@ export const gameProducts: GameProduct[] = [
     name: "Deep Melt Cleansing Balm",
     image_url: "/products/deepmelt_balm.png",
     ingredients: ["Sunflower Oil", "Green Tea", "Shea Butter"],
-    tooltip: "Solid balm-to-oil formula that removes impurities without stripping moisture.",
+    tooltip:
+      "Solid balm-to-oil formula that removes impurities without stripping moisture.",
   },
   {
     id: 28,
@@ -132,7 +147,8 @@ export const gameProducts: GameProduct[] = [
     name: "Purity First Oil Cleanser",
     image_url: "/products/purity_oil_cleanser.png",
     ingredients: ["Grapeseed Oil", "Tea Tree", "Squalane"],
-    tooltip: "Lightweight oil that deeply cleanses pores and helps control acne.",
+    tooltip:
+      "Lightweight oil that deeply cleanses pores and helps control acne.",
   },
   {
     id: 29,
@@ -140,7 +156,8 @@ export const gameProducts: GameProduct[] = [
     name: "Silky Barrier Oil Wash",
     image_url: "/products/silky_oil_cleanser.png",
     ingredients: ["Squalane", "Ceramides", "Avocado Oil"],
-    tooltip: "Protects skin barrier while effectively lifting off sunscreen and debris.",
+    tooltip:
+      "Protects skin barrier while effectively lifting off sunscreen and debris.",
   },
   {
     id: 30,
@@ -148,7 +165,8 @@ export const gameProducts: GameProduct[] = [
     name: "HydraGlow Cleansing Oil",
     image_url: "/products/hydraglow_oil.png",
     ingredients: ["Argan Oil", "Vitamin C", "Glycerin"],
-    tooltip: "Brightening oil cleanser that removes dullness and hydrates as it cleanses.",
+    tooltip:
+      "Brightening oil cleanser that removes dullness and hydrates as it cleanses.",
   },
 
   // --- TONERS ---
@@ -344,7 +362,7 @@ export const skinCases: SkinCase[] = [
     avoidIngredients: ["Essential Oils", "Alcohol"],
     requiredProducts: ["Soothing Toner", "Barrier Cream"],
     avoidProducts: ["Scrubs", "Strong Acids"],
-  }
+  },
 ];
 
 export const masks: Mask[] = [
@@ -357,7 +375,7 @@ export const masks: Mask[] = [
       { tag: "tea-tree-oil", quantity: 1 },
     ],
     case: "oily",
-    tooltip: "Detoxifies, calms irritation, and reduces acne."
+    tooltip: "Detoxifies, calms irritation, and reduces acne.",
   },
   {
     id: 2,
@@ -368,7 +386,7 @@ export const masks: Mask[] = [
       { tag: "chamomile", quantity: 1 },
     ],
     case: "dry",
-    tooltip: "Deep hydration and glowing skin with calming effects."
+    tooltip: "Deep hydration and glowing skin with calming effects.",
   },
   {
     id: 3,
@@ -379,11 +397,9 @@ export const masks: Mask[] = [
       { tag: "vitamin-c", quantity: 1 },
     ],
     case: "combination",
-    tooltip: "Balances oil, brightens complexion, and smooths texture."
-  }
+    tooltip: "Balances oil, brightens complexion, and smooths texture.",
+  },
 ];
-
-
 
 export const gameMaskIngredients: MaskIngredient[] = [
   {

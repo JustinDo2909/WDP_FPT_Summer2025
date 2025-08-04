@@ -1144,3 +1144,109 @@ export const GAME_MODES = {
   },
 };
 //endregion
+
+//region Defender
+// Enemy types configuration - increased sizes and speed
+export const ENEMY_TYPES = {
+  basic: {
+    health: 1,
+    color: "#ff4444",
+    size: 0.8,
+    speed: 0.025,
+    points: 10,
+    type: "basic",
+  },
+  strong: {
+    health: 3,
+    color: "#ff8844",
+    size: 1.0,
+    speed: 0.02,
+    points: 30,
+    type: "strong",
+  },
+  fast: {
+    health: 1,
+    color: "#44ff44",
+    size: 0.7,
+    speed: 0.04,
+    points: 20,
+    type: "fast",
+  },
+  hard3: {
+    health: 3,
+    color: "#888888",
+    size: 0.6,
+    speed: 0.03,
+    points: 15,
+    type: "hard3",
+  },
+  hard5: {
+    health: 5,
+    color: "#8844ff",
+    size: 1.1,
+    speed: 0.01,
+    points: 50,
+    type: "hard5",
+  },
+  hard7: {
+    health: 7,
+    color: "#44ff88",
+    size: 1.2,
+    speed: 0.008,
+    points: 70,
+    type: "hard7",
+  },
+  hard10: {
+    health: 10,
+    color: "#ff0088",
+    size: 1.3,
+    speed: 0.007,
+    points: 100,
+    type: "hard10",
+  },
+  invulnerable: {
+    health: 1,
+    color: "#ffff00",
+    size: 0.7,
+    speed: 0.03,
+    points: 40,
+    isInvulnerable: false, // Initial state
+    invulnerableTimer: 0,
+    type: "invulnerable",
+  },
+} as const;
+
+// Power-up types configuration (removed upgradeBox)
+export const POWER_UP_CONFIG = {
+  infiniteAmmo: { color: "#00ffff", type: "infiniteAmmo" },
+  multiShot3: { color: "#ff00ff", type: "multiShot3", value: 3 }, // Shoots 3 bullets
+  multiShot5: { color: "#ff00ff", type: "multiShot5", value: 5 }, // Shoots 5 bullets
+} as const;
+
+// New config for UpgradeBox
+export const UPGRADE_BOX_CONFIG = { color: "#ffa500" }; // Orange for upgrade boxes
+
+// Bullet Upgrade Levels
+export const UPGRADE_LEVELS = [
+  { level: 1, boxesNeeded: 0, bullets: 1, damage: 1, ammoCost: 1 }, // Default
+  { level: 2, boxesNeeded: 3, bullets: 2, damage: 1, ammoCost: 2 }, // x2 bullets, 2 ammo cost
+  { level: 3, boxesNeeded: 5, bullets: 3, damage: 1, ammoCost: 3 }, // x3 bullets, 3 ammo cost
+  { level: 4, boxesNeeded: 7, bullets: 4, damage: 1, ammoCost: 4 }, // x4 bullets, 4 ammo cost
+  { level: 5, boxesNeeded: 10, bullets: 5, damage: 1, ammoCost: 5 }, // x5 bullets, 5 ammo cost
+  { level: 6, boxesNeeded: 10, bullets: 5, damage: 2, ammoCost: 5 }, // +1 damage
+  { level: 7, boxesNeeded: 10, bullets: 5, damage: 3, ammoCost: 5 },
+  { level: 8, boxesNeeded: 10, bullets: 5, damage: 4, ammoCost: 5 },
+  { level: 9, boxesNeeded: 10, bullets: 5, damage: 5, ammoCost: 5 },
+  { level: 10, boxesNeeded: 10, bullets: 5, damage: 6, ammoCost: 5 },
+  { level: 11, boxesNeeded: 10, bullets: 5, damage: 7, ammoCost: 5 },
+  { level: 12, boxesNeeded: 10, bullets: 5, damage: 8, ammoCost: 5 },
+  { level: 13, boxesNeeded: 10, bullets: 5, damage: 9, ammoCost: 5 },
+  { level: 14, boxesNeeded: 10, bullets: 5, damage: 10, ammoCost: 5 },
+  { level: 15, boxesNeeded: 10, bullets: 5, damage: 11, ammoCost: 5 },
+  { level: 16, boxesNeeded: 10, bullets: 5, damage: 12, ammoCost: 5 },
+  { level: 17, boxesNeeded: 10, bullets: 5, damage: 13, ammoCost: 5 },
+  { level: 18, boxesNeeded: 10, bullets: 5, damage: 14, ammoCost: 5 },
+  { level: 19, boxesNeeded: 10, bullets: 5, damage: 15, ammoCost: 5 },
+  { level: 20, boxesNeeded: 10, bullets: 5, damage: 16, ammoCost: 5 }, // Max level
+];
+//endregion

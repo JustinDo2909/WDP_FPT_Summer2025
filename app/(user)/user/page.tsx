@@ -42,11 +42,11 @@ export default function UserProfilePage() {
 
   useEffect(() => {
     if (user) {
-      setName(user.name)
-      setEmail(user.email)
-      setPhone(user.phone)
+      setName(user.name);
+      setEmail(user.email);
+      setPhone(user.phone);
     }
-  },[user])
+  }, [user]);
 
   return (
     <div className="w-full mx-auto bg-white p-6 sm:p-8 rounded-lg shadow-sm">
@@ -87,8 +87,6 @@ export default function UserProfilePage() {
           />
         </FormField>
 
-
-
         <FormField label="Phone">
           <input
             type="text"
@@ -98,9 +96,6 @@ export default function UserProfilePage() {
             className="w-full max-w-sm border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-primary focus:border-primary"
           />
         </FormField>
-
-
-       
 
         <FormField label="Gender">
           <div className="flex items-center gap-6 text-sm">
@@ -144,8 +139,7 @@ export default function UserProfilePage() {
               Change
             </a>
           </div>
-                  </FormField>
-
+        </FormField>
 
         <div className="mt-8 flex justify-start space-x-4">
           {/* You can use your custom Button or a standard button */}

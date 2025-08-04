@@ -199,7 +199,9 @@ export default function CustomerInteraction({
             animate="visible_delayed2"
           >
             <div className="bg-green-100 text-gray-800 px-5 py-4 rounded-2xl shadow-md border border-green-200 text-lg relative">
-              <span className="block">You&apos;re welcome. See you again next time!</span>
+              <span className="block">
+                You&apos;re welcome. See you again next time!
+              </span>
               <button className="game-button mt-4" onClick={nextCustomer}>
                 <div>
                   <span>Next Customer</span>

@@ -26,7 +26,8 @@ export default function VouchersPage() {
       );
       if (type === "redeemed") return v.redeemed === true;
       if (type === "expired") return expiry < now && !v.redeemed;
-      if (type === "usable") return v.redeemed === false && !(expiry < now && !v.redeemed);
+      if (type === "usable")
+        return v.redeemed === false && !(expiry < now && !v.redeemed);
       return true; // all
     });
   };

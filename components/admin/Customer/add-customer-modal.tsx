@@ -40,7 +40,6 @@ export function AddCustomerModal({
   }, [editCustomer]);
 
   if (!isOpen) return null;
-
   return (
     <>
       {/* Backdrop */}

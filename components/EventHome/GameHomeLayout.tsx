@@ -25,6 +25,7 @@ const DEFAULTS = {
 
 export default function GameHomeLayout({
   children,
+  type,
   playButtonText = DEFAULTS.playButton,
   inventoryButtonText = DEFAULTS.inventoryButton,
   rulesButtonText = DEFAULTS.rulesButton,
@@ -35,6 +36,7 @@ export default function GameHomeLayout({
 }: {
   children?: React.ReactNode;
   title?: string;
+  type?: string;
   playButtonText?: string;
   backgroundImage?: string;
   inventoryButtonText?: string;
@@ -46,8 +48,19 @@ export default function GameHomeLayout({
   const [showRules, setShowRules] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showRewards, setShowRewards] = useState(false);
-  const {data} = useGetVoucherByEventIdQuery(eventData?.event.id ?? "");
+  const { data } = useGetVoucherByEventIdQuery(eventData?.event.id ?? "");
   const router = useRouter();
+
+  const toggleLeaderboard = () => {
+    setShowLeaderboard((prev) => !prev);
+    if (showRewards) setShowRewards(false); // Close Rewards if open
+  };
+
+  // Handler to toggle Rewards and close Leaderboard
+  const toggleRewards = () => {
+    setShowRewards((prev) => !prev);
+    if (showLeaderboard) setShowLeaderboard(false); // Close Leaderboard if open
+  };
 
   return (
     <Area
@@ -83,7 +96,7 @@ export default function GameHomeLayout({
         <Section className="mb-4 ">
           <button
             className={`game-button p-0  ${showLeaderboard ? "w-full" : ""}`}
-            onClick={() => setShowLeaderboard(!showLeaderboard)}
+            onClick={toggleLeaderboard}
           >
             <Block className="flex items-center justify-center gap-2  p-3">
               {showLeaderboard ? (
@@ -146,14 +159,16 @@ export default function GameHomeLayout({
           </button>
 
           {/* Play Button */}
-          <button className="game-button">
-            <Block>
-              <span className="text-xl mx-4 flex items-center">
-                {playButtonText}
-                <Play fill="black" size={20} className="ml-2 mb-1" />
-              </span>
-            </Block>
-          </button>
+          {type !== "DEFENDER" && type !== "DROP" && (
+            <button className="game-button">
+              <Block>
+                <span className="text-xl mx-4 flex items-center">
+                  {playButtonText}
+                  <Play fill="black" size={20} className="ml-2 mb-1" />
+                </span>
+              </Block>
+            </button>
+          )}
 
           {/* Inventory Button */}
           <button
@@ -177,7 +192,7 @@ export default function GameHomeLayout({
         <Block className="mb-4">
           <button
             className={`game-button p-0  ${showRewards ? "w-full" : ""}`}
-            onClick={() => setShowRewards(!showRewards)}
+            onClick={toggleRewards}
           >
             <Block className="flex items-center justify-center gap-2 p-3 ">
               {showRewards ? (

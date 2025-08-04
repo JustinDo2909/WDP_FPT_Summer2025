@@ -31,8 +31,8 @@ export default function VoucherCard({
   const statusText = isExpired
     ? "Expired"
     : isRedeemed
-    ? `Redeemed${redeemed_at ? ` at ${new Date(redeemed_at).toLocaleDateString()}` : ""}`
-    : "Available";
+      ? `Redeemed${redeemed_at ? ` at ${new Date(redeemed_at).toLocaleDateString()}` : ""}`
+      : "Available";
 
   const formattedDiscount =
     type === "PERCENT"
@@ -43,7 +43,7 @@ export default function VoucherCard({
     <Card
       className={`
         flex w-full min-w-[450px] overflow-hidden rounded-lg border border-gray-200
-        ${(isRedeemed || isExpired) ? "opacity-50 cursor-not-allowed grayscale" : ""}
+        ${isRedeemed || isExpired ? "opacity-50 cursor-not-allowed grayscale" : ""}
       `}
     >
       {/* Left Pill */}
@@ -64,8 +64,8 @@ export default function VoucherCard({
                 isExpired
                   ? "text-red-500"
                   : isRedeemed
-                  ? "text-gray-400"
-                  : "text-green-600"
+                    ? "text-gray-400"
+                    : "text-green-600"
               }`}
             >
               {statusText}
@@ -73,11 +73,14 @@ export default function VoucherCard({
           </Row>
 
           {/* Linked product titles */}
-          {voucherTemplate?.voucherProducts && voucherTemplate?.voucherProducts.length > 0 && (
-            <Wrap className="mt-2 text-xs text-gray-600">
-              Applicable for:&nbsp;
-              {(showAll ? (voucherTemplate?.voucherProducts ?? []) : (voucherTemplate?.voucherProducts ?? []).slice(0, 3)).map(
-                (vp, index) => (
+          {voucherTemplate?.voucherProducts &&
+            voucherTemplate?.voucherProducts.length > 0 && (
+              <Wrap className="mt-2 text-xs text-gray-600">
+                Applicable for:&nbsp;
+                {(showAll
+                  ? (voucherTemplate?.voucherProducts ?? [])
+                  : (voucherTemplate?.voucherProducts ?? []).slice(0, 3)
+                ).map((vp, index) => (
                   <React.Fragment key={vp.product.id}>
                     <Link
                       href={`/products/${vp.product.id}`}
@@ -88,23 +91,25 @@ export default function VoucherCard({
                     {index <
                       (showAll
                         ? (voucherTemplate?.voucherProducts?.length ?? 0)
-                        : Math.min(voucherTemplate?.voucherProducts?.length ?? 0, 3)) -
+                        : Math.min(
+                            voucherTemplate?.voucherProducts?.length ?? 0,
+                            3,
+                          )) -
                         1 && ", "}
                   </React.Fragment>
-                ),
-              )}
-              {voucherTemplate?.voucherProducts.length > 3 && (
-                <button
-                  onClick={() => setShowAll((prev) => !prev)}
-                  className="ml-1 text-blue-500 underline"
-                >
-                  {showAll
-                    ? "Show less"
-                    : `+${voucherTemplate?.voucherProducts.length - 3} more`}
-                </button>
-              )}
-            </Wrap>
-          )}
+                ))}
+                {voucherTemplate?.voucherProducts.length > 3 && (
+                  <button
+                    onClick={() => setShowAll((prev) => !prev)}
+                    className="ml-1 text-blue-500 underline"
+                  >
+                    {showAll
+                      ? "Show less"
+                      : `+${voucherTemplate?.voucherProducts.length - 3} more`}
+                  </button>
+                )}
+              </Wrap>
+            )}
         </Column>
 
         <Wrap className="text-xs text-gray-400 mt-2">

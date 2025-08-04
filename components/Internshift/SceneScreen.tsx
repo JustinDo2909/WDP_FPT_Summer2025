@@ -37,7 +37,7 @@ export const SceneScreen = ({ eventId }: { eventId: string }) => {
     submitRoutine,
     submitProducts,
     nextCustomer,
-    onMixComplete,
+    onMixComplete
   } = gameStateApi;
 
   // Call startNewCustomer when the component mounts
@@ -84,6 +84,10 @@ export const SceneScreen = ({ eventId }: { eventId: string }) => {
         />
       );
     }
+    if (
+      gameState.gameScene === SceneName.MASK_MIXING &&
+      gameState.currentCustomer
+    ) {
     if (
       gameState.gameScene === SceneName.MASK_MIXING &&
       gameState.currentCustomer
