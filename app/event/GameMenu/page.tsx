@@ -5,9 +5,9 @@ import Defender from "@/components/Event/Defender/gameplay";
 import GameHomeLayout from "@/components/EventHome/GameHomeLayout";
 import { Block, Container, RText } from "@/lib/by/Div";
 import {
-  useGetEventLeaderboardQuery,
   useGetNewEventByIdQuery,
 } from "@/process/api/api";
+import { useGetEventLeaderboardQuery } from "@/process/api/apiEvent";
 import { useSearchParams } from "next/navigation";
 
 export default function BeautyDropHomePage() {
