@@ -623,6 +623,12 @@ export const api = createApi({
       providesTags: (result, error, id) => [{ type: "Event", id }],
     }),
 
+    getNewEventById: build.query<IEvent, string>({
+      query: (id) => `/events/get/${id}`,
+      transformResponse: (response) => response.event,
+      providesTags: (result, error, id) => [{ type: "Event", id }],
+    }),
+
     createEvent: build.mutation<ApiResponse, CreateEventRequest>({
       query: (eventData) => ({
         url: "/events/add",
@@ -766,7 +772,7 @@ export const api = createApi({
     }),
 
     getVoucherByEventId: build.query<IResponse<IVoucher[], "vouchers">, string>({
-      query: (id) => `voucher/event/${id}`,
+      query: (id) => `vouchers/event/${id}`,
       providesTags: ["Vouchers"],      
     }),
 
@@ -849,6 +855,7 @@ export const {
   useUpdateEventMutation,
   useDeleteEventMutation,
   useGetEventLeaderboardQuery,
+  useGetNewEventByIdQuery,
 
   // Questions
   useGetQuestionsByEventIdQuery,

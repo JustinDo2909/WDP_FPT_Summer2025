@@ -30,6 +30,8 @@ export default function GameHomeLayout({
   rulesButtonText = DEFAULTS.rulesButton,
   backgroundImage,
   eventData,
+  event
+
 }: {
   children?: React.ReactNode;
   title?: string;
@@ -38,6 +40,7 @@ export default function GameHomeLayout({
   inventoryButtonText?: string;
   rulesButtonText?: string;
   eventData?: ILeaderBoardData;
+  event?: IEvent;
 }) {
   const [showInventory, setShowInventory] = useState(false);
   const [showRules, setShowRules] = useState(false);
@@ -198,9 +201,10 @@ export default function GameHomeLayout({
             showRewards ? "opacity-100 max-h-screen" : "opacity-0 max-h-0"
           }`}
         >
-          {showRewards && (
+          {(showRewards && event) && (
             <div>
               <VoucherRewards
+                event={event}
                 rewards={eventData?.rewards ?? []}
                 hideToggleButton={true}
               />

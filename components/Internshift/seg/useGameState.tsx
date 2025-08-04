@@ -199,6 +199,34 @@ export const useGameState = () => {
   }, [gameState.currentCustomer, gameState.selectedProducts, evaluateProducts]);
   //#endregion
 
+
+  //#region Products Submission
+  const onMixComplete = useCallback((success: boolean, bonus: number) => {
+    const customer = gameState.currentCustomer;
+    if (!customer) return;
+
+    const feedbackMessage = customer.thanks_line
+
+    setGameStateWithLogging((prev) => ({
+      ...prev,
+      profit: success
+          ? prev.profit + bonus
+          : prev.profit ,
+      customersServed: prev.customersServed + 1,
+      showNextCustomer: (!success || prev.meter < 1) ? true : false ,
+      showMaskCrafting: success && prev.meter === 1,
+      currentDialogue: feedbackMessage,
+    }));
+
+    setTimeout(() => {
+      setGameStateWithLogging((prev) => ({
+        ...prev,
+        gameScene: SceneName.CUSTOMER_INTERFACE,
+      }));
+    }, 500);
+  }, [gameState.currentCustomer]);
+  //#endregion
+
   //#region Mask Crafting
   const craftMask = useCallback((ingredients: MaskIngredient[]) => {
     const customer = gameState.currentCustomer;
@@ -244,7 +272,8 @@ export const useGameState = () => {
     nextCustomer,
     setGameScene,
     selectProductType,
-    removeProductType
+    removeProductType,
+    onMixComplete
   };
   //#endregion
 };
