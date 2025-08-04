@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface Position {
   x: number;
@@ -40,7 +40,7 @@ interface Particle {
 
 const RacingGame = () => {
   const [gameState, setGameState] = useState<"menu" | "playing" | "gameOver">(
-    "menu",
+    "menu"
   );
   const [playerPos, setPlayerPos] = useState<Position>({ x: 50, y: 180 });
   const [obstacles, setObstacles] = useState<Obstacle[]>([]);
@@ -153,7 +153,7 @@ const RacingGame = () => {
   const createParticles = (
     x: number,
     y: number,
-    type: "collision" | "shield" | "powerup" = "collision",
+    type: "collision" | "shield" | "powerup" = "collision"
   ) => {
     const newParticles: Particle[] = [];
     const particleCount = 10;
@@ -232,7 +232,7 @@ const RacingGame = () => {
             vy: particle.vy * 0.98,
             life: particle.life - 1,
           }))
-          .filter((particle) => particle.life > 0),
+          .filter((particle) => particle.life > 0)
       );
 
       // Increase score
@@ -278,7 +278,7 @@ const RacingGame = () => {
             setShield(0);
             createParticles(obstacle.x, obstacle.y, "shield");
             setObstacles((prev) =>
-              prev.filter((obs) => obs.id !== obstacle.id),
+              prev.filter((obs) => obs.id !== obstacle.id)
             );
           } else {
             createParticles(playerPos.x, playerPos.y, "collision");
@@ -429,24 +429,25 @@ const RacingGame = () => {
             {[...Array(6)].map((_, i) => (
               <div
                 key={i}
-                className="absolute h-full w-2 bg-yellow-300 opacity-70"
+                className="absolute w-full h-2 bg-yellow-300 opacity-70"
                 style={{
-                  left: 120 + i * 130,
+                  top: 120 + i * 130, // dời theo chiều dọc
+                  left: 0,
                   backgroundImage:
-                    "repeating-linear-gradient(to bottom, transparent 0px, transparent 10px, yellow 10px, yellow 20px)",
-                  transform: `translateY(-${(roadOffset * 3) % 40}px)`,
+                    "repeating-linear-gradient(to right, transparent 0px, transparent 10px, yellow 10px, yellow 20px)",
+                  transform: `rotate(0deg) translateX(-${(roadOffset * 3) % 40}px)`,
                 }}
               />
             ))}
 
             {/* Lane separators */}
-            {[...Array(5)].map((_, i) => (
+            {/* {[...Array(5)].map((_, i) => (
               <div
                 key={i}
                 className="absolute h-full w-px bg-white opacity-30"
                 style={{ left: 85 + i * 70 }}
               />
-            ))}
+            ))} */}
 
             {/* Player car */}
             <div
