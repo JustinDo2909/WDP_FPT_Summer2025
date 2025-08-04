@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { VITAMINS, HARMFUL_ITEMS, MULTIPLIERS } from "@/constants";
-type GameState = "menu" | "modeSelect" | "playing" | "gameOver" | "restricted";
+type GameState = "menu" | "modeSelect" | "playing" | "gameOver";
 export function useGameLogic(
   gameModes: { [key: string]: GameMode },
   selectedMode: string,
   gameState: string,
-  setGameState: React.Dispatch<React.SetStateAction<GameState>>,
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>
 ) {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30);
@@ -15,8 +15,8 @@ export function useGameLogic(
   const [basket, setBasket] = useState<Basket>({
     x: 350,
     y: 520,
-    width: 100,
-    height: 60,
+    width: 80,
+    height: 50,
   });
   const [powerUp, setPowerUp] = useState<PowerUp | null>(null);
 
@@ -24,8 +24,8 @@ export function useGameLogic(
   const keysRef = useRef<Set<string>>(new Set());
   const lastUpdateRef = useRef<number>(Date.now());
 
-  const CANVAS_WIDTH = 800;
-  const CANVAS_HEIGHT = 600;
+  const CANVAS_WIDTH = 780;
+  const CANVAS_HEIGHT = 560;
   const currentMode = gameModes[selectedMode] || gameModes.practice;
 
   const spawnItem = useCallback(() => {
@@ -113,7 +113,7 @@ export function useGameLogic(
       if (keysRef.current.has("ArrowRight") || keysRef.current.has("d")) {
         newX = Math.min(
           CANVAS_WIDTH - prev.width,
-          prev.x + currentMode.settings.basketSpeed,
+          prev.x + currentMode.settings.basketSpeed
         );
       }
       return { ...prev, x: newX };
@@ -197,7 +197,7 @@ export function useGameLogic(
     const modeSettings = gameModes[mode].settings;
     setBasket({
       x: 350,
-      y: 520,
+      y: 480,
       width: modeSettings.basketSize.width,
       height: modeSettings.basketSize.height,
     });

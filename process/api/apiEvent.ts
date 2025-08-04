@@ -12,7 +12,16 @@ export const apiEvent = createApi({
         url: `events/get`,
         method: "GET",
       }),
-      transformResponse: (response: EventResponse) => response.events || {},
+      transformResponse: (response: EventsResponse) => response.events || {},
+      providesTags: ["Events"],
+    }),
+    //region getEventByID
+    getEventByID: build.query<IEvent, { eventId: string }>({
+      query: (eventId) => ({
+        url: `/events/get/${eventId}`,
+        method: "GET",
+      }),
+      transformResponse: (response: EventResponse) => response.event || {},
       providesTags: ["Events"],
     }),
     // endregion
@@ -47,29 +56,18 @@ export const apiEvent = createApi({
         method: "POST",
         body: { correct_answers },
       }),
-      transformResponse: (response: IResponseCalculate) =>
-        response.reward || {},
+      // transformResponse: (response: IResponseCalculate) =>
+      //   response.reward || {},
       invalidatesTags: ["Reward"],
     }),
     //#endregion
-
-    //#region playEvent
-    playEvent: build.mutation<IPlayResponse, void>({
-      query: () => ({
-        url: `events/play`,
-        method: "POST",
-      }),
-      transformResponse: (response: IPlayResponse) => response,
-      invalidatesTags: [{ type: "PlayStatus" }],
-    }),
-    //endregion
   }),
 });
 
 export const {
   useGetEventsQuery,
+  useGetEventByIDQuery,
   useGetQuestionsQuery,
   useGetRewardHooksQuery,
   useCalculateRewardMutation,
-  usePlayEventMutation,
 } = apiEvent;

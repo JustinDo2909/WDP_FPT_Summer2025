@@ -5,10 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export const CardGame = ({ game, isList = false }: { game: IEvent, isList?: boolean }) => {
-  const {  isLogged  } = useUser();;
+export const CardGame = ({
+  game,
+  isList = false,
+}: {
+  game: IEvent;
+  isList?: boolean;
+}) => {
+  const { isLogged } = useUser();
   const router = useRouter();
-;
   const fallbackImage =
     "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWF3EMjVHyeOBfC0Di9EszHlqMXr4T7G1ovPbY";
   enum EGame {
@@ -55,12 +60,17 @@ export const CardGame = ({ game, isList = false }: { game: IEvent, isList?: bool
           router.push("/login");
         }
       }}
-      href={renderGame(game)}
-      className="shadow-xl h-56 w-72 flex flex-col justify-between items-center rounded-lg bg-[url('https://90sj56vdp0.ufs.sh/f/rSQkHC8t0FOUCNH4GXgNEZRdGL4mshnW0g53kYyDOSeQlIc2')] bg-no-repeat bg-cover
-      hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out cursor-pointer group relative overflow-hidden"
+      href={
+        game.is_active
+          ? `/event/GameMenu?event_id=${game.id}`
+          : renderGame(game)
+      }
+      className="flex w-full items-start gap-6 p-4 rounded-xl bg-[#1e1033] border border-white/10 hover:shadow-2xl transition-all duration-300 group cursor-pointer"
     >
       {/* Image */}
-      <Box className={`relative ${ isList ?  "min-w-[240%]" :"min-w-[140px]"} h-32 rounded-lg overflow-hidden shadow-md`}>
+      <Box
+        className={`relative ${isList ? "min-w-[240%]" : "min-w-[140px]"} h-32 rounded-lg overflow-hidden shadow-md`}
+      >
         <Image
           src={game.image_url || fallbackImage}
           alt={game.title || "Game Image"}
@@ -73,7 +83,8 @@ export const CardGame = ({ game, isList = false }: { game: IEvent, isList?: bool
       <Column className="flex-1 gap-1">
         <RText className="text-lg font-bold text-white">{game.title}</RText>
         <RText className="text-sm text-purple-200">
-          {formatDate(String(game.start_time))} — {formatDate(String(game.end_time))}
+          {formatDate(String(game.start_time))} —{" "}
+          {formatDate(String(game.end_time))}
         </RText>
         <RText className="text-sm text-zinc-300 line-clamp-3">
           {game.description}

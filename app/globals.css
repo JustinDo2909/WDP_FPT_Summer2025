@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  font-family: sans-serif;
+}
+
 /* Custom utilities for line clamping */
 @layer utilities {
   .line-clamp-1 {
@@ -16,6 +20,36 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+  .animate-fade-up-and-out {
+    animation: fade-up-and-out 0.5s ease-out forwards;
+  }
+
+  @keyframes fade-up-and-out {
+    0% {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50px);
+    }
+  }
+
+  .animate-flash {
+    animation: flash 0.2s ease-out forwards;
+  }
+
+  @keyframes flash {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 0;
+    }
   }
 
   .line-clamp-3 {
@@ -262,8 +296,7 @@ body {
   animation-delay: 1s;
 }
 
-
-/* From Uiverse.io by augustin_4687 */ 
+/* From Uiverse.io by augustin_4687 */
 .game-button {
   --stone-50: #fafaf9;
   --stone-800: #292524;

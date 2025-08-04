@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
       "www.dhgate.com",
       "i5.walmartimages.com",
       "picsum.photos",
+      "cdn.chiaki.vn",
+      "i.ibb.co",
       "hzjfxfzm26.ufs.sh",
       "example.com",
       "cdn.chiaki.vn",
