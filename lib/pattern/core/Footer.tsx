@@ -1,20 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import FooterMenu from "@/components/FooterMenu";
+import { footerData } from "@/constants/homepage";
+import { Core } from "@/lib/by/Div";
 
 const Footer = () => {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-    return null;
-  }
   return (
-    <footer className="bg-[#A0BBA7] border-t">
-      <div>footer</div>
-    </footer>
+    <Core className="">
+      <FooterMenu footers={footerData} />
+    </Core>
   );
 };
 

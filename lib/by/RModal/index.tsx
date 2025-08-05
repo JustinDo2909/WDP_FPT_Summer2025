@@ -2,7 +2,7 @@ import { Array2Enum } from "@/process/helper/adapt";
 import { eventEmitter } from "@/process/utils";
 import React, { ReactNode, useEffect, useState } from "react";
 
-RModal.EModal = Array2Enum(["Test"] as const);
+RModal.EModal = Array2Enum(["Test", "AddressModal"] as const);
 
 export type NameModal = keyof typeof RModal.EModal | "Dynamic";
 
@@ -41,7 +41,7 @@ export function RModal(props: IModalArgs) {
 
   return (
     <div
-      //   className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30"
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
       style={{ zIndex: _set?.overlay?.zIndex ?? 50 }}
       onClick={() => onClose()}
     >
@@ -52,7 +52,6 @@ export function RModal(props: IModalArgs) {
         style={_set?.modal}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Chắc chắn render nội dung nếu có */}
         {typeof children === "function"
           ? children({ open: modalData, onClose })
           : null}

@@ -1,24 +1,25 @@
 "use client";
-import { motion } from "motion/react";
-import { Loader2 } from "lucide-react";
 
-const Loading = () => {
+import { Container, RText, Section } from "@/lib/by/Div";
+import Image from "next/image";
+import React from "react";
+
+export default function Loader() {
   return (
-    <div className="fixed min-h-screen w-full bg-white left-0 top-0 flex items-center justify-center">
-      <div className="flex flex-col justify-center items-center gap-1">
-        <motion.div
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-          className="flex items-center space-x-2 text-green-800"
-        >
-          <Loader2 className=" animate-spin" />
-          <span className="font-semibold tracking-wide">
-            Reco is loading...
-          </span>
-        </motion.div>
-      </div>
-    </div>
+    <Container className="flex items-center justify-center min-h-screen bg-gray-100">
+      <Section className="flex flex-col items-center justify-center">
+        <Image
+          src="/images/footer-icon.png"
+          alt="Logo"
+          width={540}
+          height={180}
+          priority
+          className="hover:scale-105 transition-transform"
+        />
+        <RText className="text-4xl md:text-2xl font-light text-slate-900 leading-tight">
+          Loading data ...
+        </RText>
+      </Section>
+    </Container>
   );
-};
-
-export default Loading;
+}

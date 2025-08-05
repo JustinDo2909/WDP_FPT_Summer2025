@@ -1,4 +1,6 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
+import tailwindScrollbarHide from "tailwind-scrollbar-hide";
 
 export default {
   darkMode: ["class"],
@@ -6,11 +8,11 @@ export default {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        // Our colors start
         darkColor: "#151515",
         lightColor: "#52525b",
         lightOrange: "#fca99b",
@@ -18,7 +20,6 @@ export default {
         darkBlue: "#6c7fd8",
         darkText: "#686e7d",
         lightBg: "#F8F8FB",
-        // Our colors end
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -30,7 +31,9 @@ export default {
           foreground: "hsl(var(--popover-foreground))",
         },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "#ec4899",
+          dark: "#db2777",
+          light: "#f9a8d4",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -82,15 +85,21 @@ export default {
             height: "0",
           },
         },
+        "spinner-leaf-fade": {
+          "0%, 100%": {
+            opacity: "0",
+          },
+          "50%": {
+            opacity: "1",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "spinner-leaf-fade": "spinner-leaf-fade 800ms linear infinite",
       },
     },
   },
-  plugins: [
-    require("tailwindcss-animate"), 
-    require("tailwind-scrollbar-hide")
-  ],
+  plugins: [tailwindcssAnimate, tailwindScrollbarHide],
 } satisfies Config;

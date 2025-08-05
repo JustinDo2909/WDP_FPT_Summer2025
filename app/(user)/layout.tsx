@@ -3,6 +3,7 @@ import Header from "@/lib/pattern/core/Header";
 import Footer from "@/lib/pattern/core/Footer";
 import { Toaster } from "react-hot-toast";
 import Providers from "@/app/providers";
+import FloatingGameButton from "@/components/floating_game_button";
 
 export default function UserLayout({
   children,
@@ -23,6 +24,7 @@ export default function UserLayout({
           },
         }}
       />
+      <FloatingGameButton />
     </Providers>
   );
 }

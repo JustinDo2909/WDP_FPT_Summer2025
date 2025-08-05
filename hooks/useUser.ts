@@ -1,31 +1,56 @@
-// "use client";
+"use client";
 
-import { useLazyGetUserQuery } from "@/process/api/apiAuth";
+import { useLazyGetUserQuery, useLazyLogOutQuery } from "@/process/api/apiAuth";
 import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 export const useUser = () => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<IUser>();
   const [loading, setLoading] = useState(true);
+  const [triggerLogOut] = useLazyLogOutQuery();
+  const [isLogged, setIsLogged] = useState(false);
 
-  const [triggerGetMe] = useLazyGetUserQuery(); // dùng lazy để gọi thủ công
+  const [triggerGetMe] = useLazyGetUserQuery();
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const result = await triggerGetMe().unwrap();
-        setUser(result.user);
-      } catch (error) {
-        console.error("Lỗi khi gọi getMe:", error);
-        setUser(null);
-      }
+      if (pathname === "/logout") {
+        setLoading(false);
+        setUser(undefined);
+        console.log("calling logout");
+      } else {
+        console.log("refreshing user");
 
-      setLoading(false);
+        await triggerGetMe()
+          .unwrap()
+          .then((data) => {
+            setUser(data.user);
+            setIsLogged(true);
+            setLoading(false);
+          })
+          .catch(() => {
+            setUser(undefined);
+            setIsLogged(false);
+            setLoading(false);
+          });
+      }
     };
 
     fetchUser();
-  }, [triggerGetMe]);
+  }, [triggerGetMe, pathname]);
 
-  const isLogged = !!user;
+  const logout = async () => {
+    try {
+      await triggerLogOut().unwrap();
+      setUser(undefined);
+      setIsLogged(false);
+      router.replace("/");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
 
-  return { user, loading, isLogged };
+  return { user, loading, isLogged, setIsLogged, logout };
 };

@@ -1,6 +1,5 @@
 "use client";
 
-import GoogleButton from "@/components/Auth/GoogleButton";
 import {
   useRegisterMutation,
   useVerifyOtpMutation,
@@ -14,6 +13,7 @@ type FormData = {
   name: string;
   email: string;
   password: string;
+  phone: string;
 };
 
 const SignUpPage = () => {
@@ -119,13 +119,6 @@ const SignUpPage = () => {
             </Link>
           </p>
 
-          <GoogleButton />
-          <div className="flex items-center my-5 text-gray-400 text-sm gap-3">
-            <div className="flex-1 border-t border-gray-300" />
-            <span className="">or Sign up with Email</span>
-            <div className="flex-1 border-t border-gray-300" />
-          </div>
-
           {!showOtp ? (
             <form onSubmit={handleSubmit(onSubmit)}>
               <label className="block text-gray-700 mb-1">Name</label>
@@ -160,6 +153,18 @@ const SignUpPage = () => {
                   {String(errors.email.message)}
                 </p>
               )}
+              <label className="block text-gray-700 mb-1">Phone</label>
+              <input
+                placeholder="Enter your phone"
+                className="w-full p-2 border border-gray-300 outline-0 rounded mb-1"
+                {...register("phone", {
+                  required: "Phone is required",
+                  minLength: {
+                    value: 10,
+                    message: "phone must be at least 6 number",
+                  },
+                })}
+              />
 
               <label className="block text-gray-700 mb-1">Password</label>
               <div className="relative">

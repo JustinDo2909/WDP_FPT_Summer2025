@@ -1,6 +1,5 @@
 "use client";
 
-import GoogleButton from "@/components/Auth/GoogleButton";
 import { useLoginMutation } from "@/process/api/apiAuth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -25,14 +24,19 @@ const LoginPage = () => {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    await login(data)
-      .unwrap()
-      .then(() => {
+    try {
+      const response = await login(data).unwrap();
+      if (response.user?.role === "ADMIN") {
+        router.push("/dashboard");
+      } else if (response.user?.role === "STAFF") {
+        router.push("/manage-products");
+      } else {
         router.push("/");
-      })
-      .catch((error) => {
-        console.log("Login failed:", error);
-      });
+      }
+    } catch (error) {
+      alert("Login failed. Please check your credentials.");
+      console.error("error", error);
+    }
   };
 
   return (
@@ -48,18 +52,11 @@ const LoginPage = () => {
             Login to CosmePlay
           </h3>
           <p className="text-center text-gray-500 mb-4">
-            Don't have and account?{" "}
+            Dont have and account?{" "}
             <Link href={"/signup"} className="text-blue-500">
               Sign up
             </Link>
           </p>
-
-          <GoogleButton />
-          <div className="flex items-center my-5 text-gray-400 text-sm gap-3">
-            <div className="flex-1 border-t border-gray-300" />
-            <span className="">or Sign in with Email</span>
-            <div className="flex-1 border-t border-gray-300" />
-          </div>
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <label className="block text-gray-700 mb-1">Email</label>
