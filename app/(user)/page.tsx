@@ -9,6 +9,12 @@ export default function Page() {
     RModal.onShow({ name: "Test", status: true, data: "Hello from modal" });
   };
 
+  const { loading, user } = useUser();
+
+  if (loading) {
+    return null;
+  }
+
   return (
     <Begin className="flex flex-col ">
       <Group>
@@ -16,6 +22,8 @@ export default function Page() {
 
         <button onClick={openModal}>Mở Modal</button>
       </Group>
+
+      <pre>{JSON.stringify(user, null, 2)}</pre>
 
       <RModal
         name="Test"
