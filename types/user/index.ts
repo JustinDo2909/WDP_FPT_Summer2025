@@ -32,7 +32,6 @@ export interface ApiResponse {
 export interface CreateUserRequest {
   name: string;
   email: string;
-  phone: string;
   password: string;
   role?: "USER" | "ADMIN" | "STAFF";
 }
@@ -41,7 +40,6 @@ export interface UpdateUserRequest {
   id: string;
   name?: string;
   email?: string;
-  phone?: string;
   password?: string;
   role?: "USER" | "ADMIN" | "STAFF";
 }
@@ -56,7 +54,6 @@ export interface GetUsersParams {
 export interface UserFormData {
   name: string;
   email: string;
-  phone: string;
   password: string;
   role: "USER" | "ADMIN" | "STAFF";
 }

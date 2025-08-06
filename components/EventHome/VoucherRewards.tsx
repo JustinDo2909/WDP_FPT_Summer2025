@@ -1,4 +1,3 @@
-import { fallbackRewards } from "@/constants/event";
 import { Block, Column, Group, Row, RText, Section, Yard } from "@/lib/by/Div";
 import { formatPrice } from "@/lib/share/formatPrice";
 import { map } from "lodash";
@@ -7,11 +6,13 @@ import React, { useState } from "react";
 
 interface VoucherRewardsProps {
   rewards?: ILeaderBoardReward[];
+  event: IEvent;
   hideToggleButton?: boolean;
 }
 
 export default function VoucherRewards({
-  rewards = fallbackRewards,
+  rewards,
+  event,
   hideToggleButton = false,
 }: VoucherRewardsProps) {
   const [selectedVoucher, setSelectedVoucher] =
@@ -29,7 +30,7 @@ export default function VoucherRewards({
     from === to ? `Rank ${from}` : `Rank ${from}-${to}`;
 
   const getVoucherText = (voucher: IVoucherTemplate) => {
-    if (voucher.type === "Percent") {
+    if (voucher.type === "PERCENT") {
       return `${voucher.discount_value}% off your order!`;
     }
     return `${formatPrice(voucher.discount_value)} off your order!`;

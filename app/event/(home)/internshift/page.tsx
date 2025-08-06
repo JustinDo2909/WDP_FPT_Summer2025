@@ -1,4 +1,9 @@
+"use client";
+
 import GameHomeLayout from "@/components/EventHome/GameHomeLayout";
+import { useGetNewEventByIdQuery } from "@/process/api/api";
+import { useGetEventLeaderboardQuery } from "@/process/api/apiEvent";
+import { useSearchParams } from "next/navigation";
 
 export default function InternshiftGamePage() {
   const searchParams = useSearchParams();

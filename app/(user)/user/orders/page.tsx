@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetAllOrdersQuery } from "@/process/api/api";
+import { useGetOrdersQuery } from "@/process/api/apiOrders";
 import OrdersList from "../../../../components/OrdersPage/OrdersList";
 import {
   Tabs,
@@ -12,7 +12,7 @@ import { OrdersSearch } from "@/components/OrdersPage/OrdersSearch";
 import { Box } from "@/lib/by/Div";
 
 export default function OrdersPage() {
-  const { data, isLoading } = useGetAllOrdersQuery();
+  const { data, isLoading } = useGetOrdersQuery();
   const orders = data?.orders || [];
 
   // Helper to filter orders by status

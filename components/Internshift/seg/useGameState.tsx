@@ -23,9 +23,11 @@ export const useGameState = () => {
     selectedProducts: [],
     profit: 0,
     meter: 0,
+    currentDialogue: "",
     customersServed: 0,
     waitingForFeedback: [],
     showMaskCrafting: false,
+    showNextCustomer: false,
     gameScene: SceneName.CUSTOMER_INTERFACE,
   });
   //#endregion
@@ -45,7 +47,7 @@ export const useGameState = () => {
         return updatedState;
       });
     },
-    []
+    [],
   );
   //#endregion
 
@@ -54,9 +56,6 @@ export const useGameState = () => {
     setGameStateWithLogging((prev) => {
       if (
         prev.selectedProductTypes.includes(type) ||
-        !["cleanser", "moisturizer", "toner", "serum", "exfoliator"].includes(
-          type
-        ) ||
         prev.selectedProductTypes.length >= (prev.currentCustomer?.steps || 5)
       ) {
         return prev;
@@ -79,11 +78,11 @@ export const useGameState = () => {
   //#region Customer Management
   const getRandomCustomer = useCallback(() => {
     const availableCustomers = customers.filter(
-      (c) => c.id !== gameState.currentCustomer?.id
+      (c) => c.id !== gameState.currentCustomer?.id,
     );
     console.log(
       "Selecting random customer, excluding ID:",
-      gameState.currentCustomer?.id
+      gameState.currentCustomer?.id,
     );
     return availableCustomers[
       Math.floor(Math.random() * availableCustomers.length)
@@ -97,6 +96,10 @@ export const useGameState = () => {
       ...prev,
       currentCustomer: newCustomer,
       selectedProducts: [],
+      selectedProductTypes: [],
+      showNextCustomer: false,
+      meter: 0,
+      currentDialogue: newCustomer.concern_line,
       gameScene: SceneName.CUSTOMER_INTERFACE,
       showMaskCrafting: false,
     }));
@@ -107,7 +110,7 @@ export const useGameState = () => {
   const selectProduct = useCallback((product: GameProduct) => {
     setGameStateWithLogging((prev) => {
       const alreadySelected = prev.selectedProducts.some(
-        (p) => p.id === product.id
+        (p) => p.id === product.id,
       );
       if (prev.selectedProducts.length >= 5 || alreadySelected) return prev;
 
@@ -133,19 +136,19 @@ export const useGameState = () => {
 
       const selectedIngredients = selected.flatMap((p) => p.ingredients);
       const requiredMatches = customer.case.requiredIngredients.filter((req) =>
-        selectedIngredients.includes(req)
+        selectedIngredients.includes(req),
       ).length;
 
       const avoidedAll = customer.case.avoidIngredients.every(
-        (avoid) => !selectedIngredients.includes(avoid)
+        (avoid) => !selectedIngredients.includes(avoid),
       );
 
       const successThreshold = Math.ceil(
-        customer.case.requiredIngredients.length * 0.6
+        customer.case.requiredIngredients.length * 0.6,
       );
       return requiredMatches >= successThreshold && avoidedAll;
     },
-    []
+    [],
   );
   //#endregion
 
@@ -155,15 +158,15 @@ export const useGameState = () => {
       if (selected.length < customer.steps) return false;
 
       const requiredMatches = customer.case.requiredProducts.filter((req) =>
-        selected.includes(req)
+        selected.includes(req),
       ).length;
 
       const successThreshold = Math.ceil(
-        customer.case.requiredProducts.length * 0.6
+        customer.case.requiredProducts.length * 0.6,
       );
       return requiredMatches >= successThreshold;
     },
-    []
+    [],
   );
   //#endregion
 
@@ -187,7 +190,11 @@ export const useGameState = () => {
 
       setGameScene(SceneName.CHOOSING_PRODUCTS);
     },
-    [gameState.currentCustomer, gameState.selectedProductTypes, evaluateRoutine]
+    [
+      gameState.currentCustomer,
+      gameState.selectedProductTypes,
+      evaluateRoutine,
+    ],
   );
   //#endregion
 
@@ -197,34 +204,26 @@ export const useGameState = () => {
     if (!customer || gameState.selectedProducts.length < 3) return;
 
     const success = evaluateProducts(customer, gameState.selectedProducts);
+    const routineCost = gameState.selectedProducts.reduce((sum) => sum + 50, 0); // Add price to GameProduct type if needed
+    const feedbackMessage = customer.thanks_line;
 
     setGameStateWithLogging((prev) => ({
       ...prev,
+      meter: success ? prev.meter + 1 : prev.meter,
       waitingForFeedback: [...prev.waitingForFeedback, customer],
-      gameScene: SceneName.CUSTOMER_INTERFACE,
+      profit: success
+        ? prev.profit + Math.floor(routineCost * 1.2)
+        : prev.profit + Math.floor(routineCost),
       customersServed: prev.customersServed + 1,
+      showNextCustomer: !success || prev.meter < 1 ? true : false,
+      showMaskCrafting: success && prev.meter === 1,
+      currentDialogue: feedbackMessage,
     }));
 
     setTimeout(() => {
-      const routineCost = gameState.selectedProducts.reduce(
-        (sum, p) => sum + (p as any).price,
-        0
-      ); // Add price to GameProduct type if needed
-
-      const feedbackMessage = success
-        ? customer.happy_line
-        : customer.unhappy_line;
-
       setGameStateWithLogging((prev) => ({
         ...prev,
-        profit: success
-          ? prev.profit + Math.floor(routineCost * 1.5)
-          : prev.profit - routineCost - 50,
-        waitingForFeedback: prev.waitingForFeedback.filter(
-          (c) => c.id !== customer.id
-        ),
-        showMaskCrafting: success,
-        currentDialogue: feedbackMessage,
+        gameScene: SceneName.CUSTOMER_INTERFACE,
       }));
     }, 500);
   }, [gameState.currentCustomer, gameState.selectedProducts, evaluateProducts]);
@@ -254,7 +253,31 @@ export const useGameState = () => {
         }));
       }, 500);
     },
-    [gameState.currentCustomer]
+    [gameState.currentCustomer],
+  );
+  //#endregion
+
+  //#region Mask Crafting
+  const craftMask = useCallback(
+    (ingredients: MaskIngredient[]) => {
+      const customer = gameState.currentCustomer;
+      if (!customer || ingredients.length !== 3) return;
+
+      const ingredientNames = ingredients.map((i) => i.name);
+      const matches = customer.case.requiredIngredients.filter((req) =>
+        ingredientNames.includes(req),
+      ).length;
+
+      const bonus = matches * 25;
+      setGameStateWithLogging((prev) => ({
+        ...prev,
+        profit: prev.profit + bonus,
+        showMaskCrafting: false,
+      }));
+
+      return bonus;
+    },
+    [gameState.currentCustomer],
   );
   //#endregion
 

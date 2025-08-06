@@ -13,7 +13,7 @@ export default function BeautyDropHomePage() {
   const event_id = searchParams.get("event_id");
 
   const { data: eventData } = useGetEventLeaderboardQuery(String(event_id));
-  const { data: event } = useGetEventByIdQuery(String(event_id));
+  const { data: event } = useGetNewEventByIdQuery(String(event_id));
 
   if (!event_id) {
     return (

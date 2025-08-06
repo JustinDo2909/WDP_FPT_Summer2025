@@ -45,7 +45,6 @@ import type {
   CreateLeaderboardRewardRequest,
   UpdateLeaderboardRewardRequest,
   AddVoucherTemplateToRewardRequest,
-  LeaderboardResponse,
 } from "@/types/event";
 import type {
   Voucher,
@@ -70,7 +69,7 @@ import type {
 const customBaseQuery = async (
   args: string | FetchArgs,
   api: BaseQueryApi,
-  extraOptions: any
+  extraOptions: any,
 ) => {
   const baseQuery = fetchBaseQuery({
     baseUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/`,
@@ -124,7 +123,6 @@ export const api = createApi({
     "Questions",
     "Rewards",
     "LeaderboardRewards",
-    "Leaderboard",
     "Reviews",
     "Batches",
     "Suppliers",
@@ -267,14 +265,38 @@ export const api = createApi({
         response.reward,
       invalidatesTags: ["LeaderboardRewards"],
     }),
+    //#endregion
 
-    // Leaderboard Data
-    getEventLeaderboard: build.query<LeaderboardResponse, string>({
-      query: (eventId) => `/events/${eventId}/leaderboard`,
-      providesTags: ["Leaderboard"],
-      keepUnusedDataFor: 300, // 5 minutes cache
+    //#region getEventLeaderboard
+    getEventLeaderboard: build.query<
+      IResponse<ILeaderBoardData, "data">,
+      string
+    >({
+      query: (event_id) => ({
+        url: `events/${event_id}/leaderboard`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Event"],
     }),
     //#endregion
+
+    //#region calculateReward
+    calculateReward: build.mutation<
+      EventReward,
+      { eventId: string; correct_answers: number }
+    >({
+      query: ({ eventId, correct_answers }) => ({
+        url: `events/${eventId}/calculate-reward`,
+        method: "POST",
+        body: { correct_answers },
+      }),
+      // transformResponse: (response: IResponseCalculate) =>
+      //   response.reward || {},
+      invalidatesTags: ["Event"],
+    }),
+    //#endregion
+
     //#region getRandomQuestion
     postAnswer: build.mutation<IReward, { correct_answers: number }>({
       query: (body) => ({
@@ -341,7 +363,7 @@ export const api = createApi({
         },
         providesTags: ["Batches"],
         keepUnusedDataFor: 60, // 1 minute cache for paginated data
-      }
+      },
     ),
 
     getProductBatches: build.query<Batch[], string>({
@@ -453,7 +475,7 @@ export const api = createApi({
       {
         query: (id) => `/products/${id}`,
         providesTags: ["Products"],
-      }
+      },
     ),
     //#endregion
 
@@ -490,19 +512,19 @@ export const api = createApi({
       }),
       async onQueryStarted(
         { id, ...categoryData },
-        { dispatch, queryFulfilled }
+        { dispatch, queryFulfilled },
       ) {
         const patchResult = dispatch(
           api.util.updateQueryData("getMetaData", undefined, (draft) => {
             if (draft?.data?.categories) {
               const categoryIndex = draft.data.categories.findIndex(
-                (cat) => cat.id === id
+                (cat) => cat.id === id,
               );
               if (categoryIndex !== -1) {
                 draft.data.categories[categoryIndex] = { id, ...categoryData };
               }
             }
-          })
+          }),
         );
         try {
           await queryFulfilled;
@@ -551,13 +573,13 @@ export const api = createApi({
           api.util.updateQueryData("getMetaData", undefined, (draft) => {
             if (draft?.data?.brands) {
               const brandIndex = draft.data.brands.findIndex(
-                (brand) => brand.id === id
+                (brand) => brand.id === id,
               );
               if (brandIndex !== -1) {
                 draft.data.brands[brandIndex] = { id, ...brandData };
               }
             }
-          })
+          }),
         );
         try {
           await queryFulfilled;
@@ -606,19 +628,19 @@ export const api = createApi({
       }),
       async onQueryStarted(
         { id, ...skinTypeData },
-        { dispatch, queryFulfilled }
+        { dispatch, queryFulfilled },
       ) {
         const patchResult = dispatch(
           api.util.updateQueryData("getMetaData", undefined, (draft) => {
             if (draft?.data?.skinTypes) {
               const skinTypeIndex = draft.data.skinTypes.findIndex(
-                (st) => st.id === id
+                (st) => st.id === id,
               );
               if (skinTypeIndex !== -1) {
                 draft.data.skinTypes[skinTypeIndex] = { id, ...skinTypeData };
               }
             }
-          })
+          }),
         );
         try {
           await queryFulfilled;
@@ -672,7 +694,7 @@ export const api = createApi({
           api.util.updateQueryData("getAllOrders", undefined, (draft) => {
             if (draft?.orders) {
               const orderIndex = draft.orders.findIndex(
-                (order) => order.id === orderId
+                (order) => order.id === orderId,
               );
               if (orderIndex !== -1) {
                 draft.orders[orderIndex].status = status as
@@ -683,7 +705,7 @@ export const api = createApi({
                 draft.orders[orderIndex].updatedAt = new Date().toISOString();
               }
             }
-          })
+          }),
         );
 
         try {
@@ -698,20 +720,20 @@ export const api = createApi({
       ],
     }),
 
-    cancelOrder: build.mutation<
-      { success: boolean; message?: string },
-      { orderId: string; reason: string; images: string[] }
-    >({
-      query: ({ orderId, reason, images }) => ({
-        url: `/orders/cancel/${orderId}`,
-        method: "POST",
-        body: { reason, images },
-      }),
-      invalidatesTags: (result, error, { orderId }) => [
-        "Orders",
-        { type: "OrderDetail", id: orderId },
-      ],
-    }),
+    // cancelOrder: build.mutation<
+    //   { success: boolean; message?: string },
+    //   { orderId: string; reason: string; images: string[] }
+    // >({
+    //   query: ({ orderId, reason, images }) => ({
+    //     url: `/orders/cancel/${orderId}`,
+    //     method: "POST",
+    //     body: { reason, images },
+    //   }),
+    //   invalidatesTags: (result, error, { orderId }) => [
+    //     "Orders",
+    //     { type: "OrderDetail", id: orderId },
+    //   ],
+    // }),
     //#endregion
 
     //#region Events
@@ -724,6 +746,12 @@ export const api = createApi({
     getEventById: build.query<Event, string>({
       query: (id) => `/events/get/${id}`,
       transformResponse: (response: EventResponse) => response.event,
+      providesTags: (result, error, id) => [{ type: "Event", id }],
+    }),
+
+    getNewEventById: build.query<IEvent, string>({
+      query: (id) => `/events/get/${id}`,
+      transformResponse: (response) => response.event,
       providesTags: (result, error, id) => [{ type: "Event", id }],
     }),
 
@@ -869,7 +897,7 @@ export const api = createApi({
           { type: "Reward", id: event_id },
           "Reward",
         ],
-      }
+      },
     ),
     //#endregion
 
@@ -885,7 +913,7 @@ export const api = createApi({
       {
         query: (id) => `vouchers/event/${id}`,
         providesTags: ["Vouchers"],
-      }
+      },
     ),
 
     //#endregion
@@ -903,7 +931,7 @@ export const api = createApi({
         if (params?.include_leaderboard !== undefined) {
           searchParams.append(
             "include_leaderboard",
-            params.include_leaderboard.toString()
+            params.include_leaderboard.toString(),
           );
         }
         const queryString = searchParams.toString();
@@ -988,6 +1016,20 @@ export const api = createApi({
     }),
 
     //#endregion
+
+    //#region cancelOrder
+    cancelOrder: build.mutation<
+      IResponse<IOrder, "order">,
+      { id: string; reason: string }
+    >({
+      query: ({ id, reason }) => ({
+        url: `orders/cancel/${id}`,
+        method: "POST",
+        body: { reason, images: [] },
+      }),
+      invalidatesTags: ["Orders"],
+    }),
+    //#endregion
   }),
 });
 
@@ -1032,6 +1074,8 @@ export const {
   useUpdateEventMutation,
   useDeleteEventMutation,
   useFinalizeEventMutation,
+  useGetNewEventByIdQuery,
+  useCalculateRewardMutation,
 
   // Questions
   useGetQuestionsByEventIdQuery,
@@ -1053,11 +1097,9 @@ export const {
   useDeleteLeaderboardRewardMutation,
   useAddVoucherTemplateToRewardMutation,
 
-  // Leaderboard
-  useGetEventLeaderboardQuery,
-
   // Vouchers
   useGetAllVouchersQuery, //qdao
+  useGetVoucherByEventIdQuery,
   useGetUserVouchersQuery,
   useGetAllVoucherssQuery, //khoa
 

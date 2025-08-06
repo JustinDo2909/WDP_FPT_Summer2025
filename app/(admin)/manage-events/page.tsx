@@ -1,33 +1,29 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
-import {
-  Calendar,
-  Trophy,
-  HelpCircle,
-  Users,
-  Gift,
-  Plus,
-  X,
-  Eye,
-  Edit,
-  Trash2,
-  RefreshCw,
-  Tag,
-  Flag,
-  Award,
-  Star,
-} from "lucide-react";
-import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
-import CustomTable from "@/components/CustomTable";
 import { EventModal } from "@/components/admin/Event/Event-modal";
 import { QuestionModal } from "@/components/admin/Event/Question-modal";
 import { RewardModal } from "@/components/admin/Event/Reward-modal";
+import { MiniStatsCard, StatsCard } from "@/components/admin/StatsCard";
+import CustomTable from "@/components/CustomTable";
+import {
+  Calendar,
+  Edit,
+  Eye,
+  Flag,
+  Gift,
+  HelpCircle,
+  Plus,
+  RefreshCw,
+  Tag,
+  Trash2,
+  Trophy,
+  Users,
+  X,
+} from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
 import { AddVoucherTemplateToRewardModal } from "@/components/admin/Event/AddVoucherTemplateToReward-modal";
 import { LeaderboardRewardDetailModal } from "@/components/admin/Event/LeaderboardReward-detail-modal";
-import { VoucherTemplateModal } from "@/components/admin/Voucher/VoucherTemplate-modal";
-import { VoucherTemplateDetailModal } from "@/components/admin/Voucher/VoucherTemplate-detail-modal";
-import { Leaderboard } from "@/components/admin/Event/Leaderboard";
 import { LeaderboardRewardModal } from "@/components/admin/Event/LeaderboardReward-modal";
 import {
   formatDate,
@@ -42,6 +38,8 @@ import {
   getStatusText as getVoucherStatusText,
   useVoucherTemplatesLogic,
 } from "@/components/admin/Voucher/seg/voucherTemplateUtils";
+import { VoucherTemplateDetailModal } from "@/components/admin/Voucher/VoucherTemplate-detail-modal";
+import { VoucherTemplateModal } from "@/components/admin/Voucher/VoucherTemplate-modal";
 import { Area, Container, Core, RText, Yard } from "@/lib/by/Div";
 import type { Event, EventReward, Question } from "@/types/event";
 import { toast } from "react-hot-toast";
@@ -59,8 +57,6 @@ import {
   useUpdateEventMutation,
   useUpdateQuestionMutation,
   useUpdateRewardMutation,
-  useDeleteRewardMutation,
-  useGetEventLeaderboardQuery,
 } from "@/process/api/api";
 
 import {
@@ -72,7 +68,7 @@ import { VoucherTemplate } from "@/types/voucher";
 
 export default function EventManagement() {
   const [activeTab, setActiveTab] = useState<
-    "events" | "leaderboardRewards" | "voucherTemplates" | "leaderboard"
+    "events" | "leaderboardRewards" | "voucherTemplates"
   >("events");
   const [selectedEventId, setSelectedEventId] = useState<string>("");
   const [showEventQuestions, setShowEventQuestions] = useState<string | null>(
@@ -117,14 +113,6 @@ export default function EventManagement() {
     skip: !selectedEventId || activeTab !== "leaderboardRewards",
     refetchOnMountOrArgChange: 30,
   });
-
-  const { data: leaderboardData } = useGetEventLeaderboardQuery(
-    selectedEventId!,
-    {
-      skip: !selectedEventId || activeTab !== "leaderboard",
-      refetchOnMountOrArgChange: 30,
-    }
-  );
 
   // Leaderboard Rewards Logic
   const {
@@ -181,11 +169,10 @@ export default function EventManagement() {
       setShowEventQuestions(null);
     }
 
-    // Auto-select first event when switching to leaderboard rewards, voucher templates, or leaderboard
+    // Auto-select first event when switching to leaderboard rewards or voucher templates
     if (
       (activeTab === "leaderboardRewards" ||
-        activeTab === "voucherTemplates" ||
-        activeTab === "leaderboard") &&
+        activeTab === "voucherTemplates") &&
       events.length > 0 &&
       !selectedEventId
     ) {
@@ -523,7 +510,6 @@ export default function EventManagement() {
       { key: "events", label: "Events", icon: Calendar },
       { key: "leaderboardRewards", label: "Leaderboard Rewards", icon: Trophy },
       { key: "voucherTemplates", label: "Voucher Templates", icon: Tag },
-      { key: "leaderboard", label: "Leaderboard", icon: Award },
     ],
     [],
   );
@@ -776,59 +762,6 @@ export default function EventManagement() {
           </>
         )}
 
-        {activeTab === "leaderboard" && selectedEventId && (
-          <>
-            {/* Leaderboard Stats Cards */}
-            <Yard className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <StatsCard
-                title="Total Participants"
-                value={leaderboardData?.data?.total_participants || 0}
-                icon={Users}
-                iconColor="text-blue-600"
-                iconBgColor="bg-blue-50"
-              />
-              <StatsCard
-                title="Eligible for Rewards"
-                value={
-                  leaderboardData?.data?.leaderboard?.filter(
-                    (entry) => entry.is_eligible_for_reward
-                  ).length || 0
-                }
-                icon={Gift}
-                iconColor="text-green-600"
-                iconBgColor="bg-green-50"
-              />
-              <StatsCard
-                title="Top Score"
-                value={
-                  (leaderboardData?.data?.leaderboard?.length || 0) > 0
-                    ? leaderboardData?.data?.leaderboard?.[0]?.score || 0
-                    : 0
-                }
-                icon={Star}
-                iconColor="text-purple-600"
-                iconBgColor="bg-purple-50"
-              />
-              <StatsCard
-                title="Average Score"
-                value={
-                  (leaderboardData?.data?.leaderboard?.length || 0) > 0
-                    ? Math.round(
-                        (leaderboardData?.data?.leaderboard?.reduce(
-                          (sum, entry) => sum + entry.score,
-                          0
-                        ) || 0) / (leaderboardData?.data?.leaderboard?.length || 1)
-                      )
-                    : 0
-                }
-                icon={Award}
-                iconColor="text-orange-600"
-                iconBgColor="bg-orange-50"
-              />
-            </Yard>
-          </>
-        )}
-
         {/* Tab Navigation */}
         <Yard className="border-b border-gray-200">
           <nav className="-mb-px flex space-x-8">
@@ -837,11 +770,7 @@ export default function EventManagement() {
                 key={key}
                 onClick={() =>
                   setActiveTab(
-                    key as
-                      | "events"
-                      | "leaderboardRewards"
-                      | "voucherTemplates"
-                      | "leaderboard"
+                    key as "events" | "leaderboardRewards" | "voucherTemplates",
                   )
                 }
                 className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
@@ -857,10 +786,9 @@ export default function EventManagement() {
           </nav>
         </Yard>
 
-        {/* Event Filter for Leaderboard Rewards, Voucher Templates, and Leaderboard */}
+        {/* Event Filter for Leaderboard Rewards and Voucher Templates */}
         {(activeTab === "leaderboardRewards" ||
-          activeTab === "voucherTemplates" ||
-          activeTab === "leaderboard") && (
+          activeTab === "voucherTemplates") && (
           <Yard className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
             <Yard className="flex justify-between items-center mb-2">
               <label className="block text-sm font-medium text-gray-700">
@@ -869,9 +797,7 @@ export default function EventManagement() {
               <RText className="text-xs text-gray-500">
                 {activeTab === "leaderboardRewards"
                   ? `Found ${leaderboardRewards.length} leaderboard rewards for selected event`
-                  : activeTab === "voucherTemplates"
-                    ? `Found ${voucherTemplates.length} voucher templates for selected event`
-                    : "View leaderboard for selected event"}
+                  : `Found ${voucherTemplates.length} voucher templates for selected event`}
               </RText>
             </Yard>
             <select
@@ -1300,15 +1226,6 @@ export default function EventManagement() {
               </RText>
             </Yard>
           )}
-
-        {/* Leaderboard Tab Content */}
-        {!showEventQuestions && activeTab === "leaderboard" && (
-          <Leaderboard
-            events={events}
-            selectedEventId={selectedEventId || events[0]?.id || ""}
-            onEventSelect={setSelectedEventId}
-          />
-        )}
       </Container>
       {/* Modals */}
       <EventModal
