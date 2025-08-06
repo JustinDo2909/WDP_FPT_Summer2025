@@ -49,7 +49,7 @@ export default function Leaderboard({
           <Row
             key={entry.rank}
             className={`flex items-center justify-between rounded-full border px-3 ${getPillSize(
-              Number(entry.rank),
+              Number(entry.rank)
             )} shadow-sm ${getRankColor(Number(entry.rank))}`}
           >
             {/* Left: Name */}
@@ -80,7 +80,7 @@ export default function Leaderboard({
               <RText className="text-sm text-primary font-semibold font-sans">
                 {user_rank.score.toLocaleString()}
               </RText>
-              <RText className="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white  font-bold text-xs">
+              <RText className="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white font-sans font-bold text-xs">
                 {user_rank.rank || "?"}
               </RText>
             </Block>

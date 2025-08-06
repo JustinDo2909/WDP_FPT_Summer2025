@@ -21,7 +21,6 @@ export const CardGame = ({
     QUIZ = "QUIZ",
     PUZZLE = "PUZZLE",
     REFLEX = "REFLEX",
-    ARCADE = "ARCADE",
   }
 
   const ListGameType = [
@@ -29,7 +28,6 @@ export const CardGame = ({
     { type: EGame.QUIZ, link: "/event/Quiz" },
     { type: EGame.PUZZLE, link: "/event/FlipCard" },
     { type: EGame.REFLEX, link: "/event/Racing" },
-    { type: EGame.ARCADE, link: `/event/internshift?event_id=${game.id}` },
   ];
   const renderGame = (game: IEvent) => {
     console.log("game", game.type);
@@ -38,7 +36,7 @@ export const CardGame = ({
       if (game.type === EGame[key as keyof typeof EGame]) {
         found =
           find(ListGameType, (item) =>
-            isEqual(item.type, EGame[key as keyof typeof EGame]),
+            isEqual(item.type, EGame[key as keyof typeof EGame])
           )?.link || "/event/coming-soon";
       }
     });
@@ -61,7 +59,7 @@ export const CardGame = ({
         }
       }}
       href={
-        game.is_active && game.type != "ARCADE"
+        game.is_active
           ? `/event/GameMenu?event_id=${game.id}`
           : renderGame(game)
       }

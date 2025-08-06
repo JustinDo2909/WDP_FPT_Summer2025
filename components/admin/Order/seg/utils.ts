@@ -100,9 +100,10 @@ export const useOrdersLogic = () => {
         console.log("orderId value:", orderId);
 
         await cancelOrder({
-          id: orderId,
-          reason}).unwrap();
-          //dao xoa field order id voi images
+          orderId,
+          reason,
+          images,
+        }).unwrap();
       } catch (error) {
         console.error("Failed to cancel order:", error);
         throw error;

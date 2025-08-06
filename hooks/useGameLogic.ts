@@ -7,7 +7,7 @@ export function useGameLogic(
   gameModes: { [key: string]: GameMode },
   selectedMode: string,
   gameState: string,
-  setGameState: React.Dispatch<React.SetStateAction<GameState>>,
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>
 ) {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30);
@@ -113,7 +113,7 @@ export function useGameLogic(
       if (keysRef.current.has("ArrowRight") || keysRef.current.has("d")) {
         newX = Math.min(
           CANVAS_WIDTH - prev.width,
-          prev.x + currentMode.settings.basketSpeed,
+          prev.x + currentMode.settings.basketSpeed
         );
       }
       return { ...prev, x: newX };

@@ -26,7 +26,7 @@ import {
   ChevronRight,
   User,
 } from "lucide-react";
-import { VoucherDetailModal } from "@/components/admin/Voucher/voucher-detail-modal";
+import { VoucherDetailModal } from "@/components/admin/Voucher/Voucher-detail-modal";
 
 export default function VoucherPage() {
   const {

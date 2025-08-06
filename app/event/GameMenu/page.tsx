@@ -5,9 +5,9 @@ import Defender from "@/components/Event/Defender/gameplay";
 import GameHomeLayout from "@/components/EventHome/GameHomeLayout";
 import { Block, Container, RText } from "@/lib/by/Div";
 import {
-  useGetNewEventByIdQuery,
+  useGetEventByIdQuery,
+  useGetEventLeaderboardQuery,
 } from "@/process/api/api";
-import { useGetEventLeaderboardQuery } from "@/process/api/apiEvent";
 import { useSearchParams } from "next/navigation";
 
 export default function BeautyDropHomePage() {
@@ -15,7 +15,7 @@ export default function BeautyDropHomePage() {
   const event_id = searchParams.get("event_id");
 
   const { data: eventData } = useGetEventLeaderboardQuery(String(event_id));
-  const { data: event } = useGetNewEventByIdQuery(String(event_id));
+  const { data: event } = useGetEventByIdQuery(String(event_id));
 
   if (!event_id) {
     return (
@@ -25,14 +25,8 @@ export default function BeautyDropHomePage() {
     );
   }
 
-
   return (
-    <GameHomeLayout event={event}
-      backgroundImage={event?.image_url}
-      title={event?.title}
-      type={event?.type}
-      eventData={eventData?.data}
-    >
+    <GameHomeLayout title={event?.title} eventData={eventData?.data}>
       <Container className="w-full ">
         {event?.type === "DROP" ? (
           <CosmeticCatchGame />

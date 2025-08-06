@@ -5,8 +5,7 @@ export const npcProfiles: NPCProfile[] = [
     avatar_url_default: "https://i.ibb.co/Z6v2B3dQ/lana.png",
     avatar_url_happy: "/avatars/lana_happy.png",
     avatar_url_sad: "/avatars/lana_sad.png",
-    concern_line:
-      "Hi, I’ve been breaking out lately, especially around my chin.",
+    concern_line: "Hi, I’ve been breaking out lately, especially around my chin.",
     happy_line: "Wow, my skin feels so much clearer! Thank you!",
     unhappy_line: "Ugh, I think the products made it worse...",
     thanks_line: "Thanks for your help! I'll come back if it works well.",
@@ -14,18 +13,12 @@ export const npcProfiles: NPCProfile[] = [
     description: "A university student stressed by exams and mask acne.",
     case: {
       caseName: "Acne-prone",
-      skinType: "acne-prone",
       tooltip: "Breakouts, inflammation, and clogged pores",
       requiredIngredients: ["Salicylic acid", "Niacinamide", "Tea Tree"],
       avoidIngredients: ["Coconut oil", "Fragrance"],
-      requiredProducts: [
-        "oil-based-cleanser",
-        "gel/foam cleanser",
-        "toner",
-        "serum",
-      ],
-      avoidProducts: ["exfoliator", "heavy moisturizer"],
-    },
+      requiredProducts: ["cleanser", "toner", "serum"],
+      avoidProducts: ["exfoliator", "heavy moisturizer"]
+    }
   },
   {
     id: 2,
@@ -37,23 +30,16 @@ export const npcProfiles: NPCProfile[] = [
     happy_line: "This is the best my skin has felt in months!",
     unhappy_line: "Still oily. I don’t think the routine helped.",
     thanks_line: "Fingers crossed this helps. Thanks for the advice!",
-    steps: 5,
+    steps: 3,
     description: "A bike messenger dealing with oily skin and urban pollution.",
     case: {
       caseName: "Oily skin",
-      skinType: "oily",
       tooltip: "Shiny skin due to excess sebum",
       requiredIngredients: ["Clay", "Niacinamide", "Salicylic acid"],
       avoidIngredients: ["Mineral oil", "Petrolatum"],
-      requiredProducts: [
-        "oil-based-cleanser",
-        "gel/foam cleanser",
-        "toner",
-        "moisturizer",
-        "serum",
-      ],
-      avoidProducts: ["heavy moisturizer", "occlusive balm"],
-    },
+      requiredProducts: ["cleanser", "toner", "moisturizer"],
+      avoidProducts: ["heavy moisturizer", "occlusive balm"]
+    }
   },
   {
     id: 3,
@@ -66,24 +52,23 @@ export const npcProfiles: NPCProfile[] = [
     unhappy_line: "Still dry. Maybe I need something more moisturizing?",
     thanks_line: "I appreciate the effort. Let’s see how it goes.",
     steps: 5,
-    description:
-      "A kindergarten teacher with dry skin from long days in air conditioning.",
+    description: "A kindergarten teacher with dry skin from long days in air conditioning.",
     case: {
-      skinType: "dry",
       caseName: "Dry skin",
       tooltip: "Flaky, tight skin lacking moisture",
       requiredIngredients: ["Hyaluronic acid", "Ceramides", "Glycerin"],
       avoidIngredients: ["Alcohol", "Benzoyl peroxide"],
-      requiredProducts: ["moisturizer", "serum"],
-    },
-  },
+      requiredProducts: ["cleanser", "moisturizer", "serum"],
+    }
+  }
 ];
+
 
 export const gameProducts: GameProduct[] = [
   // --- CLEANSERS ---
   {
     id: 1,
-    type: "gel/foam-cleanser",
+    type: "cleanser",
     name: "ClearStart Acne Gel Cleanser",
     image_url: "/products/clearstart_cleanser.png",
     ingredients: ["Salicylic acid", "Tea Tree", "Aloe Vera"],
@@ -91,7 +76,7 @@ export const gameProducts: GameProduct[] = [
   },
   {
     id: 2,
-    type: "gel/foam-cleanser",
+    type: "cleanser",
     name: "HydraFoam Gentle Wash",
     image_url: "/products/hydrafoam_cleanser.png",
     ingredients: ["Glycerin", "Hyaluronic acid", "Chamomile"],
@@ -99,74 +84,27 @@ export const gameProducts: GameProduct[] = [
   },
   {
     id: 3,
-    type: "gel/foam-cleanser",
-    name: "Oil Away Daily Cleanser",
+    type: "cleanser",
+    name: "Oil-Free Daily Cleanser",
     image_url: "/products/oilfree_cleanser.png",
     ingredients: ["Salicylic acid", "Niacinamide"],
     tooltip: "Controls oil production and clears pores without over-drying.",
   },
   {
     id: 4,
-    type: "gel/foam-cleanser",
+    type: "cleanser",
     name: "Milky Barrier Cleanser",
     image_url: "/products/milky_cleanser.png",
     ingredients: ["Ceramides", "Coconut oil", "Shea Butter"],
-    tooltip:
-      "Nourishing formula for extreme dryness (not for acne-prone skin).",
+    tooltip: "Nourishing formula for extreme dryness (not for acne-prone skin).",
   },
   {
     id: 5,
-    type: "gel/foam-cleanser",
+    type: "cleanser",
     name: "Clarifying Gel Wash",
     image_url: "/products/clarifying_cleanser.png",
     ingredients: ["Clay", "Zinc", "Green Tea"],
     tooltip: "Cleanses oily skin and unclogs pores.",
-  },
-
-  {
-    id: 26,
-    type: "oil-based-cleanser",
-    name: "Calm & Clean Cleansing Oil",
-    image_url: "/products/calm_clean_oil.png",
-    ingredients: ["Jojoba Oil", "Chamomile", "Vitamin E"],
-    tooltip:
-      "Gentle cleansing oil that melts away makeup while calming sensitive skin.",
-  },
-  {
-    id: 27,
-    type: "oil-based-cleanser",
-    name: "Deep Melt Cleansing Balm",
-    image_url: "/products/deepmelt_balm.png",
-    ingredients: ["Sunflower Oil", "Green Tea", "Shea Butter"],
-    tooltip:
-      "Solid balm-to-oil formula that removes impurities without stripping moisture.",
-  },
-  {
-    id: 28,
-    type: "oil-based-cleanser",
-    name: "Purity First Oil Cleanser",
-    image_url: "/products/purity_oil_cleanser.png",
-    ingredients: ["Grapeseed Oil", "Tea Tree", "Squalane"],
-    tooltip:
-      "Lightweight oil that deeply cleanses pores and helps control acne.",
-  },
-  {
-    id: 29,
-    type: "oil-based-cleanser",
-    name: "Silky Barrier Oil Wash",
-    image_url: "/products/silky_oil_cleanser.png",
-    ingredients: ["Squalane", "Ceramides", "Avocado Oil"],
-    tooltip:
-      "Protects skin barrier while effectively lifting off sunscreen and debris.",
-  },
-  {
-    id: 30,
-    type: "oil-based-cleanser",
-    name: "HydraGlow Cleansing Oil",
-    image_url: "/products/hydraglow_oil.png",
-    ingredients: ["Argan Oil", "Vitamin C", "Glycerin"],
-    tooltip:
-      "Brightening oil cleanser that removes dullness and hydrates as it cleanses.",
   },
 
   // --- TONERS ---
@@ -362,92 +300,128 @@ export const skinCases: SkinCase[] = [
     avoidIngredients: ["Essential Oils", "Alcohol"],
     requiredProducts: ["Soothing Toner", "Barrier Cream"],
     avoidProducts: ["Scrubs", "Strong Acids"],
-  },
+  }
 ];
 
 export const masks: Mask[] = [
   {
     id: 1,
-    name: "Detox & Calm Mask",
-    ingredients: [
-      { tag: "charcoal", quantity: 2 },
-      { tag: "aloe-vera", quantity: 2 },
-      { tag: "tea-tree-oil", quantity: 1 },
-    ],
-    case: "oily",
-    tooltip: "Detoxifies, calms irritation, and reduces acne.",
+    name: "Clarifying Tea Tree Mask",
+    ingredients: ["kaolin-clay", "tea-tree-oil", "niacinamide"],
+    case: skinCases[0],
+    tooltip: "Best for oily and acne-prone skin. Reduces inflammation and clears pores."
   },
   {
     id: 2,
-    name: "Hydra Glow Mask",
-    ingredients: [
-      { tag: "hyaluronic-acid", quantity: 3 },
-      { tag: "vitamin-c", quantity: 1 },
-      { tag: "chamomile", quantity: 1 },
-    ],
-    case: "dry",
-    tooltip: "Deep hydration and glowing skin with calming effects.",
+    name: "Hydra Boost Mask",
+    ingredients: ["hyaluronic-acid", "ceramides", "shea-butter"],
+    case: skinCases[1],
+    tooltip: "Deeply hydrates and restores moisture for dry, flaky skin."
   },
   {
     id: 3,
-    name: "Balance Brightening Mask",
-    ingredients: [
-      { tag: "niacinamide", quantity: 2 },
-      { tag: "kaolin-clay", quantity: 2 },
-      { tag: "vitamin-c", quantity: 1 },
-    ],
-    case: "combination",
-    tooltip: "Balances oil, brightens complexion, and smooths texture.",
+    name: "Soothing Aloe Mask",
+    ingredients: ["aloe-vera", "panthenol", "centella-asiatica"],
+    case: skinCases[2],
+    tooltip: "Gentle formula to calm irritation and strengthen the skin barrier."
   },
+  {
+    id: 4,
+    name: "Pore Purifying Charcoal Mask",
+    ingredients: ["charcoal", "niacinamide", "green-tea-extract"],
+    case: skinCases[0],
+    tooltip: "Detoxifies pores and reduces excess oil, perfect for acne-prone skin."
+  },
+  {
+    id: 5,
+    name: "Nourishing Honey Mask",
+    ingredients: ["honey", "propolis", "glycerin"],
+    case: skinCases[1],
+    tooltip: "Nourishes and soothes dry, irritated skin with natural humectants."
+  }
 ];
+
 
 export const gameMaskIngredients: MaskIngredient[] = [
   {
+    id: "water",
+    name: "Water",
+    tooltip: "The most common solvent in skincare, helps dissolve other ingredients and hydrate skin.",
+  },
+  {
+    id: "kaolin-clay",
     name: "Kaolin Clay",
-    tag: "kaolin-clay",
-    benefits: ["Absorbs oil", "Cleanses pores"],
-    is_allergen: false,
+    tooltip: "Gentle clay that helps absorb oil and cleanse pores.",
   },
   {
+    id: "tea-tree-oil",
     name: "Tea Tree Oil",
-    tag: "tea-tree-oil",
-    benefits: ["Reduces acne", "Anti-inflammatory"],
-    is_allergen: false,
+    tooltip: "Essential oil known for its antibacterial and anti-inflammatory properties.",
   },
   {
-    name: "Aloe Vera",
-    tag: "aloe-vera",
-    benefits: ["Soothes skin", "Hydrates"],
-    is_allergen: false,
-  },
-  {
+    id: "niacinamide",
     name: "Niacinamide",
-    tag: "niacinamide",
-    benefits: ["Improves texture", "Brightens skin"],
-    is_allergen: false,
+    tooltip: "Vitamin B3 that helps brighten skin and regulate sebum.",
   },
   {
-    name: "Charcoal",
-    tag: "charcoal",
-    benefits: ["Detoxifies", "Draws out impurities"],
-    is_allergen: false,
-  },
-  {
+    id: "hyaluronic-acid",
     name: "Hyaluronic Acid",
-    tag: "hyaluronic-acid",
-    benefits: ["Hydrates", "Plumps skin"],
-    is_allergen: false,
+    tooltip: "Powerful humectant that attracts moisture into the skin.",
   },
   {
-    name: "Chamomile Extract",
-    tag: "chamomile",
-    benefits: ["Calms redness", "Anti-inflammatory"],
-    is_allergen: false,
+    id: "ceramides",
+    name: "Ceramides",
+    tooltip: "Lipids that restore and maintain the skin barrier."
   },
   {
-    name: "Vitamin C",
-    tag: "vitamin-c",
-    benefits: ["Brightens", "Fights free radicals"],
-    is_allergen: false,
+    id: "shea-butter",
+    name: "Shea Butter",
+    tooltip: "Rich natural fat that deeply moisturizes and softens skin.",
   },
+  {
+    id: "aloe-vera",
+    name: "Aloe Vera",
+    tooltip: "Cooling plant extract that calms irritated skin.",
+  },
+  {
+    id: "panthenol",
+    name: "Panthenol",
+    tooltip: "Pro-vitamin B5 that promotes healing and hydration.",
+  },
+  {
+    id: "centella-asiatica",
+    name: "Centella Asiatica",
+    tooltip: "Botanical extract known for its skin-soothing and wound-healing properties.",
+
+  },
+  {
+    id: "charcoal",
+    name: "Charcoal",
+    tooltip: "Activated charcoal that draws out impurities from pores.",
+
+  },
+  {
+    id: "green-tea-extract",
+    name: "Green Tea Extract",
+    tooltip: "Rich in antioxidants and helps calm redness and irritation.",
+
+  },
+  {
+    id: "honey",
+    name: "Honey",
+    tooltip: "Natural humectant with antibacterial and healing properties.",
+
+  },
+  {
+    id: "propolis",
+    name: "Propolis",
+    tooltip: "Bee resin extract with anti-inflammatory and healing benefits.",
+
+  },
+  {
+    id: "glycerin",
+    name: "Glycerin",
+    tooltip: "Common humectant that draws moisture into the skin.",
+
+  }
 ];

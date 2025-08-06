@@ -21,7 +21,6 @@ declare global {
     milestone_score: number;
     is_active?: boolean;
     created_at?: Date;
-    voucherTemplates: IVoucherTemplate[]
   }
 
   type QuizQuestion = {
