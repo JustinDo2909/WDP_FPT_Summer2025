@@ -34,7 +34,7 @@ export function CancelOrderModal({
     console.log("CancelOrderModal handleSubmit - orderId:", orderId);
     console.log(
       "CancelOrderModal handleSubmit - orderId type:",
-      typeof orderId
+      typeof orderId,
     );
 
     setIsSubmitting(true);
@@ -44,6 +44,7 @@ export function CancelOrderModal({
       handleClose();
     } catch (error) {
       toast.error("Failed to cancel order");
+      console.error("error", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -83,7 +84,7 @@ export function CancelOrderModal({
       <Core
         className={clsx(
           "fixed inset-0 bg-black transition-opacity duration-300 z-[9998]",
-          isOpen ? "bg-opacity-60" : "bg-opacity-0"
+          isOpen ? "bg-opacity-60" : "bg-opacity-0",
         )}
         onClick={handleClose}
       />
@@ -91,7 +92,7 @@ export function CancelOrderModal({
       <Core
         className={clsx(
           "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white shadow-2xl z-[9999] rounded-lg",
-          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
+          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95",
         )}
       >
         <Container className="p-6">

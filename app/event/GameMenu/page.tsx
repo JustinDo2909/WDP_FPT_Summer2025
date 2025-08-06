@@ -4,9 +4,7 @@ import CosmeticCatchGame from "@/components/Event/BeautyDrop/cosmetic-catch-game
 import Defender from "@/components/Event/Defender/gameplay";
 import GameHomeLayout from "@/components/EventHome/GameHomeLayout";
 import { Block, Container, RText } from "@/lib/by/Div";
-import {
-  useGetNewEventByIdQuery,
-} from "@/process/api/api";
+import { useGetNewEventByIdQuery } from "@/process/api/api";
 import { useGetEventLeaderboardQuery } from "@/process/api/apiEvent";
 import { useSearchParams } from "next/navigation";
 
@@ -25,9 +23,9 @@ export default function BeautyDropHomePage() {
     );
   }
 
-
   return (
-    <GameHomeLayout event={event}
+    <GameHomeLayout
+      event={event}
       backgroundImage={event?.image_url}
       title={event?.title}
       type={event?.type}

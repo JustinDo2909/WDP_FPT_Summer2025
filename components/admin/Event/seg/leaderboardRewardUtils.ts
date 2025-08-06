@@ -73,7 +73,7 @@ export const useLeaderboardRewardsLogic = (eventId: string = "1") => {
     const inactive = total - active;
     const totalVoucherTemplates = rewards.reduce(
       (sum, reward) => sum + reward.voucherTemplates.length,
-      0
+      0,
     );
 
     return {
@@ -133,7 +133,7 @@ export const useLeaderboardRewardsLogic = (eventId: string = "1") => {
   };
 
   const handleSubmitReward = async (
-    data: CreateLeaderboardRewardRequest | UpdateLeaderboardRewardRequest
+    data: CreateLeaderboardRewardRequest | UpdateLeaderboardRewardRequest,
   ) => {
     try {
       if (isEditMode && selectedReward) {
@@ -170,7 +170,7 @@ export const useLeaderboardRewardsLogic = (eventId: string = "1") => {
   };
 
   const handleSubmitVoucherTemplate = async (
-    data: AddVoucherTemplateToRewardRequest
+    data: AddVoucherTemplateToRewardRequest,
   ) => {
     if (!selectedReward) return;
 

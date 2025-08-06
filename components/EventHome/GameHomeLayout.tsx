@@ -31,8 +31,7 @@ export default function GameHomeLayout({
   rulesButtonText = DEFAULTS.rulesButton,
   backgroundImage,
   eventData,
-  event
-
+  event,
 }: {
   children?: React.ReactNode;
   title?: string;
@@ -216,7 +215,7 @@ export default function GameHomeLayout({
             showRewards ? "opacity-100 max-h-screen" : "opacity-0 max-h-0"
           }`}
         >
-          {(showRewards && event) && (
+          {showRewards && event && (
             <div>
               <VoucherRewards
                 event={event}

@@ -115,7 +115,7 @@ const CATEGORY_COLORS = [
 export const calculateDashboardStats = (
   orders: any[],
   users: any[],
-  products: any[]
+  products: any[],
 ) => {
   const totalRevenue = orders
     .filter((order) => order.status === "DELIVERED")
@@ -197,11 +197,11 @@ export const calculateTopProducts = (orders: any[]) => {
     // MOCK DATA: Create fake top products from order data (only from delivered orders)
     // This is temporary until we properly fetch order details
     const deliveredOrders = orders.filter(
-      (order) => order.status === "DELIVERED"
+      (order) => order.status === "DELIVERED",
     );
     const totalDeliveredRevenue = deliveredOrders.reduce(
       (sum, order) => sum + (order.total_amount || 0),
-      0
+      0,
     );
 
     return [
@@ -308,7 +308,7 @@ export const calculateTopCustomers = (orders: any[], users: any[]) => {
 // Calculate category distribution from products
 export const calculateCategoryDistribution = (
   products: any[],
-  categories: any[]
+  categories: any[],
 ) => {
   const categoryStats: { [key: string]: number } = {};
 
@@ -339,7 +339,7 @@ export const getRecentTransactions = (orders: any[], users: any[]) => {
   return [...orders] // Create a copy to avoid mutating the original read-only array
     .sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     )
     .slice(0, 5)
     .map((order) => {

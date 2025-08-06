@@ -60,7 +60,7 @@ export function OrderDetailModal({
       if (!order) return;
       onUpdateStatus?.(order.id, e.target.value as OrderDetail["status"]);
     },
-    [onUpdateStatus, order?.id]
+    [onUpdateStatus, order?.id],
   );
 
   if (!isOpen || !order) return null;
@@ -70,7 +70,7 @@ export function OrderDetailModal({
       <Core
         className={clsx(
           "fixed inset-0 bg-black transition-opacity duration-300 z-[9998]",
-          isOpen ? "bg-opacity-60" : "bg-opacity-0"
+          isOpen ? "bg-opacity-60" : "bg-opacity-0",
         )}
         onClick={onClose}
       />
@@ -78,7 +78,7 @@ export function OrderDetailModal({
       <Core
         className={clsx(
           "fixed top-0 right-0 h-full w-full max-w-3xl bg-white shadow-2xl z-[9999] transform transition-transform duration-300 ease-in-out",
-          isOpen ? "translate-x-0" : "translate-x-full"
+          isOpen ? "translate-x-0" : "translate-x-full",
         )}
       >
         <Container className="h-full overflow-y-auto">
@@ -118,7 +118,7 @@ export function OrderDetailModal({
                     <Yard
                       className={clsx(
                         "p-2 rounded-full",
-                        getStatusColor(order.status)
+                        getStatusColor(order.status),
                       )}
                     >
                       {statusIcon}
@@ -156,7 +156,7 @@ export function OrderDetailModal({
                     <Yard
                       className={clsx(
                         "p-2 rounded-full",
-                        getPaymentMethodColor(order.payment_method)
+                        getPaymentMethodColor(order.payment_method),
                       )}
                     >
                       <CreditCard className="w-5 h-5" />
@@ -185,7 +185,7 @@ export function OrderDetailModal({
                           ? "bg-green-100 text-green-600"
                           : order.payment_status === "PENDING"
                             ? "bg-yellow-100 text-yellow-600"
-                            : "bg-red-100 text-red-600"
+                            : "bg-red-100 text-red-600",
                       )}
                     >
                       <CreditCard className="w-5 h-5" />
