@@ -19,6 +19,7 @@ export const CartItem = ({
   const { handleRemove, handleUpdateQuantity, isRemoving, isUpdating } =
     useCartItemActions();
 
+
   const effectivePrice = product.sale_price ?? product.price;
   const totalPrice = effectivePrice * quantity - savings;
 

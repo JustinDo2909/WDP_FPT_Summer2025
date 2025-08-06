@@ -89,6 +89,7 @@ export default function CheckoutPage() {
           <CartTable items={cartItems} voucher={voucher} />
 
           <CouponAddInput
+            orderTotal={subtotal}
             vouchers={dataVouchers?.vouchers}
             setVoucherDiscount={setVoucherDiscount}
             onSelect={setVoucher}

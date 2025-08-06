@@ -1,4 +1,4 @@
-import { Column, Row, Wrap } from "@/lib/by/Div";
+import { Column, Row, RText, Wrap } from "@/lib/by/Div";
 import {
   calculateVoucherSavings,
   formatDiscount,
@@ -7,7 +7,7 @@ import { formatPrice } from "@/lib/share/formatPrice";
 
 const formatExpiryDate = (voucher: IVoucher) => {
   const expiry = new Date(
-    new Date(voucher.expired_at).getTime() + 2 * 24 * 60 * 60 * 1000,
+    new Date(voucher.expired_at)
   );
   return expiry.toLocaleDateString("vi-VN");
 };
@@ -31,14 +31,15 @@ export const VoucherItem: React.FC<{
       {/* Left Pill */}
       <Column className="flex flex-col items-center justify-center w-36 p-2 bg-pink-500 text-white text-center">
         <Wrap className="text-base font-bold">{formatDiscount(voucher)}</Wrap>
+        <RText className="text-[10px]">Min. order {formatPrice(voucher.voucherTemplate.min_order_amount)}</RText>
         <Wrap className="text-xs mt-1">Voucher</Wrap>
       </Column>
 
       {/* Right Content */}
       <Column className="flex flex-col flex-1 justify-between p-3 pr-8 bg-white">
         <Column className="flex flex-col">
-          <Wrap className="text-base font-semibold text-gray-800">
-            Get {formatDiscount(voucher)} on
+          <Wrap className="text-base font-semibold whitespace-nowrap text-gray-800">
+            {formatDiscount(voucher)} min order {formatPrice(voucher.voucherTemplate.min_order_amount)}
           </Wrap>
           <Wrap className="inline-block mt-2 px-2 py-0.5 bg-pink-500 text-white text-xs rounded">
             {applicable

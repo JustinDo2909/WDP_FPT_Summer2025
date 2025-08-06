@@ -19,7 +19,8 @@ const nextConfig: NextConfig = {
       "example.com",
       "cdn.chiaki.vn",
       "i.ibb.co",
-      "i.ibb.co",
+      "utfs.io"
+      
     ],
   },
 };

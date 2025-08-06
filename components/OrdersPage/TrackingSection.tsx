@@ -29,6 +29,9 @@ export function TrackingSection({ order }: TrackingSectionProps) {
                 ? new Date(order.updatedAt).toLocaleString()
                 : "-"}
             </RText>
+            <RText className="text-[12px] text-center">
+              Reason for cancellation: {order.reason}
+            </RText>
           </Column>
         </Row>
       </Section>
