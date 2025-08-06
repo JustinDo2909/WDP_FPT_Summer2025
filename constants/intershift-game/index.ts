@@ -2,7 +2,8 @@ export const npcProfiles: NPCProfile[] = [
   {
     id: 1,
     name: "Lana",
-    avatar_url_default: "https://i.ibb.co/Z6v2B3dQ/lana.png",
+    avatar_url_default:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWwtI1i836c5Z0PKmAlT2ELRnDMp7aN8sfwXid",
     avatar_url_happy: "/avatars/lana_happy.png",
     avatar_url_sad: "/avatars/lana_sad.png",
     concern_line:
@@ -30,7 +31,8 @@ export const npcProfiles: NPCProfile[] = [
   {
     id: 2,
     name: "Tobias",
-    avatar_url_default: "https://i.ibb.co/1JwDC6Kp/tobias.png",
+    avatar_url_default:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyW4M5lX7PbK52yfwRNaSEDkdHA7lCZTo0nIWB3",
     avatar_url_happy: "/avatars/tobias_happy.png",
     avatar_url_sad: "/avatars/tobias_sad.png",
     concern_line: "My face is always shiny, especially in the T-zone.",
@@ -58,7 +60,8 @@ export const npcProfiles: NPCProfile[] = [
   {
     id: 3,
     name: "Mei",
-    avatar_url_default: "https://i.ibb.co/yBQf1sT9/mei.png",
+    avatar_url_default:
+      "https://hzjfxfzm26.ufs.sh/f/KMp0egfMgYyWwm5LJ36c5Z0PKmAlT2ELRnDMp7aN8sfwXidY",
     avatar_url_happy: "/avatars/mei_happy.png",
     avatar_url_sad: "/avatars/mei_sad.png",
     concern_line: "My cheeks are dry and flaky, especially after cleansing.",
