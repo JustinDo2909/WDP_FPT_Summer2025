@@ -1,4 +1,3 @@
-import { fallbackRewards } from "@/constants/event";
 import { Block, Column, Group, Row, RText, Section, Yard } from "@/lib/by/Div";
 import { formatPrice } from "@/lib/share/formatPrice";
 import { map } from "lodash";
@@ -7,11 +6,13 @@ import React, { useState } from "react";
 
 interface VoucherRewardsProps {
   rewards?: ILeaderBoardReward[];
+  event: IEvent;
   hideToggleButton?: boolean;
 }
 
 export default function VoucherRewards({
-  rewards = fallbackRewards,
+  rewards,
+  event,
   hideToggleButton = false,
 }: VoucherRewardsProps) {
   const [selectedVoucher, setSelectedVoucher] =
@@ -29,7 +30,7 @@ export default function VoucherRewards({
     from === to ? `Rank ${from}` : `Rank ${from}-${to}`;
 
   const getVoucherText = (voucher: IVoucherTemplate) => {
-    if (voucher.type === "Percent") {
+    if (voucher.type === "PERCENT") {
       return `${voucher.discount_value}% off your order!`;
     }
     return `${formatPrice(voucher.discount_value)} off your order!`;
@@ -83,9 +84,45 @@ export default function VoucherRewards({
                   </Block>
                 </Row>
               ))}
+
+              
             </Column>
           </Block>
         ))}
+
+        <RText className="flex items-center justify-center gap-2 text-sm font-bold text-pink-800">
+              <span>Voucher Milestone: {event.milestone_score} points </span>
+            </RText>
+
+              <Row
+                  className="bg-white border border-pink-200 rounded-full px-4 py-2 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 ring-1 ring-white/70"
+                >
+                  <Group className="flex items-center justify-between">
+                    <Block className="flex items-center gap-2 flex-1">
+                      <TicketPercent
+                        size={16}
+                        className="text-pink-500 shrink-0"
+                      />
+                      <span className="text-sm font-semibold text-gray-800 truncate">
+                        Voucher Milestone
+                      </span>
+                    </Block>
+                    <button
+                      onClick={() => {
+                        if (event && event.voucherTemplates && event.voucherTemplates[0]) {
+                          handleOpenModal(event.voucherTemplates[0]);
+                        }
+                      }}
+                      className="flex items-center justify-center w-6 h-6 text-pink-600 hover:text-white hover:bg-pink-500 rounded-full transition-colors duration-200"
+                      title="View details"
+                    >
+                      <Info size={14} />
+                    </button>
+                  </Group>
+                  <Block className="text-xs text-gray-600 mt-1">
+                    {getVoucherText(event.voucherTemplates[0])}
+                  </Block>
+                </Row>
       </Section>
 
       {/* Enhanced Modal */}

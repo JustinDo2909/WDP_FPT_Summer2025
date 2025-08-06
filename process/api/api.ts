@@ -1,3 +1,39 @@
+import type {
+  AddVoucherTemplateToRewardRequest,
+  ApiResponse,
+  CreateEventRequest,
+  CreateLeaderboardRewardRequest,
+  CreateQuestionRequest,
+  CreateRewardRequest,
+  Event,
+  EventResponse,
+  EventReward,
+  EventsResponse,
+  LeaderboardReward,
+  LeaderboardRewardResponse,
+  LeaderboardRewardsResponse,
+  Question,
+  QuestionsResponse,
+  RewardsResponse,
+  UpdateEventRequest,
+  UpdateLeaderboardRewardRequest,
+  UpdateQuestionRequest,
+  UpdateRewardRequest,
+} from "@/types/event";
+import type {
+  BrandOption,
+  CategoryOption,
+  ItemRequest,
+  MetaDataResponse,
+  SimpleApiResponse,
+  SkinTypeOption,
+} from "@/types/meta/index";
+import type { OrderDetailResponse, OrdersResponse } from "@/types/order/index";
+import type {
+  Product,
+  ProductMetaResponse,
+  ProductQueryParams,
+} from "@/types/productManagement/index";
 import {
   IEventRewards,
   IQuestions,
@@ -6,66 +42,23 @@ import {
   IResponseQuestions,
   IReward,
 } from "@/types/quiz";
-import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import Cookies from "js-cookie";
-import { toast } from "sonner";
-import type {
-  MetaDataResponse,
-  CategoryOption,
-  BrandOption,
-  SkinTypeOption,
-  ItemRequest,
-  SimpleApiResponse,
-} from "@/types/meta/index";
-import type {
-  Product,
-  ProductQueryParams,
-  ProductMetaResponse,
-} from "@/types/productManagement/index";
-import type { OrdersResponse, OrderDetailResponse } from "@/types/order/index";
-import type {
-  Event,
-  Question,
-  EventReward,
-  EventsResponse,
-  EventResponse,
-  QuestionsResponse,
-  RewardsResponse,
-  ApiResponse,
-  CreateEventRequest,
-  UpdateEventRequest,
-  CreateQuestionRequest,
-  UpdateQuestionRequest,
-  CreateRewardRequest,
-  UpdateRewardRequest,
-  LeaderboardReward,
-  LeaderboardRewardsResponse,
-  LeaderboardRewardResponse,
-  CreateLeaderboardRewardRequest,
-  UpdateLeaderboardRewardRequest,
-  AddVoucherTemplateToRewardRequest,
-  LeaderboardResponse,
-} from "@/types/event";
 import type {
   Voucher,
-  VouchersResponse,
-  VoucherTemplate,
-  VoucherTemplatesResponse,
-  VoucherTemplateResponse,
-  CreateVoucherTemplateRequest,
-  UpdateVoucherTemplateRequest,
-  VoucherTemplateFilterParams,
+  VouchersResponse
 } from "@/types/voucher/index";
 import type {
   Batch,
   BatchesResponse,
+  BatchPaginationParams,
   CreateBatchRequest,
   CreateBatchResponse,
   PaginatedBatchesResponse,
-  BatchPaginationParams,
   Supplier,
 } from "@/types/warehouse/index";
+import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import Cookies from "js-cookie";
+import { toast } from "sonner";
 
 const customBaseQuery = async (
   args: string | FetchArgs,
@@ -275,6 +268,37 @@ export const api = createApi({
       keepUnusedDataFor: 300, // 5 minutes cache
     }),
     //#endregion
+
+    //#region getEventLeaderboard
+    getEventLeaderboard: build.query<
+      IResponse<ILeaderBoardData, "data">,
+      string
+    >({
+      query: (event_id) => ({
+        url: `events/${event_id}/leaderboard`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Event"],
+    }),
+    //#endregion
+
+    //#region calculateReward
+    calculateReward: build.mutation<
+      EventReward,
+      { eventId: string; correct_answers: number }
+    >({
+      query: ({ eventId, correct_answers }) => ({
+        url: `events/${eventId}/calculate-reward`,
+        method: "POST",
+        body: { correct_answers },
+      }),
+      // transformResponse: (response: IResponseCalculate) =>
+      //   response.reward || {},
+      invalidatesTags: ["Event"],
+    }),
+    //#endregion
+
     //#region getRandomQuestion
     postAnswer: build.mutation<IReward, { correct_answers: number }>({
       query: (body) => ({
@@ -698,20 +722,20 @@ export const api = createApi({
       ],
     }),
 
-    cancelOrder: build.mutation<
-      { success: boolean; message?: string },
-      { orderId: string; reason: string; images: string[] }
-    >({
-      query: ({ orderId, reason, images }) => ({
-        url: `/orders/cancel/${orderId}`,
-        method: "POST",
-        body: { reason, images },
-      }),
-      invalidatesTags: (result, error, { orderId }) => [
-        "Orders",
-        { type: "OrderDetail", id: orderId },
-      ],
-    }),
+    // cancelOrder: build.mutation<
+    //   { success: boolean; message?: string },
+    //   { orderId: string; reason: string; images: string[] }
+    // >({
+    //   query: ({ orderId, reason, images }) => ({
+    //     url: `/orders/cancel/${orderId}`,
+    //     method: "POST",
+    //     body: { reason, images },
+    //   }),
+    //   invalidatesTags: (result, error, { orderId }) => [
+    //     "Orders",
+    //     { type: "OrderDetail", id: orderId },
+    //   ],
+    // }),
     //#endregion
 
     //#region Events
@@ -724,6 +748,12 @@ export const api = createApi({
     getEventById: build.query<Event, string>({
       query: (id) => `/events/get/${id}`,
       transformResponse: (response: EventResponse) => response.event,
+      providesTags: (result, error, id) => [{ type: "Event", id }],
+    }),
+
+    getNewEventById: build.query<IEvent, string>({
+      query: (id) => `/events/get/${id}`,
+      transformResponse: (response) => response.event,
       providesTags: (result, error, id) => [{ type: "Event", id }],
     }),
 
@@ -881,82 +911,12 @@ export const api = createApi({
       keepUnusedDataFor: 300, // 5 minutes cache
     }),
 
-    //#endregion
-
-    //#region Voucher Templates
-    getVoucherTemplates: build.query<
-      VoucherTemplate[],
-      { eventId: string; params?: VoucherTemplateFilterParams }
-    >({
-      query: ({ eventId, params }) => {
-        const searchParams = new URLSearchParams();
-        if (params?.is_active !== undefined) {
-          searchParams.append("is_active", params.is_active.toString());
-        }
-        if (params?.include_leaderboard !== undefined) {
-          searchParams.append(
-            "include_leaderboard",
-            params.include_leaderboard.toString()
-          );
-        }
-        const queryString = searchParams.toString();
-        return `/events/${eventId}/voucher-templates${queryString ? `?${queryString}` : ""}`;
-      },
-      transformResponse: (response: VoucherTemplatesResponse) =>
-        response.voucher_templates,
-      providesTags: ["VoucherTemplates"],
-      keepUnusedDataFor: 300, // 5 minutes cache
-    }),
-
-    getVoucherTemplateById: build.query<
-      VoucherTemplate,
-      { eventId: string; voucherId: string }
-    >({
-      query: ({ eventId, voucherId }) =>
-        `/events/${eventId}/voucher-templates/${voucherId}`,
-      transformResponse: (response: VoucherTemplateResponse) =>
-        response.voucher_template,
-      providesTags: ["VoucherTemplates"],
-    }),
-
-    createVoucherTemplate: build.mutation<
-      VoucherTemplate,
-      { eventId: string; data: CreateVoucherTemplateRequest }
-    >({
-      query: ({ eventId, data }) => ({
-        url: `/events/${eventId}/voucher-templates`,
-        method: "POST",
-        body: data,
-      }),
-      transformResponse: (response: VoucherTemplateResponse) =>
-        response.voucher_template,
-      invalidatesTags: ["VoucherTemplates"],
-    }),
-
-    updateVoucherTemplate: build.mutation<
-      VoucherTemplate,
-      { eventId: string; voucherId: string; data: UpdateVoucherTemplateRequest }
-    >({
-      query: ({ eventId, voucherId, data }) => ({
-        url: `/events/${eventId}/voucher-templates/${voucherId}`,
-        method: "PUT",
-        body: data,
-      }),
-      transformResponse: (response: VoucherTemplateResponse) =>
-        response.voucher_template,
-      invalidatesTags: ["VoucherTemplates"],
-    }),
-
-    deleteVoucherTemplate: build.mutation<
-      void,
-      { eventId: string; voucherId: string }
-    >({
-      query: ({ eventId, voucherId }) => ({
-        url: `/events/${eventId}/voucher-templates/${voucherId}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: ["VoucherTemplates"],
-    }),
+    getVoucherByEventId: build.query<IResponse<IVoucher[], "vouchers">, string>(
+      {
+        query: (id) => `vouchers/event/${id}`,
+        providesTags: ["Vouchers"],
+      }
+    ),
 
     //#endregion
 
@@ -980,6 +940,20 @@ export const api = createApi({
       providesTags: ["Orders"],
     }),
 
+    //#endregion
+
+    //#region cancelOrder
+    cancelOrder: build.mutation<
+      IResponse<IOrder, "order">,
+      { id: string; reason: string }
+    >({
+      query: ({ id, reason }) => ({
+        url: `orders/cancel/${id}`,
+        method: "POST",
+        body: { reason, images: [] },
+      }),
+      invalidatesTags: ["Orders"],
+    }),
     //#endregion
   }),
 });
@@ -1025,6 +999,8 @@ export const {
   useUpdateEventMutation,
   useDeleteEventMutation,
   useFinalizeEventMutation,
+  useGetNewEventByIdQuery,
+  useCalculateRewardMutation,
 
   // Questions
   useGetQuestionsByEventIdQuery,
@@ -1051,6 +1027,7 @@ export const {
 
   // Vouchers
   useGetAllVouchersQuery, //qdao
+  useGetVoucherByEventIdQuery,
   useGetUserVouchersQuery,
   useGetAllVoucherssQuery, //khoa
 

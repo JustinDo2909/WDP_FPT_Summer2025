@@ -86,7 +86,7 @@ export default function CheckoutPage() {
 
           <h2 className="text-xl font-bold">2. Order Summary</h2>
 
-          <CartTable items={cartItems} isSimple={true} voucher={voucher} />
+          <CartTable items={cartItems} voucher={voucher} />
 
           <CouponAddInput
             vouchers={dataVouchers?.vouchers}

@@ -7,7 +7,7 @@ import { formatPrice } from "@/lib/share/formatPrice";
 
 const formatExpiryDate = (voucher: IVoucher) => {
   const expiry = new Date(
-    new Date(voucher.created_at).getTime() + 2 * 24 * 60 * 60 * 1000,
+    new Date(voucher.expired_at).getTime() + 2 * 24 * 60 * 60 * 1000,
   );
   return expiry.toLocaleDateString("vi-VN");
 };
