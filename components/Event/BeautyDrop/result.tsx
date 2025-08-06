@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, RotateCcw, Target } from "lucide-react";
+import { Home, RotateCcw, Target, Trophy } from "lucide-react";
 import { Block, Box, Card, RText, Section } from "@/lib/by/Div";
 import Button from "@/components/CustomButton";
 
@@ -25,8 +25,11 @@ export default function GameOver({
 }: GameOverProps) {
   return (
     <Section className="w-full max-w-md mx-auto bg-white/95 backdrop-blur-sm border border-purple-100 shadow-xl rounded-2xl p-6">
-      <Block className="text-center">
+      <Block className="text-center mb-6">
         <Box className="flex items-center justify-center gap-3 mb-3">
+          <Box className="p-3 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-full">
+            <Trophy className="w-8 h-8 text-yellow-600" />
+          </Box>
           <Box className="text-2xl font-extrabold text-gray-800">Game Over</Box>
         </Box>
         <RText
@@ -40,7 +43,7 @@ export default function GameOver({
         </RText>
       </Block>
 
-      <Block className="text-center ">
+      <Block className="text-center mb-4">
         <RText className="text-6xl font-bold font-sans text-purple-700 drop-shadow-md">
           {score}
         </RText>
@@ -48,15 +51,8 @@ export default function GameOver({
           total points
         </RText>
       </Block>
-      {rewardInfo?.is_new_high_score && (
-        <Box className="mt-2 text-center">
-          <RText className="text-sm text-green-600 font-semibold">
-            New High Score!
-          </RText>
-        </Box>
-      )}
 
-      {rewardInfo && selectedMode === "official" && rewardInfo.success && (
+      {rewardInfo && rewardInfo.success && (
         <Card className="relative overflow-hidden bg-gradient-to-br from-yellow-50 to-amber-100 border border-yellow-400 shadow-xl rounded-2xl px-5 py-4 mt-6 flex items-center justify-between gap-4">
           <Box className="absolute top-1/2 -left-3 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full border border-yellow-300 shadow-md" />
           <Box className="absolute top-1/2 -right-3 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full border border-yellow-300 shadow-md" />
@@ -112,13 +108,29 @@ export default function GameOver({
         </Card>
       )}
 
+      {rewardInfo && rewardInfo.is_new_high_score && (
+        <Box className="mt-2 text-center">
+          <RText className="text-sm text-green-600 font-semibold">
+            New High Score!
+          </RText>
+        </Box>
+      )}
+
+      <Box className="mt-4 text-center">
+        <RText className="text-sm text-red-500 font-semibold">
+          {rewardInfo?.message}
+        </RText>
+      </Box>
+
       <Block className="space-y-3 mt-6">
-        <Button
-          onClick={onPlayAgain}
-          className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold py-3 rounded-xl"
-          icon={<RotateCcw className="w-5 h-5 mr-2" />}
-          label="Play Again"
-        />
+        {selectedMode !== "official" && (
+          <Button
+            onClick={onPlayAgain}
+            className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold py-3 rounded-xl"
+            icon={<RotateCcw className="w-5 h-5 mr-2" />}
+            label="Play Again"
+          />
+        )}
 
         <Button
           onClick={onModeSelect}

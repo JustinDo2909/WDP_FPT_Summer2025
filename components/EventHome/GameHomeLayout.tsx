@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Area, Block, Section } from "@/lib/by/Div";
-import { useGetVoucherByEventIdQuery } from "@/process/api/api";
 
 const DEFAULTS = {
   title: "Game",
@@ -25,47 +24,30 @@ const DEFAULTS = {
 
 export default function GameHomeLayout({
   children,
-  type,
   playButtonText = DEFAULTS.playButton,
   inventoryButtonText = DEFAULTS.inventoryButton,
   rulesButtonText = DEFAULTS.rulesButton,
-  backgroundImage,
   eventData,
   event,
 }: {
   children?: React.ReactNode;
   title?: string;
-  type?: string;
   playButtonText?: string;
-  backgroundImage?: string;
   inventoryButtonText?: string;
   rulesButtonText?: string;
   eventData?: ILeaderBoardData;
-  event?: IEvent;
 }) {
   const [showInventory, setShowInventory] = useState(false);
   const [showRules, setShowRules] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showRewards, setShowRewards] = useState(false);
-  const { data } = useGetVoucherByEventIdQuery(eventData?.event.id ?? "");
   const router = useRouter();
-
-  const toggleLeaderboard = () => {
-    setShowLeaderboard((prev) => !prev);
-    if (showRewards) setShowRewards(false); // Close Rewards if open
-  };
-
-  // Handler to toggle Rewards and close Leaderboard
-  const toggleRewards = () => {
-    setShowRewards((prev) => !prev);
-    if (showLeaderboard) setShowLeaderboard(false); // Close Leaderboard if open
-  };
 
   return (
     <Area
       className="min-h-screen flex p-4 gap-5"
       style={{
-        backgroundImage: `url(${backgroundImage})`,
+        backgroundImage: "url('/internshift-bg-placeholder.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundColor: "pink",
@@ -95,7 +77,7 @@ export default function GameHomeLayout({
         <Section className="mb-4 ">
           <button
             className={`game-button p-0  ${showLeaderboard ? "w-full" : ""}`}
-            onClick={toggleLeaderboard}
+            onClick={() => setShowLeaderboard(!showLeaderboard)}
           >
             <Block className="flex items-center justify-center gap-2  p-3">
               {showLeaderboard ? (
@@ -158,16 +140,14 @@ export default function GameHomeLayout({
           </button>
 
           {/* Play Button */}
-          {type !== "DEFENDER" && type !== "DROP" && (
-            <button className="game-button">
-              <Block>
-                <span className="text-xl mx-4 flex items-center">
-                  {playButtonText}
-                  <Play fill="black" size={20} className="ml-2 mb-1" />
-                </span>
-              </Block>
-            </button>
-          )}
+          <button className="game-button">
+            <Block>
+              <span className="text-xl mx-4 flex items-center">
+                {playButtonText}
+                <Play fill="black" size={20} className="ml-2 mb-1" />
+              </span>
+            </Block>
+          </button>
 
           {/* Inventory Button */}
           <button
@@ -191,7 +171,7 @@ export default function GameHomeLayout({
         <Block className="mb-4">
           <button
             className={`game-button p-0  ${showRewards ? "w-full" : ""}`}
-            onClick={toggleRewards}
+            onClick={() => setShowRewards(!showRewards)}
           >
             <Block className="flex items-center justify-center gap-2 p-3 ">
               {showRewards ? (
@@ -218,7 +198,6 @@ export default function GameHomeLayout({
           {showRewards && event && (
             <div>
               <VoucherRewards
-                event={event}
                 rewards={eventData?.rewards ?? []}
                 hideToggleButton={true}
               />
@@ -231,7 +210,6 @@ export default function GameHomeLayout({
       <InventoryModal
         open={showInventory}
         onClose={() => setShowInventory(false)}
-        vouchers={data?.vouchers}
       />
       <RulesModal open={showRules} onClose={() => setShowRules(false)} />
     </Area>

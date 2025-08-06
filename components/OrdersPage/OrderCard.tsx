@@ -1,3 +1,4 @@
+import { calculateOrderTotalOriginalPrice } from "@/app/(user)/checkout/seg/calculateSubtotal";
 import { Begin, Card, Column, Row, RText, Wrap } from "@/lib/by/Div";
 import { useCancelOrderMutation } from "@/process/api/api";
 import { useState } from "react";
@@ -9,24 +10,30 @@ import { formatPrice } from "@/lib/share/formatPrice";
 interface OrderCardProps {
   order: IOrder;
   onBuyAgain?: () => void;
-  onViewReciept?: () => void;
+  onContactSeller?: () => void;
 }
 
 export default function OrderCard({
   order,
   onBuyAgain,
-  onViewReciept,
+  onContactSeller,
 }: OrderCardProps): JSX.Element {
   const { orderItems, status, total_amount, createdAt, updatedAt, id } = order;
+  const shippingFee =
+    total_amount - calculateOrderTotalOriginalPrice(orderItems);
+  const originalPrice = calculateOrderTotalOriginalPrice(orderItems);
 
   // Add cancel mutation
   const [cancelOrder, { isLoading: isCancelling }] = useCancelOrderMutation();
   const [showModal, setShowModal] = useState(false);
-  const [cancelReason, setCancelReason] = useState("");
 
   const handleCancelOrder = async () => {
     try {
-      await cancelOrder({ id, reason: cancelReason }).unwrap();
+      await cancelOrder({
+        orderId: id,
+        reason: "Cancelled by user",
+        images: [],
+      }).unwrap();
       setShowModal(false);
       toast.success(
         "Order cancelled successfully. You have been refunded " +
@@ -83,20 +90,13 @@ export default function OrderCard({
               </Begin>
               <Begin className="flex-1">
                 <RText className="text-xs text-gray-900">Price</RText>
-                {item.unit_price !== item.final_price ? (
-                  <>
-                    <RText className="">{formatPrice(item.final_price)}</RText>
-                    <RText className="text-sm text-gray-500 line-through">
-                      {formatPrice(item.unit_price)}
-                    </RText>
-                  </>
-                ) : (
-                  <RText className="">{formatPrice(item.unit_price)}</RText>
-                )}
+                <RText className="text-gray-500">
+                  ₫{item.price.toLocaleString()}
+                </RText>
               </Begin>
               <RText className="text-right">
                 <span className="text-pink-600 font-semibold">
-                  {formatPrice(item.total_price)}
+                  ₫{(item.price * item.quantity).toLocaleString()}
                 </span>
               </RText>
             </Link>
@@ -117,23 +117,17 @@ export default function OrderCard({
           <RText className="text-sm text-muted-foreground">
             Price:{" "}
             <span className="font-medium text-primary">
-              {formatPrice(order.subtotal)}
+              ₫{originalPrice.toLocaleString()}
             </span>
           </RText>
           <RText className="text-sm text-muted-foreground">
             Shipping:{" "}
             <span className="font-medium text-primary">
-              {formatPrice(order.shipping_fee)}
-            </span>
-          </RText>
-          <RText className="text-sm text-muted-foreground">
-            Discount:{" "}
-            <span className="font-medium text-primary">
-              -{formatPrice(order.discount_amount)}
+              ₫{shippingFee.toLocaleString()}
             </span>
           </RText>
           <RText className="text-base font-semibold text-primary">
-            Total: {formatPrice(total_amount)}
+            Total: ₫{total_amount.toLocaleString()}
           </RText>
         </Begin>
         <Wrap className="space-x-2">
@@ -145,9 +139,9 @@ export default function OrderCard({
           </button>
           <button
             className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-100"
-            onClick={onViewReciept}
+            onClick={onContactSeller}
           >
-            View Receipt
+            Contact
           </button>
           {status === "PROCESSING" && (
             <button
@@ -155,15 +149,7 @@ export default function OrderCard({
               onClick={() => setShowModal(true)}
               disabled={isCancelling}
             >
-              Refund
-            </button>
-          )}
-          {status === "DELIVERED" && (
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              onClick={() => setShowModal(true)}
-            >
-              Upload Proof
+              Cancel
             </button>
           )}
         </Wrap>
@@ -173,53 +159,22 @@ export default function OrderCard({
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
           <div className="bg-white rounded-lg shadow-lg p-6 min-w-[320px] max-w-sm">
-            <h3 className="text-lg font-semibold mb-4">
-              {status === "PROCESSING"
-                ? "Refund Order"
-                : "Upload Delivery Proof"}
-            </h3>
-            <p className="mb-6">
-              {status === "PROCESSING"
-                ? "Are you sure you want to refund this order?"
-                : "Please upload proof of delivery."}
-            </p>
-            {(status === "PROCESSING" || status === "DELIVERED") && (
-              <div className="mb-4">
-                <label
-                  htmlFor="cancelReason"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Reason for Cancellation
-                </label>
-                <textarea
-                  id="cancelReason"
-                  value={cancelReason}
-                  onChange={(e) => setCancelReason(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  rows={4}
-                  placeholder="Enter reason for cancellation"
-                />
-              </div>
-            )}
-
+            <h3 className="text-lg font-semibold mb-4">Cancel Order</h3>
+            <p className="mb-6">Are you sure you want to cancel this order?</p>
             <Row className="flex justify-end gap-2">
               <button
                 className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
                 onClick={() => setShowModal(false)}
                 disabled={isCancelling}
               >
-                Cancel
+                No
               </button>
               <button
                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                 onClick={handleCancelOrder}
                 disabled={isCancelling}
               >
-                {isCancelling
-                  ? "Processing..."
-                  : status === "PROCESSING"
-                    ? "Yes, Cancel"
-                    : "Upload"}
+                {isCancelling ? "Cancelling..." : "Yes, Cancel"}
               </button>
             </Row>
           </div>

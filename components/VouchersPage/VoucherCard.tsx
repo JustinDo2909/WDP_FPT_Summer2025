@@ -10,7 +10,7 @@ interface VoucherCardProps {
 
 const formatExpiryDate = (voucher: IVoucher) => {
   const expiry = new Date(
-    new Date(voucher.expired_at).getTime() + 2 * 24 * 60 * 60 * 1000,
+    new Date(voucher.created_at).getTime() + 2 * 24 * 60 * 60 * 1000,
   );
   return expiry.toLocaleDateString("vi-VN");
 };
@@ -18,32 +18,25 @@ const formatExpiryDate = (voucher: IVoucher) => {
 export default function VoucherCard({
   voucher,
 }: VoucherCardProps): JSX.Element {
-  const { voucherTemplate, type, redeemed, redeemed_at } = voucher;
+  const { discount_value, type, redeemed, redeemed_at, voucherProducts } =
+    voucher;
   const [showAll, setShowAll] = React.useState(false);
 
-  const now = new Date();
-  const expiryDate = new Date(
-    new Date(voucher.expired_at).getTime() + 2 * 24 * 60 * 60 * 1000,
-  );
-  const isExpired = now > expiryDate;
   const isRedeemed = redeemed;
-
-  const statusText = isExpired
-    ? "Expired"
-    : isRedeemed
-      ? `Redeemed${redeemed_at ? ` at ${new Date(redeemed_at).toLocaleDateString()}` : ""}`
-      : "Available";
+  const statusText = isRedeemed
+    ? `Redeemed${redeemed_at ? ` at ${new Date(redeemed_at).toLocaleDateString()}` : ""}`
+    : "Available";
 
   const formattedDiscount =
     type === "PERCENT"
-      ? `${voucherTemplate?.discount_value}% OFF`
-      : `₫${voucherTemplate?.discount_value.toLocaleString()} OFF`;
+      ? `${discount_value}% OFF`
+      : `₫${discount_value.toLocaleString()} OFF`;
 
   return (
     <Card
       className={`
         flex w-full min-w-[450px] overflow-hidden rounded-lg border border-gray-200
-        ${isRedeemed || isExpired ? "opacity-50 cursor-not-allowed grayscale" : ""}
+        ${isRedeemed ? "opacity-50 cursor-not-allowed grayscale" : ""}
       `}
     >
       {/* Left Pill */}
@@ -61,11 +54,7 @@ export default function VoucherCard({
             </RText>
             <RText
               className={`text-xs font-medium ${
-                isExpired
-                  ? "text-red-500"
-                  : isRedeemed
-                    ? "text-gray-400"
-                    : "text-green-600"
+                isRedeemed ? "text-gray-400" : "text-green-600"
               }`}
             >
               {statusText}
@@ -73,14 +62,11 @@ export default function VoucherCard({
           </Row>
 
           {/* Linked product titles */}
-          {voucherTemplate?.voucherProducts &&
-            voucherTemplate?.voucherProducts.length > 0 && (
-              <Wrap className="mt-2 text-xs text-gray-600">
-                Applicable for:&nbsp;
-                {(showAll
-                  ? (voucherTemplate?.voucherProducts ?? [])
-                  : (voucherTemplate?.voucherProducts ?? []).slice(0, 3)
-                ).map((vp, index) => (
+          {voucherProducts && voucherProducts.length > 0 && (
+            <Wrap className="mt-2 text-xs text-gray-600">
+              Applicable for:&nbsp;
+              {(showAll ? voucherProducts : voucherProducts.slice(0, 3)).map(
+                (vp, index) => (
                   <React.Fragment key={vp.product.id}>
                     <Link
                       href={`/products/${vp.product.id}`}
@@ -90,26 +76,28 @@ export default function VoucherCard({
                     </Link>
                     {index <
                       (showAll
-                        ? (voucherTemplate?.voucherProducts?.length ?? 0)
-                        : Math.min(
-                            voucherTemplate?.voucherProducts?.length ?? 0,
-                            3,
-                          )) -
+                        ? voucherProducts.length
+                        : Math.min(voucherProducts.length, 3)) -
                         1 && ", "}
                   </React.Fragment>
-                ))}
-                {voucherTemplate?.voucherProducts.length > 3 && (
-                  <button
-                    onClick={() => setShowAll((prev) => !prev)}
-                    className="ml-1 text-blue-500 underline"
-                  >
-                    {showAll
-                      ? "Show less"
-                      : `+${voucherTemplate?.voucherProducts.length - 3} more`}
-                  </button>
-                )}
-              </Wrap>
-            )}
+                ),
+              )}
+              {voucherProducts.length > 3 && (
+                <button
+                  onClick={() => setShowAll((prev) => !prev)}
+                  className="ml-1 text-blue-500 underline"
+                >
+                  {showAll
+                    ? "Show less"
+                    : `+${voucherProducts.length - 3} more`}
+                </button>
+              )}
+            </Wrap>
+          )}
+
+          {/* <Wrap className="inline-block mt-2 px-2 py-0.5 bg-pink-500 text-white text-xs rounded w-fit">
+            Stripe Coupon: {stripe_coupon_id ?? "N/A"}
+          </Wrap> */}
         </Column>
 
         <Wrap className="text-xs text-gray-400 mt-2">

@@ -54,7 +54,7 @@ export default function GameCanvas({
       gameLogic.basket.x,
       gameLogic.basket.y,
       gameLogic.basket.x,
-      gameLogic.basket.y + gameLogic.basket.height,
+      gameLogic.basket.y + gameLogic.basket.height
     );
     if (gameLogic.powerUp) {
       basketGradient.addColorStop(0, "#FFE082");
@@ -62,11 +62,11 @@ export default function GameCanvas({
     } else {
       basketGradient.addColorStop(
         0,
-        selectedMode === "practice" ? "#C8E6C9" : "#D7CCC8",
+        selectedMode === "practice" ? "#C8E6C9" : "#D7CCC8"
       );
       basketGradient.addColorStop(
         1,
-        selectedMode === "practice" ? "#A5D6A7" : "#A1887F",
+        selectedMode === "practice" ? "#A5D6A7" : "#A1887F"
       );
     }
     ctx.fillStyle = basketGradient;
@@ -74,7 +74,7 @@ export default function GameCanvas({
       gameLogic.basket.x,
       gameLogic.basket.y,
       gameLogic.basket.width,
-      gameLogic.basket.height,
+      gameLogic.basket.height
     );
 
     // Basket handle
@@ -91,7 +91,7 @@ export default function GameCanvas({
       15,
       0,
       Math.PI,
-      true,
+      true
     );
     ctx.stroke();
 
@@ -108,7 +108,7 @@ export default function GameCanvas({
         0,
         item.x,
         item.y,
-        circleRadius,
+        circleRadius
       );
       itemGradient.addColorStop(0, "#FFFFFF");
       itemGradient.addColorStop(0.7, item.color);
@@ -138,7 +138,7 @@ export default function GameCanvas({
           item.x - imageSize / 2,
           item.y - imageSize / 2,
           imageSize,
-          imageSize,
+          imageSize
         );
         ctx.shadowBlur = 0;
       } else {

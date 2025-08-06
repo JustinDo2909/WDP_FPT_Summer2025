@@ -4,7 +4,7 @@ import customBaseQuery from "./customFetchBase";
 export const apiEvent = createApi({
   baseQuery: customBaseQuery, // Assumes cookies are handled here
   reducerPath: "apiEvent",
-  tagTypes: ["Quiz", "Reward", "PlayStatus", "Events", "LeaderBoard"],
+  tagTypes: ["Quiz", "Reward", "PlayStatus", "Events"],
   endpoints: (build) => ({
     //region getEvent
     getEvents: build.query<IEvent[], void>({
@@ -58,21 +58,7 @@ export const apiEvent = createApi({
       }),
       // transformResponse: (response: IResponseCalculate) =>
       //   response.reward || {},
-      invalidatesTags: ["LeaderBoard"],
-    }),
-    //#endregion
-
-    //#region getEventLeaderboard
-    getEventLeaderboard: build.query<
-      IResponse<ILeaderBoardData, "data">,
-      string
-    >({
-      query: (event_id) => ({
-        url: `events/${event_id}/leaderboard`,
-        method: "GET",
-        credentials: "include",
-      }),
-      providesTags: ["LeaderBoard"],
+      invalidatesTags: ["Reward"],
     }),
     //#endregion
   }),
@@ -84,5 +70,4 @@ export const {
   useGetQuestionsQuery,
   useGetRewardHooksQuery,
   useCalculateRewardMutation,
-  useGetEventLeaderboardQuery,
 } = apiEvent;

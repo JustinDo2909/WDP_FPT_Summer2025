@@ -4,9 +4,7 @@ export function calculateVoucherSavings(
   voucher: IVoucher,
   cartItems: ICartLineItem[],
 ): number {
-  const voucherProductIds = voucher.voucherTemplate.voucherProducts?.map(
-    (vp) => vp.product.id,
-  );
+  const voucherProductIds = voucher.voucherProducts?.map((vp) => vp.product.id);
   const matchingCartItems = cartItems.filter((item) =>
     voucherProductIds?.includes(item.product_id),
   );
@@ -17,16 +15,14 @@ export function calculateVoucherSavings(
     return sum + price * quantity;
   }, 0);
 
-  if (voucher.voucherTemplate.type === "PERCENT") {
-    return Math.round(
-      totalPrice * (voucher.voucherTemplate.discount_value / 100),
-    );
+  if (voucher.type === "PERCENT") {
+    return Math.round(totalPrice * (voucher.discount_value / 100));
   } else {
-    return voucher.voucherTemplate.discount_value;
+    return voucher.discount_value;
   }
 }
 
 export const formatDiscount = (voucher: IVoucher) =>
-  voucher.voucherTemplate.type === "PERCENT"
-    ? `${voucher.voucherTemplate.discount_value}% OFF`
-    : `${formatPrice(voucher.voucherTemplate.discount_value)} OFF`;
+  voucher.type === "PERCENT"
+    ? `${voucher.discount_value}% OFF`
+    : `${formatPrice(voucher.discount_value)} OFF`;

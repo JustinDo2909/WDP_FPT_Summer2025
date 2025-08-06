@@ -40,7 +40,7 @@ interface Particle {
 
 const RacingGame = () => {
   const [gameState, setGameState] = useState<"menu" | "playing" | "gameOver">(
-    "menu",
+    "menu"
   );
   const [playerPos, setPlayerPos] = useState<Position>({ x: 50, y: 180 });
   const [obstacles, setObstacles] = useState<Obstacle[]>([]);
@@ -153,7 +153,7 @@ const RacingGame = () => {
   const createParticles = (
     x: number,
     y: number,
-    type: "collision" | "shield" | "powerup" = "collision",
+    type: "collision" | "shield" | "powerup" = "collision"
   ) => {
     const newParticles: Particle[] = [];
     const particleCount = 10;
@@ -232,7 +232,7 @@ const RacingGame = () => {
             vy: particle.vy * 0.98,
             life: particle.life - 1,
           }))
-          .filter((particle) => particle.life > 0),
+          .filter((particle) => particle.life > 0)
       );
 
       // Increase score
@@ -278,7 +278,7 @@ const RacingGame = () => {
             setShield(0);
             createParticles(obstacle.x, obstacle.y, "shield");
             setObstacles((prev) =>
-              prev.filter((obs) => obs.id !== obstacle.id),
+              prev.filter((obs) => obs.id !== obstacle.id)
             );
           } else {
             createParticles(playerPos.x, playerPos.y, "collision");

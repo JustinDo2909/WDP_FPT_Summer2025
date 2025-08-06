@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { GAME_MODES } from "@/constants";
 import { useGameLogic } from "@/hooks/useGameLogic";
 import { useImageLoader } from "@/hooks/useImageLoader";
@@ -28,7 +28,7 @@ export default function CosmeticCatchGame() {
     gameModes,
     selectedMode,
     gameState,
-    setGameState,
+    setGameState
   );
   const [calculateReward] = useCalculateRewardMutation();
 
@@ -38,8 +38,7 @@ export default function CosmeticCatchGame() {
     setGameState("playing");
   };
 
-  // Memoize handleEndGame with useCallback
-  const handleEndGame = useCallback(async () => {
+  const handleEndGame = async () => {
     setGameState("gameOver");
     if (selectedMode === "official") {
       try {
@@ -53,17 +52,10 @@ export default function CosmeticCatchGame() {
         console.error("Mutation error:", err);
       }
     }
-  }, [selectedMode, calculateReward, event_id, gameLogic.score, setGameState]);
+  };
 
   const goToModeSelect = () => setGameState("modeSelect");
   const goToMenu = () => setGameState("menu");
-
-  // UseEffect with handleEndGame as dependency
-  useEffect(() => {
-    if (gameState === "playing" && gameLogic.timeLeft === 0) {
-      handleEndGame();
-    }
-  }, [gameState, gameLogic.timeLeft, handleEndGame]);
 
   if (!imagesLoaded) {
     return <LoadingScreen />;

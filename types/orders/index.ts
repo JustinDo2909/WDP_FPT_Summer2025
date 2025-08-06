@@ -5,12 +5,12 @@ declare global {
     address_id: string;
     status: "PROCESSING" | "SHIPPED" | "DELIVERED" | "CANCELLED";
     total_amount: number;
-    subtotal: number;
     checkout_session_id: string;
     payment_intent_id: string;
     payment_method: "card" | "paypal" | "bank_transfer" | "cash_on_delivery";
     createdAt: string;
     updatedAt: string;
+    subtotal: number;
     shipping_fee: number;
     payment_status: string;
     receipt_url: string;
@@ -25,7 +25,6 @@ declare global {
     email: string;
     name: string;
     role: "USER" | "ADMIN" | "STAFF";
-    phone: string;
     createdAt: string;
     updatedAt: string;
   }
@@ -35,13 +34,9 @@ declare global {
     order_id: string;
     product_id: string;
     title: string;
-    price: number; //dep
+    price: number;
     image_url: string;
     quantity: number;
-    unit_price: number;
-    discount_per_item: number;
-    total_price: number;
-    final_price: number;
   }
 }
 

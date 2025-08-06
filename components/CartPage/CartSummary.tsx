@@ -31,6 +31,11 @@ export default function CartSummary({
           <RText className="font-semibold">{formatPrice(subtotal)}</RText>
         </Row>
 
+        <Row className="flex justify-between">
+          <RText>Discount:</RText>
+          <RText> -{formatPrice(subtotal - total) ?? 0}</RText>
+        </Row>
+
         <Row className="flex text-gray-400 justify-between">
           <RText>Shipping:</RText>
           <RText>
