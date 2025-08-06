@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Area, Block, Section } from "@/lib/by/Div";
 import { useGetVoucherByEventIdQuery } from "@/process/api/api";
+import Link from "next/link";
 
 const DEFAULTS = {
   title: "Game",
@@ -159,14 +160,17 @@ export default function GameHomeLayout({
 
           {/* Play Button */}
           {type !== "DEFENDER" && type !== "DROP" && (
-            <button className="game-button">
+            <Link
+              className="game-button"
+              href={`/event/internshift/play?event_id=${event?.id}`}
+            >
               <Block>
                 <span className="text-xl mx-4 flex items-center">
                   {playButtonText}
                   <Play fill="black" size={20} className="ml-2 mb-1" />
                 </span>
               </Block>
-            </button>
+            </Link>
           )}
 
           {/* Inventory Button */}

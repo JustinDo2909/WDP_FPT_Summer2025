@@ -7,7 +7,7 @@ export default function GamePlay() {
   const searchParams = useSearchParams();
   const event_id = searchParams.get("event_id");
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-950">
+    <div className="flex flex-1 justify-center items-center h-screen bg-gray-950">
       <SceneScreen eventId={event_id ?? ""} />
     </div>
   );
