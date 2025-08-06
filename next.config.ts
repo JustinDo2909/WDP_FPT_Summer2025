@@ -20,6 +20,7 @@ const nextConfig: NextConfig = {
       "cdn.chiaki.vn",
       "i.ibb.co",
       "i.ibb.co",
+      "utfs.io",
     ],
   },
 };

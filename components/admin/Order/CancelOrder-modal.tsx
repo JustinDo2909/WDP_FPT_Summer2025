@@ -5,6 +5,7 @@ import { X, Upload, Trash2 } from "lucide-react";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 import { toast } from "react-hot-toast";
 import clsx from "clsx";
+import { UploadDropzone } from "@/lib/uploadthing";
 
 interface CancelOrderModalProps {
   isOpen: boolean;
@@ -34,8 +35,9 @@ export function CancelOrderModal({
     console.log("CancelOrderModal handleSubmit - orderId:", orderId);
     console.log(
       "CancelOrderModal handleSubmit - orderId type:",
-      typeof orderId,
+      typeof orderId
     );
+    console.log("Images to upload:", images);
 
     setIsSubmitting(true);
     try {
@@ -84,7 +86,7 @@ export function CancelOrderModal({
       <Core
         className={clsx(
           "fixed inset-0 bg-black transition-opacity duration-300 z-[9998]",
-          isOpen ? "bg-opacity-60" : "bg-opacity-0",
+          isOpen ? "bg-opacity-60" : "bg-opacity-0"
         )}
         onClick={handleClose}
       />
@@ -92,7 +94,7 @@ export function CancelOrderModal({
       <Core
         className={clsx(
           "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white shadow-2xl z-[9999] rounded-lg",
-          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95",
+          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
         )}
       >
         <Container className="p-6">
@@ -142,7 +144,7 @@ export function CancelOrderModal({
               </RText>
 
               {/* Upload Button */}
-              <Yard className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
+              {/* <Yard className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
                 <input
                   type="file"
                   multiple
@@ -163,7 +165,26 @@ export function CancelOrderModal({
                     PNG, JPG, JPEG up to 5MB each
                   </RText>
                 </label>
-              </Yard>
+              </Yard> */}
+              <UploadDropzone
+                endpoint={"imageUploader"}
+                appearance={{
+                  label: {
+                    color: "#FFFFFF",
+                  },
+                  allowedContent: {
+                    color: "#FFFFFF",
+                  },
+                  button: {
+                    color: "#7878fc",
+                  },
+                }}
+                onClientUploadComplete={(res) => {
+                  if (res?.[0]?.url) {
+                    setImages((prev) => [...prev, res[0].url]);
+                  }
+                }}
+              />
 
               {/* Image Preview */}
               {images.length > 0 && (
