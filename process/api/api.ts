@@ -42,10 +42,7 @@ import {
   IResponseQuestions,
   IReward,
 } from "@/types/quiz";
-import type {
-  Voucher,
-  VouchersResponse
-} from "@/types/voucher/index";
+import type { Voucher, VouchersResponse } from "@/types/voucher/index";
 import type {
   Batch,
   BatchesResponse,
@@ -66,7 +63,7 @@ const customBaseQuery = async (
   extraOptions: any
 ) => {
   const baseQuery = fetchBaseQuery({
-    baseUrl: "https://cosme-play-be.vercel.app/api/",
+    baseUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/`,
     credentials: "include",
     prepareHeaders: async (headers) => {
       const token = Cookies.get("authToken");

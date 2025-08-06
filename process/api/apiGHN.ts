@@ -4,12 +4,12 @@ export const ghnApi = createApi({
   reducerPath: "ghnApi",
   tagTypes: ["Districts"],
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://online-gateway.ghn.vn/shiip/public-api/",
+    baseUrl: `${process.env.NEXT_PUBLIC_GHN_URL}/shiip/public-api/`,
     prepareHeaders: (headers) => {
       headers.set("Content-Type", "application/json");
       headers.set(
         "Token",
-        process.env.GHN_API_TOKEN || "2097f4fe-1bfe-11f0-8aaa-9ed348b01f47",
+        process.env.GHN_API_TOKEN || "2097f4fe-1bfe-11f0-8aaa-9ed348b01f47"
       );
       headers.set("ShopId", process.env.GHN_SHOP_ID || "5738915");
       return headers;
