@@ -1,6 +1,6 @@
 "use client";
 
-import { Row, RText } from "@/lib/by/Div";
+import { Block, Box, Card, Row, RText } from "@/lib/by/Div";
 import { useGameState } from "./seg/useGameState";
 import CustomerInteraction from "./scenes/CustomerInteraction";
 import ChoosingProducts from "./scenes/ChoosingProducts";
@@ -184,25 +184,77 @@ export const SceneScreen = ({ eventId }: { eventId: string }) => {
             <h2 className="text-2xl font-bold mb-4 text-yellow-700">
               Congratulations!
             </h2>
-            {voucher ? (
-              <>
-                <div className="text-lg mb-2">You have won a voucher:</div>
-                <div className="bg-yellow-100 border-2 border-yellow-400 rounded-xl px-6 py-4 text-center text-yellow-800 text-xl font-bold mb-4">
-                  {voucher.reward?.discountValue?.toLocaleString()}{" "}
-                  {voucher.reward?.discountType === "PERCENT" ? " %" : " đ"} off
-                </div>
-              </>
-            ) : (
-              <div className="text-lg text-gray-700 mb-4">
-                You&apos;ve received the max amount of vouchers for today
-              </div>
+
+            <Block className="text-center ">
+              <RText className="text-6xl font-bold font-sans text-purple-700 drop-shadow-md">
+                {voucher?.score}
+              </RText>
+              <RText className="text-sm text-gray-600 font-medium tracking-wider uppercase mt-1">
+                total points
+              </RText>
+            </Block>
+            {voucher?.is_new_high_score && (
+              <Box className="mt-2 text-center">
+                <RText className="text-sm text-green-600 font-semibold">
+                  New High Score!
+                </RText>
+              </Box>
             )}
 
-            {voucher?.score && (
-              <div className="text-lg text-gray-700 mb-2">
-                Your Score: {voucher.score}
-                {voucher.is_new_high_score && " (New High Score!)"}
-              </div>
+            {voucher && voucher.success && (
+              <Card className="relative overflow-hidden bg-gradient-to-br from-yellow-50 to-amber-100 border border-yellow-400 shadow-xl rounded-2xl px-5 py-4 my-6 flex items-center justify-between gap-4">
+                <Box className="absolute top-1/2 -left-3 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full border border-yellow-300 shadow-md" />
+                <Box className="absolute top-1/2 -right-3 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full border border-yellow-300 shadow-md" />
+
+                {voucher.reward ? (
+                  <>
+                    <Box className="flex-1 text-left">
+                      <RText className="text-base font-bold text-yellow-800">
+                        🎉 Congratulations!
+                      </RText>
+
+                      <RText className="text-sm text-gray-600 mt-1">
+                        {voucher.reward.discountValue}
+                      </RText>
+
+                      <RText className="text-xs italic text-gray-500 mt-1">
+                        Reward will be saved to your profile.
+                      </RText>
+                    </Box>
+
+                    <Box className="text-right min-w-[90px]">
+                      <RText className="text-3xl font-black text-orange-600">
+                        {voucher.reward?.discountType === "AMOUNT"
+                          ? `₫${voucher.reward.discountValue?.toLocaleString()}`
+                          : "%"}
+                      </RText>
+                      <RText className="text-sm text-yellow-700 font-semibold">
+                        OFF
+                      </RText>
+                    </Box>
+                  </>
+                ) : voucher.voucher_already_received ? (
+                  <Box className="flex-1 text-left">
+                    <RText className="text-base font-bold text-yellow-800">
+                      Notification
+                    </RText>
+
+                    <RText className="text-sm text-gray-600 mt-1">
+                      {voucher.message}
+                    </RText>
+                  </Box>
+                ) : (
+                  <Box className="flex-1 text-left">
+                    <RText className="text-base font-bold text-yellow-800">
+                      Notification
+                    </RText>
+
+                    <RText className="text-sm text-gray-600 mt-1">
+                      {voucher.message}
+                    </RText>
+                  </Box>
+                )}
+              </Card>
             )}
             <button
               className="game-button px-4 py-2 bg-gray-700 text-white rounded mt-2"
