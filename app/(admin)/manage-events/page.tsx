@@ -59,7 +59,6 @@ import {
   useUpdateEventMutation,
   useUpdateQuestionMutation,
   useUpdateRewardMutation,
-  useDeleteRewardMutation,
   useGetEventLeaderboardQuery,
 } from "@/process/api/api";
 

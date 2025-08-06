@@ -37,12 +37,12 @@ export function Leaderboard({ selectedEventId }: LeaderboardProps) {
     return "bg-white border border-gray-200";
   };
 
-  const formatCompletionTime = (time: number | null) => {
-    if (!time) return "N/A";
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  };
+  // const formatCompletionTime = (time: number | null) => {
+  //   if (!time) return "N/A";
+  //   const minutes = Math.floor(time / 60);
+  //   const seconds = time % 60;
+  //   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  // };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
