@@ -47,7 +47,15 @@ export default function OrderCard({
           })}
         </RText>
         <Begin className="flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+          <span
+            className={`px-2 py-0.5 rounded-full text-xs font-semibold
+              ${status === "PROCESSING" ? "bg-yellow-100 text-yellow-700 border border-yellow-300"
+                : status === "SHIPPED" ? "bg-blue-100 text-blue-700 border border-blue-300"
+                : status === "DELIVERED" ? "bg-green-100 text-green-700 border border-green-300"
+                : status === "CANCELLED" ? "bg-red-100 text-red-700 border border-red-300"
+                : "bg-gray-100 text-gray-700 border border-gray-300"}
+            `}
+          >
             {status}
           </span>
           <RText className="text-xs text-muted-foreground">
@@ -60,57 +68,59 @@ export default function OrderCard({
       </Row>
 
       <Column className="divide-y">
-        {orderItems.map((item) => (
-          <Row key={item.id} className="flex py-4 items-center w-full">
-            <Link
-              href={`/user/orders/${order.id}`}
-              className="flex items-center flex-1 min-w-0"
+        {orderItems.map((item) => {
+          const hasVoucher = item.discount_per_item;
+          return (
+            <Row
+              key={item.id}
+              className={`flex py-4  items-center w-full `}
             >
-              <Image
-                width={64}
-                height={64}
-                src={item.image_url}
-                alt={item.title}
-                className="w-16 h-16 rounded object-cover mr-4"
-              />
-              <Begin className="flex-1 min-w-0">
-                <RText className="font-medium text-gray-900 truncate">
-                  {item.title}
-                </RText>
-                <RText className="text-xs text-gray-500">
-                  x{item.quantity}
-                </RText>
-              </Begin>
-              <Begin className="flex-1">
-                <RText className="text-xs text-gray-900">Price</RText>
-                {item.unit_price !== item.final_price ? (
-                  <>
-                    <RText className="">{formatPrice(item.final_price)}</RText>
-                    <RText className="text-sm text-gray-500 line-through">
-                      {formatPrice(item.unit_price)}
-                    </RText>
-                  </>
-                ) : (
-                  <RText className="">{formatPrice(item.unit_price)}</RText>
-                )}
-              </Begin>
-              <RText className="text-right">
-                <span className="text-pink-600 font-semibold">
-                  {formatPrice(item.total_price)}
-                </span>
-              </RText>
-            </Link>
-            <Wrap className="ml-4">
               <Link
-                href={`/products/${item.product_id}#reviews`}
-                className="px-3 py-1 bg-primary text-white rounded hover:bg-primary-dark transition-all text-xs"
-                scroll={true}
+                href={`/user/orders/${order.id}`}
+                className="flex items-center flex-1 min-w-0"
               >
-                Review
+                <Image
+                  width={64}
+                  height={64}
+                  src={item.image_url}
+                  alt={item.title}
+                  className="w-16 h-16 rounded object-cover mr-4"
+                />
+                <Begin className="flex-1 min-w-0">
+                  <RText className="font-medium text-gray-900 truncate">
+                    {item.title}
+                  </RText>
+                  <RText className="text-xs text-gray-500">
+                    x{item.quantity}
+                  </RText>
+                </Begin>
+                <Begin className="flex-1">
+                  <RText className="text-xs text-gray-900">Price</RText>
+                  {formatPrice(item.unit_price)}
+                </Begin>
+                <RText className="text-right">
+                  <span className="text-pink-600 font-semibold">
+                    {formatPrice(item.total_price)}
+                  </span>
+                  {hasVoucher ? (
+                    <span className="block text-xs text-green-600 mt-1">
+                      Voucher saved {formatPrice(item.discount_per_item * item.quantity)}
+                    </span>
+                  ) : ""}
+                </RText>
               </Link>
-            </Wrap>
-          </Row>
-        ))}
+              <Wrap className="ml-4">
+                <Link
+                  href={`/products/${item.product_id}#reviews`}
+                  className="px-3 py-1 bg-primary text-white rounded hover:bg-primary-dark transition-all text-xs"
+                  scroll={true}
+                >
+                  Review
+                </Link>
+              </Wrap>
+            </Row>
+          );
+        })}
       </Column>
       <Row className="flex justify-between items-center mt-4">
         <Begin className="space-y-1">
@@ -127,9 +137,9 @@ export default function OrderCard({
             </span>
           </RText>
           <RText className="text-sm text-muted-foreground">
-            Discount:{" "}
+            Voucher:{" "}
             <span className="font-medium text-primary">
-              -{formatPrice(order.discount_amount)}
+              -{formatPrice(order.discount_amount ?? 0)}
             </span>
           </RText>
           <RText className="text-base font-semibold text-primary">

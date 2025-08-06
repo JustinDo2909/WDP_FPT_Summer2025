@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { X, Upload, Trash2 } from "lucide-react";
+import { X, Trash2 } from "lucide-react";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 import { toast } from "react-hot-toast";
 import clsx from "clsx";
+import { UploadDropzone } from "@/lib/uploadthing";
 
 interface CancelOrderModalProps {
   isOpen: boolean;
@@ -36,6 +37,7 @@ export function CancelOrderModal({
       "CancelOrderModal handleSubmit - orderId type:",
       typeof orderId,
     );
+    console.log("Images to upload:", images);
 
     setIsSubmitting(true);
     try {
@@ -57,21 +59,21 @@ export function CancelOrderModal({
     onClose();
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      // Convert files to base64 strings (simplified for demo)
-      // In real app, you'd upload to cloud storage and get URLs
-      Array.from(files).forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const result = e.target?.result as string;
-          setImages((prev) => [...prev, result]);
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-  };
+  // const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = e.target.files;
+  //   if (files) {
+  //     // Convert files to base64 strings (simplified for demo)
+  //     // In real app, you'd upload to cloud storage and get URLs
+  //     Array.from(files).forEach((file) => {
+  //       const reader = new FileReader();
+  //       reader.onload = (e) => {
+  //         const result = e.target?.result as string;
+  //         setImages((prev) => [...prev, result]);
+  //       };
+  //       reader.readAsDataURL(file);
+  //     });
+  //   }
+  // };
 
   const removeImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
@@ -142,7 +144,7 @@ export function CancelOrderModal({
               </RText>
 
               {/* Upload Button */}
-              <Yard className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
+              {/* <Yard className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
                 <input
                   type="file"
                   multiple
@@ -163,7 +165,26 @@ export function CancelOrderModal({
                     PNG, JPG, JPEG up to 5MB each
                   </RText>
                 </label>
-              </Yard>
+              </Yard> */}
+              <UploadDropzone
+                endpoint={"imageUploader"}
+                appearance={{
+                  label: {
+                    color: "#FFFFFF",
+                  },
+                  allowedContent: {
+                    color: "#FFFFFF",
+                  },
+                  button: {
+                    color: "#7878fc",
+                  },
+                }}
+                onClientUploadComplete={(res) => {
+                  if (res?.[0]?.url) {
+                    setImages((prev) => [...prev, res[0].url]);
+                  }
+                }}
+              />
 
               {/* Image Preview */}
               {images.length > 0 && (

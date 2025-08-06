@@ -143,6 +143,7 @@ declare global {
     id: string;
     discount_value: number;
     event_id: string;
+    min_order_amount: number
     type: "PERCENT" | "AMOUNT";
     user_limit: string;
     user_count: string;

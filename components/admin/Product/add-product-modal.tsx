@@ -1,9 +1,11 @@
 "use client";
-import { X, Upload, Trash2 } from "lucide-react";
+import { X, Trash2 } from "lucide-react";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 import { AddProductModalProps } from "@/types/productManagement/index";
 import { useProductForm } from "@/components/admin/Product/seg/utils";
 import { useGetProductMetaQuery } from "@/process/api/api";
+import Image from "next/image";
+import { UploadDropzone } from "@/lib/uploadthing";
 
 export function AddProductModal({
   isOpen,
@@ -16,7 +18,6 @@ export function AddProductModal({
     errors,
     isSubmitting,
     handleInputChange,
-    handleImageChange,
     removeImage,
     handleSubmit,
   } = useProductForm(editProduct);
@@ -257,36 +258,16 @@ export function AddProductModal({
               <RText className="block text-sm font-medium text-gray-700 mb-2">
                 Product Image *
               </RText>
-              <Area className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-                <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                <RText className="text-sm text-gray-600 mb-2">
-                  Click to upload or drag and drop
-                </RText>
-                <RText className="text-xs text-gray-500 mb-4">
-                  PNG, JPG, GIF up to 10MB
-                </RText>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                  id="image-upload"
-                />
-                <label
-                  htmlFor="image-upload"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition-colors inline-block"
-                >
-                  Choose File
-                </label>
-              </Area>
 
               {/* Image Preview */}
-              {formData.image_url && (
+              {formData.image_url ? (
                 <Area className="mt-4 relative inline-block">
-                  <img
+                  <Image
                     src={formData.image_url}
                     alt="Product preview"
-                    className="w-32 h-32 object-cover rounded-lg border border-gray-200"
+                    width={160}
+                    height={160}
+                    className="object-cover rounded-lg border border-gray-200"
                   />
                   <button
                     type="button"
@@ -296,6 +277,26 @@ export function AddProductModal({
                     <Trash2 className="h-3 w-3" />
                   </button>
                 </Area>
+              ) : (
+                <UploadDropzone
+                  endpoint={"imageUploader"}
+                  appearance={{
+                    label: {
+                      color: "#FFFFFF",
+                    },
+                    allowedContent: {
+                      color: "#FFFFFF",
+                    },
+                    button: {
+                      color: "#7878fc",
+                    },
+                  }}
+                  onClientUploadComplete={(res) => {
+                    if (res?.[0]?.url) {
+                      handleInputChange("image_url", res[0].url);
+                    }
+                  }}
+                />
               )}
 
               {errors.image_url && (

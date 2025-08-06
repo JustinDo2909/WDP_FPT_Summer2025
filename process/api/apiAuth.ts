@@ -13,7 +13,7 @@ export const apiAuth = createApi({
     extraOptions: any,
   ) => {
     const baseQuery = fetchBaseQuery({
-      baseUrl: "https://cosme-play-be.vercel.app/api",
+      baseUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/`,
       prepareHeaders: async (headers) => {
         // Get token from localStorage
         if (typeof window !== "undefined") {

@@ -47,7 +47,7 @@ export default function CartPage() {
                   <Button
                     disabled={sortedCartItems.length === 0}
                     label={
-                      <RText className="text-base whitespace-nowrap">
+                      <RText className="text-base font-raleway whitespace-nowrap">
                         Proceed to Checkout
                       </RText>
                     }

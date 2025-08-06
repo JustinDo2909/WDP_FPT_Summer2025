@@ -4,7 +4,7 @@ export const ghnApi = createApi({
   reducerPath: "ghnApi",
   tagTypes: ["Districts"],
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://online-gateway.ghn.vn/shiip/public-api/",
+    baseUrl: `${process.env.NEXT_PUBLIC_GHN_URL}/shiip/public-api/`,
     prepareHeaders: (headers) => {
       headers.set("Content-Type", "application/json");
       headers.set(

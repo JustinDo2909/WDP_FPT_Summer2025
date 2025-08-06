@@ -18,6 +18,7 @@ declare global {
     orderItems: IOrderItem[];
     address: IAddress;
     user: IUser;
+    reason: string;
   };
 
   interface IUser {

@@ -79,7 +79,7 @@ const GHNForm: React.FC<GHNFormProps> = ({
 
   useEffect(() => {
     if (user) {
-      setShippingInfo({ ...shippingInfo, fullname: user.name });
+      setShippingInfo({ ...shippingInfo, fullname: user.name, phone: user.phone });
     }
   }, [user]);
 

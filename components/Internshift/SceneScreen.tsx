@@ -188,7 +188,7 @@ export const SceneScreen = ({ eventId }: { eventId: string }) => {
               <>
                 <div className="text-lg mb-2">You have won a voucher:</div>
                 <div className="bg-yellow-100 border-2 border-yellow-400 rounded-xl px-6 py-4 text-center text-yellow-800 text-xl font-bold mb-4">
-                  {voucher.reward?.discountValue}{" "}
+                  {voucher.reward?.discountValue?.toLocaleString()}{" "}
                   {voucher.reward?.discountType === "PERCENT" ? " %" : " đ"} off
                 </div>
               </>
