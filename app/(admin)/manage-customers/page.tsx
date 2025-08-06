@@ -40,6 +40,7 @@ export default function CustomersPage() {
     id?: string;
     name: string;
     email: string;
+    phone: string;
     password?: string;
     role?: string;
   }) => {
@@ -49,10 +50,12 @@ export default function CustomersPage() {
           id: string;
           name: string;
           email: string;
+          phone: string;
         } = {
           id: userData.id,
           name: userData.name,
           email: userData.email,
+          phone: userData.phone,
         };
 
         await updateUser(updateData).unwrap();
@@ -64,6 +67,7 @@ export default function CustomersPage() {
         await createUser({
           name: userData.name,
           email: userData.email,
+          phone: userData.phone,
           password: userData.password,
           role: userData.role as "USER" | "ADMIN" | "STAFF",
         }).unwrap();
@@ -77,7 +81,7 @@ export default function CustomersPage() {
   };
 
   const handleExportUsers = () => {
-    const headers = ["User ID", "Name", "Email", "Role", "Created At"];
+    const headers = ["User ID", "Name", "Email", "Phone", "Role", "Created At"];
     const csvContent = [
       headers.join(","),
       ...users.map((user) =>
@@ -85,9 +89,10 @@ export default function CustomersPage() {
           user.id,
           `"${user.name}"`,
           user.email,
+          user.phone,
           user.role,
           new Date(user.createdAt).toLocaleDateString(),
-        ].join(","),
+        ].join(",")
       ),
     ].join("\n");
 
@@ -103,7 +108,7 @@ export default function CustomersPage() {
   const totalUsers = users.length;
   const recentSignups = users.filter(
     (u) =>
-      new Date(u.createdAt) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+      new Date(u.createdAt) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
   ).length;
 
   const columns = [
@@ -135,6 +140,14 @@ export default function CustomersPage() {
             <RText className="text-sm text-gray-500">{user.email}</RText>
           </Yard>
         </Area>
+      ),
+    },
+    {
+      key: "phone" as keyof User,
+      label: "Phone",
+      sortable: true,
+      render: (user: User) => (
+        <RText className="text-sm text-gray-900">{user.phone}</RText>
       ),
     },
 
@@ -262,6 +275,7 @@ export default function CustomersPage() {
                   id: editingUser?.id,
                   name: formData.get("name") as string,
                   email: formData.get("email") as string,
+                  phone: formData.get("phone") as string,
                   password: formData.get("password") as string,
                   role: formData.get("role") as string,
                 });
@@ -286,6 +300,18 @@ export default function CustomersPage() {
                     name="email"
                     type="email"
                     defaultValue={editingUser?.email}
+                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                    required
+                  />
+                </Yard>
+                <Yard>
+                  <label className="block text-sm font-medium mb-1">
+                    Phone
+                  </label>
+                  <input
+                    name="phone"
+                    type="tel"
+                    defaultValue={editingUser?.phone}
                     className="w-full px-3 py-2 border border-gray-300 rounded"
                     required
                   />
