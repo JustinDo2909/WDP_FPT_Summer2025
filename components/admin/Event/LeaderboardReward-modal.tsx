@@ -13,7 +13,7 @@ interface LeaderboardRewardModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (
-    data: CreateLeaderboardRewardRequest | UpdateLeaderboardRewardRequest
+    data: CreateLeaderboardRewardRequest | UpdateLeaderboardRewardRequest,
   ) => void;
   isLoading?: boolean;
   reward?: LeaderboardReward | null;

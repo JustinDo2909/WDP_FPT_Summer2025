@@ -156,7 +156,7 @@ export function useWarehouseLogic() {
       (b) => b.status === "expired",
     ).length;
     const outOfStockBatches = batchesWithStatus.filter(
-      (b) => b.current_stock === 0
+      (b) => b.current_stock === 0,
     ).length;
 
     const totalQuantity = batchesWithStatus.reduce(

@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { Area, RText, Yard, Container } from "@/lib/by/Div";
-import { X, Search, Plus, Trash2 } from "lucide-react";
+import { Area, Container, RText, Yard } from "@/lib/by/Div";
 import { useGetProductsQuery } from "@/process/api/api";
 import type {
-  LeaderboardReward,
   AddVoucherTemplateToRewardRequest,
+  LeaderboardReward,
 } from "@/types/event";
+import { Plus, Search, Trash2, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 interface AddVoucherTemplateToRewardModalProps {
   isOpen: boolean;
@@ -22,11 +22,10 @@ export function AddVoucherTemplateToRewardModal({
   onClose,
   onSubmit,
   isLoading = false,
-  reward,
 }: AddVoucherTemplateToRewardModalProps) {
   const [discountValue, setDiscountValue] = useState("");
   const [discountType, setDiscountType] = useState<"PERCENT" | "AMOUNT">(
-    "PERCENT"
+    "PERCENT",
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
@@ -46,7 +45,7 @@ export function AddVoucherTemplateToRewardModal({
     if (!Array.isArray(products)) return [];
 
     return products.filter((product) =>
-      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+      product.title.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }, [products, searchTerm]);
 
@@ -55,7 +54,7 @@ export function AddVoucherTemplateToRewardModal({
     if (!Array.isArray(products)) return [];
 
     return products.filter((product) =>
-      selectedProductIds.includes(product.id)
+      selectedProductIds.includes(product.id),
     );
   }, [products, selectedProductIds]);
 
@@ -72,7 +71,7 @@ export function AddVoucherTemplateToRewardModal({
     setSelectedProductIds((prev) =>
       prev.includes(productId)
         ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
+        : [...prev, productId],
     );
   };
 
@@ -88,11 +87,11 @@ export function AddVoucherTemplateToRewardModal({
     onSubmit(data);
   };
 
-  const isFormValid =
-    discountValue &&
-    parseFloat(discountValue) > 0 &&
-    (discountType === "AMOUNT" ||
-      (discountType === "PERCENT" && selectedProductIds.length > 0));
+  // const isFormValid =
+  //   discountValue &&
+  //   parseFloat(discountValue) > 0 &&
+  //   (discountType === "AMOUNT" ||
+  //     (discountType === "PERCENT" && selectedProductIds.length > 0));
 
   if (!isOpen) return null;
 

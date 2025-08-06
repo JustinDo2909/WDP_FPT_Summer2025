@@ -258,10 +258,10 @@ export default function VoucherPage() {
                 {groupedVouchers.map((userGroup) => {
                   const isExpanded = expandedUsers.has(userGroup.key);
                   const availableVouchers = userGroup.vouchers.filter(
-                    (v) => !v.redeemed
+                    (v) => !v.redeemed,
                   ).length;
                   const redeemedVouchers = userGroup.vouchers.filter(
-                    (v) => v.redeemed
+                    (v) => v.redeemed,
                   ).length;
 
                   return (

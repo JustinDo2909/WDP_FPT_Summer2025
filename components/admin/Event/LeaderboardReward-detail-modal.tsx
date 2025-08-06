@@ -98,7 +98,7 @@ export function LeaderboardRewardDetailModal({
                   </RText>
                   <span
                     className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(
-                      reward
+                      reward,
                     )}`}
                   >
                     {getStatusText(reward)}
