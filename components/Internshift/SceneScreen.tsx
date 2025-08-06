@@ -16,7 +16,8 @@ import { useRouter } from "next/navigation";
 // import MaskMixing from "./scenes/MaskMixing";
 // import PimplePopping from "./scenes/PimplePopping";
 
-const img = "https://i.ibb.co/35vtsM31/cosmetics-shop.jpg";
+const img =
+  "https://static.vecteezy.com/system/resources/previews/015/485/938/non_2x/cosmetics-shop-with-skincare-and-makeup-products-free-vector.jpg";
 
 export const SceneScreen = ({ eventId }: { eventId: string }) => {
   const gameStateApi = useGameState();
@@ -126,14 +127,15 @@ export const SceneScreen = ({ eventId }: { eventId: string }) => {
   };
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto">
+    <div className="relative w-full mx-auto">
       {/* Clinic Background */}
       <div
-        className="relative min-h-[600px] overflow-hidden shadow-2xl"
+        className="relative max-h-screen overflow-hidden shadow-2xl"
         style={{
           backgroundImage: `url(${img})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
