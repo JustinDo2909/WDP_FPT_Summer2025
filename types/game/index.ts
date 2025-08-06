@@ -154,11 +154,11 @@ declare global {
   }
 
   type IEventScore = {
-    rank?: number;
+    rank: number;
     id: string;
     score: number;
     user: IUser;
-    is_eligible_for_rewards: boolean;
+    is_eligible_for_reward: boolean;
     event_id: string;
     completion_time: string;
     completed_at: string;
