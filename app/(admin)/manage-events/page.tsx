@@ -1,29 +1,33 @@
 "use client";
 
+import { useState, useEffect, useMemo, useCallback } from "react";
+import {
+  Calendar,
+  Trophy,
+  HelpCircle,
+  Users,
+  Gift,
+  Plus,
+  X,
+  Eye,
+  Edit,
+  Trash2,
+  RefreshCw,
+  Tag,
+  Flag,
+  Award,
+  Star,
+} from "lucide-react";
+import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
+import CustomTable from "@/components/CustomTable";
 import { EventModal } from "@/components/admin/Event/Event-modal";
 import { QuestionModal } from "@/components/admin/Event/Question-modal";
 import { RewardModal } from "@/components/admin/Event/Reward-modal";
-import { MiniStatsCard, StatsCard } from "@/components/admin/StatsCard";
-import CustomTable from "@/components/CustomTable";
-import {
-  Calendar,
-  Edit,
-  Eye,
-  Flag,
-  Gift,
-  HelpCircle,
-  Plus,
-  RefreshCw,
-  Tag,
-  Trash2,
-  Trophy,
-  Users,
-  X,
-} from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
-
 import { AddVoucherTemplateToRewardModal } from "@/components/admin/Event/AddVoucherTemplateToReward-modal";
 import { LeaderboardRewardDetailModal } from "@/components/admin/Event/LeaderboardReward-detail-modal";
+import { VoucherTemplateModal } from "@/components/admin/Voucher/VoucherTemplate-modal";
+import { VoucherTemplateDetailModal } from "@/components/admin/Voucher/VoucherTemplate-detail-modal";
+import { Leaderboard } from "@/components/admin/Event/Leaderboard";
 import { LeaderboardRewardModal } from "@/components/admin/Event/LeaderboardReward-modal";
 import {
   formatDate,
@@ -38,8 +42,6 @@ import {
   getStatusText as getVoucherStatusText,
   useVoucherTemplatesLogic,
 } from "@/components/admin/Voucher/seg/voucherTemplateUtils";
-import { VoucherTemplateDetailModal } from "@/components/admin/Voucher/VoucherTemplate-detail-modal";
-import { VoucherTemplateModal } from "@/components/admin/Voucher/VoucherTemplate-modal";
 import { Area, Container, Core, RText, Yard } from "@/lib/by/Div";
 import type { Event, EventReward, Question } from "@/types/event";
 import { toast } from "react-hot-toast";
@@ -57,6 +59,8 @@ import {
   useUpdateEventMutation,
   useUpdateQuestionMutation,
   useUpdateRewardMutation,
+  useDeleteRewardMutation,
+  useGetEventLeaderboardQuery,
 } from "@/process/api/api";
 
 import {
@@ -68,11 +72,11 @@ import { VoucherTemplate } from "@/types/voucher";
 
 export default function EventManagement() {
   const [activeTab, setActiveTab] = useState<
-    "events" | "leaderboardRewards" | "voucherTemplates"
+    "events" | "leaderboardRewards" | "voucherTemplates" | "leaderboard"
   >("events");
   const [selectedEventId, setSelectedEventId] = useState<string>("");
   const [showEventQuestions, setShowEventQuestions] = useState<string | null>(
-    null,
+    null
   );
 
   const [eventModal, setEventModal] = useState({
@@ -96,7 +100,7 @@ export default function EventManagement() {
     undefined,
     {
       refetchOnMountOrArgChange: 30, // Cache for 30 seconds
-    },
+    }
   );
 
   const [finalizeEvent] = useFinalizeEventMutation();
@@ -106,13 +110,21 @@ export default function EventManagement() {
     {
       skip: !showEventQuestions,
       refetchOnMountOrArgChange: 30,
-    },
+    }
   );
 
   const { data: rewards = [] } = useGetRewardsByEventIdQuery(selectedEventId!, {
     skip: !selectedEventId || activeTab !== "leaderboardRewards",
     refetchOnMountOrArgChange: 30,
   });
+
+  const { data: leaderboardData } = useGetEventLeaderboardQuery(
+    selectedEventId!,
+    {
+      skip: !selectedEventId || activeTab !== "leaderboard",
+      refetchOnMountOrArgChange: 30,
+    }
+  );
 
   // Leaderboard Rewards Logic
   const {
@@ -169,10 +181,11 @@ export default function EventManagement() {
       setShowEventQuestions(null);
     }
 
-    // Auto-select first event when switching to leaderboard rewards or voucher templates
+    // Auto-select first event when switching to leaderboard rewards, voucher templates, or leaderboard
     if (
       (activeTab === "leaderboardRewards" ||
-        activeTab === "voucherTemplates") &&
+        activeTab === "voucherTemplates" ||
+        activeTab === "leaderboard") &&
       events.length > 0 &&
       !selectedEventId
     ) {
@@ -193,7 +206,7 @@ export default function EventManagement() {
   // Memoized computed values
   const filteredRewards = useMemo(
     () => (selectedEventId ? rewards : []),
-    [selectedEventId, rewards],
+    [selectedEventId, rewards]
   );
 
   const allQuestions = useMemo(() => [], []); // Empty array if not needed
@@ -202,7 +215,7 @@ export default function EventManagement() {
 
   const questionStats = useMemo(
     () => calculateQuestionStats(allQuestions, events),
-    [allQuestions, events],
+    [allQuestions, events]
   );
 
   const rewardStats = useMemo(() => calculateRewardStats(rewards), [rewards]);
@@ -314,7 +327,7 @@ export default function EventManagement() {
         ),
       },
     ],
-    [],
+    []
   );
 
   const questionColumns = useMemo(
@@ -333,7 +346,7 @@ export default function EventManagement() {
         label: "Correct Answer",
         render: (question: Question) => {
           const correctOption = question.questionOptions.find(
-            (opt) => opt.is_correct,
+            (opt) => opt.is_correct
           );
           return (
             <Yard className="max-w-xs truncate text-green-600 font-medium">
@@ -358,7 +371,7 @@ export default function EventManagement() {
         ),
       },
     ],
-    [],
+    []
   );
 
   // const rewardColumns = useMemo(
@@ -439,7 +452,7 @@ export default function EventManagement() {
         alert("Error saving event. Please try again.");
       }
     },
-    [eventModal.mode, eventModal.event, createEvent, updateEvent],
+    [eventModal.mode, eventModal.event, createEvent, updateEvent]
   );
 
   const handleQuestionSave = useCallback(
@@ -467,12 +480,7 @@ export default function EventManagement() {
         alert("Error saving question. Please try again.");
       }
     },
-    [
-      questionModal.mode,
-      questionModal.question,
-      createQuestion,
-      updateQuestion,
-    ],
+    [questionModal.mode, questionModal.question, createQuestion, updateQuestion]
   );
 
   const handleRewardSave = useCallback(
@@ -502,7 +510,7 @@ export default function EventManagement() {
         alert("Error saving reward. Please try again.");
       }
     },
-    [rewardModal.mode, rewardModal.reward, createReward, updateReward],
+    [rewardModal.mode, rewardModal.reward, createReward, updateReward]
   );
 
   const tabConfig = useMemo(
@@ -510,8 +518,9 @@ export default function EventManagement() {
       { key: "events", label: "Events", icon: Calendar },
       { key: "leaderboardRewards", label: "Leaderboard Rewards", icon: Trophy },
       { key: "voucherTemplates", label: "Voucher Templates", icon: Tag },
+      { key: "leaderboard", label: "Leaderboard", icon: Award },
     ],
-    [],
+    []
   );
 
   // Event handlers for delete operations
@@ -529,7 +538,7 @@ export default function EventManagement() {
         }
       }
     },
-    [deleteQuestion],
+    [deleteQuestion]
   );
 
   const handleDeleteEvent = useCallback(
@@ -544,7 +553,7 @@ export default function EventManagement() {
         }
       }
     },
-    [deleteEvent],
+    [deleteEvent]
   );
 
   const handleFinalizeEvent = useCallback(
@@ -562,7 +571,7 @@ export default function EventManagement() {
         }
       }
     },
-    [finalizeEvent],
+    [finalizeEvent]
   );
 
   // const handleDeleteReward = useCallback(
@@ -587,7 +596,7 @@ export default function EventManagement() {
     const csv = events
       .map(
         (e) =>
-          `${e.title},${e.description},${e.start_time},${e.end_time},${e.is_active}`,
+          `${e.title},${e.description},${e.start_time},${e.end_time},${e.is_active}`
       )
       .join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
@@ -762,6 +771,60 @@ export default function EventManagement() {
           </>
         )}
 
+        {activeTab === "leaderboard" && selectedEventId && (
+          <>
+            {/* Leaderboard Stats Cards */}
+            <Yard className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <StatsCard
+                title="Total Participants"
+                value={leaderboardData?.data?.total_participants || 0}
+                icon={Users}
+                iconColor="text-blue-600"
+                iconBgColor="bg-blue-50"
+              />
+              <StatsCard
+                title="Eligible for Rewards"
+                value={
+                  leaderboardData?.data?.leaderboard?.filter(
+                    (entry) => entry.is_eligible_for_reward
+                  ).length || 0
+                }
+                icon={Gift}
+                iconColor="text-green-600"
+                iconBgColor="bg-green-50"
+              />
+              <StatsCard
+                title="Top Score"
+                value={
+                  (leaderboardData?.data?.leaderboard?.length || 0) > 0
+                    ? leaderboardData?.data?.leaderboard?.[0]?.score || 0
+                    : 0
+                }
+                icon={Star}
+                iconColor="text-purple-600"
+                iconBgColor="bg-purple-50"
+              />
+              <StatsCard
+                title="Average Score"
+                value={
+                  (leaderboardData?.data?.leaderboard?.length || 0) > 0
+                    ? Math.round(
+                        (leaderboardData?.data?.leaderboard?.reduce(
+                          (sum, entry) => sum + entry.score,
+                          0
+                        ) || 0) /
+                          (leaderboardData?.data?.leaderboard?.length || 1)
+                      )
+                    : 0
+                }
+                icon={Award}
+                iconColor="text-orange-600"
+                iconBgColor="bg-orange-50"
+              />
+            </Yard>
+          </>
+        )}
+
         {/* Tab Navigation */}
         <Yard className="border-b border-gray-200">
           <nav className="-mb-px flex space-x-8">
@@ -770,7 +833,11 @@ export default function EventManagement() {
                 key={key}
                 onClick={() =>
                   setActiveTab(
-                    key as "events" | "leaderboardRewards" | "voucherTemplates",
+                    key as
+                      | "events"
+                      | "leaderboardRewards"
+                      | "voucherTemplates"
+                      | "leaderboard"
                   )
                 }
                 className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
@@ -786,9 +853,10 @@ export default function EventManagement() {
           </nav>
         </Yard>
 
-        {/* Event Filter for Leaderboard Rewards and Voucher Templates */}
+        {/* Event Filter for Leaderboard Rewards, Voucher Templates, and Leaderboard */}
         {(activeTab === "leaderboardRewards" ||
-          activeTab === "voucherTemplates") && (
+          activeTab === "voucherTemplates" ||
+          activeTab === "leaderboard") && (
           <Yard className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
             <Yard className="flex justify-between items-center mb-2">
               <label className="block text-sm font-medium text-gray-700">
@@ -797,7 +865,9 @@ export default function EventManagement() {
               <RText className="text-xs text-gray-500">
                 {activeTab === "leaderboardRewards"
                   ? `Found ${leaderboardRewards.length} leaderboard rewards for selected event`
-                  : `Found ${voucherTemplates.length} voucher templates for selected event`}
+                  : activeTab === "voucherTemplates"
+                    ? `Found ${voucherTemplates.length} voucher templates for selected event`
+                    : "View leaderboard for selected event"}
               </RText>
             </Yard>
             <select
@@ -989,7 +1059,7 @@ export default function EventManagement() {
                               <td className="py-3 px-4">
                                 <span
                                   className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(
-                                    reward,
+                                    reward
                                   )}`}
                                 >
                                   {getStatusText(reward)}
@@ -1159,7 +1229,7 @@ export default function EventManagement() {
                               <td className="py-3 px-4">
                                 <span
                                   className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full border ${getVoucherStatusColor(
-                                    template,
+                                    template
                                   )}`}
                                 >
                                   {getVoucherStatusText(template)}
@@ -1226,6 +1296,15 @@ export default function EventManagement() {
               </RText>
             </Yard>
           )}
+
+        {/* Leaderboard Tab Content */}
+        {!showEventQuestions && activeTab === "leaderboard" && (
+          <Leaderboard
+            events={events}
+            selectedEventId={selectedEventId || events[0]?.id || ""}
+            onEventSelect={setSelectedEventId}
+          />
+        )}
       </Container>
       {/* Modals */}
       <EventModal
