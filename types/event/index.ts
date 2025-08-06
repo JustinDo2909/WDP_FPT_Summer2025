@@ -212,3 +212,37 @@ export interface ApiResponse {
   success: boolean;
   message?: string;
 }
+
+// Leaderboard Types
+export interface LeaderboardUser {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface LeaderboardEntry {
+  rank: number;
+  user: LeaderboardUser;
+  score: number;
+  completion_time: number | null;
+  completed_at: string;
+  is_eligible_for_reward: boolean;
+  rewards: LeaderboardReward[];
+}
+
+export interface LeaderboardData {
+  event: {
+    id: string;
+    title: string;
+    milestone_score: number;
+    is_active: boolean;
+  };
+  leaderboard: LeaderboardEntry[];
+  total_participants: number;
+  rewards: LeaderboardReward[];
+}
+
+export interface LeaderboardResponse {
+  success: boolean;
+  data: LeaderboardData;
+}

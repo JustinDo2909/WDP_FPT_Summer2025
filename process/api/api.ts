@@ -45,6 +45,7 @@ import type {
   CreateLeaderboardRewardRequest,
   UpdateLeaderboardRewardRequest,
   AddVoucherTemplateToRewardRequest,
+  LeaderboardResponse,
 } from "@/types/event";
 import type {
   Voucher,
@@ -123,6 +124,7 @@ export const api = createApi({
     "Questions",
     "Rewards",
     "LeaderboardRewards",
+    "Leaderboard",
     "Reviews",
     "Batches",
     "Suppliers",
@@ -264,6 +266,13 @@ export const api = createApi({
       transformResponse: (response: LeaderboardRewardResponse) =>
         response.reward,
       invalidatesTags: ["LeaderboardRewards"],
+    }),
+
+    // Leaderboard Data
+    getEventLeaderboard: build.query<LeaderboardResponse, string>({
+      query: (eventId) => `/events/${eventId}/leaderboard`,
+      providesTags: ["Leaderboard"],
+      keepUnusedDataFor: 300, // 5 minutes cache
     }),
     //#endregion
     //#region getRandomQuestion
@@ -1036,6 +1045,9 @@ export const {
   useUpdateLeaderboardRewardMutation,
   useDeleteLeaderboardRewardMutation,
   useAddVoucherTemplateToRewardMutation,
+
+  // Leaderboard
+  useGetEventLeaderboardQuery,
 
   // Vouchers
   useGetAllVouchersQuery, //qdao
