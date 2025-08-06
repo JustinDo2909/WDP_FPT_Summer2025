@@ -476,7 +476,7 @@ function Game({
   const handleShoot = useCallback(() => {
     setGameState((prev) => {
       const isInfiniteAmmo = prev.activePowerUps.some(
-        (p) => p.type === "infiniteAmmo"
+        (p) => p.type === "infiniteAmmo",
       );
       const currentBulletConfig = UPGRADE_LEVELS[prev.bulletLevel - 1];
 
@@ -554,7 +554,7 @@ function Game({
       // Check ammo before setting isMouseDown to true for initial click
       if (gameState.paused || gameState.gameOver) return;
       const isInfiniteAmmo = gameState.activePowerUps.some(
-        (p) => p.type === "infiniteAmmo"
+        (p) => p.type === "infiniteAmmo",
       );
       const currentBulletConfig = UPGRADE_LEVELS[gameState.bulletLevel - 1];
       if (!isInfiniteAmmo && gameState.ammo < currentBulletConfig.ammoCost)
@@ -599,7 +599,7 @@ function Game({
       specificConfig?:
         | (typeof ENEMY_TYPES)[keyof typeof ENEMY_TYPES]
         | (typeof POWER_UP_CONFIG)[keyof typeof POWER_UP_CONFIG]
-        | typeof UPGRADE_BOX_CONFIG // Added upgradeBox config type
+        | typeof UPGRADE_BOX_CONFIG, // Added upgradeBox config type
     ) => {
       const spawnPadding = 2; // How far outside the screen to spawn
       let startPos: THREE.Vector3;
@@ -613,48 +613,48 @@ function Game({
         startPos = new THREE.Vector3(
           (Math.random() - 0.5) * WORLD_WIDTH,
           WORLD_HEIGHT / 2 + spawnPadding,
-          0
+          0,
         );
         velocity = new THREE.Vector3(
           (Math.random() - 0.5) * 0.5, // Random X component
           -1, // Always move downwards initially
-          0
+          0,
         ).normalize();
       } else if (side === 1) {
         // Bottom
         startPos = new THREE.Vector3(
           (Math.random() - 0.5) * WORLD_WIDTH,
           -(WORLD_HEIGHT / 2 + spawnPadding),
-          0
+          0,
         );
         velocity = new THREE.Vector3(
           (Math.random() - 0.5) * 0.5, // Random X component
           1, // Always move upwards initially
-          0
+          0,
         ).normalize();
       } else if (side === 2) {
         // Left
         startPos = new THREE.Vector3(
           -(WORLD_WIDTH / 2 + spawnPadding),
           (Math.random() - 0.5) * WORLD_HEIGHT,
-          0
+          0,
         );
         velocity = new THREE.Vector3(
           1, // Always move rightwards initially
           (Math.random() - 0.5) * 0.5, // Random Y component
-          0
+          0,
         ).normalize();
       } else {
         // Right
         startPos = new THREE.Vector3(
           WORLD_WIDTH / 2 + spawnPadding,
           (Math.random() - 0.5) * WORLD_HEIGHT,
-          0
+          0,
         );
         velocity = new THREE.Vector3(
           -1, // Always move leftwards initially
           (Math.random() - 0.5) * 0.5, // Random Y component
-          0
+          0,
         ).normalize();
       }
 
@@ -663,7 +663,7 @@ function Game({
           specificConfig as (typeof ENEMY_TYPES)[keyof typeof ENEMY_TYPES];
         const difficultyMultiplier = Math.pow(
           1.2,
-          Math.floor(gameState.score / DIFFICULTY_SCORE_THRESHOLD)
+          Math.floor(gameState.score / DIFFICULTY_SCORE_THRESHOLD),
         ); // Health x1.2 every threshold
         const speedMultiplier =
           1 + Math.floor(gameState.score / DIFFICULTY_SCORE_THRESHOLD) * 0.025; // Speed slightly faster
@@ -672,7 +672,7 @@ function Game({
           id: Math.random().toString(36),
           position: startPos,
           velocity: velocity.multiplyScalar(
-            enemyConfig.speed * speedMultiplier
+            enemyConfig.speed * speedMultiplier,
           ),
           health: enemyConfig.health * difficultyMultiplier,
           maxHealth: enemyConfig.health * difficultyMultiplier,
@@ -731,13 +731,13 @@ function Game({
         }));
       }
     },
-    [WORLD_WIDTH, WORLD_HEIGHT, gameState.score, setGameState] // Added gameState.score for difficulty scaling
+    [WORLD_WIDTH, WORLD_HEIGHT, gameState.score, setGameState], // Added gameState.score for difficulty scaling
   );
 
   // Spawn enemies
   const spawnEnemy = useCallback(() => {
     const difficultyLevel = Math.floor(
-      gameState.score / DIFFICULTY_SCORE_THRESHOLD
+      gameState.score / DIFFICULTY_SCORE_THRESHOLD,
     );
 
     let type: keyof typeof ENEMY_TYPES = "basic";
@@ -808,7 +808,7 @@ function Game({
 
     // Continuous shooting when mouse is held down
     const isInfiniteAmmo = gameState.activePowerUps.some(
-      (p) => p.type === "infiniteAmmo"
+      (p) => p.type === "infiniteAmmo",
     );
     const currentBulletConfig = UPGRADE_LEVELS[gameState.bulletLevel - 1];
     if (
@@ -987,7 +987,7 @@ function Game({
                     const fragmentVelocity = new THREE.Vector3(
                       Math.cos(angle),
                       Math.sin(angle),
-                      0
+                      0,
                     ).multiplyScalar(ENEMY_TYPES.hard3.speed * 1.5); // Faster fragments
                     newSpawnedEnemies.push({
                       ...ENEMY_TYPES.hard3,
@@ -1004,7 +1004,7 @@ function Game({
                     const fragmentVelocity = new THREE.Vector3(
                       Math.cos(angle),
                       Math.sin(angle),
-                      0
+                      0,
                     ).multiplyScalar(ENEMY_TYPES.hard3.speed * 1.5); // Faster fragments
                     newSpawnedEnemies.push({
                       ...ENEMY_TYPES.hard3,
@@ -1035,7 +1035,7 @@ function Game({
             bulletsToRemove.add(bullet.id); // Mark bullet for removal
             // Remove ammo box
             const ammoBoxIndex = newState.ammoBoxes.findIndex(
-              (box) => box.id === ammoBox.id
+              (box) => box.id === ammoBox.id,
             );
             if (ammoBoxIndex > -1) {
               newState.ammoBoxes.splice(ammoBoxIndex, 1);
@@ -1054,7 +1054,7 @@ function Game({
             bulletsToRemove.add(bullet.id); // Mark bullet for removal
             // Remove power-up box
             const powerUpIndex = newState.powerUps.findIndex(
-              (p) => p.id === powerUp.id
+              (p) => p.id === powerUp.id,
             );
             if (powerUpIndex > -1) {
               newState.powerUps.splice(powerUpIndex, 1);
@@ -1076,11 +1076,11 @@ function Game({
             // Handle multi-shot stacking logic
             if (powerUp.type.startsWith("multiShot")) {
               const existingMultiShots = newState.activePowerUps.filter((p) =>
-                p.type.startsWith("multiShot")
+                p.type.startsWith("multiShot"),
               );
               const currentHighestValue = existingMultiShots.reduce(
                 (max, p) => Math.max(max, p.value || 0),
-                0
+                0,
               );
 
               if (newActivePowerUp.value! > currentHighestValue) {
@@ -1094,7 +1094,7 @@ function Game({
             } else {
               // For other power-ups (like infiniteAmmo), replace or extend
               const existingPowerUpIndex = newState.activePowerUps.findIndex(
-                (p) => p.type === powerUp.type
+                (p) => p.type === powerUp.type,
               );
               if (existingPowerUpIndex > -1) {
                 newState.activePowerUps[existingPowerUpIndex].endTime =
@@ -1117,7 +1117,7 @@ function Game({
             bulletsToRemove.add(bullet.id); // Mark bullet for removal
             // Remove upgrade box
             const upgradeBoxIndex = newState.upgradeBoxes.findIndex(
-              (box) => box.id === upgradeBox.id
+              (box) => box.id === upgradeBox.id,
             );
             if (upgradeBoxIndex > -1) {
               newState.upgradeBoxes.splice(upgradeBoxIndex, 1);
@@ -1142,19 +1142,19 @@ function Game({
 
       // Remove hit bullets
       newState.bullets = newState.bullets.filter(
-        (bullet) => !bulletsToRemove.has(bullet.id)
+        (bullet) => !bulletsToRemove.has(bullet.id),
       );
 
       // Remove destroyed enemies and add score
       const destroyedEnemies = newState.enemies.filter((enemy) =>
-        enemiesToDestroy.has(enemy.id)
+        enemiesToDestroy.has(enemy.id),
       );
       newState.score += destroyedEnemies.reduce(
         (sum, enemy) => sum + enemy.points,
-        0
+        0,
       );
       newState.enemies = newState.enemies.filter(
-        (enemy) => !enemiesToDestroy.has(enemy.id)
+        (enemy) => !enemiesToDestroy.has(enemy.id),
       );
 
       // Add newly spawned fragments
@@ -1162,7 +1162,7 @@ function Game({
 
       // Check enemy-center collisions (enemies reaching center still cause damage)
       const hitEnemies = newState.enemies.filter(
-        (enemy) => enemy.position.length() < 0.8
+        (enemy) => enemy.position.length() < 0.8,
       );
       if (hitEnemies.length > 0) {
         newState.health -= hitEnemies.length;
@@ -1173,7 +1173,7 @@ function Game({
           setScreenFlashEffect(false);
         }, 200); // Reset effects after 0.2s
         newState.enemies = newState.enemies.filter(
-          (enemy) => enemy.position.length() >= 0.8
+          (enemy) => enemy.position.length() >= 0.8,
         );
 
         if (newState.health <= 0) {
@@ -1184,18 +1184,18 @@ function Game({
 
       // Remove ammo boxes, power-ups, and upgrade boxes that reached center (they don't cause damage, just disappear)
       newState.ammoBoxes = newState.ammoBoxes.filter(
-        (ammoBox) => ammoBox.position.length() >= 0.8
+        (ammoBox) => ammoBox.position.length() >= 0.8,
       );
       newState.powerUps = newState.powerUps.filter(
-        (powerUp) => powerUp.position.length() >= 0.8
+        (powerUp) => powerUp.position.length() >= 0.8,
       );
       newState.upgradeBoxes = newState.upgradeBoxes.filter(
-        (upgradeBox) => upgradeBox.position.length() >= 0.8
+        (upgradeBox) => upgradeBox.position.length() >= 0.8,
       ); // New filter for upgrade boxes
 
       // Update active power-ups (remove expired ones)
       newState.activePowerUps = newState.activePowerUps.filter(
-        (p) => p.endTime > Date.now()
+        (p) => p.endTime > Date.now(),
       );
 
       return newState;
@@ -1205,7 +1205,7 @@ function Game({
   // Player geometry and material memoization for optimization
   const playerGeometry = React.useMemo(
     () => new THREE.SphereGeometry(0.5, 32, 32),
-    []
+    [],
   );
   const playerMaterial = React.useMemo(
     () =>
@@ -1216,22 +1216,22 @@ function Game({
         metalness: 0.4,
         roughness: 0.1,
       }),
-    []
+    [],
   );
 
   const ammoBoxGeometry = React.useMemo(
     () => new THREE.BoxGeometry(0.4, 0.4, 0.4),
-    []
+    [],
   );
   // Changed powerUpGeometry to SphereGeometry
   const powerUpGeometry = React.useMemo(
     () => new THREE.SphereGeometry(0.4, 32, 32),
-    []
+    [],
   );
   // New geometry for upgrade boxes (BoxGeometry)
   const upgradeBoxGeometry = React.useMemo(
     () => new THREE.BoxGeometry(0.4, 0.4, 0.4),
-    []
+    [],
   );
 
   // Player hit effect visual
@@ -1244,7 +1244,7 @@ function Game({
 
       // Flash red
       (playerMeshRef.current.material as THREE.MeshStandardMaterial).color.copy(
-        hitColor
+        hitColor,
       );
       playerMeshRef.current.scale.copy(hitScale);
 
@@ -1516,7 +1516,7 @@ function PulsingPowerUp({
           ref={materialRef}
           color={new THREE.Color(powerUp.color).lerp(
             new THREE.Color(0xffffff),
-            0.5
+            0.5,
           )} // Brighter color
           emissive={powerUp.color}
           emissiveIntensity={1.0} // Initial intensity
@@ -1573,7 +1573,7 @@ function PulsingUpgradeBox({
           ref={materialRef}
           color={new THREE.Color(upgradeBox.color).lerp(
             new THREE.Color(0xffffff),
-            0.5
+            0.5,
           )} // Brighter color
           emissive={upgradeBox.color}
           emissiveIntensity={1.0} // Initial intensity

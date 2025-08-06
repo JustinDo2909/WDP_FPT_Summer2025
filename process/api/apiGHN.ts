@@ -9,7 +9,7 @@ export const ghnApi = createApi({
       headers.set("Content-Type", "application/json");
       headers.set(
         "Token",
-        process.env.GHN_API_TOKEN || "2097f4fe-1bfe-11f0-8aaa-9ed348b01f47"
+        process.env.GHN_API_TOKEN || "2097f4fe-1bfe-11f0-8aaa-9ed348b01f47",
       );
       headers.set("ShopId", process.env.GHN_SHOP_ID || "5738915");
       return headers;

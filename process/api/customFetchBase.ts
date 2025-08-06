@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 const customBaseQuery = async (
   args: string | FetchArgs,
   api: BaseQueryApi,
-  extraOptions: any
+  extraOptions: any,
 ) => {
   const baseQuery = fetchBaseQuery({
     baseUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/`,
@@ -32,7 +32,7 @@ const customBaseQuery = async (
           method: "POST",
         },
         api,
-        extraOptions
+        extraOptions,
       );
 
       if (refreshResult.data) {

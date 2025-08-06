@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, Upload, Trash2 } from "lucide-react";
+import { X, Trash2 } from "lucide-react";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 import { toast } from "react-hot-toast";
 import clsx from "clsx";
@@ -35,7 +35,7 @@ export function CancelOrderModal({
     console.log("CancelOrderModal handleSubmit - orderId:", orderId);
     console.log(
       "CancelOrderModal handleSubmit - orderId type:",
-      typeof orderId
+      typeof orderId,
     );
     console.log("Images to upload:", images);
 
@@ -59,21 +59,21 @@ export function CancelOrderModal({
     onClose();
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      // Convert files to base64 strings (simplified for demo)
-      // In real app, you'd upload to cloud storage and get URLs
-      Array.from(files).forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const result = e.target?.result as string;
-          setImages((prev) => [...prev, result]);
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-  };
+  // const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = e.target.files;
+  //   if (files) {
+  //     // Convert files to base64 strings (simplified for demo)
+  //     // In real app, you'd upload to cloud storage and get URLs
+  //     Array.from(files).forEach((file) => {
+  //       const reader = new FileReader();
+  //       reader.onload = (e) => {
+  //         const result = e.target?.result as string;
+  //         setImages((prev) => [...prev, result]);
+  //       };
+  //       reader.readAsDataURL(file);
+  //     });
+  //   }
+  // };
 
   const removeImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
@@ -86,7 +86,7 @@ export function CancelOrderModal({
       <Core
         className={clsx(
           "fixed inset-0 bg-black transition-opacity duration-300 z-[9998]",
-          isOpen ? "bg-opacity-60" : "bg-opacity-0"
+          isOpen ? "bg-opacity-60" : "bg-opacity-0",
         )}
         onClick={handleClose}
       />
@@ -94,7 +94,7 @@ export function CancelOrderModal({
       <Core
         className={clsx(
           "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white shadow-2xl z-[9999] rounded-lg",
-          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
+          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95",
         )}
       >
         <Container className="p-6">

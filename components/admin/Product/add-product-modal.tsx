@@ -1,5 +1,5 @@
 "use client";
-import { X, Upload, Trash2 } from "lucide-react";
+import { X, Trash2 } from "lucide-react";
 import { Area, RText, Yard, Core, Container } from "@/lib/by/Div";
 import { AddProductModalProps } from "@/types/productManagement/index";
 import { useProductForm } from "@/components/admin/Product/seg/utils";
@@ -18,7 +18,6 @@ export function AddProductModal({
     errors,
     isSubmitting,
     handleInputChange,
-    handleImageChange,
     removeImage,
     handleSubmit,
   } = useProductForm(editProduct);
@@ -181,7 +180,7 @@ export function AddProductModal({
                       <option key={category.id} value={category.id}>
                         {category.title}
                       </option>
-                    )
+                    ),
                   )}
                 </select>
                 {errors.product_category_id && (
@@ -212,7 +211,7 @@ export function AddProductModal({
                       <option key={brand.id} value={brand.id}>
                         {brand.title}
                       </option>
-                    )
+                    ),
                   )}
                 </select>
                 {errors.product_brand_id && (
@@ -243,7 +242,7 @@ export function AddProductModal({
                       <option key={skinType.id} value={skinType.id}>
                         {skinType.title}
                       </option>
-                    )
+                    ),
                   )}
                 </select>
                 {errors.product_skinType_id && (
