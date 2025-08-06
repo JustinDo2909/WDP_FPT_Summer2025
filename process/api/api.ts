@@ -1,39 +1,3 @@
-import type {
-  AddVoucherTemplateToRewardRequest,
-  ApiResponse,
-  CreateEventRequest,
-  CreateLeaderboardRewardRequest,
-  CreateQuestionRequest,
-  CreateRewardRequest,
-  Event,
-  EventResponse,
-  EventReward,
-  EventsResponse,
-  LeaderboardReward,
-  LeaderboardRewardResponse,
-  LeaderboardRewardsResponse,
-  Question,
-  QuestionsResponse,
-  RewardsResponse,
-  UpdateEventRequest,
-  UpdateLeaderboardRewardRequest,
-  UpdateQuestionRequest,
-  UpdateRewardRequest,
-} from "@/types/event";
-import type {
-  BrandOption,
-  CategoryOption,
-  ItemRequest,
-  MetaDataResponse,
-  SimpleApiResponse,
-  SkinTypeOption,
-} from "@/types/meta/index";
-import type { OrderDetailResponse, OrdersResponse } from "@/types/order/index";
-import type {
-  Product,
-  ProductMetaResponse,
-  ProductQueryParams,
-} from "@/types/productManagement/index";
 import {
   IEventRewards,
   IQuestions,
@@ -42,20 +6,65 @@ import {
   IResponseQuestions,
   IReward,
 } from "@/types/quiz";
-import type { Voucher, VouchersResponse } from "@/types/voucher/index";
-import type {
-  Batch,
-  BatchesResponse,
-  BatchPaginationParams,
-  CreateBatchRequest,
-  CreateBatchResponse,
-  PaginatedBatchesResponse,
-  Supplier,
-} from "@/types/warehouse/index";
 import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
+import type {
+  MetaDataResponse,
+  CategoryOption,
+  BrandOption,
+  SkinTypeOption,
+  ItemRequest,
+  SimpleApiResponse,
+} from "@/types/meta/index";
+import type {
+  Product,
+  ProductQueryParams,
+  ProductMetaResponse,
+} from "@/types/productManagement/index";
+import type { OrdersResponse, OrderDetailResponse } from "@/types/order/index";
+import type {
+  Event,
+  Question,
+  EventReward,
+  EventsResponse,
+  EventResponse,
+  QuestionsResponse,
+  RewardsResponse,
+  ApiResponse,
+  CreateEventRequest,
+  UpdateEventRequest,
+  CreateQuestionRequest,
+  UpdateQuestionRequest,
+  CreateRewardRequest,
+  UpdateRewardRequest,
+  LeaderboardReward,
+  LeaderboardRewardsResponse,
+  LeaderboardRewardResponse,
+  CreateLeaderboardRewardRequest,
+  UpdateLeaderboardRewardRequest,
+  AddVoucherTemplateToRewardRequest,
+} from "@/types/event";
+import type {
+  Voucher,
+  VouchersResponse,
+  VoucherTemplate,
+  VoucherTemplatesResponse,
+  VoucherTemplateResponse,
+  CreateVoucherTemplateRequest,
+  UpdateVoucherTemplateRequest,
+  VoucherTemplateFilterParams,
+} from "@/types/voucher/index";
+import type {
+  Batch,
+  BatchesResponse,
+  CreateBatchRequest,
+  CreateBatchResponse,
+  PaginatedBatchesResponse,
+  BatchPaginationParams,
+  Supplier,
+} from "@/types/warehouse/index";
 
 const customBaseQuery = async (
   args: string | FetchArgs,
@@ -906,6 +915,83 @@ export const api = createApi({
         providesTags: ["Vouchers"],
       }
     ),
+
+    //#endregion
+
+    //#region Voucher Templates
+    getVoucherTemplates: build.query<
+      VoucherTemplate[],
+      { eventId: string; params?: VoucherTemplateFilterParams }
+    >({
+      query: ({ eventId, params }) => {
+        const searchParams = new URLSearchParams();
+        if (params?.is_active !== undefined) {
+          searchParams.append("is_active", params.is_active.toString());
+        }
+        if (params?.include_leaderboard !== undefined) {
+          searchParams.append(
+            "include_leaderboard",
+            params.include_leaderboard.toString()
+          );
+        }
+        const queryString = searchParams.toString();
+        return `/events/${eventId}/voucher-templates${queryString ? `?${queryString}` : ""}`;
+      },
+      transformResponse: (response: VoucherTemplatesResponse) =>
+        response.voucher_templates,
+      providesTags: ["VoucherTemplates"],
+      keepUnusedDataFor: 300, // 5 minutes cache
+    }),
+
+    getVoucherTemplateById: build.query<
+      VoucherTemplate,
+      { eventId: string; voucherId: string }
+    >({
+      query: ({ eventId, voucherId }) =>
+        `/events/${eventId}/voucher-templates/${voucherId}`,
+      transformResponse: (response: VoucherTemplateResponse) =>
+        response.voucher_template,
+      providesTags: ["VoucherTemplates"],
+    }),
+
+    createVoucherTemplate: build.mutation<
+      VoucherTemplate,
+      { eventId: string; data: CreateVoucherTemplateRequest }
+    >({
+      query: ({ eventId, data }) => ({
+        url: `/events/${eventId}/voucher-templates`,
+        method: "POST",
+        body: data,
+      }),
+      transformResponse: (response: VoucherTemplateResponse) =>
+        response.voucher_template,
+      invalidatesTags: ["VoucherTemplates"],
+    }),
+
+    updateVoucherTemplate: build.mutation<
+      VoucherTemplate,
+      { eventId: string; voucherId: string; data: UpdateVoucherTemplateRequest }
+    >({
+      query: ({ eventId, voucherId, data }) => ({
+        url: `/events/${eventId}/voucher-templates/${voucherId}`,
+        method: "PUT",
+        body: data,
+      }),
+      transformResponse: (response: VoucherTemplateResponse) =>
+        response.voucher_template,
+      invalidatesTags: ["VoucherTemplates"],
+    }),
+
+    deleteVoucherTemplate: build.mutation<
+      void,
+      { eventId: string; voucherId: string }
+    >({
+      query: ({ eventId, voucherId }) => ({
+        url: `/events/${eventId}/voucher-templates/${voucherId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["VoucherTemplates"],
+    }),
 
     //#endregion
 

@@ -1,15 +1,7 @@
 "use client";
 
 import { Area, RText, Yard, Container } from "@/lib/by/Div";
-import {
-  X,
-  Tag,
-  Users,
-  Calendar,
-  Package,
-  Percent,
-  DollarSign,
-} from "lucide-react";
+import { X, Users, Calendar, Package, Percent, DollarSign } from "lucide-react";
 import type { VoucherTemplate } from "@/types/voucher/index";
 
 interface VoucherTemplateDetailModalProps {
@@ -98,7 +90,7 @@ export function VoucherTemplateDetailModal({
                   </RText>
                   <span
                     className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(
-                      voucherTemplate
+                      voucherTemplate,
                     )}`}
                   >
                     {getStatusText(voucherTemplate)}

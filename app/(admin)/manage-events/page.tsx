@@ -1,63 +1,62 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
-import {
-  Calendar,
-  Trophy,
-  HelpCircle,
-  Users,
-  Gift,
-  Plus,
-  X,
-  Eye,
-  Edit,
-  Trash2,
-  RefreshCw,
-  Tag,
-  Flag,
-} from "lucide-react";
-import { StatsCard, MiniStatsCard } from "@/components/admin/StatsCard";
-import CustomTable from "@/components/CustomTable";
 import { EventModal } from "@/components/admin/Event/Event-modal";
 import { QuestionModal } from "@/components/admin/Event/Question-modal";
 import { RewardModal } from "@/components/admin/Event/Reward-modal";
+import { MiniStatsCard, StatsCard } from "@/components/admin/StatsCard";
+import CustomTable from "@/components/CustomTable";
+import {
+  Calendar,
+  Edit,
+  Eye,
+  Flag,
+  Gift,
+  HelpCircle,
+  Plus,
+  RefreshCw,
+  Tag,
+  Trash2,
+  Trophy,
+  Users,
+  X,
+} from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { LeaderboardRewardModal } from "@/components/admin/Event/LeaderboardReward-modal";
 import { AddVoucherTemplateToRewardModal } from "@/components/admin/Event/AddVoucherTemplateToReward-modal";
 import { LeaderboardRewardDetailModal } from "@/components/admin/Event/LeaderboardReward-detail-modal";
-import { VoucherTemplateModal } from "@/components/admin/Voucher/VoucherTemplate-modal";
-import { VoucherTemplateDetailModal } from "@/components/admin/Voucher/VoucherTemplate-detail-modal";
+import { LeaderboardRewardModal } from "@/components/admin/Event/LeaderboardReward-modal";
 import {
-  useLeaderboardRewardsLogic,
   formatDate,
   getStatusColor,
   getStatusText,
+  useLeaderboardRewardsLogic,
 } from "@/components/admin/Event/seg/leaderboardRewardUtils";
 import {
-  useVoucherTemplatesLogic,
   formatDate as formatVoucherDate,
   getDiscountDisplay,
   getStatusColor as getVoucherStatusColor,
   getStatusText as getVoucherStatusText,
+  useVoucherTemplatesLogic,
 } from "@/components/admin/Voucher/seg/voucherTemplateUtils";
-import type { Event, Question, EventReward } from "@/types/event";
-import { RText, Yard, Core, Container, Area } from "@/lib/by/Div";
+import { VoucherTemplateDetailModal } from "@/components/admin/Voucher/VoucherTemplate-detail-modal";
+import { VoucherTemplateModal } from "@/components/admin/Voucher/VoucherTemplate-modal";
+import { Area, Container, Core, RText, Yard } from "@/lib/by/Div";
+import type { Event, EventReward, Question } from "@/types/event";
 import { toast } from "react-hot-toast";
 
 import {
-  useGetAllEventsQuery,
   useCreateEventMutation,
-  useUpdateEventMutation,
-  useDeleteEventMutation,
-  useFinalizeEventMutation,
-  useGetQuestionsByEventIdQuery,
   useCreateQuestionMutation,
-  useUpdateQuestionMutation,
-  useDeleteQuestionMutation,
-  useGetRewardsByEventIdQuery,
   useCreateRewardMutation,
+  useDeleteEventMutation,
+  useDeleteQuestionMutation,
+  useFinalizeEventMutation,
+  useGetAllEventsQuery,
+  useGetQuestionsByEventIdQuery,
+  useGetRewardsByEventIdQuery,
+  useUpdateEventMutation,
+  useUpdateQuestionMutation,
   useUpdateRewardMutation,
-  useDeleteRewardMutation,
 } from "@/process/api/api";
 
 import {
@@ -65,6 +64,7 @@ import {
   calculateQuestionStats,
   calculateRewardStats,
 } from "@/components/admin/Event/seg/utils";
+import { VoucherTemplate } from "@/types/voucher";
 
 export default function EventManagement() {
   const [activeTab, setActiveTab] = useState<
@@ -72,7 +72,7 @@ export default function EventManagement() {
   >("events");
   const [selectedEventId, setSelectedEventId] = useState<string>("");
   const [showEventQuestions, setShowEventQuestions] = useState<string | null>(
-    null
+    null,
   );
 
   const [eventModal, setEventModal] = useState({
@@ -96,7 +96,7 @@ export default function EventManagement() {
     undefined,
     {
       refetchOnMountOrArgChange: 30, // Cache for 30 seconds
-    }
+    },
   );
 
   const [finalizeEvent] = useFinalizeEventMutation();
@@ -106,7 +106,7 @@ export default function EventManagement() {
     {
       skip: !showEventQuestions,
       refetchOnMountOrArgChange: 30,
-    }
+    },
   );
 
   const { data: rewards = [] } = useGetRewardsByEventIdQuery(selectedEventId!, {
@@ -188,12 +188,12 @@ export default function EventManagement() {
   const [deleteQuestion] = useDeleteQuestionMutation();
   const [createReward] = useCreateRewardMutation();
   const [updateReward] = useUpdateRewardMutation();
-  const [deleteReward] = useDeleteRewardMutation();
+  // const [deleteReward] = useDeleteRewardMutation();
 
   // Memoized computed values
   const filteredRewards = useMemo(
     () => (selectedEventId ? rewards : []),
-    [selectedEventId, rewards]
+    [selectedEventId, rewards],
   );
 
   const allQuestions = useMemo(() => [], []); // Empty array if not needed
@@ -202,7 +202,7 @@ export default function EventManagement() {
 
   const questionStats = useMemo(
     () => calculateQuestionStats(allQuestions, events),
-    [allQuestions, events]
+    [allQuestions, events],
   );
 
   const rewardStats = useMemo(() => calculateRewardStats(rewards), [rewards]);
@@ -314,7 +314,7 @@ export default function EventManagement() {
         ),
       },
     ],
-    []
+    [],
   );
 
   const questionColumns = useMemo(
@@ -333,7 +333,7 @@ export default function EventManagement() {
         label: "Correct Answer",
         render: (question: Question) => {
           const correctOption = question.questionOptions.find(
-            (opt) => opt.is_correct
+            (opt) => opt.is_correct,
           );
           return (
             <Yard className="max-w-xs truncate text-green-600 font-medium">
@@ -358,56 +358,56 @@ export default function EventManagement() {
         ),
       },
     ],
-    []
+    [],
   );
 
-  const rewardColumns = useMemo(
-    () => [
-      {
-        key: "min_correct" as keyof EventReward,
-        label: "Min Correct",
-        sortable: true,
-      },
-      {
-        key: "max_correct" as keyof EventReward,
-        label: "Max Correct",
-        sortable: true,
-      },
-      {
-        key: "voucher_quantity" as keyof EventReward,
-        label: "Voucher Qty",
-        sortable: true,
-      },
-      {
-        key: "discount_value" as keyof EventReward,
-        label: "Reward Value",
-        render: (reward: EventReward) => (
-          <span className="font-medium text-green-600">
-            {reward.type === "AMOUNT"
-              ? `${reward.discount_value.toLocaleString()} VND`
-              : `${reward.discount_value}%`}
-          </span>
-        ),
-        sortable: true,
-      },
-      {
-        key: "type" as keyof EventReward,
-        label: "Type",
-        render: (reward: EventReward) => (
-          <span
-            className={`px-2 py-1 rounded-full text-xs font-medium ${
-              reward.type === "AMOUNT"
-                ? "bg-blue-100 text-blue-800"
-                : "bg-purple-100 text-purple-800"
-            }`}
-          >
-            {reward.type === "AMOUNT" ? "Fixed Amount" : "Percentage"}
-          </span>
-        ),
-      },
-    ],
-    []
-  );
+  // const rewardColumns = useMemo(
+  //   () => [
+  //     {
+  //       key: "min_correct" as keyof EventReward,
+  //       label: "Min Correct",
+  //       sortable: true,
+  //     },
+  //     {
+  //       key: "max_correct" as keyof EventReward,
+  //       label: "Max Correct",
+  //       sortable: true,
+  //     },
+  //     {
+  //       key: "voucher_quantity" as keyof EventReward,
+  //       label: "Voucher Qty",
+  //       sortable: true,
+  //     },
+  //     {
+  //       key: "discount_value" as keyof EventReward,
+  //       label: "Reward Value",
+  //       render: (reward: EventReward) => (
+  //         <span className="font-medium text-green-600">
+  //           {reward.type === "AMOUNT"
+  //             ? `${reward.discount_value.toLocaleString()} VND`
+  //             : `${reward.discount_value}%`}
+  //         </span>
+  //       ),
+  //       sortable: true,
+  //     },
+  //     {
+  //       key: "type" as keyof EventReward,
+  //       label: "Type",
+  //       render: (reward: EventReward) => (
+  //         <span
+  //           className={`px-2 py-1 rounded-full text-xs font-medium ${
+  //             reward.type === "AMOUNT"
+  //               ? "bg-blue-100 text-blue-800"
+  //               : "bg-purple-100 text-purple-800"
+  //           }`}
+  //         >
+  //           {reward.type === "AMOUNT" ? "Fixed Amount" : "Percentage"}
+  //         </span>
+  //       ),
+  //     },
+  //   ],
+  //   []
+  // );
 
   // Optimized event handlers with useCallback
   const handleEventSave = useCallback(
@@ -439,7 +439,7 @@ export default function EventManagement() {
         alert("Error saving event. Please try again.");
       }
     },
-    [eventModal.mode, eventModal.event, createEvent, updateEvent]
+    [eventModal.mode, eventModal.event, createEvent, updateEvent],
   );
 
   const handleQuestionSave = useCallback(
@@ -467,7 +467,12 @@ export default function EventManagement() {
         alert("Error saving question. Please try again.");
       }
     },
-    [questionModal.mode, questionModal.question, createQuestion, updateQuestion]
+    [
+      questionModal.mode,
+      questionModal.question,
+      createQuestion,
+      updateQuestion,
+    ],
   );
 
   const handleRewardSave = useCallback(
@@ -497,7 +502,7 @@ export default function EventManagement() {
         alert("Error saving reward. Please try again.");
       }
     },
-    [rewardModal.mode, rewardModal.reward, createReward, updateReward]
+    [rewardModal.mode, rewardModal.reward, createReward, updateReward],
   );
 
   const tabConfig = useMemo(
@@ -506,7 +511,7 @@ export default function EventManagement() {
       { key: "leaderboardRewards", label: "Leaderboard Rewards", icon: Trophy },
       { key: "voucherTemplates", label: "Voucher Templates", icon: Tag },
     ],
-    []
+    [],
   );
 
   // Event handlers for delete operations
@@ -524,7 +529,7 @@ export default function EventManagement() {
         }
       }
     },
-    [deleteQuestion]
+    [deleteQuestion],
   );
 
   const handleDeleteEvent = useCallback(
@@ -539,7 +544,7 @@ export default function EventManagement() {
         }
       }
     },
-    [deleteEvent]
+    [deleteEvent],
   );
 
   const handleFinalizeEvent = useCallback(
@@ -557,32 +562,32 @@ export default function EventManagement() {
         }
       }
     },
-    [finalizeEvent]
+    [finalizeEvent],
   );
 
-  const handleDeleteReward = useCallback(
-    async (reward: EventReward) => {
-      if (confirm("Are you sure you want to delete this reward?")) {
-        try {
-          await deleteReward({
-            id: reward.id,
-            event_id: reward.event_id,
-          }).unwrap();
-        } catch (error) {
-          console.error("Error deleting reward:", error);
-          alert("Error deleting reward. Please try again.");
-        }
-      }
-    },
-    [deleteReward]
-  );
+  // const handleDeleteReward = useCallback(
+  //   async (reward: EventReward) => {
+  //     if (confirm("Are you sure you want to delete this reward?")) {
+  //       try {
+  //         await deleteReward({
+  //           id: reward.id,
+  //           event_id: reward.event_id,
+  //         }).unwrap();
+  //       } catch (error) {
+  //         console.error("Error deleting reward:", error);
+  //         alert("Error deleting reward. Please try again.");
+  //       }
+  //     }
+  //   },
+  //   [deleteReward]
+  // );
 
   // Memoized export handler
   const handleExport = useCallback(() => {
     const csv = events
       .map(
         (e) =>
-          `${e.title},${e.description},${e.start_time},${e.end_time},${e.is_active}`
+          `${e.title},${e.description},${e.start_time},${e.end_time},${e.is_active}`,
       )
       .join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
@@ -765,7 +770,7 @@ export default function EventManagement() {
                 key={key}
                 onClick={() =>
                   setActiveTab(
-                    key as "events" | "leaderboardRewards" | "voucherTemplates"
+                    key as "events" | "leaderboardRewards" | "voucherTemplates",
                   )
                 }
                 className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
@@ -984,7 +989,7 @@ export default function EventManagement() {
                               <td className="py-3 px-4">
                                 <span
                                   className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(
-                                    reward
+                                    reward,
                                   )}`}
                                 >
                                   {getStatusText(reward)}
@@ -1125,7 +1130,7 @@ export default function EventManagement() {
                           </tr>
                         </thead>
                         <tbody>
-                          {voucherTemplates.map((template) => (
+                          {voucherTemplates.map((template: VoucherTemplate) => (
                             <tr
                               key={template.id}
                               className="border-b border-gray-100 hover:bg-gray-50"
@@ -1154,7 +1159,7 @@ export default function EventManagement() {
                               <td className="py-3 px-4">
                                 <span
                                   className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full border ${getVoucherStatusColor(
-                                    template
+                                    template,
                                   )}`}
                                 >
                                   {getVoucherStatusText(template)}

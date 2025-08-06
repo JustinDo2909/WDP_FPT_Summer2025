@@ -56,7 +56,7 @@ export const useVoucherTemplatesLogic = (eventId: string = "1") => {
     {
       is_active: true,
       include_leaderboard: false,
-    }
+    },
   );
 
   // Fetch voucher templates
@@ -78,12 +78,14 @@ export const useVoucherTemplatesLogic = (eventId: string = "1") => {
   // Computed stats
   const stats = useMemo(() => {
     const total = templates.length;
-    const active = templates.filter((t) => t.is_active).length;
+    const active = templates.filter((t: VoucherTemplate) => t.is_active).length;
     const inactive = total - active;
     const percentTemplates = templates.filter(
-      (t) => t.type === "PERCENT"
+      (t: VoucherTemplate) => t.type === "PERCENT",
     ).length;
-    const amountTemplates = templates.filter((t) => t.type === "AMOUNT").length;
+    const amountTemplates = templates.filter(
+      (t: VoucherTemplate) => t.type === "AMOUNT",
+    ).length;
 
     return {
       total,
@@ -121,13 +123,14 @@ export const useVoucherTemplatesLogic = (eventId: string = "1") => {
         await deleteTemplate({ eventId, voucherId: templateId }).unwrap();
         // Success message will be handled by the API toast
       } catch (error) {
+        console.error("error", error);
         // Error message will be handled by the API toast
       }
     }
   };
 
   const handleSubmitTemplate = async (
-    data: CreateVoucherTemplateRequest | UpdateVoucherTemplateRequest
+    data: CreateVoucherTemplateRequest | UpdateVoucherTemplateRequest,
   ) => {
     try {
       if (isEditMode && selectedTemplate) {
@@ -147,6 +150,7 @@ export const useVoucherTemplatesLogic = (eventId: string = "1") => {
       setIsEditMode(false);
       // Success message will be handled by the API toast
     } catch (error) {
+      console.error("error", error);
       // Error message will be handled by the API toast
     }
   };
@@ -163,7 +167,7 @@ export const useVoucherTemplatesLogic = (eventId: string = "1") => {
   };
 
   const handleFilterChange = (
-    newParams: Partial<VoucherTemplateFilterParams>
+    newParams: Partial<VoucherTemplateFilterParams>,
   ) => {
     setFilterParams((prev) => ({ ...prev, ...newParams }));
   };

@@ -14,7 +14,7 @@ interface VoucherTemplateModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (
-    data: CreateVoucherTemplateRequest | UpdateVoucherTemplateRequest
+    data: CreateVoucherTemplateRequest | UpdateVoucherTemplateRequest,
   ) => void;
   isLoading?: boolean;
   voucherTemplate?: VoucherTemplate | null;
@@ -29,7 +29,7 @@ export function VoucherTemplateModal({
 }: VoucherTemplateModalProps) {
   const [discountValue, setDiscountValue] = useState("");
   const [discountType, setDiscountType] = useState<"PERCENT" | "AMOUNT">(
-    "PERCENT"
+    "PERCENT",
   );
   const [userLimit, setUserLimit] = useState("");
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
@@ -54,7 +54,7 @@ export function VoucherTemplateModal({
       setDiscountType(voucherTemplate.type);
       setUserLimit(voucherTemplate.user_limit.toString());
       setSelectedProductIds(
-        voucherTemplate.voucherProducts.map((vp) => vp.product.id)
+        voucherTemplate.voucherProducts.map((vp) => vp.product.id),
       );
     } else {
       setDiscountValue("");
@@ -81,13 +81,13 @@ export function VoucherTemplateModal({
     setSelectedProductIds((prev) =>
       prev.includes(productId)
         ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
+        : [...prev, productId],
     );
   };
 
   const filteredProducts = Array.isArray(products)
     ? products.filter((product) =>
-        product.title.toLowerCase().includes(searchTerm.toLowerCase())
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()),
       )
     : [];
 
