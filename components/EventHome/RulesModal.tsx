@@ -4,9 +4,11 @@ import RulesSection from "./RulesSection";
 export default function RulesModal({
   open,
   onClose,
+  extraRule
 }: {
   open: boolean;
   onClose: () => void;
+  extraRule?: string;
 }) {
   if (!open) return null;
   return (
@@ -18,7 +20,7 @@ export default function RulesModal({
             Close
           </button>
         </div>
-        <RulesSection />
+        <RulesSection extraRule={extraRule}/>
       </div>
     </div>
   );

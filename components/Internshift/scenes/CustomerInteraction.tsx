@@ -195,8 +195,8 @@ export default function CustomerInteraction({
           <motion.div
             className=""
             variants={bubbleVariants}
-            initial="hidden_left"
-            animate="visible_delayed2"
+            initial="hidden_right"
+            animate="visible_delayed"
           >
             <div className="bg-green-100 text-gray-800 px-5 py-4 rounded-2xl shadow-md border border-green-200 text-lg relative">
               <span className="block">

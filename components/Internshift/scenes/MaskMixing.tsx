@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState, useMemo } from "react";
 import { gameMaskIngredients, masks } from "@/constants/intershift-game";
@@ -44,6 +45,7 @@ export default function MaskMixing({
     bonus: number;
   }>(null);
   const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const maskRecipe: Mask | undefined = useMemo(
     () => masks.find((m) => m.case === customerSkinType),
@@ -114,9 +116,20 @@ export default function MaskMixing({
     setIsMixing(false);
   };
 
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <div className="flex flex-col gap-6 items-center justify-center min-h-[75vh] p-6 bg-yellow-50 rounded-xl shadow-inner border border-yellow-100 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold text-yellow-800">Mix Your Mask</h2>
+      <div className="flex justify-between items-center w-full">
+        <h2 className="text-2xl font-bold text-yellow-800">Mix Your Mask</h2>
+        <button
+          onClick={openModal}
+          className="bg-yellow-500 text-white px-4 py-1.5 rounded-lg hover:bg-yellow-600 transition"
+        >
+          Mask Recipes
+        </button>
+      </div>
 
       {/* Bento Layout */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
@@ -215,6 +228,45 @@ export default function MaskMixing({
           )}
         </div>
       </div>
+
+      {/* Modal for Mask Recipes */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-yellow-800">Mask Recipes</h3>
+              <button
+                onClick={closeModal}
+                className="text-yellow-800 hover:text-yellow-900 font-bold text-lg"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="space-y-4">
+              {masks.map((mask) => (
+                <div key={mask.case} className="border-b border-yellow-200 pb-2">
+                  <h4 className="text-lg font-semibold text-yellow-700">
+                    {mask.case}
+                  </h4>
+                  <ul className="list-disc list-inside text-sm text-yellow-800">
+                    {mask.ingredients.map((ing) => (
+                      <li key={ing.tag}>
+                        {gameMaskIngredients.find((i) => i.tag === ing.tag)?.name} x{ing.quantity}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={closeModal}
+              className="mt-4 bg-yellow-500 text-white px-4 py-1.5 rounded-lg hover:bg-yellow-600 transition w-full"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

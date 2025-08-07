@@ -29,11 +29,11 @@ export default function VoucherRewards({
   const formatRank = (from: number, to: number) =>
     from === to ? `Rank ${from}` : `Rank ${from}-${to}`;
 
-  const getVoucherText = (voucher: IVoucherTemplate) => {
+  const getVoucherText = (voucher: IVoucherTemplate, showMinOrder: boolean) => {
     if (voucher.type === "PERCENT") {
-      return `${voucher.discount_value}% off your order!`;
+      return `${voucher.discount_value}% off your order!  ${showMinOrder && "min order "+ formatPrice(voucher.min_order_amount)})`;
     }
-    return `${formatPrice(voucher.discount_value)} off your order!`;
+    return `${formatPrice(voucher.discount_value)} off your order!  ${showMinOrder && "min order "+ formatPrice(voucher.min_order_amount)})`;
   };
 
   return (
@@ -80,7 +80,7 @@ export default function VoucherRewards({
                     </button>
                   </Group>
                   <Block className="text-xs text-gray-600 mt-1">
-                    {getVoucherText(voucher)}
+                    {getVoucherText(voucher, false)}
                   </Block>
                 </Row>
               ))}
@@ -117,7 +117,7 @@ export default function VoucherRewards({
             </button>
           </Group>
           <Block className="text-xs text-gray-600 mt-1">
-            {getVoucherText(event.voucherTemplates[0])}
+            {getVoucherText(event.voucherTemplates[0], false)}
           </Block>
         </Row>
       </Section>
@@ -136,7 +136,7 @@ export default function VoucherRewards({
                   <Block>
                     <h2 className="text-lg font-bold">Voucher Details</h2>
                     <p className="text-pink-100 text-sm">
-                      {getVoucherText(selectedVoucher)}
+                      {getVoucherText(selectedVoucher, true)}
                     </p>
                   </Block>
                 </Group>
@@ -184,7 +184,7 @@ export default function VoucherRewards({
                     No specific products attached to this voucher.
                   </RText>
                   <RText className="text-sm text-gray-400 mt-1">
-                    This voucher can be used on eligible items.
+                    This voucher can be used on eligible products.
                   </RText>
                 </Block>
               )}

@@ -214,7 +214,6 @@ export const useGameState = () => {
       profit: success
         ? prev.profit + Math.floor(routineCost * 1.2)
         : prev.profit + Math.floor(routineCost),
-      customersServed: prev.customersServed + 1,
       showNextCustomer: !success || prev.meter < 1 ? true : false,
       showMaskCrafting: success && prev.meter === 1,
       currentDialogue: feedbackMessage,
@@ -240,9 +239,8 @@ export const useGameState = () => {
       setGameStateWithLogging((prev) => ({
         ...prev,
         profit: success ? prev.profit + bonus : prev.profit,
-        customersServed: prev.customersServed + 1,
-        showNextCustomer: !success || prev.meter < 1 ? true : false,
-        showMaskCrafting: success && prev.meter === 1,
+        showNextCustomer: true,
+        showMaskCrafting: false,
         currentDialogue: feedbackMessage,
       }));
 

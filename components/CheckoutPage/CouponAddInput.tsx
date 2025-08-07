@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Select,
   SelectTrigger,
@@ -21,7 +21,7 @@ interface CouponAddInputProps {
   setVoucherDiscount: (voucherDiscount: number) => void;
   onSelect: (voucher: IVoucher) => void;
   cartItems: ICartLineItem[];
-  orderTotal: number
+  orderTotal: number;
 }
 
 export const CouponAddInput: React.FC<CouponAddInputProps> = ({
@@ -29,13 +29,13 @@ export const CouponAddInput: React.FC<CouponAddInputProps> = ({
   setVoucherDiscount,
   onSelect,
   cartItems,
-  orderTotal
+  orderTotal,
 }) => {
   const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
 
   const cartProductIds = useMemo(
     () => cartItems.map((item) => item.product_id),
-    [cartItems],
+    [cartItems]
   );
 
   const sortedVouchers = useMemo(() => {
@@ -43,12 +43,12 @@ export const CouponAddInput: React.FC<CouponAddInputProps> = ({
     return vouchers
       .map((voucher) => {
         const applicable =
-    Array.isArray(voucher.voucherTemplate.voucherProducts) &&
-    (voucher.voucherTemplate.voucherProducts.some((vp) =>
-      cartProductIds.includes(vp.product.id),
-    ) ||
-      voucher.voucherTemplate.voucherProducts?.length === 0) &&
-    orderTotal > (voucher.voucherTemplate.min_order_amount ?? 0);
+          Array.isArray(voucher.voucherTemplate.voucherProducts) &&
+          (voucher.voucherTemplate.voucherProducts.some((vp) =>
+            cartProductIds.includes(vp.product.id)
+          ) ||
+            voucher.voucherTemplate.voucherProducts?.length === 0) &&
+          orderTotal > (voucher.voucherTemplate.min_order_amount ?? 0);
 
         const savings = applicable
           ? calculateVoucherSavings(voucher, cartItems)
@@ -59,8 +59,12 @@ export const CouponAddInput: React.FC<CouponAddInputProps> = ({
         if (a.applicable !== b.applicable) return a.applicable ? -1 : 1;
         return b.savings - a.savings; // Sort by savings in descending order
       })
-      .filter((p) => new Date(p.voucher.expired_at) > new Date() && !p.voucher.redeemed);
+      .filter(
+        (p) =>
+          new Date(p.voucher.expired_at) > new Date() && !p.voucher.redeemed
+      );
   }, [vouchers, cartProductIds, cartItems]);
+
 
   const selected = sortedVouchers.find((v) => v.voucher.id === selectedId);
 
@@ -71,6 +75,10 @@ export const CouponAddInput: React.FC<CouponAddInputProps> = ({
       setVoucherDiscount(discount);
     }
   };
+
+  useEffect(() => {
+    if (selectedId) handleApply();
+  }, [cartItems]);
 
   return (
     <Box>

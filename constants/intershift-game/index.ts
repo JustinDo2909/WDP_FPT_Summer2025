@@ -6,16 +6,16 @@ export const npcProfiles: NPCProfile[] = [
     avatar_url_happy: "/avatars/lana_happy.png",
     avatar_url_sad: "/avatars/lana_sad.png",
     concern_line:
-      "Hi, I’ve been breaking out lately, especially around my chin.",
-    happy_line: "Wow, my skin feels so much clearer! Thank you!",
-    unhappy_line: "Ugh, I think the products made it worse...",
-    thanks_line: "Thanks for your help! I'll come back if it works well.",
+      "Lately, even the gentlest products seem to make my skin freak out...",
+    happy_line: "Wow, my skin didn’t react this time. It actually feels balanced!",
+    unhappy_line: "Sigh… another flare-up. I guess that didn’t suit me either.",
+    thanks_line: "Thanks for listening. I really hope this one's a better match.",
     steps: 4,
-    description: "A university student stressed by exams and mask acne.",
+    description: "A university student stressed by exams and cautious about unpredictable skin.",
     case: {
       caseName: "Acne-prone",
       skinType: "acne-prone",
-      tooltip: "Breakouts, inflammation, and clogged pores",
+      tooltip: "Skin that's easily triggered by the wrong ingredients or routines",
       requiredIngredients: ["Salicylic acid", "Niacinamide", "Tea Tree"],
       avoidIngredients: ["Coconut oil", "Fragrance"],
       requiredProducts: [
@@ -33,16 +33,17 @@ export const npcProfiles: NPCProfile[] = [
     avatar_url_default: "https://i.ibb.co/1JwDC6Kp/tobias.png",
     avatar_url_happy: "/avatars/tobias_happy.png",
     avatar_url_sad: "/avatars/tobias_sad.png",
-    concern_line: "My face is always shiny, especially in the T-zone.",
-    happy_line: "This is the best my skin has felt in months!",
-    unhappy_line: "Still oily. I don’t think the routine helped.",
-    thanks_line: "Fingers crossed this helps. Thanks for the advice!",
+    concern_line:
+      "My skin always ends up looking shiny by lunch — I’m constantly wiping it down.",
+    happy_line: "This is the best my face has looked in weeks — no more midday slick!",
+    unhappy_line: "Still feels greasy. Nothing really changes...",
+    thanks_line: "Fingers crossed this new routine holds up. Appreciate it!",
     steps: 5,
-    description: "A bike messenger dealing with oily skin and urban pollution.",
+    description: "A bike messenger dealing with midday shine and city air.",
     case: {
       caseName: "Oily skin",
       skinType: "oily",
-      tooltip: "Shiny skin due to excess sebum",
+      tooltip: "Skin that produces excess oil, especially in the T-zone",
       requiredIngredients: ["Clay", "Niacinamide", "Salicylic acid"],
       avoidIngredients: ["Mineral oil", "Petrolatum"],
       requiredProducts: [
@@ -61,23 +62,25 @@ export const npcProfiles: NPCProfile[] = [
     avatar_url_default: "https://i.ibb.co/yBQf1sT9/mei.png",
     avatar_url_happy: "/avatars/mei_happy.png",
     avatar_url_sad: "/avatars/mei_sad.png",
-    concern_line: "My cheeks are dry and flaky, especially after cleansing.",
-    happy_line: "So much better! My skin actually feels hydrated now.",
-    unhappy_line: "Still dry. Maybe I need something more moisturizing?",
-    thanks_line: "I appreciate the effort. Let’s see how it goes.",
+    concern_line:
+      "After I wash my face, it just feels... tight and uncomfortable for hours.",
+    happy_line: "Finally, my skin doesn’t feel like paper after cleansing!",
+    unhappy_line: "Still dry and itchy… maybe it needs something richer.",
+    thanks_line: "Thanks! I’m hopeful this will make my skin feel less parched.",
     steps: 5,
     description:
-      "A kindergarten teacher with dry skin from long days in air conditioning.",
+      "A kindergarten teacher whose skin dries out from long hours in air-conditioned classrooms.",
     case: {
       skinType: "dry",
       caseName: "Dry skin",
-      tooltip: "Flaky, tight skin lacking moisture",
+      tooltip: "Skin that feels tight, flaky, or dehydrated throughout the day",
       requiredIngredients: ["Hyaluronic acid", "Ceramides", "Glycerin"],
       avoidIngredients: ["Alcohol", "Benzoyl peroxide"],
       requiredProducts: ["moisturizer", "serum"],
     },
   },
 ];
+
 
 export const gameProducts: GameProduct[] = [
   // --- CLEANSERS ---
@@ -396,7 +399,7 @@ export const masks: Mask[] = [
       { tag: "kaolin-clay", quantity: 2 },
       { tag: "vitamin-c", quantity: 1 },
     ],
-    case: "combination",
+    case: "acne-prone",
     tooltip: "Balances oil, brightens complexion, and smooths texture.",
   },
 ];

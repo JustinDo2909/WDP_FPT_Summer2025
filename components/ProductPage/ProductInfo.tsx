@@ -38,6 +38,7 @@ export function ProductInfo({ productData }: { productData: IProduct }) {
       </Row>
 
       <RText>{productData.description}</RText>
+      <RText>Volume: {productData.volume} {productData.volume_type}</RText>
 
       <Row className="flex items-center gap-2">
         <RText className="text-right flex items-center gap-1 px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full">

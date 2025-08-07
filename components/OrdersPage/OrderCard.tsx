@@ -30,7 +30,7 @@ export default function OrderCard({
       setShowModal(false);
       toast.success(
         "Order cancelled successfully. You have been refunded " +
-          formatPrice(total_amount),
+          formatPrice(total_amount)
       );
     } catch (err) {
       // Optionally, handle error
@@ -45,15 +45,22 @@ export default function OrderCard({
           {new Date(createdAt).toLocaleDateString(undefined, {
             dateStyle: "medium",
           })}
+          &nbsp;#{order.order_number}
         </RText>
         <Begin className="flex items-center gap-2">
           <span
             className={`px-2 py-0.5 rounded-full text-xs font-semibold
-              ${status === "PROCESSING" ? "bg-yellow-100 text-yellow-700 border border-yellow-300"
-                : status === "SHIPPED" ? "bg-blue-100 text-blue-700 border border-blue-300"
-                : status === "DELIVERED" ? "bg-green-100 text-green-700 border border-green-300"
-                : status === "CANCELLED" ? "bg-red-100 text-red-700 border border-red-300"
-                : "bg-gray-100 text-gray-700 border border-gray-300"}
+              ${
+                status === "PROCESSING"
+                  ? "bg-yellow-100 text-yellow-700 border border-yellow-300"
+                  : status === "SHIPPED"
+                    ? "bg-blue-100 text-blue-700 border border-blue-300"
+                    : status === "DELIVERED"
+                      ? "bg-green-100 text-green-700 border border-green-300"
+                      : status === "CANCELLED"
+                        ? "bg-red-100 text-red-700 border border-red-300"
+                        : "bg-gray-100 text-gray-700 border border-gray-300"
+              }
             `}
           >
             {status}
@@ -71,10 +78,7 @@ export default function OrderCard({
         {orderItems.map((item) => {
           const hasVoucher = item.discount_per_item;
           return (
-            <Row
-              key={item.id}
-              className={`flex py-4  items-center w-full `}
-            >
+            <Row key={item.id} className={`flex py-4  items-center w-full `}>
               <Link
                 href={`/user/orders/${order.id}`}
                 className="flex items-center flex-1 min-w-0"
@@ -103,10 +107,16 @@ export default function OrderCard({
                     {formatPrice(item.total_price)}
                   </span>
                   {hasVoucher ? (
-                    <span className="block text-xs text-green-600 mt-1">
-                      Voucher saved {formatPrice(item.discount_per_item * item.quantity)}
-                    </span>
-                  ) : ""}
+                    <RText className="block text-xs text-green-600 mt-1 leading-tight break-words">
+                      Voucher saved{" "}
+                      {formatPrice(item.discount_per_item * item.quantity)}
+                    </RText>
+                  ) : (
+                    // hidden placeholder with same styles to reserve space
+                    <RText className="block text-xs invisible mt-1 leading-tight break-words">
+                      Voucher saved 500000k
+                    </RText>
+                  )}
                 </RText>
               </Link>
               <Wrap className="ml-4">

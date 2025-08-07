@@ -10,7 +10,7 @@ interface VoucherCardProps {
 
 const formatExpiryDate = (voucher: IVoucher) => {
   const expiry = new Date(
-    new Date(voucher.expired_at).getTime() + 2 * 24 * 60 * 60 * 1000,
+    new Date(voucher.expired_at),
   );
   return expiry.toLocaleDateString("vi-VN");
 };
@@ -23,7 +23,7 @@ export default function VoucherCard({
 
   const now = new Date();
   const expiryDate = new Date(
-    new Date(voucher.expired_at).getTime() + 2 * 24 * 60 * 60 * 1000,
+    new Date(voucher.expired_at),
   );
   const isExpired = now > expiryDate;
   const isRedeemed = redeemed;

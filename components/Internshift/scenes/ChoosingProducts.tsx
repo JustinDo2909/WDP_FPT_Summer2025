@@ -40,7 +40,7 @@ export default function ChoosingProducts({
   const [productPage, setProductPage] = useState(0);
   const paginatedProducts = products.slice(
     productPage * productsPerPage,
-    (productPage + 1) * productsPerPage,
+    (productPage + 1) * productsPerPage
   );
   const totalProductPages = Math.ceil(products.length / productsPerPage);
 
@@ -52,7 +52,7 @@ export default function ChoosingProducts({
 
   // Only allow one product per type
   const selectedForCurrentType = selectedProducts.find(
-    (p) => p.type === currentType,
+    (p) => p.type === currentType
   );
 
   // Handlers
@@ -88,7 +88,7 @@ export default function ChoosingProducts({
   };
 
   return (
-    <div className="flex flex-col mt-20 w-full items-center justify-between">
+    <div className="flex flex-col mt-16 w-full items-center justify-between">
       {/* Product Type Navigation */}
       <div className="flex items-center justify-between w-full gap-8 mb-4 px-60">
         <button
@@ -153,7 +153,9 @@ export default function ChoosingProducts({
                   ?
                 </div>
                 <div className="absolute z-20 left-6 top-0 w-44 p-2 bg-white text-gray-800 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto text-xs">
-                  {product.tooltip}
+                  {product.tooltip} Contains {product.ingredients
+  .map((ing) => `${ing.replace(/-{/g, " ")}`)
+  .join(", ")}
                 </div>
               </div>
             </div>
@@ -187,7 +189,7 @@ export default function ChoosingProducts({
       {/* Selected Products Sidebar */}
       <div className="absolute right-8 top-8 w-48 bg-white/90 rounded-xl p-4 shadow-xl flex flex-col gap-2 border border-gray-300 z-10">
         <h3 className="text-gray-700 font-bold text-sm mb-2 text-center">
-          Selected Products
+          Selected Products {selectedProducts.length}/{selectedProductTypes.length}
         </h3>
         {selectedProducts.length === 0 ? (
           <span className="text-gray-500 text-sm text-center">None</span>
@@ -225,7 +227,7 @@ export default function ChoosingProducts({
           className="game-button px-6 py-2 text-lg font-bold ml-auto"
           onClick={submitProducts}
           disabled={selectedProductTypes.some(
-            (type) => !selectedProducts.find((p) => p.type === type),
+            (type) => !selectedProducts.find((p) => p.type === type)
           )}
         >
           <div>

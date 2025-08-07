@@ -10,6 +10,7 @@ declare global {
     payment_intent_id: string;
     payment_method: "card" | "paypal" | "bank_transfer" | "cash_on_delivery";
     createdAt: string;
+    order_number: string;
     updatedAt: string;
     shipping_fee: number;
     payment_status: string;

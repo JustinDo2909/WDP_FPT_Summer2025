@@ -14,6 +14,7 @@ export default function InternshiftGamePage() {
 
   return (
     <GameHomeLayout
+      extraRule="Use your cosmetic and skincare knowledge to help the intern statisfy the customer! Choose the best routine and products for their skin condition to earn stars. Earn up to two stars for extra bonuses and the chance to play a minigame. Read the tooltips to perform even better"
       event={event}
       title=""
       backgroundImage="https://i.ibb.co/TqBxrqYw/intershift-cover.png"

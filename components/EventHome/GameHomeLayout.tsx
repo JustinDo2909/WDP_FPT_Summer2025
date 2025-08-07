@@ -33,6 +33,7 @@ export default function GameHomeLayout({
   backgroundImage,
   eventData,
   event,
+  extraRule
 }: {
   children?: React.ReactNode;
   title?: string;
@@ -43,6 +44,7 @@ export default function GameHomeLayout({
   rulesButtonText?: string;
   eventData?: ILeaderBoardData;
   event?: IEvent;
+  extraRule?: string;
 }) {
   const [showInventory, setShowInventory] = useState(false);
   const [showRules, setShowRules] = useState(false);
@@ -237,7 +239,7 @@ export default function GameHomeLayout({
         onClose={() => setShowInventory(false)}
         vouchers={data?.vouchers}
       />
-      <RulesModal open={showRules} onClose={() => setShowRules(false)} />
+      <RulesModal open={showRules} onClose={() => setShowRules(false)} extraRule={extraRule}/>
     </Area>
   );
 }

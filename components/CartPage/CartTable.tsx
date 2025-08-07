@@ -15,9 +15,9 @@ export const CartTable = ({
   const voucherMap = voucher ? createVoucherMap(voucher, items) : {};
 
   const finalItems = map(items, (item) => ({
-    ...item,
-    savings: voucherMap[item.id] ?? 0,
-  }));
+  ...item,
+  savings: voucherMap[item.id] ?? 0,
+})).sort((a, b) => a.product.title.localeCompare(b.product.title));
 
   return (
     <Container className="md:col-span-3 space-y-2">
